@@ -1,0 +1,38 @@
+{
+  "name": "@zerowallscience/plugin-base",
+  "version": "0.1.3",
+  "applicationVersion": "8.0.2",
+  "restartRequired": true,
+  "desktop": {
+    "min": "8.0.1"
+  },
+  "rollbackSupported": true,
+  "dsh": {
+    "min": "0.2.0-rc.2",
+    "max": "0.2.0-rc.2"
+  },
+  "host": "./lib/index.js",
+  "client": "./lib/client.js",
+  "requiredServices": [
+    "webServer",
+    "systemPrompt"
+  ],
+  "optionalServices": [
+    "updater"
+  ],
+  "capabilities": [
+    "ui.locale",
+    "ui.update"
+  ],
+  "permissions": [],
+  "network": false,
+  "files": false,
+  "credentials": false,
+  "approvals": false,
+  "profiles": [
+    "development",
+    "preview",
+    "stable"
+  ],
+  "migrationVersion": 1
+}

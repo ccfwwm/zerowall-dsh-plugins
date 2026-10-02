@@ -1,0 +1,1786 @@
+import { ManagedGenerations } from './managed-generations.js'
+import { registerResearchWorkflow } from './research-workflow.js'
+import type { Context, Fiber } from '@deepseek-ai/cordis'
+import * as McpClient from '@deepseek-ai/dsh-mcp-client'
+import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import { createHash } from 'node:crypto'
+import { existsSync, lstatSync, readFileSync, readdirSync, renameSync, rmSync, statSync, mkdirSync, writeFileSync } from 'node:fs'
+import { lstat, mkdir, open, readFile, realpath, rename, stat, unlink, writeFile } from 'node:fs/promises'
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
+import { homedir } from 'node:os'
+import { rootCertificates } from 'node:tls'
+import { ToolCallId, type ContentBlock } from '@deepseek-ai/dsh-llm'
+import { defineTool } from '@deepseek-ai/dsh-tools'
+type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue }
+import type {
+  CreateMcpServerInput,
+  McpReconnectPolicy,
+  McpServerRecord,
+  McpTransport,
+  UpdateMcpServerInput,
+} from '@zerowallscience/research-store/types'
+import type {} from 'zod'
+import { SecretBrokerClient } from '@zerowallscience/plugin-secrets'
+import type { CreateMcpServerRequest, McpRuntimeState, McpServerDto, UpdateMcpServerRequest } from '../shared/types.js'
+
+export type { CreateMcpServerRequest, McpRuntimeState, McpServerDto, UpdateMcpServerChanges, UpdateMcpServerRequest } from '../shared/types.js'
+
+// Credential vault keys are restricted to the ZeroWall domain and lowercase
+// POSIX-style segments. Keep the SciMaster key under the MCP namespace.
+export const SCIMASTER_API_KEY_CREDENTIAL = 'zerowall.mcp.scimaster_api_key'
+export const SCIMASTER_API_KEY_URL = 'https://scimaster.bohrium.com/vibe-write/home'
+export const HUAGONGSHE_URL = 'https://huagongshe.com/mcp'
+export const HUAGONGSHE_CREDENTIAL = 'zerowall.mcp.huagongshe_token'
+export const HUAGONGSHE_AUTH_ENV = 'HUAGONGSHE_MCP_AUTHORIZATION'
+export const RDATALINUX_R_MCP_LEGACY_URL = 'http://103.217.185.141/r-platform/mcp'
+export const RDATALINUX_R_MCP_URL = 'http://103.217.185.141:8099/r-platform/mcp'
+export const RDATALINUX_SERVER_NAME = 'rmcp'
+export const RDATALINUX_BIOMNI_SERVER_NAME = 'rbioagent'
+export const RDATALINUX_R_PLATFORM_SERVER_NAME = 'rplatform'
+export const RDATALINUX_RPLOTFIGURE_SERVER_NAME = 'rplotfigure'
+export const RDATALINUX_R_MCP_AUTHORIZATION_CREDENTIAL = 'zerowall.mcp.rdatalinux_authorization'
+export const RDATALINUX_R_MCP_AUTHORIZATION_ENV = 'R_PLATFORM_MCP_AUTHORIZATION'
+const ENVIRONMENT_SECRET_PREFIX = 'zerowall.environment.var.'
+// A prepared update waits for Host readiness. Poll the compact transaction and
+// pointer frequently; manifest contents remain cached by the file signature.
+const MCP_ENVIRONMENT_POLL_INTERVAL_MS = 1000
+const MCP_FAILURE_COOLDOWN_MS = 5 * 60_000
+const RDATALINUX_UPLOAD_MAX_BYTES = 100 * 1024 * 1024
+const FIGUREYA_MODULE_MAX_BYTES = 250 * 1024 * 1024
+
+function figureyaSourceRequest(moduleId: unknown, sourcePath: unknown, remotePath: unknown): { moduleId: string; path: string } | undefined {
+  if (typeof moduleId === 'string' && moduleId.trim() !== '') {
+    const path = typeof sourcePath === 'string' && sourcePath.trim() !== '' ? sourcePath.trim() : typeof remotePath === 'string' ? remotePath.trim() : ''
+    return { moduleId: moduleId.trim(), path }
+  }
+  if (typeof remotePath !== 'string') return undefined
+  const normalized = remotePath.trim().replaceAll('\\', '/')
+  const absolute = /^\/opt\/rdatalinux-figureya\/current\/([^/]+)\/(.+)$/u.exec(normalized)
+  const relative = /^(FigureYa[^/]+)\/(.+)$/u.exec(normalized)
+  const match = absolute ?? relative
+  if (match?.[1] === undefined || match[2] === undefined) return undefined
+  return { moduleId: match[1], path: `${match[1]}/${match[2]}` }
+}
+
+/** Resolve the AI Cloud group secret key without accepting arbitrary providers. */
+export function aiCloudCredentialKey(provider: string): string | undefined {
+  const match = /^zerowall-ai-cloud-([1-9]\d*)(?:-(?:responses|messages|completions))?$/u.exec(provider)
+  return match?.[1] === undefined ? undefined : `zerowall.ai-cloud.group.${match[1]}`
+}
+
+type RuntimeMcpConfig = {
+  serverName: string
+  toolCallTimeoutMs: number
+  failOnStartupError: boolean
+  reconnect: McpReconnectPolicy
+  enabledTools?: string[]
+} & ({
+  transport: 'stdio'
+  command: string
+  args: string[]
+  env: Record<string, string>
+  cwd: string
+} | {
+  transport: 'streamable-http'
+  url: string
+  headers: Record<string, string>
+})
+
+export interface ResolvedMcpConfig {
+  config?: RuntimeMcpConfig
+  missingEnvironmentVariables: string[]
+}
+
+interface RuntimeStatus {
+  state: McpRuntimeState
+  error: string
+  missingEnvironmentVariables: string[]
+}
+
+/**
+ * Resolve a model provider's API key without exposing it to the model or
+ * persisting it in an MCP request. Environment credentials are stored by the
+ * environment plugin under lowercase names, while hydrate() also mirrors
+ * them into process.env for providers that use native discovery.
+ */
+export function providerCredentialNames(provider: string): string[] {
+  const normalized = provider.trim().toLowerCase()
+  const names: string[] = []
+  const add = (name: string): void => { if (!names.includes(name)) names.push(name) }
+  if (/deepseek/u.test(normalized)) add('DEEPSEEK_API_KEY')
+  if (/openai|gpt/u.test(normalized)) add('OPENAI_API_KEY')
+  if (/anthropic|claude/u.test(normalized)) add('ANTHROPIC_API_KEY')
+  if (/google|gemini|vertex/u.test(normalized)) add('GOOGLE_API_KEY')
+  if (/moonshot|kimi/u.test(normalized)) { add('MOONSHOT_API_KEY'); add('KIMI_API_KEY') }
+  if (/qwen|aliyun|dashscope/u.test(normalized)) add('DASHSCOPE_API_KEY')
+  if (/zhipu|glm/u.test(normalized)) add('ZHIPUAI_API_KEY')
+  if (/minimax/u.test(normalized)) add('MINIMAX_API_KEY')
+  const stem = normalized.replace(/[^a-z0-9]+/gu, '_').replace(/^_+|_+$/gu, '').toUpperCase()
+  if (stem) add(`${stem}_API_KEY`)
+  add('LLM_API_KEY')
+  return names
+}
+
+export interface CompactCapabilityRecord {
+  id: string
+  publicTool: string
+  summary: string
+  inputSchema?: JsonValue
+  backend: 'rmcp' | 'bio'
+}
+
+declare module '@deepseek-ai/cordis' {
+  interface Context {
+    zerowallMcp: ZeroWallMcpService
+  }
+  interface Events {
+    'mcp-client/status'(serverName: string, state: 'starting' | 'active' | 'error', error?: string): void
+  }
+}
+
+export class ZeroWallMcpService extends TypertRemoteService {
+  static inject = ['zerowallProjects', 'tools']
+
+  private managed!: ManagedGenerations
+  private readonly connecting = new Map<string, Promise<void>>()
+  private disposed = false
+  private backgroundStarted = false
+  private readonly fibers = new Map<string, Fiber>()
+  /** Tools observed after the corresponding Fiber completed its initial sync. */
+  private readonly registeredTools = new Map<string, string[]>()
+  /** Reconcile version whose initial connection and tools/list have settled. */
+  private readonly readyVersions = new Map<string, number>()
+  private readonly statuses = new Map<string, RuntimeStatus>()
+  private readonly reconcileVersions = new Map<string, number>()
+  private readonly recordsReady: Promise<void>
+  private operation: Promise<void> = Promise.resolve()
+  private environmentPoller: NodeJS.Timeout | undefined
+  private environmentFileSignature = ''
+  private environmentSignature = ''
+  private environmentRefreshInFlight = false
+  private readonly secrets = new SecretBrokerClient()
+  private readonly mcpToolIndex = new Map<string, { server: string; name: string; description: string }>()
+  private readonly failureCooldownUntil = new Map<string, number>()
+
+  constructor(ctx: Context) {
+    super(ctx, 'zerowallMcp')
+    this.managed = new ManagedGenerations(ctx, () => managedEnvironmentRecord()?.root)
+    registerResearchWorkflow(ctx, this)
+    const service = this
+    // Biomni execution runs through the DSH MCP bridge, but its model key is
+    // owned by ZeroWall AI Cloud rather than the DSH credential-local store.
+    // Expose a narrow Host-only resolver so the bridge can inject the active
+    // route key into Biomni execution calls without putting it in session
+    // messages, connection records, or tool descriptions.
+    ctx.provide('zerowallMcpRuntimeEnvironment', {
+      resolve: async (server: string): Promise<Record<string, string>> => {
+        if (server !== 'rmcp') return {}
+        const record = service.projects().listMcpServers().find(item => item.serverName === server)
+        const output: Record<string, string> = {}
+        for (const [name, ref] of Object.entries(record?.envRefs ?? {})) {
+          if (!/^[A-Z][A-Z0-9_]{0,99}$/u.test(name) || /^(?:BIOMNI_|R_PLATFORM_|LD_|PYTHON|ZERO|XDG_|LC_)/u.test(name)
+            || ['PATH', 'HOME', 'TMPDIR', 'TMP', 'TEMP', 'BASH_ENV', 'ENV', 'SHELLOPTS', 'NODE_OPTIONS', 'LLM_SOURCE'].includes(name)) throw new Error(`INVALID_RUNTIME_ENV: ${name}`)
+          const key = `${ENVIRONMENT_SECRET_PREFIX}${ref.toLowerCase()}`
+          const value = await service.secrets.get(key) ?? process.env[ref]
+          if (typeof value !== 'string' || !value.trim()) throw new Error(`MISSING_RUNTIME_ENV: ${name}`)
+          output[name] = value
+        }
+        return output
+      },
+    } as never)
+    ctx.provide('zerowallMcpCredentialResolver', {
+      resolve: async (provider: string, _model: string): Promise<string | undefined> => {
+        // Managed ZeroWall AI Cloud routes keep their key in the account
+        // broker. Delegate first so a missing restored group key can trigger
+        // the account service's single-flight catalog refresh before falling
+        // back to generic provider credentials.
+        try {
+          const aiCloud = service.ctx.get('zerowallAiCloudCredentialResolver') as { resolve?: (provider: string, model: string) => Promise<string | undefined> } | undefined
+          if (typeof aiCloud?.resolve === 'function') {
+            const value = await aiCloud.resolve(provider, _model)
+            if (typeof value === 'string' && value.trim().length > 0) return value.trim()
+          }
+        } catch {
+          // Continue with ambient/DSH/broker credentials below.
+        }
+        const managedKey = aiCloudCredentialKey(provider)
+        const candidates = managedKey === undefined
+          ? providerCredentialNames(provider).map(name => `${ENVIRONMENT_SECRET_PREFIX}${name.toLowerCase()}`)
+          : [managedKey, ...providerCredentialNames(provider).map(name => `${ENVIRONMENT_SECRET_PREFIX}${name.toLowerCase()}`)]
+        for (const name of providerCredentialNames(provider)) {
+          const ambient = process.env[name]?.trim()
+          if (ambient) return ambient
+        }
+        // Official DSH providers keep their apiKeyEnv value in the harness
+        // credential service rather than ZeroWall's environment namespace.
+        // Resolve that service first when this plugin runs inside the DSH Host.
+        const dshCredentials = service.ctx.get('credentials') as { resolve?: (ref: string) => Promise<{ value?: string } | undefined> } | undefined
+        if (typeof dshCredentials?.resolve === 'function') {
+          for (const name of providerCredentialNames(provider)) {
+            try {
+              const resolved = await dshCredentials.resolve(name)
+              if (typeof resolved?.value === 'string' && resolved.value.trim()) return resolved.value.trim()
+            } catch { /* continue with the ZeroWall broker */ }
+          }
+        }
+        for (const key of candidates) {
+          try {
+            const value = await service.secrets.get(key)
+            if (typeof value === 'string' && value.trim()) return value.trim()
+          } catch { /* try the next provider-specific credential */ }
+        }
+        return undefined
+      },
+    } as never)
+    ctx.effect(() => ctx.tools.register(defineTool({
+      name: 'mcp_connect',
+      description: 'Check MCP availability directly. Omit server to return all configured connections and their current status without reconnecting. Pass an enabled server name to await its existing connection or connect it once. Defaults connect in the background at startup. Do not search or read the capability catalog to check connection status.',
+      parameters: { server: { type: 'string' } },
+      output: { schema: { type: 'object', additionalProperties: true }, render: (_args, value) => [{ type: 'text', text: JSON.stringify(value) }] },
+      async execute(args) {
+        await service.recordsReady
+        if (args.server === undefined || args.server.trim() === '') {
+          return { connections: (await service.list()).map(item => ({ server: item.serverName, name: item.name, enabled: item.enabled, state: item.runtimeState, toolCount: item.tools.length, ...(item.runtimeError ? { error: item.runtimeError } : {}) })) }
+        }
+        await service.ensureConnected(args.server)
+          const record = (await service.list()).find(item => item.serverName === args.server)
+          if (record === undefined) throw new Error(`MCP server disappeared during connection: ${args.server}`)
+          return { server: args.server, state: record.runtimeState, tools: record.tools.slice(0, 40), toolCount: record.tools.length }
+      },
+    })), 'zerowall-mcp: demand connection tool')
+    ctx.tools.register(defineTool({
+      name: 'r_files',
+      description: 'Access rdatalinux files through the compact file facade. download_workspace saves a remote project artifact or a server-installed FigureYa source/example file into the current local workspace without confirmation or base64 in the conversation. download_figureya_module saves every FigureYa module artifact (PNG, HTML, README, R/Rmd, CSV/JSON, and other manifest files) into a workspace directory and returns local paths plus checksums. FigureYa source downloads accept module_id plus source_path, or an /opt/rdatalinux-figureya/current/... remote_path, and do not require project_id. upload_workspace requires confirm=true.',
+      parameters: {
+        action: { type: 'string', required: true },
+        arguments: { type: 'json' },
+        project_id: { type: 'string' },
+        module_id: { type: 'string' },
+        source_path: { type: 'string' },
+        local_path: { type: 'string' },
+        remote_path: { type: 'string' },
+        confirm: { type: 'boolean' },
+      },
+      output: {
+        schema: { type: 'object', additionalProperties: true },
+        render: (_args: unknown, value: JsonValue) => [{ type: 'text', text: JSON.stringify(value) }],
+      },
+      isConcurrencySafe(args: unknown) {
+        if (args === null || typeof args !== 'object' || Array.isArray(args)) return false
+        const action = (args as { action?: unknown }).action
+        return typeof action === 'string' && /(?:^catalog$|list|read|manifest|resolve|inspect|status)/iu.test(action)
+      },
+      async execute(args: { action: string; arguments?: JsonValue; project_id?: string; module_id?: string; source_path?: string; local_path?: string; remote_path?: string; confirm?: boolean }, exec: any) {
+        await service.ensureConnected(RDATALINUX_SERVER_NAME)
+        const remoteName = 'mcp__rmcp__r_files'
+        const nestedValues = args.arguments !== null && typeof args.arguments === 'object' && !Array.isArray(args.arguments) ? args.arguments : {}
+        const values = { ...args, ...nestedValues } as typeof args
+        if (args.action !== 'upload_workspace' && args.action !== 'download_workspace' && args.action !== 'download_figureya_module') {
+          if (service.ctx.tools.get(remoteName) === undefined) throw new Error('rdatalinux R MCP is not active; reload the connection before accessing project files.')
+          const nested = await service.ctx.tools.execute({
+            signal: exec.signal,
+            callId: ToolCallId(`r-files-${Date.now()}`),
+            name: remoteName,
+            arguments: { action: args.action, arguments: nestedValues },
+            parent: exec.token,
+            agent: exec.agent,
+          })
+          if (nested.isError) {
+            const message = nested.content.map((block: ContentBlock) => block.type === 'text' ? block.text : '').filter(Boolean).join('\n')
+            throw new Error(message || 'rdatalinux R MCP file operation failed.')
+          }
+          return nested.value as Record<string, JsonValue>
+        }
+        if (args.action === 'upload_workspace' && values.confirm !== true) throw new Error('Uploading a workspace file requires confirm=true.')
+        const sourceRequest = args.action === 'download_workspace' ? figureyaSourceRequest(values.module_id, values.source_path, values.remote_path) : undefined
+        if (typeof values.local_path !== 'string' || (args.action === 'upload_workspace' && (typeof values.project_id !== 'string' || typeof values.remote_path !== 'string'))
+          || (args.action === 'download_workspace' && sourceRequest === undefined && (typeof values.project_id !== 'string' || typeof values.remote_path !== 'string'))) {
+          throw new Error(sourceRequest === undefined
+            ? `project_id, local_path, and remote_path are required for ${args.action}. Server FigureYa sources may omit project_id when module_id/source_path or an /opt/rdatalinux-figureya/current/... remote_path is provided.`
+            : `local_path is required for ${args.action}.`)
+        }
+        const sessionCwd = exec.agent?.session.header.cwd
+        if (typeof sessionCwd !== 'string' || sessionCwd.trim() === '') throw new Error('The current session has no workspace directory.')
+        const workspace = await realpath(resolve(sessionCwd))
+        const requested = String(values.local_path ?? '').trim()
+        if (requested === '' || isAbsolute(requested)) throw new Error('local_path must be a relative path inside the current workspace.')
+        const source = resolve(workspace, requested)
+        const containment = relative(workspace, source)
+        if (containment === '..' || containment.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(containment)) throw new Error('local_path escapes the current workspace.')
+        if (args.action === 'download_figureya_module') {
+          if (typeof values.module_id !== 'string' || values.module_id.trim() === '') throw new Error('module_id is required for download_figureya_module.')
+          const moduleId = values.module_id.trim()
+          const targetRoot = source
+          const isOutsideWorkspace = (candidate: string): boolean => {
+            const candidateRelative = relative(workspace, candidate)
+            return candidateRelative === '..' || candidateRelative.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(candidateRelative)
+          }
+          const ensureWorkspaceDirectory = async (directory: string): Promise<void> => {
+            if (isOutsideWorkspace(directory)) throw new Error('FigureYa artifact path resolves outside the current workspace.')
+            const components = relative(workspace, directory).split(/[\\/]/u).filter(Boolean)
+            let current = workspace
+            for (const component of components) {
+              current = join(current, component)
+              try {
+                const info = await lstat(current)
+                if (!info.isDirectory() || info.isSymbolicLink()) throw new Error('FigureYa artifact directories must not be symbolic links.')
+              } catch (error) {
+                if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+                await mkdir(current)
+              }
+              const resolvedDirectory = await realpath(current)
+              if (isOutsideWorkspace(resolvedDirectory)) throw new Error('FigureYa artifact path resolves outside the current workspace.')
+            }
+          }
+          await ensureWorkspaceDirectory(targetRoot)
+          const catalogTool = 'mcp__rmcp__r_figureya_catalog'
+          if (service.ctx.tools.get(catalogTool) === undefined) throw new Error('rdatalinux FigureYa catalog tool is not active; reload the connection before downloading a module.')
+          const callCatalog = async (action: string, actionArguments: Record<string, JsonValue>): Promise<Record<string, JsonValue>> => {
+            const result = await service.ctx.tools.execute({ signal: exec.signal, callId: ToolCallId(`figureya-module-${Date.now()}-${Math.random().toString(16).slice(2)}`), name: catalogTool, arguments: { action, arguments: actionArguments }, parent: exec.token, agent: exec.agent })
+            return service.compactPayload(result, `FigureYa ${action}`)
+          }
+          const listing = await callCatalog('figureya.list.files', { module_id: moduleId })
+          const rawEntries: JsonValue[] = []
+          const collectEntries = (value: JsonValue): void => {
+            if (Array.isArray(value)) { for (const item of value) collectEntries(item); return }
+            if (value === null || typeof value !== 'object') return
+            const object = value as Record<string, JsonValue>
+            if (typeof object.path === 'string' || typeof object.remote_path === 'string' || typeof object.relative_path === 'string' || typeof object.name === 'string') { rawEntries.push(object); return }
+            for (const key of ['files', 'artifacts', 'list_files', 'manifest']) collectEntries(object[key] ?? null)
+          }
+          collectEntries(listing.files ?? listing)
+          if (rawEntries.length === 0) throw new Error(`FigureYa module ${moduleId} contains no downloadable files.`)
+          const seen = new Set<string>()
+          const files: Array<{ path: string; localPath: string; mimeType?: string; bytes: number; sha256: string }> = []
+          let totalBytes = 0
+          for (const raw of rawEntries) {
+            if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) continue
+            const item = raw as Record<string, JsonValue>
+            const remotePath = [item.path, item.remote_path, item.relative_path, item.name].find(value => typeof value === 'string' && value.trim() !== '')
+            if (typeof remotePath !== 'string') continue
+            const normalizedPath = remotePath.trim().replaceAll('\\', '/').replace(/^\/+/u, '')
+            if (normalizedPath === '' || normalizedPath.split('/').some(part => part === '..' || part === '.')) throw new Error(`FigureYa manifest contains an unsafe path: ${remotePath}`)
+            if (seen.has(normalizedPath)) continue
+            seen.add(normalizedPath)
+            const localModulePath = normalizedPath.startsWith(`${moduleId}/`) ? normalizedPath.slice(moduleId.length + 1) : normalizedPath
+            if (localModulePath === '') throw new Error(`FigureYa manifest contains an unsafe path: ${remotePath}`)
+            const fileManifest = await callCatalog('figureya.source.file.manifest', { module_id: moduleId, path: normalizedPath })
+            const manifest = fileManifest.manifest !== null && typeof fileManifest.manifest === 'object' && !Array.isArray(fileManifest.manifest) ? fileManifest.manifest as Record<string, JsonValue> : fileManifest
+            const expectedBytes = Number(manifest.bytes ?? item.bytes ?? item.size)
+            const expectedSha256 = typeof manifest.sha256 === 'string' ? manifest.sha256.toLowerCase() : typeof item.sha256 === 'string' ? item.sha256.toLowerCase() : ''
+            if (!Number.isSafeInteger(expectedBytes) || expectedBytes < 0 || expectedBytes > RDATALINUX_UPLOAD_MAX_BYTES) throw new Error(`FigureYa file ${normalizedPath} exceeds the 100 MiB per-file limit.`)
+            if (!/^[a-f0-9]{64}$/u.test(expectedSha256)) throw new Error(`FigureYa file ${normalizedPath} has no valid SHA-256.`)
+            totalBytes += expectedBytes
+            if (totalBytes > FIGUREYA_MODULE_MAX_BYTES) throw new Error('The FigureYa module exceeds the 250 MiB total artifact limit.')
+            const destination = resolve(targetRoot, localModulePath)
+            const destinationContainment = relative(targetRoot, destination)
+            if (destinationContainment === '..' || destinationContainment.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(destinationContainment)) throw new Error(`FigureYa manifest contains an unsafe path: ${normalizedPath}`)
+            const destinationParent = dirname(destination)
+            await ensureWorkspaceDirectory(destinationParent)
+            const part = `${destination}.part`
+            try {
+              const existing = await lstat(destination)
+              if (existing.isSymbolicLink() || !existing.isFile()) throw new Error(`FigureYa destination is not a regular file: ${normalizedPath}`)
+            } catch (error) {
+              if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+            }
+            try {
+              await lstat(part)
+              throw new Error(`FigureYa temporary file already exists: ${normalizedPath}.part`)
+            } catch (error) {
+              if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+            }
+            try {
+              let offset = 0
+              const chunks: Buffer[] = []
+              while (offset < expectedBytes) {
+                const chunk = await callCatalog('figureya.read.source.file.chunk', {
+                  module_id: moduleId,
+                  path: typeof fileManifest.path === 'string' ? fileManifest.path : normalizedPath,
+                  offset,
+                  length: Math.min(4_194_304, expectedBytes - offset),
+                  internal_host_download: true,
+                })
+                if (typeof chunk.data_base64 !== 'string' || chunk.data_base64 === '') throw new Error(`The FigureYa file chunk at offset ${offset} has no data.`)
+                const bytes = Buffer.from(chunk.data_base64, 'base64')
+                if (bytes.length < 1 || offset + bytes.length > expectedBytes) throw new Error(`The FigureYa file chunk at offset ${offset} has an invalid length.`)
+                chunks.push(bytes)
+                offset += bytes.length
+              }
+              const bytes = Buffer.concat(chunks)
+              const sha256 = createHash('sha256').update(bytes).digest('hex')
+              if (bytes.length !== expectedBytes || sha256 !== expectedSha256) throw new Error(`The downloaded FigureYa file ${normalizedPath} does not match its manifest.`)
+              await writeFile(part, bytes)
+              await rename(part, destination)
+              files.push({ path: normalizedPath, localPath: relative(workspace, destination).replaceAll('\\', '/'), ...(typeof manifest.mime_type === 'string' ? { mimeType: manifest.mime_type } : typeof manifest.mimeType === 'string' ? { mimeType: manifest.mimeType } : {}), bytes: bytes.length, sha256 })
+            } finally {
+              await unlink(part).catch(() => undefined)
+            }
+          }
+          if (files.length === 0) throw new Error(`FigureYa module ${moduleId} manifest contains no downloadable files.`)
+          return { moduleId, localRoot: relative(workspace, targetRoot).replaceAll('\\', '/'), files, totalBytes }
+        }
+        if (args.action === 'upload_workspace') {
+          if (service.ctx.tools.get(remoteName) === undefined) throw new Error('rdatalinux R MCP is not active; reload the connection before uploading project files.')
+          const info = await lstat(source)
+          if (!info.isFile() || info.isSymbolicLink()) throw new Error('local_path must be a regular, non-symbolic-link file.')
+          const resolvedSource = await realpath(source)
+          if (resolvedSource !== source) throw new Error('local_path must not resolve through a symbolic link.')
+          const size = (await stat(source)).size
+          if (size < 1 || size > 20 * 1024 ** 3) throw new Error('The local file must be between 1 byte and 20 GiB.')
+          await service.executeCompactCapability('r.register.project', { project_id: values.project_id, name: values.project_id }, exec)
+          if (size > RDATALINUX_UPLOAD_MAX_BYTES) {
+            const handle = await open(source, 'r')
+            try {
+              const chunk = Buffer.alloc(4_194_304); const hash = createHash('sha256')
+              for (let position = 0; position < size;) { const { bytesRead } = await handle.read(chunk, 0, Math.min(chunk.length, size - position), position); if (!bytesRead) throw new Error('Upload source changed'); hash.update(chunk.subarray(0, bytesRead)); position += bytesRead }
+              const sha256 = hash.digest('hex')
+              const transfer_id = createHash('sha256').update(JSON.stringify([values.project_id, values.remote_path, sha256, size])).digest('hex')
+              const transfer = async (action: string, fields: Record<string, unknown> = {}) => {
+                const response = await service.ctx.tools.execute({ signal: exec.signal, callId: ToolCallId(`r-transfer-${transfer_id}-${action}`), name: remoteName, arguments: { action: 'r.upload.transfer', arguments: { project_id: values.project_id, transfer_id, action, confirm: true, ...fields } }, parent: exec.token, agent: exec.agent })
+                return service.compactPayload(response, remoteName)
+              }
+              const started = await transfer('start', { path: values.remote_path, bytes: size, sha256 })
+              let position = Number(started.offset)
+              if (!Number.isSafeInteger(position) || position < 0 || position > size) throw new Error('Invalid upload resume offset')
+              while (position < size) {
+                exec.signal.throwIfAborted()
+                const { bytesRead } = await handle.read(chunk, 0, Math.min(chunk.length, size - position), position)
+                if (!bytesRead) throw new Error('Upload source changed')
+                const response = await transfer('chunk', { offset: position, data_base64: chunk.subarray(0, bytesRead).toString('base64') })
+                if (Number(response.offset) !== position + bytesRead) throw new Error('Upload offset acknowledgement mismatch')
+                position += bytesRead
+              }
+              const committed = await transfer('finish')
+              return { projectId: values.project_id!, localPath: requested, remotePath: values.remote_path!, bytes: size, sha256, transferId: transfer_id, remote: committed }
+            } finally { await handle.close() }
+          }
+          const bytes = await readFile(source)
+          const sha256 = createHash('sha256').update(bytes).digest('hex')
+          const nested = await service.ctx.tools.execute({
+            signal: exec.signal,
+            callId: ToolCallId(`r-upload-workspace-${Date.now()}`),
+            name: remoteName,
+            arguments: { action: 'r.upload.file', arguments: { project_id: values.project_id, path: values.remote_path, data_base64: bytes.toString('base64'), confirm: true } },
+            parent: exec.token,
+            agent: exec.agent,
+          })
+          if (nested.isError) {
+            const message = nested.content.map((block: ContentBlock) => block.type === 'text' ? block.text : '').filter(Boolean).join('\n')
+            throw new Error(message || 'rdatalinux R MCP upload failed.')
+          }
+          return { projectId: values.project_id!, localPath: requested, remotePath: values.remote_path!, name: basename(source), bytes: bytes.length, sha256, remote: nested.value as JsonValue }
+        }
+
+        const downloadTool = sourceRequest === undefined ? remoteName : 'mcp__rmcp__r_figureya_catalog'
+        if (service.ctx.tools.get(downloadTool) === undefined) throw new Error('rdatalinux R MCP is not active; reload the connection before downloading files.')
+        const resolvedResult = await service.ctx.tools.execute({
+          signal: exec.signal,
+          callId: ToolCallId(`r-download-resolve-${Date.now()}`),
+          name: downloadTool,
+          arguments: sourceRequest === undefined
+            ? { action: 'r.resolve.file', arguments: { project_id: values.project_id, path: values.remote_path } }
+            : { action: 'figureya.source.file.manifest', arguments: { module_id: sourceRequest.moduleId, path: sourceRequest.path } },
+          parent: exec.token,
+          agent: exec.agent,
+        })
+        const resolvedPayload = service.compactPayload(resolvedResult, 'rdatalinux file resolver')
+        const resolvedRemotePath = typeof resolvedPayload.path === 'string' && resolvedPayload.path.trim() !== ''
+          ? resolvedPayload.path
+          : sourceRequest?.path ?? values.remote_path ?? ''
+        const manifest = resolvedPayload.manifest !== null && typeof resolvedPayload.manifest === 'object' && !Array.isArray(resolvedPayload.manifest)
+          ? resolvedPayload.manifest as Record<string, JsonValue>
+          : resolvedPayload
+        const expectedBytes = Number(manifest.bytes)
+        const expectedSha256 = typeof manifest.sha256 === 'string' ? manifest.sha256.toLowerCase() : ''
+        if (!Number.isSafeInteger(expectedBytes) || expectedBytes < 0 || expectedBytes > 20 * 1024 ** 3) throw new Error('The remote file must be between 0 bytes and 20 GiB.')
+        if (!/^[a-f0-9]{64}$/u.test(expectedSha256)) throw new Error('The remote file manifest has no valid SHA-256.')
+        const parent = dirname(source)
+        let currentParent = workspace
+        for (const component of relative(workspace, parent).split(/[\\/]/u).filter(Boolean)) {
+          currentParent = join(currentParent, component)
+          try {
+            const info = await lstat(currentParent)
+            if (!info.isDirectory() || info.isSymbolicLink()) throw new Error('Download directories must not be symbolic links.')
+          } catch (error) {
+            if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+            await mkdir(currentParent)
+          }
+        }
+        const parentContainment = relative(workspace, await realpath(parent))
+        if (parentContainment === '..' || parentContainment.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(parentContainment)) throw new Error('local_path resolves outside the current workspace.')
+        const temporary = `${source}.${Date.now()}.download-partial`
+        const output = await open(temporary, 'wx')
+        const hash = createHash('sha256')
+        let offset = 0
+        let sha256: string
+        try {
+        while (offset < expectedBytes) {
+          const chunkResult = await service.ctx.tools.execute({
+            signal: exec.signal,
+            callId: ToolCallId(`r-download-chunk-${Date.now()}-${offset}`),
+            name: downloadTool,
+            arguments: sourceRequest === undefined
+              ? { action: 'r.read.file.chunk', arguments: { project_id: values.project_id, path: resolvedRemotePath, offset, length: Math.min(4_194_304, expectedBytes - offset) } }
+              : { action: 'figureya.read.source.file.chunk', arguments: { module_id: sourceRequest.moduleId, path: resolvedRemotePath, offset, length: Math.min(4_194_304, expectedBytes - offset), internal_host_download: true } },
+            parent: exec.token,
+            agent: exec.agent,
+          })
+          const chunkPayload = service.compactPayload(chunkResult, 'rdatalinux file chunk')
+          if (typeof chunkPayload.data_base64 !== 'string' || chunkPayload.data_base64 === '') throw new Error(`The remote file chunk at offset ${offset} has no data.`)
+          const chunk = Buffer.from(chunkPayload.data_base64, 'base64')
+          if (chunk.length < 1 || offset + chunk.length > expectedBytes) throw new Error(`The remote file chunk at offset ${offset} has an invalid length.`)
+          let written = 0
+          while (written < chunk.length) {
+            const progress = await output.write(chunk, written, chunk.length - written)
+            if (progress.bytesWritten === 0) throw new Error('Local download write made no progress.')
+            written += progress.bytesWritten
+          }
+          hash.update(chunk)
+          offset += chunk.length
+        }
+        sha256 = hash.digest('hex')
+        if (offset !== expectedBytes || sha256 !== expectedSha256) throw new Error('The downloaded file does not match its remote Manifest.')
+        await output.sync()
+        await output.close()
+        try {
+          const existing = await lstat(source)
+          if (!existing.isFile() || existing.isSymbolicLink()) throw new Error('local_path must resolve to a regular, non-symbolic-link file.')
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+        }
+        await rename(temporary, source)
+        } finally {
+          await output.close()
+          await unlink(temporary).catch(error => { if (error.code !== 'ENOENT') throw error })
+        }
+        return sourceRequest === undefined
+          ? { projectId: values.project_id!, localPath: requested, requestedRemotePath: values.remote_path!, remotePath: resolvedRemotePath, name: basename(source), bytes: expectedBytes, sha256 }
+          : { moduleId: sourceRequest.moduleId, sourcePath: resolvedRemotePath, localPath: requested, name: basename(source), bytes: expectedBytes, sha256 }
+      },
+    }) as any)
+    this.recordsReady = this.seedBundledServers().then(() => {
+      for (const record of this.projects().listMcpServers()) {
+        this.statuses.set(record.id, {
+          state: record.enabled ? 'idle' : 'disabled',
+          error: '',
+          missingEnvironmentVariables: [],
+        })
+      }
+    }).catch((error: unknown) => {
+      // Existing user records can outlive several desktop releases. A failed
+      // default migration must remain an MCP-domain error instead of becoming
+      // an unhandled startup rejection that terminates the whole Host.
+      ctx.logger.warn(`zerowall-mcp: default connection migration failed: ${redactError(error)}`)
+    })
+    this.operation = this.recordsReady
+    // Nested Cordis fibers created during boot join the boot barrier even
+    // without an await here. Release optional transports after UI mount.
+    const startBackground = (): void => {
+      if (this.backgroundStarted || this.disposed) return
+      this.backgroundStarted = true
+      void this.recordsReady.then(async () => {
+        const pending = this.projects().listMcpServers().map(record => record.id)
+        const worker = async (): Promise<void> => {
+          while (!this.disposed && pending.length > 0) {
+            const record = this.projects().getMcpServer(pending.shift()!)
+            if (!record?.enabled || this.statuses.get(record.id)?.state === 'active') continue
+            this.startConnection(record)
+            await this.connecting.get(record.id)
+          }
+        }
+        await Promise.all([worker(), worker()])
+      }).catch(error => ctx.logger.warn(`zerowall-mcp: background startup failed: ${redactError(error)}`))
+    }
+    if (process.env.ZEROWALL_DEFER_DEFAULT_MCP === '1' && typeof process.send === 'function') {
+      const onDesktopReady = (message: unknown): void => {
+        if (!message || typeof message !== 'object' || (message as { type?: string }).type !== 'zerowall:desktop:workbench-ready') return
+        process.off('message', onDesktopReady)
+        startBackground()
+      }
+      process.on('message', onDesktopReady)
+      ctx.effect(() => () => process.off('message', onDesktopReady), 'zerowall-mcp: desktop startup gate')
+    } else startBackground()
+    // dsh-mcp-client publishes lifecycle events on the root context so that
+    // the service can observe clients created in nested Cordis fibers.
+    const applyStatus = (serverName: string, state: 'starting' | 'active' | 'error', error?: string): void => {
+      const record = this.projects().listMcpServers().find(candidate => candidate.serverName === serverName)
+      if (record === undefined || !record.enabled) return
+      // dsh-mcp-client broadcasts on both the nested Fiber and root context.
+      // A delayed reconnect/start event must not regress a connection that
+      // has already completed its initial tools/list synchronization.
+      if (state === 'starting' && (this.fibers.has(record.id) || this.managed.has(record.id)) && this.registeredTools.has(record.id)) return
+      if (state === 'active') { const names = this.toolNames(record.serverName); this.registeredTools.set(record.id, names); this.indexMcpTools(record.serverName, names) }
+      this.statuses.set(record.id, {
+        state,
+        error: error === undefined ? '' : redactError(error),
+        missingEnvironmentVariables: [],
+      })
+    }
+    // The MCP client emits on both paths. Listening at root is sufficient for
+    // clients created in nested Fibers and avoids duplicate/late transitions.
+    const disposeRootStatusListener = ctx.root.on('mcp-client/status', applyStatus, { global: true })
+    ctx.effect(() => () => {
+      disposeRootStatusListener()
+    }, 'zerowall-mcp: lifecycle status listener')
+    this.startEnvironmentRefresh()
+    ctx.effect(() => async () => {
+      this.disposed = true
+      if (this.environmentPoller !== undefined) clearInterval(this.environmentPoller)
+      this.environmentPoller = undefined
+      await Promise.allSettled([...this.connecting.values()])
+      await this.disposeAll()
+    }, 'zerowall-mcp: dispose dynamic clients')
+  }
+
+  private compactPayload(result: { value?: unknown; content: ContentBlock[]; isError: boolean }, target: string): Record<string, JsonValue> {
+    if (result.isError) throw new Error(result.content.filter(block => block.type === 'text').map(block => block.text).join('\n') || `${target} failed`)
+    if (result.value !== null && typeof result.value === 'object' && !Array.isArray(result.value)) {
+      const value = result.value as Record<string, JsonValue>
+      if (value.structuredContent !== null && typeof value.structuredContent === 'object' && !Array.isArray(value.structuredContent)) return value.structuredContent as Record<string, JsonValue>
+      if (!Array.isArray(value.content)) return value
+      const nestedText = value.content.find(block => block !== null && typeof block === 'object' && !Array.isArray(block) && block.type === 'text') as { text?: JsonValue } | undefined
+      if (typeof nestedText?.text === 'string') {
+        const parsed = JSON.parse(nestedText.text) as unknown
+        if (parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed as Record<string, JsonValue>
+      }
+    }
+    const text = result.content.find(block => block.type === 'text')
+    if (text?.type !== 'text') throw new Error(`${target} returned no structured catalog`)
+    const parsed = JSON.parse(text.text) as unknown
+    if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error(`${target} returned an invalid catalog`)
+    return parsed as Record<string, JsonValue>
+  }
+
+  async workflowRequest(action: string, args: unknown, exec: any): Promise<unknown> {
+    await this.ensureConnected('rmcp')
+    const target = 'mcp__rmcp__r_runtime'
+    const result = await this.ctx.tools.execute({ callId: ToolCallId(`${exec.callId}:${action}`), name: target, arguments: { action, arguments: args }, agent: exec.agent, parent: exec.token, rootCallId: exec.rootCallId ?? exec.callId, signal: exec.signal })
+    if (result.isError) throw new Error(result.content.filter(block => block.type === 'text').map(block => block.text).join('\n'))
+    return this.compactPayload(result, target)
+  }
+
+  async searchCompactCapabilities(query: string, detailId: string | undefined, limit: number, exec: any): Promise<CompactCapabilityRecord[]> {
+    const requests = [
+      {
+        backend: 'rmcp' as const,
+        target: 'mcp__rmcp__r_runtime',
+        arguments: { action: 'capability_search', query: detailId ?? query, detail: detailId !== undefined, limit },
+      },
+      {
+        backend: 'bio' as const,
+        target: 'mcp__zerowall_managed_bio_tools__bio_search',
+        arguments: { query: detailId === undefined ? query : '', ...(detailId === undefined ? {} : { capability_id: detailId }), detail: detailId !== undefined, limit },
+      },
+    ].filter(request => this.ctx.tools.get(request.target) !== undefined)
+    const settled = await Promise.allSettled(requests.map(async request => {
+      const result = await this.ctx.tools.execute({
+        callId: ToolCallId(`${exec.callId}:catalog:${request.backend}`),
+        name: request.target,
+        arguments: request.arguments,
+        agent: exec.agent,
+        parent: exec.token,
+        rootCallId: exec.rootCallId ?? exec.callId,
+        signal: exec.signal,
+      })
+      return { request, payload: this.compactPayload(result, request.target) }
+    }))
+    const records: CompactCapabilityRecord[] = []
+    for (const item of settled) {
+      if (item.status !== 'fulfilled') continue
+      const { request, payload } = item.value
+      const exact = payload.capability
+      const entries = exact !== undefined ? [exact] : (request.backend === 'bio' ? payload.matches : payload.capabilities)
+      if (!Array.isArray(entries)) continue
+      for (const value of entries) {
+        if (value === null || typeof value !== 'object' || Array.isArray(value)) continue
+        const entry = value as Record<string, JsonValue>
+        if (typeof entry.id !== 'string' || typeof entry.public_tool !== 'string') continue
+        records.push({
+          id: entry.id,
+          publicTool: entry.public_tool,
+          summary: typeof entry.summary === 'string' ? entry.summary : '',
+          ...(entry.input_schema === undefined ? {} : { inputSchema: entry.input_schema }),
+          backend: request.backend,
+        })
+      }
+    }
+    return records.slice(0, limit)
+  }
+
+  async executeCompactCapability(id: string, args: unknown, exec: any): Promise<{ target: string; content: ContentBlock[]; value: unknown }> {
+    const [record] = await this.searchCompactCapabilities('', id, 1, exec)
+    if (record === undefined) throw new Error(`UNKNOWN_CAPABILITY: ${id}`)
+    const target = record.backend === 'bio'
+      ? `mcp__zerowall_managed_bio_tools__${record.publicTool}`
+      : `mcp__rmcp__${record.publicTool}`
+    const argumentsValue = record.backend === 'bio'
+      ? { capability_id: id, arguments: args ?? {} }
+      : { action: id, arguments: args ?? {} }
+    const result = await this.ctx.tools.execute({
+      callId: ToolCallId(`${exec.callId}:compact:${id}`),
+      name: target,
+      arguments: argumentsValue,
+      agent: exec.agent,
+      parent: exec.token,
+      rootCallId: exec.rootCallId ?? exec.callId,
+      signal: exec.signal,
+    })
+    if (result.isError) throw new Error(result.content.filter(block => block.type === 'text').map(block => block.text).join('\n') || `${id} failed`)
+    return { target, content: result.content, value: result.value }
+  }
+
+  @Remote('list')
+  async list(): Promise<McpServerDto[]> {
+    await this.recordsReady
+    this.convergeReadyStatuses()
+    return this.projects().listMcpServers().sort(compareMcpServers).map(record => this.dto(record))
+  }
+
+  @Remote('create')
+  create(input: CreateMcpServerRequest): Promise<McpServerDto> {
+    return this.exclusive(async () => {
+      if (isManagedMcpName(input.serverName)) throw new Error('This connection is managed in Environment settings.')
+      const record = this.projects().createMcpServer(input as CreateMcpServerInput)
+      await this.reconcile(record)
+      return this.dto(record)
+    })
+  }
+
+  @Remote('update')
+  update(input: UpdateMcpServerRequest): Promise<McpServerDto> {
+    return this.exclusive(async () => {
+      const existing = this.projects().listMcpServers().find(record => record.id === input.id)
+      if (existing !== undefined && isManagedMcpName(existing.serverName)) {
+        const allowed = new Set(['enabled', 'name', 'toolCallTimeoutMs', 'reconnect', 'failOnStartupError'])
+        if (Object.keys(input.changes).some(key => !allowed.has(key))) throw new Error('Managed connection fields are read-only. Use Environment settings.')
+      } else if (input.changes.serverName !== undefined && isManagedMcpName(input.changes.serverName)) {
+        throw new Error('Managed connection names are reserved.')
+      }
+      const record = this.projects().updateMcpServer(input.id, input.changes as UpdateMcpServerInput)
+      await this.reconcile(record)
+      return this.dto(record)
+    })
+  }
+
+  @Remote('deleteConnection')
+  deleteConnection(id: string): Promise<void> {
+    return this.exclusive(async () => {
+      await this.disposeOne(id)
+      this.projects().deleteMcpServer(id)
+      this.statuses.delete(id)
+    })
+  }
+
+  @Remote('reload')
+  reload(id: string): Promise<McpServerDto> {
+    return this.exclusive(async () => {
+      const record = this.projects().getMcpServer(id)
+      if (record === undefined) throw new Error(`MCP server was not found: ${id}`)
+      await this.reconcile(record, true)
+      return this.dto(record)
+    })
+  }
+
+  @Remote('getSciMasterCredentialStatus')
+  async getSciMasterCredentialStatus(): Promise<{ configured: boolean }> {
+    try {
+      const value = await this.secrets.get(SCIMASTER_API_KEY_CREDENTIAL)
+      return { configured: typeof value === 'string' && value.trim() !== '' }
+    } catch {
+      return { configured: false }
+    }
+  }
+
+  @Remote('setSciMasterApiKey')
+  setSciMasterApiKey(apiKey: string): Promise<McpServerDto | undefined> {
+    return this.exclusive(async () => {
+      const value = apiKey.trim()
+      if (value === '') throw new Error('SciMaster API Key 不能为空。')
+      await this.secrets.set(SCIMASTER_API_KEY_CREDENTIAL, value)
+      const record = this.projects().listMcpServers().find(item => item.serverName === 'zerowall_managed_scimaster')
+      if (record === undefined) return undefined
+      const next = record.enabled ? record : this.projects().updateMcpServer(record.id, { enabled: true })
+      await this.reconcile(next)
+      return this.dto(next)
+    })
+  }
+
+  @Remote('clearSciMasterApiKey')
+  clearSciMasterApiKey(): Promise<McpServerDto | undefined> {
+    return this.exclusive(async () => {
+      await this.secrets.delete(SCIMASTER_API_KEY_CREDENTIAL)
+      const record = this.projects().listMcpServers().find(item => item.serverName === 'zerowall_managed_scimaster')
+      if (record === undefined) return undefined
+      await this.reconcile(record)
+      return this.dto(record)
+    })
+  }
+
+  @Remote('getHuagongsheCredentialStatus')
+  async getHuagongsheCredentialStatus(): Promise<{ configured: boolean }> {
+    try {
+      if ((await this.secrets.get(HUAGONGSHE_CREDENTIAL))?.trim()) return { configured: true }
+    } catch { /* Existing environment references remain supported. */ }
+    const record = this.projects().listMcpServers().find(item => item.serverName === 'huagongshe' && item.url === HUAGONGSHE_URL)
+    const reference = record?.headerRefs.Authorization
+    return { configured: Boolean(reference && process.env[reference]?.trim()) }
+  }
+
+  @Remote('setHuagongsheApiKey')
+  setHuagongsheApiKey(token: string): Promise<McpServerDto> {
+    return this.exclusive(async () => {
+      const value = token.trim().replace(/^Bearer\s+/iu, '')
+      if (!value || /\s/u.test(value)) throw new Error('请输入有效的化工社 API Token。')
+      const previous = this.projects().listMcpServers().find(item => item.serverName === 'huagongshe')
+      if (previous && previous.url !== HUAGONGSHE_URL) throw new Error('化工社连接地址已自定义，请先在 MCP 设置中恢复官方地址。')
+      await this.secrets.set(HUAGONGSHE_CREDENTIAL, value)
+      const record = previous
+        ? this.projects().updateMcpServer(previous.id, { headerRefs: { ...previous.headerRefs, Authorization: HUAGONGSHE_AUTH_ENV } })
+        : this.projects().createMcpServer({ name: '化工社 AIchem', serverName: 'huagongshe', transport: 'streamable-http', url: HUAGONGSHE_URL, enabled: true, headerRefs: { Authorization: HUAGONGSHE_AUTH_ENV }, failOnStartupError: false })
+      const next = record.enabled ? record : this.projects().updateMcpServer(record.id, { enabled: true })
+      await this.reconcile(next)
+      return this.dto(next)
+    })
+  }
+
+  @Remote('clearHuagongsheApiKey')
+  clearHuagongsheApiKey(): Promise<void> {
+    return this.exclusive(async () => {
+      await this.secrets.delete(HUAGONGSHE_CREDENTIAL)
+      const record = this.projects().listMcpServers().find(item => item.serverName === 'huagongshe' && item.url === HUAGONGSHE_URL)
+      if (!record) return
+      const { Authorization: _removed, ...headerRefs } = record.headerRefs
+      await this.reconcile(this.projects().updateMcpServer(record.id, { headerRefs }))
+    })
+  }
+
+  @Remote('getRdatalinuxCredentialStatus')
+  async getRdatalinuxCredentialStatus(): Promise<{ configured: boolean; endpoint: string }> {
+    try {
+      const value = await this.secrets.get(RDATALINUX_R_MCP_AUTHORIZATION_CREDENTIAL)
+      return { configured: typeof value === 'string' && value.trim() !== '', endpoint: RDATALINUX_R_MCP_URL }
+    } catch {
+      return { configured: Boolean(process.env[RDATALINUX_R_MCP_AUTHORIZATION_ENV]?.trim()), endpoint: RDATALINUX_R_MCP_URL }
+    }
+  }
+
+  @Remote('setRdatalinuxAuthorization')
+  setRdatalinuxAuthorization(value: string): Promise<McpServerDto | undefined> {
+    return this.exclusive(async () => {
+      const authorization = value.trim()
+      if (!/^Bearer\s+\S+$/iu.test(authorization)) throw new Error('rdatalinux R MCP Authorization 必须是 Bearer <key>。')
+      await this.secrets.set(RDATALINUX_R_MCP_AUTHORIZATION_CREDENTIAL, authorization)
+      const record = this.projects().listMcpServers().find(item => item.serverName === RDATALINUX_SERVER_NAME)
+      if (record === undefined) return undefined
+      let result: McpServerRecord | undefined
+      for (const item of [record]) {
+        if (item === undefined) continue
+        const next = item.transport === 'streamable-http' && item.headerRefs.Authorization !== RDATALINUX_R_MCP_AUTHORIZATION_ENV
+          ? this.projects().updateMcpServer(item.id, { headerRefs: { ...item.headerRefs, Authorization: RDATALINUX_R_MCP_AUTHORIZATION_ENV }, enabled: true })
+          : item.enabled ? item : this.projects().updateMcpServer(item.id, { enabled: true })
+        await this.reconcile(next)
+        result ??= next
+      }
+      return result === undefined ? undefined : this.dto(result)
+    })
+  }
+
+  @Remote('clearRdatalinuxAuthorization')
+  clearRdatalinuxAuthorization(): Promise<McpServerDto | undefined> {
+    return this.exclusive(async () => {
+      await this.secrets.delete(RDATALINUX_R_MCP_AUTHORIZATION_CREDENTIAL)
+      const record = this.projects().listMcpServers().find(item => item.serverName === RDATALINUX_SERVER_NAME)
+      if (record !== undefined) await this.reconcile(record)
+      return record === undefined ? undefined : this.dto(record)
+    })
+  }
+
+  private exclusive<T>(task: () => Promise<T> | T): Promise<T> {
+    const run = this.operation.then(task, task)
+    this.operation = run.then(() => undefined, () => undefined)
+    return run
+  }
+
+  /**
+   * The desktop installer atomically replaces current.json after a health
+   * check. The Host runs in a separate process, so it cannot receive the
+   * Electron IPC event directly; polling the small state file handles both
+   * atomic replacement and temporary rename gaps without a fragile fs.watch
+   * subscription.
+   */
+  private startEnvironmentRefresh(): void {
+    if (this.environmentPoller !== undefined || process.env.ZEROWALL_MCP_ENVIRONMENT_ROOT?.trim() === '') return
+    // The initial reconcile already reads current.json. Record that generation
+    // as the baseline instead of immediately starting every MCP server twice.
+    this.environmentFileSignature = managedEnvironmentFileSignature()
+    this.environmentSignature = managedEnvironmentSignature(managedEnvironmentRecord(this.environmentFileSignature))
+    const configuredInterval = Number(process.env.ZEROWALL_MCP_ENVIRONMENT_POLL_MS)
+    const interval = Number.isFinite(configuredInterval) && configuredInterval >= 100 ? configuredInterval : MCP_ENVIRONMENT_POLL_INTERVAL_MS
+    this.environmentPoller = setInterval(() => { void this.pollEnvironment().catch(error => this.ctx.logger.warn(`zerowall-mcp: environment transaction failed: ${redactError(error)}`)) }, interval)
+  }
+
+  private async pollEnvironment(): Promise<void> {
+    if (this.environmentRefreshInFlight) return
+    await this.prepareEnvironmentTransaction()
+    this.managed.commitStaged()
+    if (!this.backgroundStarted) return
+    const fileSignature = managedEnvironmentFileSignature()
+    if (fileSignature === this.environmentFileSignature) return
+    this.environmentFileSignature = fileSignature
+    const record = managedEnvironmentRecord(fileSignature)
+    const signature = managedEnvironmentSignature(record)
+    if (signature === this.environmentSignature) return
+    this.environmentSignature = signature
+    // Never tear down a healthy client because an in-progress download or a
+    // transient current.json gap made the new environment unavailable. A
+    // later ready/manual signature performs the safe generation swap.
+    if (record?.health !== 'ready' || typeof record.root !== 'string' || record.root.trim() === '') return
+    this.environmentRefreshInFlight = true
+    try {
+      await this.exclusive(async () => {
+        this.convergeReadyStatuses()
+        if (this.disposed) return
+        for (const server of this.projects().listMcpServers()) {
+          if (server.enabled && isManagedMcp(server.serverName)) await this.reconcile(server)
+        }
+      })
+    } catch (error) {
+      this.ctx.logger.warn(`zerowall-mcp: managed environment refresh failed: ${redactError(error)}`)
+    } finally {
+      this.environmentRefreshInFlight = false
+    }
+  }
+
+  @Remote('pendingEditors')
+  pendingEditors(): Array<{ artifact_id: string; url: string; sessionId: string; cwd: string; createdAt: number }> { return this.managed.ketcher.list() }
+
+  @Remote('acknowledgeEditor')
+  acknowledgeEditor(id: string): void { this.managed.ketcher.acknowledge(id) }
+
+  private activationId = ''
+  private activationBusy = false
+  private async prepareEnvironmentTransaction(): Promise<void> {
+    const root = process.env.ZEROWALL_MCP_ENVIRONMENT_ROOT
+    if (!root || this.activationBusy) return
+    this.activationBusy = true
+    try {
+      const transaction = await readFile(join(root, 'activation.json'), 'utf8').then(JSON.parse, () => undefined)
+      if (!transaction?.transactionId || transaction.transactionId === this.activationId || Date.now() - transaction.createdAt > 180_000) return
+      this.activationId = transaction.transactionId
+      const candidate = transaction.candidate as ManagedEnvironmentRecord
+      if (!candidate.root || candidate.health !== 'ready') throw new Error('无效候选环境。')
+      const prepared: Array<{ id: string; value: Awaited<ReturnType<ManagedGenerations['prepare']>> }> = []
+      try {
+        for (const record of this.projects().listMcpServers().filter(record => record.enabled && isManagedMcp(record.serverName))) {
+          const key = record.serverName === 'zerowall_managed_scimaster' ? await this.secrets.get(SCIMASTER_API_KEY_CREDENTIAL).catch(() => undefined) : undefined
+          if (record.serverName === 'zerowall_managed_scimaster' && !key) continue
+          const resolved = resolveMcpConfig(record, process.env, process.cwd(), undefined, candidate)
+          if (!resolved.config || resolved.config.transport !== 'stdio') throw new Error('候选 MCP 配置无效。')
+          if (key) resolved.config.env.ZEROWALL_SCIMASTER_API_KEY = key
+          try {
+            prepared.push({ id: record.id, value: await this.managed.prepare(resolved.config, candidate.root) })
+          } catch (error) {
+            throw new Error(`候选 MCP ${record.serverName} 启动失败：${redactError(error)}`)
+          }
+        }
+        for (const item of prepared) await this.managed.stage(item.id, candidate.root, item.value)
+        await writeFile(join(root, 'activation-ready.json'), JSON.stringify({ transactionId: transaction.transactionId, ready: true }))
+      } catch (error) {
+        await Promise.allSettled(prepared.map(item => this.managed.discard(item.value)))
+        await writeFile(join(root, 'activation-ready.json'), JSON.stringify({ transactionId: transaction.transactionId, error: redactError(error) }))
+      }
+    } finally { this.activationBusy = false }
+  }
+
+  private async seedBundledServers(): Promise<void> {
+    if (process.env.ZEROWALL_DISABLE_DEFAULT_MCP === '1') return
+    const deferDefaultConnections = process.env.ZEROWALL_DEFER_DEFAULT_MCP === '1'
+    // Default MCP records are enabled by policy. Their reconciliation is
+    // started asynchronously by the Host, so enabling them here does not
+    // block the desktop UI boot and keeps the MCP tab populated immediately.
+    const defaultEnabled = true
+    const marker = defaultMcpMarkerPath()
+    let markerVersion = 0
+    try {
+      const parsed = JSON.parse(await readFile(marker, 'utf8')) as { version?: unknown }
+      markerVersion = typeof parsed.version === 'number' ? parsed.version : 0
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error
+    }
+    const projects = this.projects()
+    // Migrate legacy rdatalinux namespaces while preserving settings.
+    for (const server of projects.listMcpServers()) {
+      if (['rdatalinux_biomni', 'rdatalinux_r_platform', 'rbioagent', 'rplatform', 'rplotfigure'].includes(server.serverName)
+        && server.transport === 'streamable-http'
+        && [RDATALINUX_R_MCP_URL, RDATALINUX_R_MCP_LEGACY_URL].includes(server.url ?? '')
+        && server.headerRefs?.Authorization === RDATALINUX_R_MCP_AUTHORIZATION_ENV) {
+        const existing = projects.listMcpServers().find(candidate => candidate.serverName === RDATALINUX_SERVER_NAME)
+        if (existing === undefined) projects.updateMcpServer(server.id, { serverName: RDATALINUX_SERVER_NAME, name: RDATALINUX_SERVER_NAME })
+        else if (existing.id !== server.id) projects.deleteMcpServer(server.id)
+      }
+    }
+    if (markerVersion < 2) {
+      // This was an early product default with a machine-specific path in its
+      // arguments. Remove only the known ZeroWall default; user-created MCP
+      // records use a different namespace and remain untouched.
+      for (const server of projects.listMcpServers()) {
+        if (server.serverName === 'zerowall_filesystem') projects.deleteMcpServer(server.id)
+      }
+    }
+    if (markerVersion < 4) {
+      // The R Platform MCP service moved from the default HTTP port to 8099.
+      // Migrate only the exact retired endpoint so user-managed MCP URLs are
+      // never rewritten as part of bundled-server maintenance.
+      for (const server of projects.listMcpServers()) {
+        if (server.transport === 'streamable-http' && server.url === RDATALINUX_R_MCP_LEGACY_URL) {
+          projects.updateMcpServer(server.id, { url: RDATALINUX_R_MCP_URL })
+        }
+      }
+    }
+    if (deferDefaultConnections && markerVersion < 6 && process.env.ZEROWALL_REENABLE_DEFAULT_MCP_MIGRATION === '1') {
+      // Releases before the deferred-boot fix persisted the bundled servers
+      // as enabled. On an existing install that made the new desktop flag
+      // ineffective: every managed server still performed tools/list during
+      // boot and could exhaust the Harness heap. Disable only the exact
+      // ZeroWall defaults once; custom MCP records and future user choices are
+      // left untouched.
+      const defaultServerNames = new Set([
+        RDATALINUX_SERVER_NAME,
+        'huagongshe',
+        'zerowall_managed_scimaster',
+        'zerowall_managed_bio_tools',
+        'zerowall_managed_ketcher',
+      ])
+      for (const server of projects.listMcpServers()) {
+        if (defaultServerNames.has(server.serverName) && server.enabled) {
+          projects.updateMcpServer(server.id, { enabled: false })
+        }
+      }
+    }
+    if (markerVersion < 9) {
+      // Restore the product defaults to enabled after the deferred-connection
+      // release. User-created MCP records are left untouched.
+      const defaultServerNames = new Set([
+        RDATALINUX_SERVER_NAME,
+        'huagongshe',
+        'zerowall_managed_scimaster',
+        'zerowall_managed_bio_tools',
+        'zerowall_managed_ketcher',
+      ])
+      for (const server of projects.listMcpServers()) {
+        if (defaultServerNames.has(server.serverName) && !server.enabled) {
+          projects.updateMcpServer(server.id, { enabled: true })
+        }
+      }
+    }
+    for (const server of projects.listMcpServers()) {
+      if (server.serverName === RDATALINUX_SERVER_NAME && server.transport === 'streamable-http' && server.headerRefs.Authorization === undefined) {
+        projects.updateMcpServer(server.id, { headerRefs: { ...server.headerRefs, Authorization: RDATALINUX_R_MCP_AUTHORIZATION_ENV } })
+      }
+    }
+    if (!projects.listMcpServers().some(server => server.serverName === RDATALINUX_SERVER_NAME)) {
+      projects.createMcpServer({
+        name: 'rmcp', serverName: RDATALINUX_SERVER_NAME, transport: 'streamable-http',
+        // Seed the managed record for Settings/Environment, but do not start
+        // a remote tools/list request during a clean desktop boot. Saving a
+        // credential or explicitly enabling the connection reconciles it.
+        enabled: defaultEnabled, url: RDATALINUX_R_MCP_URL,
+        headerRefs: { Authorization: RDATALINUX_R_MCP_AUTHORIZATION_ENV },
+        failOnStartupError: false,
+      })
+    }
+    const bundled = projects.listMcpServers()
+    if (!bundled.some(server => server.serverName === 'huagongshe')) {
+      projects.createMcpServer({ name: '化工社 AIchem', serverName: 'huagongshe', transport: 'streamable-http', enabled: defaultEnabled, url: HUAGONGSHE_URL, failOnStartupError: false })
+    }
+    const displayNames: Record<string, string> = {
+      zerowall_managed_scimaster: 'Sci',
+      [RDATALINUX_SERVER_NAME]: 'rmcp',
+      zerowall_managed_bio_tools: 'Bio Tools',
+      zerowall_managed_ketcher: 'Ketcher Chemistry',
+    }
+    for (const server of bundled) {
+      const desired = displayNames[server.serverName]
+      if (desired !== undefined && server.name !== desired) projects.updateMcpServer(server.id, { name: desired })
+    }
+    if (!bundled.some(server => server.serverName === 'zerowall_managed_bio_tools')) {
+      projects.createMcpServer({ name: 'Bio Tools', serverName: 'zerowall_managed_bio_tools', transport: 'stdio', enabled: defaultEnabled, command: 'zerowall-managed:bio-tools', cwd: '', failOnStartupError: false })
+    }
+    if (!bundled.some(server => server.serverName === 'zerowall_managed_ketcher')) {
+      projects.createMcpServer({ name: 'Ketcher Chemistry', serverName: 'zerowall_managed_ketcher', transport: 'stdio', enabled: defaultEnabled, command: 'zerowall-managed:ketcher', cwd: '', failOnStartupError: false })
+    }
+    if (!bundled.some(server => server.serverName === 'zerowall_managed_scimaster')) {
+      projects.createMcpServer({ name: 'Sci', serverName: 'zerowall_managed_scimaster', transport: 'stdio', enabled: defaultEnabled, command: 'zerowall-managed:scimaster', cwd: '', failOnStartupError: false })
+    }
+    for (const server of projects.listMcpServers()) {
+      const reconnect = { ...server.reconnect }
+      if (reconnect.maxAttempts === 10) reconnect.maxAttempts = 2
+      if (reconnect.initialDelayMs === 500) reconnect.initialDelayMs = 5_000
+      if (reconnect.maxDelayMs === 30_000) reconnect.maxDelayMs = 60_000
+      if (server.toolCallTimeoutMs === 60_000 || JSON.stringify(reconnect) !== JSON.stringify(server.reconnect)) {
+        projects.updateMcpServer(server.id, { toolCallTimeoutMs: server.toolCallTimeoutMs === 60_000 ? 300_000 : server.toolCallTimeoutMs, reconnect })
+      }
+    }
+    await mkdir(dirname(marker), { recursive: true })
+    await writeFile(marker, '{"version":9}\n', 'utf8')
+  }
+
+  private projects() {
+    type ProjectsService = {
+      listMcpServers(): McpServerRecord[]
+      getMcpServer(id: string): McpServerRecord | undefined
+      createMcpServer(input: CreateMcpServerInput): McpServerRecord
+      updateMcpServer(id: string, input: UpdateMcpServerInput): McpServerRecord
+      deleteMcpServer(id: string): void
+    }
+    const projects = this.ctx.get('zerowallProjects') as unknown as ProjectsService | undefined
+    if (projects === undefined) throw new Error('ZeroWall projects service is not available.')
+    return projects
+  }
+
+  private startConnection(record: McpServerRecord): void {
+    if (this.disposed || this.connecting.has(record.id)) return
+    const cooldown = this.failureCooldownUntil.get(record.id) ?? 0
+    if (cooldown > Date.now()) return
+    const pending = this.exclusive(async () => {
+      const latest = this.projects().getMcpServer(record.id)
+      if (!latest || this.disposed || this.statuses.get(record.id)?.state === 'active') return
+      await this.reconcile(latest)
+    }).catch((error: unknown) => {
+      this.failureCooldownUntil.set(record.id, Date.now() + MCP_FAILURE_COOLDOWN_MS)
+      this.ctx.logger.warn(`zerowall-mcp: default connection failed: ${redactError(error)}`)
+    }).finally(() => {
+      if (this.connecting.get(record.id) === pending) this.connecting.delete(record.id)
+    })
+    this.connecting.set(record.id, pending)
+  }
+
+  /** Coalesce demand for one server; inspection and polling never call this method. */
+  async ensureConnected(serverName: string): Promise<void> {
+    await this.recordsReady
+    if (this.disposed) throw new Error('MCP service is stopping.')
+    const record = this.projects().listMcpServers().find(item => item.serverName === serverName)
+    if (record === undefined || !record.enabled) throw new Error('MCP connection is disabled or unknown. Enable it in Settings first.')
+    if (this.statuses.get(record.id)?.state === 'active' && (this.fibers.has(record.id) || this.managed.has(record.id))) return
+    const cooldown = this.failureCooldownUntil.get(record.id) ?? 0
+    if (cooldown > Date.now()) throw new Error('MCP connection is cooling down after a failed start. Retry later or reload it from Settings.')
+    let pending = this.connecting.get(record.id)
+    if (pending === undefined) {
+      pending = this.exclusive(async () => {
+        const current = this.projects().getMcpServer(record.id)
+        if (current === undefined || !current.enabled) throw new Error('MCP connection is disabled or removed.')
+        if (this.statuses.get(record.id)?.state !== 'active') await this.reconcile(current)
+        const status = this.statuses.get(record.id)
+        if (status?.state !== 'active') throw new Error(status?.error || 'MCP connection is unavailable.')
+      })
+      this.connecting.set(record.id, pending)
+    }
+    try {
+      await pending
+      this.failureCooldownUntil.delete(record.id)
+      const status = this.statuses.get(record.id)
+      if (status?.state !== 'active') throw new Error(status?.error || 'MCP connection is unavailable.')
+    } finally { if (this.connecting.get(record.id) === pending) this.connecting.delete(record.id) }
+  }
+
+  private async reconcile(record: McpServerRecord, force = false): Promise<void> {
+    const version = (this.reconcileVersions.get(record.id) ?? 0) + 1
+    this.reconcileVersions.set(record.id, version)
+    this.readyVersions.delete(record.id)
+    const current = (): boolean => !this.disposed && this.reconcileVersions.get(record.id) === version
+    if (!force && record.enabled && isManagedMcp(record.serverName) && this.managed.has(record.id) && this.managed.snapshot(record.id) === managedEnvironmentRecord()?.root) {
+      const names = this.managed.names(record.id)
+      this.registeredTools.set(record.id, names); this.indexMcpTools(record.serverName, names)
+      this.readyVersions.set(record.id, version)
+      this.statuses.set(record.id, { state: 'active', error: '', missingEnvironmentVariables: [] })
+      return
+    }
+    if (!record.enabled) {
+      await this.disposeOne(record.id)
+      if (current()) this.statuses.set(record.id, { state: 'disabled', error: '', missingEnvironmentVariables: [] })
+      return
+    }
+    if (isManagedMcp(record.serverName) && !managedEnvironmentReady()) {
+      if (current() && !(this.fibers.has(record.id) || this.managed.has(record.id))) this.statuses.set(record.id, { state: 'blocked', error: 'The ZeroWall shared Python/MCP environment is not ready. Retry initialization from Python settings.', missingEnvironmentVariables: [] })
+      return
+    }
+    let sciMasterApiKey: string | undefined
+    let rdatalinuxAuthorization: string | undefined
+    if (record.serverName === 'zerowall_managed_scimaster') {
+      try {
+        sciMasterApiKey = await this.secrets.get(SCIMASTER_API_KEY_CREDENTIAL)
+      } catch {
+        sciMasterApiKey = undefined
+      }
+      if (!sciMasterApiKey?.trim()) {
+        await this.disposeOne(record.id)
+        if (current()) this.statuses.set(record.id, { state: 'blocked', error: 'SciMaster 需要配置 API Key。请在设置中保存 Key 后重试。', missingEnvironmentVariables: [] })
+        return
+      }
+    }
+    if (record.serverName === RDATALINUX_SERVER_NAME) {
+      try { rdatalinuxAuthorization = await this.secrets.get(RDATALINUX_R_MCP_AUTHORIZATION_CREDENTIAL) } catch { rdatalinuxAuthorization = undefined }
+      if (!rdatalinuxAuthorization?.trim()) rdatalinuxAuthorization = process.env[RDATALINUX_R_MCP_AUTHORIZATION_ENV]
+    }
+    let huagongsheAuthorization: string | undefined
+    if (record.serverName === 'huagongshe' && record.url === HUAGONGSHE_URL) {
+      try {
+        const token = await this.secrets.get(HUAGONGSHE_CREDENTIAL)
+        if (token?.trim()) huagongsheAuthorization = `Bearer ${token.trim()}`
+      } catch { /* An unavailable vault is reported by reference resolution. */ }
+      if (!huagongsheAuthorization && !process.env[HUAGONGSHE_AUTH_ENV]?.trim()) {
+        await this.disposeOne(record.id)
+        if (current()) this.statuses.set(record.id, { state: 'blocked', error: '请在环境配置中设置化工社 Token。', missingEnvironmentVariables: [] })
+        return
+      }
+    }
+    const environment = record.serverName === RDATALINUX_SERVER_NAME && rdatalinuxAuthorization?.trim()
+      ? { ...process.env, [RDATALINUX_R_MCP_AUTHORIZATION_ENV]: rdatalinuxAuthorization }
+      : process.env
+    const resolved = resolveMcpConfig(record, huagongsheAuthorization ? { ...environment, [HUAGONGSHE_AUTH_ENV]: huagongsheAuthorization } : environment, process.cwd())
+    if (resolved.config === undefined) {
+      await this.disposeOne(record.id)
+      if (current()) this.statuses.set(record.id, {
+        state: 'blocked',
+        error: 'Required environment variables are not available to the Host.',
+        missingEnvironmentVariables: resolved.missingEnvironmentVariables,
+      })
+      return
+    }
+    if (!current()) return
+    if (isManagedMcp(record.serverName) && resolved.config.transport === 'stdio') {
+      const config = resolved.config as McpClient.StdioConfig
+      if (sciMasterApiKey !== undefined) config.env.ZEROWALL_SCIMASTER_API_KEY = sciMasterApiKey
+      try {
+        const candidate = await this.managed.prepare(config, managedEnvironmentRecord()?.root)
+        if (!current()) { await this.managed.discard(candidate); return }
+        const names = this.managed.activate(record.id, candidate)
+        this.registeredTools.set(record.id, names)
+        this.indexMcpTools(record.serverName, names)
+        this.readyVersions.set(record.id, version)
+        this.statuses.set(record.id, { state: 'active', error: '', missingEnvironmentVariables: [] })
+      } catch (error) {
+        if (!this.managed.has(record.id)) this.statuses.set(record.id, { state: 'error', error: redactError(error), missingEnvironmentVariables: [] })
+        else this.ctx.logger.warn(`Managed candidate failed; retaining active generation: ${redactError(error)}`)
+        this.environmentFileSignature = ''
+        this.environmentSignature = ''
+      }
+      return
+    }
+    // DSH reserves a server namespace until the prior client is disposed.
+    await this.disposeOne(record.id)
+    if (!current()) return
+    this.statuses.set(record.id, { state: 'starting', error: '', missingEnvironmentVariables: [] })
+    let replacement: Fiber | undefined
+    try {
+      const config = resolved.config as McpClient.Config
+      if (sciMasterApiKey !== undefined && config.transport === 'stdio') config.env.ZEROWALL_SCIMASTER_API_KEY = sciMasterApiKey
+      const fiber = this.ctx.plugin(McpClient, config)
+      replacement = fiber
+      await fiber
+      if (!current()) {
+        await fiber.dispose()
+        return
+      }
+      this.fibers.set(record.id, fiber)
+      { const names = this.toolNames(record.serverName); this.registeredTools.set(record.id, names); this.indexMcpTools(record.serverName, names) }
+      this.readyVersions.set(record.id, version)
+      // The fiber resolves after the initial transport handshake and
+      // tools/list synchronization.  The lifecycle event normally arrives on
+      // the same turn, but it can cross a nested Fiber boundary before this
+      // service's listener is attached.  Converge the authoritative Host state
+      // here as well so callers never remain stuck at `starting` when tools are
+      // already registered.  Later lifecycle events still win and can report
+      // reconnect/error transitions.
+      if (current()) {
+        this.statuses.set(record.id, { state: 'active', error: '', missingEnvironmentVariables: [] })
+      }
+    } catch (error) {
+      await replacement?.dispose()
+      if (!current()) return
+      this.statuses.set(record.id, {
+        state: 'error',
+        error: redactError(error),
+        missingEnvironmentVariables: [],
+      })
+    }
+  }
+
+  private dto(record: McpServerRecord): McpServerDto {
+    const status = this.statuses.get(record.id) ?? { state: record.enabled ? 'idle' as const : 'disabled' as const, error: '', missingEnvironmentVariables: [] }
+    // Prefer the snapshot captured for this connection generation. Reading the
+    // global registry during a concurrent refresh can otherwise expose a
+    // different server's tools in this DTO.
+    const tools = [...(this.registeredTools.get(record.id) ?? this.toolNames(record.serverName))]
+    const runtimeState = status.state === 'starting' && (this.fibers.has(record.id) || this.managed.has(record.id)) && this.registeredTools.has(record.id)
+      ? 'active'
+      : status.state
+    return {
+      ...record,
+      runtimeState,
+      runtimeError: runtimeState === 'active' ? '' : status.error,
+      missingEnvironmentVariables: [...status.missingEnvironmentVariables],
+      tools,
+    }
+  }
+
+  /**
+   * Lifecycle events are deliberately best-effort notifications and can cross
+   * Cordis Fiber boundaries. The reconcile operation is authoritative: once
+   * its Fiber resolved, the MCP handshake and tools/list synchronization have
+   * completed. Re-assert that state before projecting a DTO so a late
+   * `starting` event cannot leave the settings UI stuck forever.
+   */
+  private convergeReadyStatuses(): void {
+    for (const record of this.projects().listMcpServers()) {
+      const version = this.readyVersions.get(record.id)
+      if (!record.enabled || version === undefined || this.reconcileVersions.get(record.id) !== version || !(this.fibers.has(record.id) || this.managed.has(record.id))) continue
+      const status = this.statuses.get(record.id)
+      if (status?.state === 'starting' || status?.state === undefined) {
+        this.statuses.set(record.id, { state: 'active', error: '', missingEnvironmentVariables: [] })
+      }
+    }
+  }
+
+  private indexMcpTools(serverName: string, names: string[]): void {
+    for (const name of names) this.mcpToolIndex.set(name, { server: serverName, name, description: name.replace(/^mcp__[^_]+__/u, '').replaceAll('_', ' ') })
+  }
+
+  private toolNames(serverName: string): string[] {
+    const prefix = `mcp__${serverName}__`
+    return this.ctx.tools.schemas()
+      .map(schema => schema.name)
+      .filter(name => name.startsWith(prefix))
+      .sort((left, right) => left.localeCompare(right))
+  }
+
+  private async disposeOne(id: string): Promise<void> {
+    await this.managed.remove(id)
+    const fiber = this.fibers.get(id)
+    if (fiber === undefined) return
+    this.fibers.delete(id)
+    this.registeredTools.delete(id)
+    this.readyVersions.delete(id)
+    await fiber.dispose()
+  }
+
+  private async disposeAll(): Promise<void> {
+    await this.managed.dispose()
+    await Promise.allSettled([...this.fibers.keys()].map(id => this.disposeOne(id)))
+  }
+}
+
+function dshHome(): string { return resolve(process.env.DSH_HOME ?? join(homedir(), '.dsh')) }
+function defaultMcpMarkerPath(): string { return join(dshHome(), 'zerowall-mcp-defaults-v1.json') }
+
+/** CA overrides that make `requests`/`pip` abandon their bundled certificates. */
+const MANAGED_CA_ENV_KEYS = ['SSL_CERT_FILE', 'REQUESTS_CA_BUNDLE', 'CURL_CA_BUNDLE', 'PIP_CERT'] as const
+
+/**
+ * A CA path is only usable when it is a real, non-empty file. A stale value
+ * left by a previous runtime layout (for example
+ * ``slots\\b\\bio-tools\\python\\site-packages\\certifi\\cacert.pem``) still
+ * exists as a string but resolves to nothing, and `requests` raises
+ * "Could not find a suitable TLS CA certificate bundle" before any request is
+ * attempted. Symlinks are rejected so a junction pointing at a removed slot
+ * cannot masquerade as a bundle.
+ */
+function usableCaFile(path: string | undefined): path is string {
+  if (!path) return false
+  try {
+    if (!existsSync(path)) return false
+    const info = statSync(path)
+    if (!info.isFile() || info.size === 0) return false
+    return !lstatSync(path).isSymbolicLink()
+  } catch {
+    return false
+  }
+}
+
+function publicCaBundlePath(): string {
+  const appData = process.env.APPDATA?.trim() || join(homedir(), 'AppData', 'Roaming')
+  return join(appData, 'zerowall-science', 'certificates', 'zerowall-public-ca.pem')
+}
+
+/**
+ * Write the application-owned public CA bundle, atomically. An earlier version
+ * wrote in place, so a crash mid-write left a truncated PEM that later checks
+ * accepted on `size > 0` alone; the temp file plus rename means the bundle is
+ * either the previous good copy or the complete new one.
+ */
+function ensurePublicCaBundle(target: string): boolean {
+  if (usableCaFile(target)) return true
+  const temporary = `${target}.${process.pid}.tmp`
+  try {
+    mkdirSync(dirname(target), { recursive: true })
+    writeFileSync(temporary, `${rootCertificates.join('\n')}\n`, 'utf8')
+    if (!usableCaFile(temporary)) return false
+    renameSync(temporary, target)
+  } catch {
+    try { rmSync(temporary, { force: true }) } catch { /* best effort */ }
+    return false
+  }
+  return usableCaFile(target)
+}
+
+/**
+ * Resolve a CA bundle for managed Python/MCP processes. The managed wheel
+ * layer may be installed on demand, so certifi is not guaranteed to exist at
+ * launch time. Keep one application-owned fallback outside the environment;
+ * this also avoids malformed Windows paths being passed through JSON or shell
+ * escaping (for example ``\\b`` becoming a backspace).
+ *
+ * The active runtime record wins over the caller-supplied root: callers have
+ * been observed holding a pre-migration slot path, and a root that is no longer
+ * the live environment must never decide which certificate the child trusts.
+ */
+/**
+ * Absolute site-package directories the interpreter will actually search,
+ * taken from the embedded CPython path file rather than inferred from a layout.
+ *
+ * For embeddable CPython the `pythonXY._pth` file is authoritative: it replaces
+ * `sys.path` bootstrapping, so it — not `sys.prefix`, not `PYTHONPATH`, not the
+ * signed manifest — decides which `certifi` a child imports, and therefore
+ * which `cacert.pem` `certifi.where()` returns. A flat-layout environment lists
+ * `site-packages` directly; a shared environment lists `Lib/site-packages`.
+ * Reading the file is the only way to cover both without a hard-coded guess.
+ */
+function interpreterSitePackages(root: string, relativeExecutable: string | undefined): string[] {
+  const found: string[] = []
+  if (!relativeExecutable) return found
+  const interpreter = resolve(root, relativeExecutable)
+  const directory = dirname(interpreter)
+  let names: string[]
+  try { names = readdirSync(directory) } catch { return found }
+  for (const name of names.filter(entry => entry.endsWith('._pth')).sort()) {
+    let content: string
+    try { content = readFileSync(join(directory, name), 'utf8') } catch { continue }
+    for (const raw of content.split(/\r?\n/u)) {
+      const line = raw.trim()
+      // `import site` and comments are directives, not search directories.
+      if (line === '' || line.startsWith('#') || line.startsWith('import ')) continue
+      const entry = resolve(directory, line.replace(/[\\/]+$/u, ''))
+      // Ignore entries that climb out of the managed shared runtime.
+      const local = relative(root, entry)
+      if (local === '..' || local.startsWith(`..${sep}`) || isAbsolute(local)) continue
+      if (basename(entry) !== 'site-packages') continue
+      if (!found.includes(entry)) found.push(entry)
+    }
+  }
+  return found
+}
+
+/**
+ * Best-effort site-packages directory for a manifest that omits the field. The
+ * interpreter's own path file wins; the shared Python layout is the only
+ * supported runtime contract. Legacy layouts are migrated by the desktop
+ * updater and are never launched here.
+ */
+function derivedSitePackages(root: string, relativeExecutable?: string): string {
+  const interpreter = relativeExecutable ?? 'Python/python.exe'
+  const fromPathFile = interpreterSitePackages(root, interpreter)[0]
+  if (fromPathFile) return relative(root, fromPathFile)
+  for (const candidate of ['Python/Lib/site-packages']) {
+    if (existsSync(join(root, candidate, 'certifi'))) return candidate
+  }
+  return 'Python/Lib/site-packages'
+}
+
+function managedPythonCaFile(root: string, relativeSitePackages: string): string | undefined {
+  const active = managedEnvironmentRecord()
+  const candidates: Array<[string, string]> = []
+  if (active?.root) {
+    candidates.push([active.runtimeRoot ?? active.root, active.manifest?.python?.relativeSitePackages ?? relativeSitePackages])
+  }
+  candidates.push([root, relativeSitePackages])
+  for (const [candidateRoot, candidateRelative] of candidates) {
+    const bundled = join(candidateRoot, candidateRelative, 'certifi', 'cacert.pem')
+    if (usableCaFile(bundled)) return bundled
+  }
+  // Neither record described a bundle that exists. Ask the interpreter where it
+  // will really import `certifi` from, and trust a bundle found there over the
+  // application-owned fallback: that bundle belongs to the environment the child
+  // is about to run in.
+  for (const [candidateRoot, candidateExecutable] of [[root, undefined], [active?.root, active?.manifest?.python?.relativeExecutable]] as Array<[string | undefined, string | undefined]>) {
+    if (!candidateRoot) continue
+    for (const site of interpreterSitePackages(candidateRoot, candidateExecutable ?? derivedExecutable(candidateRoot))) {
+      const bundled = join(site, 'certifi', 'cacert.pem')
+      if (usableCaFile(bundled)) return bundled
+    }
+  }
+  const fallback = publicCaBundlePath()
+  if (ensurePublicCaBundle(fallback)) return fallback
+  return undefined
+}
+
+/** Interpreter path for a record whose manifest cannot be read. */
+function derivedExecutable(root: string): string | undefined {
+  for (const candidate of ['Python/python.exe']) {
+    if (existsSync(join(root, candidate))) return candidate
+  }
+  return undefined
+}
+
+export function resolveMcpConfig(record: McpServerRecord, environment: NodeJS.ProcessEnv, hostCwd = process.cwd(), enabledTools?: string[], candidate?: ManagedEnvironmentRecord): ResolvedMcpConfig {
+  const missing = new Set<string>()
+  const resolveRefs = (refs: Record<string, string>): Record<string, string> => Object.fromEntries(
+    Object.entries(refs).map(([target, source]) => {
+      const value = environment[source]
+      if (value === undefined || value === '') missing.add(source)
+      return [target, value ?? '']
+    }),
+  )
+  const values = resolveRefs(record.transport === 'stdio' ? record.envRefs : record.headerRefs)
+  if (missing.size > 0) return { missingEnvironmentVariables: [...missing].sort() }
+  const common = {
+    serverName: record.serverName,
+    toolCallTimeoutMs: record.toolCallTimeoutMs,
+    failOnStartupError: record.failOnStartupError,
+    reconnect: record.reconnect,
+    ...(enabledTools === undefined ? {} : { enabledTools }),
+  }
+  const launch = record.transport === 'stdio' ? resolveStdioLaunch(record, hostCwd) : undefined
+  if (launch && candidate?.root) {
+    const currentRoot = managedEnvironmentRecord()?.root
+    if (currentRoot) {
+      launch.command = launch.command.replace(currentRoot, candidate.root)
+      launch.args = launch.args.map(arg => arg.replace(currentRoot, candidate.root!))
+      launch.cwd = launch.cwd.replace(currentRoot, candidate.root)
+    } else {
+      // The live environment is unavailable, so there is no root to relocate
+      // from and no manifest to read a layout out of. Deriving one from a
+      // hard-coded flat layout put a stale interpreter path in front of Python;
+      // only the entry scripts below are layout-independent.
+      const relative = record.command === 'zerowall-managed:bio-tools' ? ['', 'bio-tools/run_server.py', 'mcp_bio'] : record.command === 'zerowall-managed:ketcher' ? ['', 'ketcher-chemistry/server.js'] : ['', 'sci/zerowall-mcp-launcher.cjs']
+      launch.command = relative[0] ? join(candidate.root, relative[0]) : process.execPath
+      launch.args = [join(candidate.root, relative[1]!), ...relative.slice(2)]
+      launch.cwd = candidate.root
+    }
+    if (record.command === 'zerowall-managed:bio-tools') {
+      // A first-run candidate lives in a slot until activation. The shared
+      // install-directory interpreter does not exist yet, so preflight must
+      // launch the candidate's own verified interpreter.
+      launch.command = managedCandidatePythonExecutable(candidate)
+      const bioToolsRoot = bundledManagedRoot('ZEROWALL_BIO_TOOLS_ROOT', candidate.root, 'bio-tools')
+      launch.args = [join(bioToolsRoot, 'run_server.py'), 'mcp_bio']
+      launch.cwd = bioToolsRoot
+    } else if (record.command === 'zerowall-managed:ketcher') {
+      const ketcherRoot = bundledManagedRoot('ZEROWALL_KETCHER_ROOT', candidate.root, 'ketcher-chemistry')
+      launch.command = process.execPath
+      launch.args = [join(ketcherRoot, 'server.js')]
+      launch.cwd = ketcherRoot
+    } else if (record.command === 'zerowall-managed:scimaster') {
+      const sciRoot = bundledManagedRoot('ZEROWALL_SCI_ROOT', candidate.root, 'sci')
+      launch.command = process.execPath
+      launch.args = [join(sciRoot, 'zerowall-mcp-launcher.cjs')]
+      launch.cwd = sciRoot
+    }
+  }
+  if (record.transport === 'stdio' && record.command === 'zerowall-managed:bio-tools') {
+    const managed = candidate ?? managedEnvironmentRecord()
+    const root = managed?.root
+    const version = managed?.environmentVersion ?? managed?.version
+    if (root && version) {
+      // Every managed child uses the one application-wide Python directory.
+      // Legacy overlay paths are deliberately ignored after migration so a
+      // stale profile cannot shadow the signed shared site-packages.
+      const relativeSitePackages = managed.manifest?.python?.relativeSitePackages ?? derivedSitePackages(root)
+      const runtimeRoot = candidate ? root : managed.runtimeRoot ?? resolve(root, '..')
+      values.PYTHONPATH = join(runtimeRoot, relativeSitePackages)
+      values.PYTHONNOUSERSITE = '1'
+      // The stdio transport merges these values over the inherited parent
+      // environment (`{ ...scrubbedParentEnv(), ...extra }`). Assigning only on
+      // success left the keys absent from `values`, so a stale CA path that the
+      // Electron process itself had inherited survived the spread verbatim and
+      // reached Python — the reported `slots\b\...\certifi\cacert.pem` failure.
+      // Set or delete, never skip: an absent key is an inherited key.
+      const caFile = managedPythonCaFile(root, relativeSitePackages)
+      for (const key of MANAGED_CA_ENV_KEYS) {
+        if (caFile === undefined) delete values[key]
+        else values[key] = caFile
+      }
+    }
+  }
+  return {
+    missingEnvironmentVariables: [],
+    config: record.transport === 'stdio'
+      ? { ...common, transport: 'stdio', command: launch!.command, args: launch!.args, env: values, cwd: launch!.cwd }
+      : { ...common, transport: 'streamable-http', url: record.url, headers: values },
+  }
+}
+
+export function resolveStdioLaunch(record: Pick<McpServerRecord, 'command' | 'args' | 'cwd'>, hostCwd = process.cwd()): { command: string; args: string[]; cwd: string } {
+  const managed = resolveManagedLaunch(record.command)
+  if (managed !== undefined) return managed
+  const expandHome = (value: string): string => value === '~'
+    ? homedir()
+    : value.startsWith('~/') || value.startsWith('~\\') ? join(homedir(), value.slice(2)) : value
+  const cwd = resolve(hostCwd, expandHome(record.cwd.trim() || '.'))
+  const pathValue = (value: string): string => {
+    const expanded = expandHome(value)
+    const candidate = resolve(cwd, expanded)
+    const explicit = isAbsolute(expanded) || expanded.startsWith('.') || expanded.startsWith('~')
+      || (!expanded.startsWith('@') && (expanded.includes('/') || expanded.includes('\\')))
+    return explicit || existsSync(candidate) ? candidate : value
+  }
+  return {
+    command: pathValue(record.command),
+    args: record.args.map(value => value.startsWith('-') || /^[A-Za-z][A-Za-z\d+.-]*:\/\//u.test(value) ? value : pathValue(value)),
+    cwd,
+  }
+}
+
+function isManagedMcp(serverName: string): boolean { return serverName === 'zerowall_managed_bio_tools' || serverName === 'zerowall_managed_ketcher' || serverName === 'zerowall_managed_scimaster' }
+
+type ManagedEnvironmentRecord = { root?: string; runtimeRoot?: string; health?: string; version?: string; environmentVersion?: string; contentRevision?: number; archiveSha256?: string; mode?: string; manifest?: { python?: { version?: string; relativeExecutable?: string; relativeSitePackages?: string } } }
+
+/**
+ * The signed manifest decides where the interpreter lives. An earlier build
+ * fell back to the flat ``bio-tools/python/python.exe`` layout whenever the
+ * manifest was absent; that layout has no ``Lib`` level and no longer exists in
+ * current environments, so the fallback silently produced a path that resolved
+ * to nothing and the failure only surfaced much later as an interpreter error.
+ * Refusing here names the real problem at the point of use.
+ */
+function managedPythonExecutable(record: ManagedEnvironmentRecord): string {
+  if (!record.runtimeRoot) throw new Error('Managed environment has no shared runtimeRoot.')
+  const root = resolve(record.runtimeRoot)
+  const path = record.manifest?.python?.relativeExecutable
+  if (path !== 'Python/python.exe') throw new Error('Managed environment must use the shared Python/python.exe layout.')
+  const executable = resolve(root, path)
+  const local = relative(root, executable)
+  if (isAbsolute(path) || local === '..' || local.startsWith(`..${sep}`) || isAbsolute(local)) throw new Error('Unsafe managed Python executable')
+  return executable
+}
+
+function managedCandidatePythonExecutable(record: ManagedEnvironmentRecord): string {
+  if (!record.root || record.manifest?.python?.relativeExecutable !== 'Python/python.exe') throw new Error('Managed candidate has no shared Python layout.')
+  const root = resolve(record.root)
+  const executable = resolve(root, record.manifest.python.relativeExecutable)
+  const local = relative(root, executable)
+  if (local === '..' || local.startsWith(`..${sep}`) || isAbsolute(local)) throw new Error('Unsafe managed candidate Python executable')
+  return executable
+}
+let managedEnvironmentCache: { path: string; fileSignature: string; record: ManagedEnvironmentRecord | undefined } | undefined
+
+function managedEnvironmentPath(): string | undefined {
+  const root = process.env.ZEROWALL_PYTHON_ROOT?.trim() || process.env.ZEROWALL_MCP_ENVIRONMENT_ROOT?.trim()
+  return root ? join(root, 'current.json') : undefined
+}
+
+/** Cheap identity for the atomically replaced environment state file. */
+export function managedEnvironmentFileSignature(): string {
+  const path = managedEnvironmentPath()
+  if (path === undefined) return 'disabled'
+  try {
+    const info = statSync(path, { bigint: true })
+    return `${path}:${info.size}:${info.mtimeNs}`
+  } catch {
+    return `${path}:missing`
+  }
+}
+
+/** Parse the multi-megabyte environment record at most once per file generation. */
+export function managedEnvironmentRecord(fileSignature = managedEnvironmentFileSignature()): ManagedEnvironmentRecord | undefined {
+  const path = managedEnvironmentPath()
+  if (path === undefined) return undefined
+  if (managedEnvironmentCache?.path === path && managedEnvironmentCache.fileSignature === fileSignature) return managedEnvironmentCache.record
+  let record: ManagedEnvironmentRecord | undefined
+  try { record = JSON.parse(readFileSync(path, 'utf8')) as ManagedEnvironmentRecord } catch { record = undefined }
+  managedEnvironmentCache = { path, fileSignature, record }
+  return record
+}
+
+function managedEnvironmentSignature(record = managedEnvironmentRecord()): string {
+  return record === undefined
+    ? 'missing'
+    : `${record.health ?? 'unknown'}:${record.environmentVersion ?? record.version ?? 'unknown'}:${record.contentRevision ?? ''}:${record.archiveSha256?.slice(0, 12) ?? ''}:${record.root ?? ''}`
+}
+
+function managedEnvironmentReady(): boolean {
+  const record = managedEnvironmentRecord()
+  const root = record?.root
+  if (!root || record?.health !== 'ready') return false
+  const bioToolsRoot = bundledManagedRoot('ZEROWALL_BIO_TOOLS_ROOT', root, 'bio-tools')
+  const ketcherRoot = bundledManagedRoot('ZEROWALL_KETCHER_ROOT', root, 'ketcher-chemistry')
+  const sciRoot = bundledManagedRoot('ZEROWALL_SCI_ROOT', root, 'sci')
+  return existsSync(managedPythonExecutable(record))
+    && existsSync(join(bioToolsRoot, 'run_server.py'))
+    && existsSync(join(ketcherRoot, 'server.js'))
+    && existsSync(join(sciRoot, 'dist', 'mcp.cjs'))
+    && existsSync(join(sciRoot, 'zerowall-mcp-launcher.cjs'))
+}
+
+const MANAGED_ORDER: Record<string, number> = {
+  zerowall_managed_scimaster: 0,
+  zerowall_managed_bio_tools: 1,
+  zerowall_managed_ketcher: 2,
+}
+
+function compareMcpServers(left: McpServerRecord, right: McpServerRecord): number {
+  const leftOrder = MANAGED_ORDER[left.serverName] ?? 100
+  const rightOrder = MANAGED_ORDER[right.serverName] ?? 100
+  return leftOrder - rightOrder || left.name.localeCompare(right.name)
+}
+
+function resolveManagedLaunch(command: string): { command: string; args: string[]; cwd: string } | undefined {
+  const record = managedEnvironmentRecord()
+  const root = record?.root
+  if (!root || !['zerowall-managed:bio-tools', 'zerowall-managed:ketcher', 'zerowall-managed:scimaster'].includes(command)) return undefined
+  if (command === 'zerowall-managed:bio-tools') {
+    const bioToolsRoot = bundledManagedRoot('ZEROWALL_BIO_TOOLS_ROOT', root, 'bio-tools')
+    return { command: managedPythonExecutable(record!), args: [join(bioToolsRoot, 'run_server.py'), 'mcp_bio'], cwd: bioToolsRoot }
+  }
+  if (command === 'zerowall-managed:ketcher') {
+    const ketcherRoot = bundledManagedRoot('ZEROWALL_KETCHER_ROOT', root, 'ketcher-chemistry')
+    return { command: process.execPath, args: [join(ketcherRoot, 'server.js')], cwd: ketcherRoot }
+  }
+  const sciRoot = bundledManagedRoot('ZEROWALL_SCI_ROOT', root, 'sci')
+  return { command: process.execPath, args: [join(sciRoot, 'zerowall-mcp-launcher.cjs')], cwd: sciRoot }
+}
+
+function bundledManagedRoot(variable: string, managedRoot: string, fallbackDirectory: string): string {
+  const bundled = process.env[variable]?.trim()
+  if (bundled && existsSync(bundled)) return bundled
+  return join(managedRoot, fallbackDirectory)
+}
+
+export function redactError(error: unknown): string {
+  const messages: string[] = []
+  let current: unknown = error
+  for (let depth = 0; depth < 4 && current !== undefined; depth += 1) {
+    messages.push(current instanceof Error ? current.message : String(current))
+    current = current instanceof Error ? current.cause : undefined
+  }
+  return messages.join(': ')
+    .replace(/\b(Bearer|Basic)\s+[A-Za-z0-9+/=_\-.~]+/gi, '$1 [redacted]')
+    .replace(/(authorization|api[-_ ]?key|token|secret|password)\s*[:=]\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/gi, '$1=[redacted]')
+    .replace(/https?:\/\/[^\s)\]}]+/gi, redactUrl)
+    .slice(0, 1000)
+}
+
+function redactUrl(value: string): string {
+  try {
+    const url = new URL(value)
+    url.username = ''
+    url.password = ''
+    if (url.search !== '') url.search = '?[redacted]'
+    url.hash = ''
+    return url.toString()
+  } catch {
+    return '[redacted-url]'
+  }
+}
+
+export function apply(ctx: Context): void {
+  ctx.plugin(ZeroWallMcpService)
+}
+
+export default { apply }
+
+
+
+function isManagedMcpName(name: string): boolean {
+  return ['rmcp', 'huagongshe', 'zerowall_managed_scimaster', 'zerowall_managed_bio_tools', 'zerowall_managed_ketcher'].includes(name)
+}

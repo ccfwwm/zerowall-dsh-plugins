@@ -1,0 +1,11 @@
+node_modules/
+artifacts/
+lib/
+dist/
+.build/
+.env
+.env.*
+*.pem
+*.tsbuildinfo
+*.log
+__pycache__/

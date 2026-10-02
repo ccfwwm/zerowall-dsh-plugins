@@ -1,0 +1,95 @@
+# Broad CPU research set in the one shared runtime; existing core ABI versions are constrained by the
+# three existing locks when compiling requirements-windows.lock.
+-r requirements-science.txt
+-r requirements-managed-compatible.txt
+-r requirements-integrity.txt
+pyzotero>=1.13,<2
+cloudscraper==1.2.71
+markitdown[pdf,docx,pptx,xls,xlsx]==0.1.7
+imageio
+tifffile
+imagecodecs
+pillow-heif
+pydicom==3.0.2
+pylibjpeg[libjpeg,openjpeg,rle]
+pyjpegls
+nibabel
+pynrrd
+SimpleITK
+astropy>=7.2,<9
+dask[array,dataframe,distributed]>=2025.1
+xarray
+netCDF4
+geopandas
+pyogrio
+pyproj
+shapely
+pint>=0.25.3
+uncertainties>=3.2.3
+pingouin>=0.6
+lifelines
+pyDOE3
+simpy==4.1.2
+shap[plots]>=0.52
+pymoo>=0.6.1.6
+scikit-survival==0.28.0
+hdbscan
+xgboost
+pymc>=6.0.1
+arviz>=1.0
+scanpy[leiden]==1.12.4
+pydeseq2==0.5.4
+scikit-bio>=0.7
+gprofiler-official
+flowio==1.4.0
+rdkit
+datamol
+medchem
+pybids
+openpiv>=0.25.4
+pyopenms>=3.5.0
+pymatgen>=2026.5.4
+mp-api>=0.46.4
+pytximport
+qutip>=5.3
+qiskit[visualization]>=2.5
+playwright==1.62.0
+pycryptodome==3.23.0
+tomli==2.2.1
+# BrainGlobe atlas and registration stack in the shared runtime. brain-atlas.ts and brain-transform.ts
+# both refuse to run unless brainreg reports exactly 1.0.16, and the atlas API
+# must agree with the managed atlas on disk, so these are pinned rather than
+# floated. torch arrives transitively through cellfinder and stays in the
+# shared dependency manifest; it is downloaded separately, never shipped in the archive.
+brainglobe
+brainglobe-atlasapi
+brainglobe-utils
+brainreg==1.0.16
+cellfinder
+brainrender
+# HE StarDist segmentation. he-segmentation-runner.ts imports numpy, openslide,
+# tifffile, tensorflow, stardist and csbdeep at module scope, so the shared
+# environment must supply all of them; HE has no private venv.
+# Resolved against the same three constraint locks as the rest of this file, so
+# tensorflow keeps the shared numpy 2.5.3 / protobuf / keras pins. They are
+# installed through the signed dependency manifest and never shipped inside the
+# installer archive.
+stardist
+csbdeep
+tensorflow
+# openslide-python needs the native OpenSlide DLLs on Windows; openslide-bin
+# supplies them as a wheel instead of an external installer.
+openslide-python
+openslide-bin
+# BioGenie runs in the same shared Python as every other capability.
+primer3-py==2.3.1
+dnachisel==3.2.16
+dna-features-viewer==3.1.5
+pydna==5.5.16
+biocrnpyler==1.3.4
+bioscrape==1.4.1
+viennarna==2.7.2
+sbol3==1.2.0.post0
+cobra>=0.32,<1
+adjustText>=1.3,<2
+scienceplots>=2.1,<3

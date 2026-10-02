@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "kind": "python",
+  "applicationVersion": "8.0.2",
+  "localOnly": false,
+  "generatedAt": "2026-10-02T10:44:27.615Z",
+  "resources": [
+    {
+      "id": "science-dependencies",
+      "version": "8.0.2",
+      "kind": "python",
+      "applicationVersion": "8.0.2",
+      "dshRange": {
+        "min": "0.2.0-rc.2",
+        "max": "0.2.0-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.0.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/python/layers/science/8.0.2/dependency-manifest.json",
+      "sha256": "193a36f86926e98a44787d183a6b8b05fb3a6958da0af3a7fe7ea09b1d5403fd",
+      "size": 95282,
+      "restartRequired": false,
+      "rollbackSupported": true,
+      "role": "dependency-manifest",
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-3",
+        "value": "ZtADOTs3RH/Q0ZYrqTeCIrpy0kkNxX6RmltqRBLysuITjpXL+5rmv+G1NdoI1KRmvzhNZxqcDp70nODk/oYrBQ=="
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-3",
+    "value": "l47NANOF4FE0esHqkqftLkBDVat9XBK/P0/v1Yv9VWiZ53+c79kicvKTi2O2Czv2cLBsrx0XzmZtXTJ6ULa1Ag=="
+  }
+}

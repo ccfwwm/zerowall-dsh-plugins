@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "kind": "pointer",
+  "resourceKind": "python",
+  "localOnly": false,
+  "catalog": {
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/python/8.0.2/1790929062515-a92ddf49-1790937863802/catalog.json",
+    "sha256": "c43447b73bd3b1d4de948d2bf9aae5248b192db0bcc3a4040bd9f0bfd3a48486",
+    "size": 1229
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-3",
+    "value": "iqQmx2/iaQskZWuAIgsS6VNK8fI6wi2VTtivKPhCKmz/Dji/mVbGd4ebPa+Nc8fkKA00f/dCmAggGwkJ510PBA=="
+  }
+}

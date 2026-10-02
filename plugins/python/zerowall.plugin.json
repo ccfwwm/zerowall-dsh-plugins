@@ -1,0 +1,36 @@
+{
+  "name": "@zerowallscience/plugin-python",
+  "version": "0.1.0",
+  "applicationVersion": "8.0.0",
+  "restartRequired": true,
+  "desktop": {
+    "min": "8.0.0"
+  },
+  "rollbackSupported": true,
+  "dsh": {
+    "min": "0.2.0-rc.2",
+    "max": "0.2.0-rc.2"
+  },
+  "host": "./lib/index.js",
+  "requiredServices": [
+    "tools"
+  ],
+  "optionalServices": [],
+  "capabilities": [
+    "python"
+  ],
+  "permissions": [
+    "processes",
+    "files"
+  ],
+  "network": false,
+  "files": true,
+  "credentials": false,
+  "approvals": false,
+  "profiles": [
+    "development",
+    "preview",
+    "stable"
+  ],
+  "migrationVersion": 1
+}

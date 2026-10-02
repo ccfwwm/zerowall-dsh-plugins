@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "kind": "mcp",
+  "applicationVersion": "8.0.2",
+  "localOnly": false,
+  "generatedAt": "2026-10-02T10:44:27.607Z",
+  "resources": [
+    {
+      "id": "scimaster",
+      "version": "0.3.15-zws.1",
+      "kind": "mcp",
+      "applicationVersion": "8.0.2",
+      "dshRange": {
+        "min": "0.2.0-rc.2",
+        "max": "0.2.0-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.0.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/mcp/scimaster/0.3.15-zws.1/scimaster.tgz",
+      "sha256": "20a56aae6dcc9064465eec99a95203475f1208a0638d487a1ee46781d3707e48",
+      "size": 176361,
+      "restartRequired": false,
+      "rollbackSupported": true,
+      "role": "server-bundle",
+      "runtime": "node",
+      "entrypoint": "zerowall-mcp-launcher.cjs",
+      "server": {
+        "name": "SciMaster 独立服务",
+        "serverName": "scimaster-independent",
+        "enabled": false,
+        "envRefs": {
+          "ZEROWALL_SCIMASTER_API_KEY": "zerowall.environment.var.scimaster_api_key"
+        }
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-3",
+        "value": "6lOyiajQjD9ffnLqIh8C0/D7FgxE2BOOTK79Eux49JFJBeEUT/tNi34DET04jcnVjBOtUQVPboFMlPaIAqRDDg=="
+      }
+    },
+    {
+      "id": "r-platform",
+      "version": "0.1.0",
+      "kind": "mcp",
+      "applicationVersion": "8.0.2",
+      "dshRange": {
+        "min": "0.2.0-rc.2",
+        "max": "0.2.0-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.0.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/mcp/r-platform/0.1.0/template.json",
+      "sha256": "204bef17eee6be1d49c3d62b33bce4d99e72292595a120019515c2e2107a9cd2",
+      "size": 279,
+      "restartRequired": false,
+      "rollbackSupported": false,
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-3",
+        "value": "eNkwHVOD6blwGDTmzVZyXdKeW5IARx6kh0yODUCPOhL/LWyKCNdNB0Rl7wML7uAw9yU7DGRSc+u0M1IfkyAxDQ=="
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-3",
+    "value": "u20Tgoo5Q3r4NBaFUVHS2ZGZ6by0qb0YAeOa5mlc42fqFGSNvusEGMandNQaOXYvTuubqJnpcN41JOSw9DEUDg=="
+  }
+}
