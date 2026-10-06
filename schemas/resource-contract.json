@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ZeroWall signed resource entry",
+  "type": "object",
+  "required": ["id", "version", "kind", "dshRange", "desktopRange", "platform", "architecture", "downloadUrl", "sha256", "size", "signature", "restartRequired", "rollbackSupported"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+" },
+    "downloadUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "size": { "type": "integer", "minimum": 1 },
+    "restartRequired": { "type": "boolean" },
+    "rollbackSupported": { "type": "boolean" }
+  }
+}
