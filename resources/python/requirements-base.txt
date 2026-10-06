@@ -44,6 +44,6 @@ typing-inspection==0.4.4
 requests==2.34.2
 six==1.17.0
 tzdata==2026.3
-urllib3==2.7.0
+urllib3==2.8.0
 uvicorn==0.52.4
 lxml==6.1.3
