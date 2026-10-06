@@ -1,0 +1,38 @@
+{
+  "name": "@zerowallscience/plugin-ai-cloud",
+  "version": "0.1.1",
+  "applicationVersion": "8.0.0",
+  "restartRequired": true,
+  "desktop": {
+    "min": "8.0.0"
+  },
+  "rollbackSupported": true,
+  "dsh": {
+    "min": "0.2.0-rc.2",
+    "max": "0.2.0-rc.2"
+  },
+  "host": "./lib/index.js",
+  "client": "./lib/client.js",
+  "requiredServices": [
+    "llm",
+    "zerowallAccount"
+  ],
+  "optionalServices": [],
+  "capabilities": [
+    "llm.cloud"
+  ],
+  "permissions": [
+    "credentials",
+    "network"
+  ],
+  "network": true,
+  "files": false,
+  "credentials": true,
+  "approvals": false,
+  "profiles": [
+    "development",
+    "preview",
+    "stable"
+  ],
+  "migrationVersion": 1
+}

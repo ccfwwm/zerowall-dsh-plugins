@@ -1,0 +1,341 @@
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { resolve } from 'node:path'
+import { researchToolConfig } from '../integration/research-tool-config.mjs'
+
+const root = resolve(import.meta.dirname, '../..')
+const rootPackage = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
+const applicationVersion = String(rootPackage.version)
+const migrationBaseline = '0.1.0'
+const hostCompilerOptions = JSON.parse(await readFile(resolve(root, 'tsconfig.plugin.host.json'), 'utf8')).compilerOptions
+const clientInject = [
+  'betterSidebar',
+  // `slots` is the Cordis service used by client plugins to register
+  // sidebar/tool presentations. Keep it in generated manifests so the
+  // Loader creates the client fiber with the same contract exported by the
+  // classic bundle (not only in the hand-maintained source package JSON).
+  'slots',
+  // Alpha.1 exposes conversation event/view registries through the
+  // uiConversation assembly service (the old conversationEvents root service
+  // no longer exists).
+  'uiConversation',
+  // Settings panels bind their namespace through the shared settings scope.
+  'settingsScope',
+  // Domain clients render conversation images and bridge actions back to the
+  // active composer. Keep the service in every generated client contract.
+  'conversation',
+  '@deepseek-ai/dsh-api-gateway',
+  '@deepseek-ai/dsh-api-remotes',
+  '@deepseek-ai/dsh-api-session-controller',
+  '@deepseek-ai/dsh-api-settings-controller',
+  '@deepseek-ai/dsh-api-workspace-controller',
+  '@deepseek-ai/dsh-client-connection',
+  '@deepseek-ai/dsh-client-locale',
+  '@deepseek-ai/dsh-client-store',
+  '@deepseek-ai/dsh-client-ui-chat',
+  '@deepseek-ai/dsh-client-ui-layout',
+  '@deepseek-ai/dsh-client-ui-session',
+  '@deepseek-ai/dsh-client-ui-slots',
+  '@deepseek-ai/dsh-client-ui-sidebar',
+  '@deepseek-ai/dsh-client-ui-settings',
+  '@deepseek-ai/dsh-client-ui-conversation',
+  '@deepseek-ai/dsh-client-ui-attachment',
+  '@deepseek-ai/dsh-client-ui-tool',
+  '@deepseek-ai/dsh-client-ui-workspace',
+]
+
+const externalClientDependencies = {
+  // Use the merged ZeroWall workspace package so the v0.18.0 merge and
+  // ZeroWall compatibility changes are reproducible without overwriting the
+  // custom host integration with a remote package snapshot.
+  'dsh-better-sidebar': 'workspace:^',
+  'dsh-dream-skin': '9.29.0',
+}
+
+const dshDependencies = {
+  '@deepseek-ai/cordis': 'workspace:^',
+  '@deepseek-ai/schemastery': 'workspace:^',
+  '@deepseek-ai/dsh-agent': 'workspace:^',
+  '@deepseek-ai/dsh-agent-default-model': 'workspace:^',
+  '@deepseek-ai/dsh-attachment': 'workspace:^',
+  '@deepseek-ai/dsh-commands': 'workspace:^',
+  '@deepseek-ai/dsh-llm': 'workspace:^',
+  '@deepseek-ai/dsh-llm-pi-ai': 'workspace:^',
+  '@deepseek-ai/dsh-mcp-client': 'workspace:^',
+  '@deepseek-ai/dsh-session': 'workspace:^',
+  '@deepseek-ai/dsh-scope': 'workspace:^',
+  '@deepseek-ai/dsh-session-persistence': 'workspace:^',
+  '@deepseek-ai/dsh-settings': 'workspace:^',
+  '@deepseek-ai/dsh-skill': 'workspace:^',
+  '@deepseek-ai/dsh-skill-filesystem': 'workspace:^',
+  '@deepseek-ai/dsh-subagent': 'workspace:^',
+  '@deepseek-ai/dsh-tools': 'workspace:^',
+  '@deepseek-ai/dsh-typert-protocol': 'workspace:^',
+  '@deepseek-ai/dsh-api-gateway': 'workspace:^',
+  '@deepseek-ai/dsh-api-remotes': 'workspace:^',
+  '@deepseek-ai/dsh-api-session-controller': 'workspace:^',
+  '@deepseek-ai/dsh-api-settings-controller': 'workspace:^',
+  '@deepseek-ai/dsh-api-workspace-controller': 'workspace:^',
+  '@deepseek-ai/dsh-host-webserver': 'workspace:^',
+  '@deepseek-ai/dsh-system-prompt': 'workspace:^',
+  '@deepseek-ai/dsh-workspace': 'workspace:^',
+  '@deepseek-ai/dsh-client-connection': 'workspace:^',
+  '@deepseek-ai/dsh-client-locale': 'workspace:^',
+  '@deepseek-ai/dsh-client-store': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-chat': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-layout': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-session': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-slots': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-sidebar': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-settings': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-conversation': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-attachment': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-tool': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-primitives': 'workspace:^',
+  '@deepseek-ai/dsh-client-ui-workspace': 'workspace:^',
+}
+
+const npmDependencies = {
+  python: { '@zerowallscience/integrity-runtime': 'workspace:^', '@zerowallscience/research-store': 'workspace:^' },
+  pubmed: { compromise: '14.16.0', undici: '^7.16.0', '@zerowallscience/research-store': 'workspace:^', zod: '^4.4.3' },
+  base: { 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0' },
+  projects: { '@deepseek-ai/dsh-session-format-catalog': 'workspace:^', '@deepseek-ai/dsh-session-persistence-jsonl': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
+  account: { qrcode: '^1.5.4', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
+  files: { '@open-file-viewer/core': '0.1.49', 'viewer-pdfjs': 'npm:pdfjs-dist@6.3.289', '@deepseek-ai/dsh-api-workspace-files': 'workspace:^', '@deepseek-ai/dsh-office-to-pdf': 'workspace:^', '@deepseek-ai/dsh-client-ui-sidebar-right': 'workspace:^', '@deepseek-ai/dsh-client-file-upload': 'workspace:^', 'dsh-office-tools': 'github:kw78/dsh-office-tools#d92ac3863ece6248a5f8c1e4aa1958a60b8aaccb', jszip: '3.10.1', 'pdf-lib': '^1.17.1', 'pdfjs-dist': '^4.10.38', xlsx: '^0.18.5', 'fast-xml-parser': '^5.11.0', zod: '^4.4.3', 'lucide-react': '^0.468.0', react: '^18.2.0' },
+  images: { sharp: '^0.35.3', 'lucide-react': '^0.468.0', react: '^18.2.0' },
+  mcp: { '@zerowallscience/plugin-secrets': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
+  skills: { 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
+  'extension-center': { 'lucide-react': '^0.468.0', react: '^18.2.0' },
+  reviewer: { 'lucide-react': '^0.468.0', react: '^18.2.0', zod: '^4.4.3' },
+  environment: { 'lucide-react': '^0.468.0', react: '^18.2.0', zod: '^4.4.3' },
+  mineru: { jszip: '3.10.1', 'lucide-react': '^0.468.0', react: '^18.2.0', zod: '^4.4.3' },
+  singlecell: { 'lucide-react': '^0.468.0', react: '^18.2.0', zod: '^4.4.3' },
+  research: { '@zerowallscience/research-store': 'workspace:^', 'fast-xml-parser': '^5.11.0', 'lucide-react': '^0.468.0', molstar: '5.11.0', react: '^18.2.0', 'react-dom': '^18.2.0', sharp: '0.35.3', zod: '^4.4.3' },
+  execution: { '@zerowallscience/research-store': 'workspace:^', zod: '^4.4.3' },
+  runs: { '@zerowallscience/research-store': 'workspace:^', zod: '^4.4.3' },
+  publications: { '@zerowallscience/research-store': 'workspace:^', jszip: '3.10.1', zod: '^4.4.3' },
+  wechat: { qrcode: '^1.5.4', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0' },
+}
+
+const plugins = [
+  { id: 'pubmed', remote: true, capabilities: ['literature', 'evidence-graph'], permissions: ['files', 'network', 'credentials', 'approvals'], dependencies: ['secrets', 'research'], requiredServices: ['settings', 'tools', 'sessions', 'zerowallResearch'] },
+  // These services are accessed directly by plugin-base during activation.
+  // Keep the generated manifest in sync so Loader injects them before apply.
+  { id: 'base', client: true, clientExternal: [], capabilities: ['ui.locale', 'ui.update'], permissions: [], requiredServices: ['webServer', 'systemPrompt'], optionalServices: ['updater'] },
+  { id: 'desktop-compat', capabilities: ['desktop.profiles', 'desktop.plugins'], permissions: [], requiredServices: [], optionalServices: ['desktopProfiles', 'desktopPnpm'] },
+  { id: 'secrets', capabilities: ['credentials.read', 'credentials.write'], permissions: ['credentials'], requiredServices: [], optionalServices: ['credentialBroker'] },
+  { id: 'environment', client: true, remote: true, capabilities: ['environment-config'], permissions: ['credentials', 'processes'], dependencies: ['secrets', 'base'], requiredServices: ['settings'] },
+  { id: 'projects', client: true, remote: true, capabilities: ['projects', 'workspaces'], permissions: ['files'] },
+  { id: 'account', client: true, remote: true, capabilities: ['account'], permissions: ['credentials', 'network'], dependencies: ['secrets', 'base'] },
+  { id: 'ai-cloud', client: true, capabilities: ['llm.cloud'], permissions: ['credentials', 'network'], dependencies: ['account', 'secrets'], requiredServices: ['llm', 'zerowallAccount'] },
+  { id: 'files', client: true, remote: true, capabilities: ['files', 'data-assets', 'office-tools', 'universal-file-preview', 'automatic-attachment-extraction'], permissions: ['files'], requiredServices: ['tools', 'sessions', 'fs', 'webServer'] },
+  {
+    id: 'images',
+    client: true,
+    capabilities: ['images', 'image-generation'],
+    permissions: ['files', 'network'],
+    dependencies: ['account', 'secrets', 'base', 'environment'],
+    requiredServices: ['tools', 'zerowallEnvironment', 'attachments', 'llm'],
+  },
+  { id: 'mcp', client: true, remote: true, capabilities: ['mcp'], permissions: ['files', 'network', 'credentials'], dependencies: ['projects', 'base', 'secrets'], requiredServices: ['zerowallProjects', 'tools'] },
+  { id: 'skills', client: true, remote: true, capabilities: ['skills'], permissions: ['files'], dependencies: ['base'], requiredServices: ['skills', 'systemPrompt'] },
+  { id: 'extension-center', client: true, capabilities: ['resource-management', 'plugin-updates', 'skill-updates', 'mcp-updates'], permissions: ['files', 'network'], dependencies: ['base'], requiredServices: [] },
+  { id: 'reviewer', client: true, capabilities: ['reviewer'], permissions: ['approvals'], dependencies: ['base'], requiredServices: ['settings', 'subagents', 'commands', 'llm'] },
+  { id: 'research', client: true, remote: true, capabilities: ['research', 'data-assets', 'artifacts'], permissions: ['files'], dependencies: ['projects', 'base'] },
+  { id: 'mineru', client: true, remote: true, capabilities: ['document-parsing', 'artifacts'], permissions: ['files', 'network', 'attachments', 'credentials', 'processes'], dependencies: ['secrets', 'files', 'research', 'base'], requiredServices: ['tools', 'sessions', 'zerowallFiles', 'zerowallResearch'], optionalServices: ['webServer', 'zerowallExecution', 'zerowallRuns'] },
+  { id: 'singlecell', client: true, remote: true, capabilities: ['singlecell-analysis', 'public-data-acquisition', 'scTenifoldKnk', 'analysis-workflow'], permissions: ['files', 'network', 'attachments', 'processes', 'approvals'], dependencies: ['base', 'files', 'projects', 'research', 'runs'], requiredServices: ['tools', 'sessions'], optionalServices: ['zerowallFiles', 'zerowallProjects', 'zerowallResearch', 'zerowallRuns', 'webServer'] },
+  { id: 'execution', client: true, remote: true, capabilities: ['execution-contexts'], permissions: ['processes', 'files'] },
+  { id: 'python', capabilities: ['python'], permissions: ['processes', 'files'], dependencies: [], requiredServices: ['tools'] },
+  { id: 'runs', client: true, remote: true, capabilities: ['runs'], permissions: ['processes', 'files'], dependencies: ['execution'] },
+  { id: 'publications', client: true, remote: true, capabilities: ['papers', 'publications'], permissions: ['files'], dependencies: ['runs'] },
+]
+
+// Every installed plugin owns its remote Client contribution.
+
+for (const plugin of plugins) {
+  plugin.client ||= plugin.remote === true
+  const dir = resolve(root, 'plugins', plugin.id)
+  const name = `@zerowallscience/plugin-${plugin.id}`
+  let previous = {}
+  let previousPlugin = {}
+  try { previous = JSON.parse(await readFile(resolve(dir, 'package.json'), 'utf8')) } catch {}
+  try { previousPlugin = JSON.parse(await readFile(resolve(dir, 'zerowall.plugin.json'), 'utf8')) } catch {}
+  const previousVersion = previous.version
+  const version = previousVersion && !/^7\./.test(previousVersion) ? previousVersion : migrationBaseline
+  await mkdir(resolve(dir, 'src/host'), { recursive: true })
+  await mkdir(resolve(dir, 'src/client'), { recursive: true })
+  await mkdir(resolve(dir, 'src/shared'), { recursive: true })
+  await mkdir(resolve(dir, 'test'), { recursive: true })
+
+  const packageJson = {
+    name,
+    version,
+    description: previous.description ?? `ZeroWall Science ${plugin.id} domain plugin.`,
+    type: 'module',
+    main: './lib/index.js',
+    types: './src/host/index.ts',
+    exports: {
+      '.': { types: './src/host/index.ts', default: './lib/index.js' },
+      ...(plugin.client ? { './client': { types: './src/client/index.ts', default: './lib/client.js' } } : {}),
+      ...(plugin.id === 'base' ? { './client-helpers': './src/shared/client-helpers.ts' } : {}),
+      ...(plugin.remote ? {
+        // DSH alpha Typert composition discovers remote contracts through these
+        // generated faces. Without the exports the generator intentionally
+        // skips typert.host/remote artifacts and the Web client waits forever
+        // for remote.* services even though the Host plugin itself starts.
+        './typert': { types: './lib/typert.host.d.ts', default: './lib/typert.host.js' },
+        './remote': { types: './lib/typert.remote-client.d.ts', default: './lib/typert.remote-client.js' },
+      } : {}),
+      './types': './src/shared/types.ts',
+      './manifest': './zerowall.plugin.json',
+      './package.json': './package.json',
+    },
+    dsh: {
+      bundle: { patch: 'dsh.bundle.patch.yml' },
+      ...(plugin.client ? {
+        client: {
+          inject: plugin.id === 'files' ? [...clientInject, 'remote.workspaceFiles', 'sidebarRightTabs', '@deepseek-ai/dsh-client-ui-sidebar-right', '@deepseek-ai/dsh-api-workspace-files'] : clientInject,
+          ...(plugin.clientExternal === undefined ? {} : { external: plugin.clientExternal }),
+          platform: 'web',
+        },
+      } : {}),
+    },
+    zerowall: {
+      desktop: previous.zerowall?.desktop ?? { min: '8.0.0' },
+      dsh: { min: '0.2.0-rc.2', max: '0.2.0-rc.2' },
+      requiredServices: plugin.requiredServices ?? [],
+      optionalServices: plugin.optionalServices ?? [],
+      capabilities: plugin.capabilities,
+      permissions: plugin.permissions,
+      profiles: ['development', 'preview', 'stable'],
+      migrationVersion: 1,
+      restartRequired: true,
+      rollbackSupported: true,
+    },
+    scripts: {
+      prepack: 'node ../../tools/plugins/prepare-pack.mjs',
+      bundle: plugin.id === 'research' ? 'node ../../tools/science/build-molecule-runtime.mjs && tsdown' : plugin.id === 'files' ? 'node scripts/prepare-viewer-assets.mjs && tsdown' : 'tsdown',
+      typecheck: plugin.client
+        ? 'tsc -p tsconfig.host.json --noEmit && tsc -p tsconfig.client.json --noEmit' + (plugin.id === 'research' ? ' && tsc -p tsconfig.workbench.json --noEmit' : '')
+        : 'tsc -p tsconfig.host.json --noEmit',
+      test: 'vitest run --config ../../vitest.plugins.config.ts',
+    },
+    publishConfig: { directory: `../../artifacts/dev/publish/plugin-${plugin.id}` },
+    license: 'AGPL-3.0-only',
+    files: [
+      'lib', 'src',
+      ...(plugin.remote ? [
+        'lib/typert.host.js',
+        'lib/typert.host.d.ts',
+        'lib/typert.remote-client.js',
+        'lib/typert.remote-client.d.ts',
+      ] : []),
+      'dsh.bundle.patch.yml',
+      'zerowall.plugin.json',
+      ...(['pubmed', 'files'].includes(plugin.id) ? ['THIRD_PARTY_LICENSES'] : []),
+      'README.md',
+    ],
+    dependencies: {
+    ...dshDependencies,
+    ...(plugin.id === 'files' ? { '@deepseek-ai/dsh-fs': 'workspace:^', 'dsh-office-tools': 'github:kw78/dsh-office-tools#d92ac3863ece6248a5f8c1e4aa1958a60b8aaccb' } : {}),
+      ...(plugin.client ? externalClientDependencies : {}),
+      ...Object.fromEntries((plugin.dependencies ?? []).map(id => [`@zerowallscience/plugin-${id}`, 'workspace:^'])),
+      ...(npmDependencies[plugin.id] ?? {}),
+      ...(plugin.id === 'mcp' ? { '@modelcontextprotocol/sdk': '1.30.0', '@modelcontextprotocol/client': '2.0.0' } : {}),
+    },
+    peerDependencies: {
+      '@deepseek-ai/cordis': '4.0.4',
+    },
+    devDependencies: {
+      ...(plugin.id === 'base' ? { '@deepseek-ai/dsh-scope': 'workspace:^' } : {}),
+      ...(plugin.id === 'account' ? { '@deepseek-ai/dsh-client-ui-renderer': 'workspace:^' } : {}),
+      tsdown: '^0.22.2',
+      typescript: '6.0.3',
+      vitest: '^4.1.10',
+    },
+  }
+  for (const [dependency, range] of Object.entries(packageJson.dependencies)) {
+    if (!dependency.startsWith('@deepseek-ai/')) continue
+    packageJson.peerDependencies[dependency] = dependency === '@deepseek-ai/cordis' ? '4.0.4' : dependency === '@deepseek-ai/schemastery' ? '3.18.4' : '0.2.0-rc.2'
+    packageJson.devDependencies[dependency] = range
+    delete packageJson.dependencies[dependency]
+  }
+  await writeFile(resolve(dir, 'package.json'), `${JSON.stringify(packageJson, null, 2)}\n`)
+  await writeFile(resolve(dir, 'zerowall.plugin.json'), `${JSON.stringify({
+    name,
+    version,
+    applicationVersion: previousPlugin.applicationVersion ?? applicationVersion,
+    restartRequired: true,
+    desktop: packageJson.zerowall.desktop,
+    rollbackSupported: true,
+    ...(plugin.remote ? { remote: './lib/typert.remote-client.js' } : {}),
+    dsh: packageJson.zerowall.dsh,
+    host: './lib/index.js',
+    ...(plugin.client ? { client: './lib/client.js' } : {}),
+    requiredServices: packageJson.zerowall.requiredServices,
+    optionalServices: packageJson.zerowall.optionalServices,
+    capabilities: plugin.capabilities,
+    permissions: plugin.permissions,
+    network: plugin.permissions.includes('network'),
+    files: plugin.permissions.includes('files'),
+    credentials: plugin.permissions.includes('credentials'),
+    approvals: plugin.permissions.includes('approvals'),
+    profiles: packageJson.zerowall.profiles,
+    migrationVersion: 1,
+  }, null, 2)}\n`)
+  await writeFile(resolve(dir, 'dsh.bundle.patch.yml'), [
+    '- insert:',
+    `    - id: ${{ 'ai-cloud': 'zerowall-ai-cloud-llm', images: 'zerowall-image-generation', publications: 'zerowall-publication', skills: 'zerowall-skills-plugin' }[plugin.id] ?? `zerowall-${plugin.id}`}`,
+    `      name: '${name}'`,
+    ...(plugin.id === 'mcp' ? ['- id: progressive-tools', `  config: ${JSON.stringify(researchToolConfig)}`] : []),
+    '',
+  ].join('\n'))
+  await writeFile(resolve(dir, 'tsconfig.json'), `${JSON.stringify({
+    files: [],
+    references: [
+      { path: './tsconfig.host.json' },
+      ...(plugin.client ? [{ path: './tsconfig.client.json' }] : []),
+    ],
+  }, null, 2)}\n`)
+  await writeFile(resolve(dir, 'tsconfig.host.json'), `${JSON.stringify({
+    extends: '../../tsconfig.plugin.host.json',
+    include: ['src/host', 'src/shared'],
+    ...(plugin.id === 'mcp' ? { compilerOptions: { paths: {
+      ...hostCompilerOptions.paths,
+      '@deepseek-ai/dsh-util-values': ['deepseek-harness/packages/util/values/src/index.ts'],
+    } } } : {}),
+  }, null, 2)}\n`)
+  await writeFile(resolve(dir, 'tsconfig.client.json'), `${JSON.stringify({
+    extends: '../../tsconfig.plugin.client.json',
+    include: plugin.client ? ['src/client', 'src/shared'] : [],
+  }, null, 2)}\n`)
+  await writeFile(resolve(dir, 'tsdown.config.ts'), [
+    "import { zerowallBundle } from '../../tools/plugins/tsdown.ts'",
+    '',
+    `export default zerowallBundle('${name}', { host: true, client: ${plugin.client === true}${plugin.id === 'ai-cloud'
+      ? String.raw`, hostAlwaysBundle: [/^@deepseek-ai\/dsh-llm-pi-ai\/src\/config\.ts$/u, /llm-pi-ai[\\/]src[\\/]config\.ts$/u]`
+      : plugin.id === 'mcp'
+        ? String.raw`, hostAlwaysBundle: [/^@deepseek-ai\/dsh-mcp-client\/src\//]`
+        : plugin.id === 'research'
+          ? ', inlinePngAssets: true'
+          : plugin.id === 'files'
+            ? ', universalViewer: true'
+          : ''} })`,
+    '',
+  ].join('\n'))
+  if (plugin.client) {
+    await writeFile(resolve(dir, 'src/client/css-modules.d.ts'), "declare module '*.module.css' { const classes: Record<string, string>; export default classes }\n")
+  }
+  if (!(await exists(resolve(dir, 'src/host/index.ts')))) {
+    await writeFile(resolve(dir, 'src/host/index.ts'), 'export function apply(): void {}\nexport default apply\n')
+  }
+  if (plugin.client && !(await exists(resolve(dir, 'src/client/index.ts')))) {
+    await writeFile(resolve(dir, 'src/client/index.ts'), 'export function apply(): void {}\n')
+  }
+  if (!(await exists(resolve(dir, 'src/shared/types.ts')))) {
+    await writeFile(resolve(dir, 'src/shared/types.ts'), 'export type ZeroWallPluginTypes = Record<string, never>\n')
+  }
+}
+
+async function exists(path) {
+  try { await access(path); return true } catch { return false }
+}

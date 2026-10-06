@@ -1,0 +1,3 @@
+- insert:
+    - id: zerowall-skills-plugin
+      name: '@zerowallscience/plugin-skills'

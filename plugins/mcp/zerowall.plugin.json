@@ -1,0 +1,40 @@
+{
+  "name": "@zerowallscience/plugin-mcp",
+  "version": "0.2.2",
+  "applicationVersion": "8.0.5",
+  "restartRequired": true,
+  "desktop": {
+    "min": "8.0.5"
+  },
+  "rollbackSupported": true,
+  "remote": "./lib/typert.remote-client.js",
+  "dsh": {
+    "min": "0.2.0-rc.2",
+    "max": "0.2.0-rc.2"
+  },
+  "host": "./lib/index.js",
+  "client": "./lib/client.js",
+  "requiredServices": [
+    "zerowallProjects",
+    "tools"
+  ],
+  "optionalServices": [],
+  "capabilities": [
+    "mcp"
+  ],
+  "permissions": [
+    "files",
+    "network",
+    "credentials"
+  ],
+  "network": true,
+  "files": true,
+  "credentials": true,
+  "approvals": false,
+  "profiles": [
+    "development",
+    "preview",
+    "stable"
+  ],
+  "migrationVersion": 1
+}

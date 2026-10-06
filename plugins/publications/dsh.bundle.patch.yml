@@ -1,0 +1,3 @@
+- insert:
+    - id: zerowall-publication
+      name: '@zerowallscience/plugin-publications'

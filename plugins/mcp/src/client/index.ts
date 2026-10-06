@@ -1,0 +1,37 @@
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import { McpConnectionsButton, PythonEnvironmentPanel, type McpServerInput } from './McpConnectionsButton.tsx'
+import { NS, unwrapRemoteResult } from '@zerowallscience/plugin-base/client-helpers'
+import { registerKetcherTab } from './KetcherTab.js'
+
+export const inject = ['slots', 'locale', 'remote', 'remote.zerowallMcp', 'betterSidebar']
+
+export function apply(ctx: ClientContext): void {
+  // Capture the dotted remote through reflection while this plugin fiber owns
+  // the dependency. Slot callbacks run later in renderer fibers and must not
+  // read `ctx.remote.zerowallMcp` directly.
+  const mcpRemote = ctx.get('remote.zerowallMcp') as any
+  registerKetcherTab(ctx, mcpRemote)
+  const t = ctx.locale.bind(NS)
+  ctx.slots.inject('settings.plugins.tab', () => ctx.slots.register({
+    name: 'settings.plugins.tab', id: 'zerowall-mcp', order: -10,
+    label: () => t('capabilities.mcpTab'), locale: NS,
+    inject: () => ({
+      embedded: true,
+      listMcpServers: async () => unwrapRemoteResult('zerowall.mcp.list', await mcpRemote?.list?.() ?? { ok: false, error: 'MCP remote is still connecting.' }),
+      createMcpServer: async (input: McpServerInput) => unwrapRemoteResult('zerowall.mcp.create', await mcpRemote.create(input)),
+      updateMcpServer: async (id: string, input: Partial<McpServerInput>) => unwrapRemoteResult('zerowall.mcp.update', await mcpRemote.update({ id, changes: input })),
+      removeMcpServer: async (id: string) => { unwrapRemoteResult('zerowall.mcp.deleteConnection', await mcpRemote.deleteConnection(id)) },
+      reloadMcpServer: async (id: string) => unwrapRemoteResult('zerowall.mcp.reload', await mcpRemote.reload(id)),
+      getSciMasterCredentialStatus: async () => unwrapRemoteResult('zerowall.mcp.getSciMasterCredentialStatus', await mcpRemote.getSciMasterCredentialStatus()),
+      setSciMasterApiKey: async (apiKey: string) => unwrapRemoteResult('zerowall.mcp.setSciMasterApiKey', await mcpRemote.setSciMasterApiKey(apiKey)),
+      clearSciMasterApiKey: async () => unwrapRemoteResult('zerowall.mcp.clearSciMasterApiKey', await mcpRemote.clearSciMasterApiKey()),
+      getRdatalinuxCredentialStatus: async () => unwrapRemoteResult('zerowall.mcp.getRdatalinuxCredentialStatus', await mcpRemote.getRdatalinuxCredentialStatus()),
+      setRdatalinuxAuthorization: async (value: string) => unwrapRemoteResult('zerowall.mcp.setRdatalinuxAuthorization', await mcpRemote.setRdatalinuxAuthorization(value)),
+      clearRdatalinuxAuthorization: async () => unwrapRemoteResult('zerowall.mcp.clearRdatalinuxAuthorization', await mcpRemote.clearRdatalinuxAuthorization()),
+    }),
+  }, McpConnectionsButton))
+  ctx.slots.inject('settings.section', () => ctx.slots.register({
+    name: 'settings.section', id: 'zerowall-python-environment', order: 30,
+    label: () => t('mcp.pythonEnvironment'), locale: NS, inject: () => ({}),
+  }, PythonEnvironmentPanel))
+}

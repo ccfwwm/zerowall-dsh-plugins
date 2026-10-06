@@ -1,0 +1,72 @@
+{
+  "name": "scimaster-cli",
+  "version": "0.3.15",
+  "description": "Scientific literature search CLI powered by SciMaster. Ships both a `sci` command and a `sci-mcp` Model Context Protocol (MCP) server for Claude Code / Cursor / other MCP clients.",
+  "type": "module",
+  "bin": {
+    "sci": "./dist/cli.mjs",
+    "sci-mcp": "./dist/mcp.cjs",
+    "scimaster-cli": "./dist/mcp.cjs"
+  },
+  "files": [
+    "dist/cli.mjs",
+    "dist/mcp.cjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.3.0"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node --loader ts-node/esm src/cli.ts",
+    "dev:mcp": "node --loader ts-node/esm src/mcp.ts",
+    "test": "vitest run",
+    "test:e2e": "node tests/e2e/run.mjs",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run build && npm test"
+  },
+  "keywords": [
+    "cli",
+    "mcp",
+    "model-context-protocol",
+    "papers",
+    "scimaster",
+    "sciland",
+    "literature-search",
+    "pasamaster",
+    "academic",
+    "bibtex",
+    "claude",
+    "cursor"
+  ],
+  "author": "SciMaster Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjtu-sai-agents/PaSaMaster.git"
+  },
+  "homepage": "https://scimaster.bohrium.com/home/scimaster-cli",
+  "bugs": {
+    "url": "https://github.com/scimaster/scimaster-cli/issues"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.0.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "commander": "^12.0.0",
+    "figlet": "^1.11.0",
+    "ink": "^7.0.5",
+    "react": "^19.2.7",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.7.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.2.16",
+    "esbuild": "^0.21.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "packageManager": "pnpm@10.13.1+sha512.37ebf1a5c7a30d5fabe0c5df44ee8da4c965ca0c5af3dbab28c3a1681b70a256218d05c81c9c0dcf767ef6b8551eb5b960042b9ed4300c59242336377e01cfad"
+}

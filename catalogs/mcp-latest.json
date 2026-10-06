@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "kind": "pointer",
+  "resourceKind": "mcp",
+  "localOnly": false,
+  "catalog": {
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/mcp/8.0.5/1791299758563-0341fd43-1791302190005/catalog.json",
+    "sha256": "a2804a1d0fe79e7b3790f48ced89366676c14774604b4a5c851919d9363d2c53",
+    "size": 2357
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-4",
+    "value": "r+ODnXt5atg8vRhCF0yxgbpl1+Hq/UAPKdmUAtdFFCGw3oOg71qn+SviF2CK9UP982it4YA7XmdKrnRWQeOGBA=="
+  }
+}

@@ -1,0 +1,3 @@
+# Compatibility entry point for the managed Python environment.
+# The base profile is shared by MCP, Skills, literature, and document tools.
+-r requirements-base.txt

@@ -1,0 +1,49 @@
+{
+  "name": "@zerowallscience/plugin-mineru",
+  "version": "0.1.2",
+  "applicationVersion": "8.0.1",
+  "restartRequired": true,
+  "desktop": {
+    "min": "8.0.1"
+  },
+  "rollbackSupported": true,
+  "remote": "./lib/typert.remote-client.js",
+  "dsh": {
+    "min": "0.2.0-rc.2",
+    "max": "0.2.0-rc.2"
+  },
+  "host": "./lib/index.js",
+  "client": "./lib/client.js",
+  "requiredServices": [
+    "tools",
+    "sessions",
+    "zerowallFiles",
+    "zerowallResearch"
+  ],
+  "optionalServices": [
+    "webServer",
+    "zerowallExecution",
+    "zerowallRuns"
+  ],
+  "capabilities": [
+    "document-parsing",
+    "artifacts"
+  ],
+  "permissions": [
+    "files",
+    "network",
+    "attachments",
+    "credentials",
+    "processes"
+  ],
+  "network": true,
+  "files": true,
+  "credentials": true,
+  "approvals": false,
+  "profiles": [
+    "development",
+    "preview",
+    "stable"
+  ],
+  "migrationVersion": 1
+}
