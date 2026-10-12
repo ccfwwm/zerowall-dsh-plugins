@@ -99,7 +99,7 @@
 
 ## GitHub 插件中心发布
 
-- 插件中心源码仓库为 [`ccfwwm/zerowall-dsh-plugins`](https://github.com/ccfwwm/zerowall-dsh-plugins)，`main` 提交为 `3b1b6ef9af6c0f6601d4a41f2f489702b422ea13`。
+- 插件中心源码仓库为 [`ccfwwm/zerowall-dsh-plugins`](https://github.com/ccfwwm/zerowall-dsh-plugins)，资源发布时的 `main` 提交为 `3b1b6ef9af6c0f6601d4a41f2f489702b422ea13`，之后仅追加本验收文档提交。
 - 资源 Release 为 [`resources-8.1.3`](https://github.com/ccfwwm/zerowall-dsh-plugins/releases/tag/resources-8.1.3)，公开、非草稿、非预发布，共 342 项资产。
 - 342 项资产已从 GitHub 完整下载并逐项核对大小和 SHA-256，342/342 通过，缺失 0、额外 0、不一致 0。根仓库收据为 `artifacts/release/8.1.3/publication/github-resources-public.json`，上传 API 收据为 `github-resources-api.json`。
 - 插件中心源码合同 CI 已通过（Run [38232793995](https://github.com/ccfwwm/zerowall-dsh-plugins/actions/runs/38232793995)）。桌面主项目 CI 的 DSH bundle 失败属于主仓库打包依赖缺失，详见桌面验收记录，不影响本 Release 已上传资源的字节核验。
