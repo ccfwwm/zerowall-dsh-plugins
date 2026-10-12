@@ -11,7 +11,7 @@
 | 组件 | 版本 |
 | --- | --- |
 | Desktop | 8.1.3 |
-| Python | 0.1.7 |
+| Python | 0.1.10 |
 | BioGenie | 0.1.3；上游 0.6.48，commit `9ad4269d0afd49213431bb4ee4d00566704641f3` |
 | Account / AI Cloud | 0.1.6 / 0.1.6 |
 | MCP / Extension Center / Base | 0.2.11 / 0.1.9 / 0.1.15 |

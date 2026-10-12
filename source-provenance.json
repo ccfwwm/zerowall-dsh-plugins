@@ -1,7 +1,7 @@
 {
   "applicationVersion": "8.1.3",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "2bd818fb89396f64f79d12c31315776f1e06cccb",
+  "sourceCommit": "f727d39994bf396346e3bf249dc5758b3288d27a",
   "buildCommit": "15aa09b7a586ef71f18e0ab06da9cfec4caff929",
   "dshCommit": "8c00ce78435cf35300654c41e69336e69dc758b1",
   "packages": [
@@ -82,7 +82,7 @@
     },
     {
       "id": "@zerowallscience/plugin-python",
-      "version": "0.1.7",
+      "version": "0.1.10",
       "kind": "plugin"
     },
     {

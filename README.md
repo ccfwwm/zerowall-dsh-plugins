@@ -62,6 +62,6 @@ pnpm source:verify
 
 ## 8.1.3 资源基线
 
-Python 插件 0.1.7，BioGenie 独立插件 0.1.3（上游 0.6.48），Account / AI Cloud 0.1.6。固定安装根 Python、本地存在即复用、中科大默认镜像及插件批量激活由桌面 8.1.3 接口协调。
+Python 插件 0.1.10，BioGenie 独立插件 0.1.3（上游 0.6.48），Account / AI Cloud 0.1.6。固定安装根 Python、本地存在即复用、中科大默认镜像及插件批量激活由桌面 8.1.3 接口协调。Python 0.1.10 修复 worker 稳定签名验真、真实本地包检测和逐包依赖状态。
 
 [resources-8.1.3](https://github.com/ccfwwm/zerowall-dsh-plugins/releases/tag/resources-8.1.3) 包含 38 个插件/支持包、282 个 Skills、2 个 MCP、6 个 Python 资源、签名目录与 r18 依赖清单；与七牛已验证资源使用相同字节。目录中的下载 URL 继续指向七牛 Stable，GitHub 作为源码和资源发布镜像。
