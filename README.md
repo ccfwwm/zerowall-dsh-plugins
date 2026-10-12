@@ -56,6 +56,8 @@ pnpm source:verify
 
 `pnpm source:verify` 检查源码版本、DSH 兼容范围及正式 catalog 的签名；它不代替插件类型检查、运行测试和隔离 profile 验收。签名私钥、七牛凭据和用户配置不进入仓库或 Release。
 
+归档管理插件 `@michengai/dsh-archive-manager@1.0.17-zws.1` 位于 [packages/dsh/dsh-archive-manager](packages/dsh/dsh-archive-manager)。在桌面 8.1.3 的扩展中心安装后，进入「设置 → 归档会话」使用。独立构建与打包使用 `pnpm package:build dsh-archive-manager`、`pnpm plugin:pack dsh-archive-manager`，测试使用 `pnpm --filter @michengai/dsh-archive-manager test`。正式签名发布收据保存在 `catalogs/independent/`，详情见 [归档插件验收记录](docs/verification-archive-manager-20261012.md)。
+
 自有代码遵循各包许可证，第三方代码和 Skills 保留原有许可证与来源；不要移除第三方许可说明。
 
 ## 8.1.3 资源基线

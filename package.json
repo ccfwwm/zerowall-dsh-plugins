@@ -16,7 +16,10 @@
     "plugins:typecheck": "pnpm --filter @zerowallscience/plugin-* run typecheck",
     "plugins:test": "pnpm --filter @zerowallscience/plugin-* run test",
     "plugins:pack": "node tools/plugins/pack.mjs",
-    "source:verify": "node tools/plugins/verify-source-repository.mjs"
+    "source:verify": "node tools/plugins/verify-source-repository.mjs",
+    "package:build": "node tools/build/build-graph.mjs package:build",
+    "plugin:build": "node tools/build/build-graph.mjs plugin:build",
+    "plugin:pack": "node tools/build/build-graph.mjs plugin:pack"
   },
   "devDependencies": {
     "@types/node": "24.10.1",

@@ -194,7 +194,29 @@
       "id": "dsh-free-search",
       "version": "0.8.3",
       "kind": "plugin"
+    },
+    {
+      "id": "@michengai/dsh-archive-manager",
+      "version": "1.0.17-zws.1",
+      "kind": "plugin"
     }
   ],
-  "exportedTrackedFiles": 5125
+  "exportedTrackedFiles": 5125,
+  "independentResourceUpdates": [
+    {
+      "id": "@michengai/dsh-archive-manager",
+      "version": "1.0.17-zws.1",
+      "sourcePath": "packages/dsh/dsh-archive-manager",
+      "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
+      "sourceParentCommit": "a807b52ef4023bed765b327bfd1aba2387ea8b62",
+      "sourceCommit": "96c27be80094381f76dea91e33971c83dfc78936",
+      "upstreamCommit": "1f65ada8cc553fbea0a3cfa1564b9136ef196cf8",
+      "buildId": "archive-20261012-1f65ada8",
+      "size": 839560,
+      "sha256": "c2a0ec6b9d418797f44eebe1eec95c6f149359d5776fe4a5dc708e42935cc600",
+      "catalogPath": "catalogs/independent/dsh-archive-manager/1.0.17-zws.1/plugin-catalog.json",
+      "pointerPath": "catalogs/independent/dsh-archive-manager/1.0.17-zws.1/plugin-latest.json",
+      "verification": "docs/verification-archive-manager-20261012.md"
+    }
+  ]
 }
