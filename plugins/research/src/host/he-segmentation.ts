@@ -1,4 +1,5 @@
-import { spawn, type ChildProcess } from 'node:child_process'
+import { type ChildProcess } from 'node:child_process'
+import { spawnWithRuntimeLease as spawn } from '../../../python/src/shared/runtime-process.js'
 import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { mkdir, open, readFile, stat, statfs, writeFile } from 'node:fs/promises'
@@ -29,7 +30,7 @@ export function heSegmentationModel(): string { return process.env.ZEROWALL_HE_S
  *
  * This is the shared managed environment, not a private venv. The runner's
  * imports — numpy, openslide, tifffile, tensorflow, stardist, csbdeep — are
- * declared in `resources/python/requirements-research.txt` and installed on
+ * declared in `resources/extensions/python/requirements-research.txt` and installed on
  * demand through the signed dependency manifest, so a second environment would
  * only duplicate that install, drift from its versions, and need its own update
  * path. This is the only interpreter supported by the application.

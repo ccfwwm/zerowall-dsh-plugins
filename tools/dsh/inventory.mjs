@@ -6,10 +6,13 @@ const dshRoot = resolve(root, 'deepseek-harness')
 const output = resolve(root, 'config/deepseek-harness/plugin-inventory.json')
 const upstream = await json('config/deepseek-harness/upstream.json')
 const desktop = await json('desktop/package.json')
+const integrations = await json('config/integrations/upstream-sources.json')
+const runtimeProfile = await json('config/layout/runtime-profile.json')
+const productionPath = name => `resources/${runtimeProfile.corePlugins.includes(name) ? 'app.asar/node_modules' : 'offline-profile/modules'}/${name}`
 
 const thirdPartyOrder = [
   'dsh-ssh-ops',
-  'dsh-progressive-tools',
+  '@everclear077/dsh-progressive-tools',
   '@dingyi222666/dsh-session-notification',
   'dsh-dream-skin',
   'dsh-better-sidebar',
@@ -24,7 +27,7 @@ const zeroWallOrder = [
   'base', 'secrets', 'environment', 'desktop-compat', 'projects', 'mcp',
   'account', 'ai-cloud',
   'files', 'images',
-  'research', 'pubmed', 'mineru', 'singlecell', 'execution', 'python', 'runs',
+  'research', 'pubmed', 'mineru', 'singlecell', 'execution', 'python', 'biogenie', 'runs',
   'publications', 'skills', 'reviewer', 'extension-center',
 ]
 const expectedOrder = [
@@ -69,7 +72,7 @@ for (const id of zeroWallOrder) {
     permissions: manifest.permissions ?? [],
     requiredServices: manifest.requiredServices ?? [],
     optionalServices: manifest.optionalServices ?? [],
-    productionPath: `resources/app.asar/node_modules/${expectedName}`,
+    productionPath: productionPath(expectedName),
   })
 }
 
@@ -132,12 +135,15 @@ for (const name of kernelPackages) assert(packageNames.has(name), `required DSH 
 
 const thirdPartyPlugins = thirdPartyPackages.map(name => ({
   package: name,
-  version: desktop.dependencies?.[name] ?? null,
+  version: name === 'dsh-dream-skin' ? integrations.dreamSkin.resourceVersion ?? integrations.dreamSkin.version
+    : name === 'dsh-file-review' ? integrations.fileReviewTab.resourceVersion ?? integrations.fileReviewTab.version
+      : name === '@everclear077/dsh-progressive-tools' ? integrations.progressiveTools.resourceVersion ?? integrations.progressiveTools.version
+      : desktop.dependencies?.[name] ?? null,
   owner: 'third-party',
-  registrationSource: profileBundles.has(name) ? 'host-web-profile-bundle' : 'desktop-patch',
+  registrationSource: 'user-profile-bundle',
   source: 'desktop/package.json',
   loadOrder: expectedOrder.indexOf(name) + 1,
-  productionPath: `resources/app.asar/node_modules/${name}`,
+  productionPath: productionPath(name),
 }))
 for (const plugin of thirdPartyPlugins) assert(plugin.version !== null, `desktop/package.json must pin ${plugin.package}`)
 
@@ -159,7 +165,7 @@ const inventory = {
   profiles: profileInventory,
   thirdPartyPlugins,
   zeroWallPlugins,
-  sharedPackages: [{ package: '@zerowallscience/integrity-runtime', source: 'packages/integrity-runtime', plugin: false, productionPath: 'resources/app.asar/node_modules/@zerowallscience/integrity-runtime' }],
+  sharedPackages: [{ package: '@zerowallscience/integrity-runtime', source: 'packages/support/integrity-runtime', plugin: false, productionPath: 'resources/app.asar/node_modules/@zerowallscience/integrity-runtime' }],
 }
 
 await writeFile(output, `${JSON.stringify(inventory, null, 2)}\n`)

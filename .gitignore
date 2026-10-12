@@ -1,6 +1,9 @@
 node_modules/
 artifacts/
-lib/
+/plugins/*/lib/
+/plugins/biogenie/payload/
+/packages/**/lib/
+/store/lib/
 dist/
 .build/
 .env

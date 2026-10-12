@@ -5,12 +5,14 @@ import { resolve, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { assertPluginDesktopCompatibility } from '../plugins/compatibility.mjs'
 import { verifyRuntimeIntegrity } from './runtime-integrity.mjs'
+import { verifyOfflineProfile } from '../commands/offline-profile.mjs'
 
 export async function verifyRuntimeFreshness(root, { allowDirty = process.env.ZEROWALL_ALLOW_DIRTY_DSH === '1' } = {}) {
   const { stage } = paths.buildPaths(root)
   const json = async file => JSON.parse(await readFile(resolve(root, file), 'utf8'))
   const pin = await json('config/deepseek-harness/upstream.json')
   const app = await json('package.json')
+  const runtimeProfile = await json('config/layout/runtime-profile.json')
   const build = await json(`${stage}/dsh/build-receipt.json`)
   const runtime = await json(`${stage}/runtime/build-receipt.json`)
   const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: resolve(root, 'deepseek-harness'), encoding: 'utf8' }).trim()
@@ -31,7 +33,9 @@ export async function verifyRuntimeFreshness(root, { allowDirty = process.env.ZE
     })
     if (manifestText === undefined) continue
     const manifest = JSON.parse(manifestText)
-    const target = resolve(stage, 'runtime/node_modules', manifest.name)
+    const core = runtimeProfile.corePlugins.includes(manifest.name)
+    if (!core && !runtimeProfile.optionalPluginPolicy?.bundled) continue
+    const target = resolve(stage, core ? 'runtime/node_modules' : 'offline-profile/modules', manifest.name)
     assertPluginDesktopCompatibility(manifest.zerowall?.desktop, app.version, manifest.name)
     for (const file of ['package.json', 'zerowall.plugin.json', ...await nestedFiles(join(source, 'lib'), 'lib/')]) {
       if (!(await readFile(join(source, file))).equals(await readFile(join(target, file)))) {
@@ -41,6 +45,8 @@ export async function verifyRuntimeFreshness(root, { allowDirty = process.env.ZE
     }
   }
   await verifyRuntimeIntegrity(root, stage)
+  if (runtimeProfile.optionalPluginPolicy?.offlineClosure) await verifyOfflineProfile(join(stage, 'offline-profile'),
+    await json('config/catalogs/trusted-keys.json'), { desktopVersion: app.version, dshVersion: pin.version, dshCommit: pin.commit, platform: process.platform, architecture: process.arch }, { staging: true })
   return { commit: head, version: app.version, checked }
 }
 

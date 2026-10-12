@@ -1,0 +1,1211 @@
+/* Turn-tail card and native review-tab content. */
+
+.card {
+  margin-top: 16px;
+  overflow: hidden;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 12px;
+  background: var(--dsw-alias-bg-container, Canvas);
+  color: var(--dsw-alias-label-primary);
+  font-size: 13px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 12px;
+}
+
+.fileIconWrap {
+  display: grid;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-secondary);
+}
+
+.icon,
+.buttonIcon,
+.closeIcon {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+.buttonIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.closeIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.cardTitleBlock {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cardTitle {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stats {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 5px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.added {
+  color: var(--dsw-alias-state-success-primary);
+}
+
+.removed {
+  color: var(--dsw-alias-state-error-primary);
+}
+
+.reviewButton,
+.toggleButton,
+.toolbarButton,
+.openButton {
+  border: 1px solid var(--dsw-alias-border-l2);
+  background: var(--dsw-alias-bg-container, Canvas);
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  font: inherit;
+}
+
+.reviewButton,
+.toggleButton,
+.toolbarButton {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 8px;
+}
+
+.reviewButton:hover,
+.toggleButton:hover:not(:disabled),
+.toolbarButton:hover:not(:disabled),
+.openButton:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.reviewButton:focus-visible,
+.toggleButton:focus-visible,
+.toolbarButton:focus-visible,
+.openButton:focus-visible,
+.reviewPath:focus-visible,
+.fileRow:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--dsw-alias-border-l3);
+}
+
+.fileList {
+  border-top: 1px solid var(--dsw-alias-border-l1);
+}
+
+.fileRow {
+  display: flex;
+  width: 100%;
+  min-height: 38px;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 1px solid var(--dsw-alias-border-l1);
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.fileRow:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.fileName {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.moreFiles {
+  display: block;
+  width: 100%;
+  min-height: 34px;
+  margin: 0;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--dsw-alias-label-tertiary);
+  cursor: pointer;
+  font: inherit;
+  line-height: 34px;
+  text-align: left;
+}
+
+.moreFiles:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-primary);
+}
+
+.moreFiles:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--dsw-alias-border-l3);
+}
+
+/* Review panel: a quiet sunken canvas holding one lifted card per file. The
+   local tokens only remix host aliases, so light, dark and custom themes all
+   keep working without a second palette. */
+.reviewContent {
+  --fr-add: var(--dsw-alias-state-success-primary);
+  --fr-del: var(--dsw-alias-state-error-primary);
+  --fr-accent: var(--dsw-alias-state-business-primary);
+  --fr-surface: var(--dsw-alias-bg-layer-1, Canvas);
+  --fr-canvas: color-mix(in oklab, var(--dsw-alias-label-primary) 3.5%, var(--fr-surface));
+  --fr-card-shadow:
+    0 0 0 1px var(--dsw-alias-border-l2), 0 1px 2px color-mix(in srgb, black 4%, transparent),
+    0 4px 14px -6px color-mix(in srgb, black 10%, transparent);
+
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--fr-surface);
+  color: var(--dsw-alias-label-primary);
+}
+
+.reviewHeader {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+  min-height: 64px;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 12px 14px 12px 18px;
+  border-bottom: 1px solid var(--dsw-alias-border-l2);
+  background: var(--fr-surface);
+}
+
+.reviewToolbar {
+  display: flex;
+  min-width: 0;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 11px;
+  background: var(--fr-canvas);
+  box-shadow: inset 0 0 0 1px var(--dsw-alias-border-l1);
+}
+
+.reviewHeading {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.reviewTitle {
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 22px;
+}
+
+.reviewSubtitle {
+  overflow: hidden;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--fr-canvas);
+  box-shadow: inset 0 0 0 1px var(--dsw-alias-border-l1);
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Totals read as a compact chip with a five-cell diffstat meter. */
+.reviewContent .stats {
+  align-items: center;
+  font: var(--dsw-font-markdown-code-block);
+  font-weight: 600;
+}
+
+.reviewHeader > .stats {
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--fr-canvas);
+  box-shadow: inset 0 0 0 1px var(--dsw-alias-border-l1);
+  line-height: 22px;
+}
+
+.statsBar {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 2px;
+}
+
+.statsCell {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--dsw-alias-border-l3);
+}
+
+.statsCellAdded {
+  background: var(--fr-add, var(--dsw-alias-state-success-primary));
+}
+
+.statsCellRemoved {
+  background: var(--fr-del, var(--dsw-alias-state-error-primary));
+}
+
+.reviewToolbar .toolbarButton {
+  min-height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 13px;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.reviewToolbar .toolbarButton:hover:not(:disabled) {
+  background: var(--fr-surface);
+  box-shadow: var(--fr-card-shadow);
+  color: var(--dsw-alias-label-primary);
+}
+
+.reviewToolbar select.toolbarButton {
+  appearance: none;
+  padding-right: 26px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2381858c' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 7px center;
+  background-repeat: no-repeat;
+  background-size: 14px;
+}
+
+.reviewToolbar select.toolbarButton:hover:not(:disabled) {
+  background-color: var(--fr-surface);
+}
+
+.toolbarButton:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.toggleButton:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.toast {
+  position: fixed;
+  z-index: 1200;
+  top: 120px;
+  left: 50%;
+  width: min(430px, calc(100vw - 32px));
+  padding: 14px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 14px;
+  background: var(--dsw-alias-bg-container, Canvas);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
+  color: var(--dsw-alias-label-primary);
+  transform: translateX(-50%);
+}
+
+.toastSuccess {
+  width: auto;
+  min-width: 220px;
+  max-width: min(430px, calc(100vw - 32px));
+  padding: 8px 10px;
+  border-color: color-mix(in srgb, var(--dsw-alias-state-success-primary) 28%, transparent);
+}
+
+.toastError {
+  border-color: color-mix(in srgb, var(--dsw-alias-state-error-primary) 28%, transparent);
+}
+
+.toastHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.noticeIcon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.toastSuccess .noticeIcon {
+  background: color-mix(in srgb, var(--dsw-alias-state-success-primary) 12%, transparent);
+  color: var(--dsw-alias-state-success-primary);
+}
+
+.toastError .noticeIcon {
+  background: color-mix(in srgb, var(--dsw-alias-state-error-primary) 10%, transparent);
+  color: var(--dsw-alias-state-error-primary);
+}
+
+.noticeIconSvg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.toastCopy {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 3px;
+}
+
+.toastTitle {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.toastDescription {
+  overflow-wrap: anywhere;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.toastCloseButton {
+  display: grid;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  cursor: pointer;
+}
+
+.toastCloseButton:hover,
+.toastCloseButton:focus-visible,
+.noticeFileButton:hover,
+.noticeFileButton:focus-visible {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.toastCloseButton:focus-visible,
+.noticeFileButton:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--dsw-alias-border-l3);
+}
+
+.noticeFiles {
+  margin: 12px 0 0 40px;
+}
+
+.noticeFileListLabel {
+  display: block;
+  margin: 0 8px 4px;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.noticeFileList {
+  display: flex;
+  max-height: 220px;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.noticeFileButton {
+  display: flex;
+  width: 100%;
+  min-height: 34px;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.noticeFilePath {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  font: var(--dsw-font-markdown-code-block);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noticeFileArrow {
+  flex: 0 0 auto;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.noticeDismissButton {
+  width: 100%;
+  min-height: 34px;
+  margin-top: 12px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--dsw-alias-label-primary);
+  color: var(--dsw-alias-bg-container, Canvas);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.noticeDismissButton:hover {
+  opacity: 0.9;
+}
+
+.noticeDismissButton:focus-visible {
+  outline: 2px solid var(--dsw-alias-border-l3);
+  outline-offset: 2px;
+}
+
+.reviewBody {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 12px 12px 20px;
+  background: var(--fr-canvas);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dsw-alias-border-l3) transparent;
+}
+
+/* `clip` rounds the card without becoming the sticky header's scroll box. */
+.reviewFile {
+  border-radius: 12px;
+  background: var(--fr-surface);
+  box-shadow: var(--fr-card-shadow);
+  overflow: clip;
+}
+
+.reviewFile + .reviewFile {
+  margin-top: 12px;
+}
+
+.reviewFileHeader {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 0 12px;
+  border-bottom: 1px solid var(--dsw-alias-border-l2);
+  background: color-mix(in oklab, var(--fr-surface) 92%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  font: var(--dsw-font-markdown-code-block);
+}
+
+.reviewFileCollapsed .reviewFileHeader {
+  border-bottom-color: transparent;
+}
+
+.sidebarTab {
+  container-type: inline-size;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--dsw-alias-bg-layer-1, Canvas);
+  color: var(--dsw-alias-label-primary);
+}
+
+.sidebarTabEmpty {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  min-height: 180px;
+  padding: 24px;
+  place-items: center;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* Narrow sidebar: keep every file header on one row and let toolbar actions
+   collapse to icons; their text stays in the DOM as the accessible name. */
+@container (max-width: 520px) {
+  .reviewHeader {
+    gap: 8px 10px;
+    padding: 10px 12px;
+  }
+
+  .reviewToolbar {
+    margin-left: auto;
+  }
+
+  .reviewBody {
+    padding: 8px 8px 16px;
+  }
+
+  .reviewFileHeader {
+    gap: 6px;
+    padding: 0 4px 0 8px;
+  }
+
+  .reviewToolbar .toolbarButton:not(select) {
+    width: 30px;
+    padding: 0;
+    justify-content: center;
+    gap: 0;
+    overflow: hidden;
+    color: transparent;
+    font-size: 0;
+  }
+
+  .reviewToolbar .toolbarButton:not(select) .buttonIcon {
+    color: var(--dsw-alias-label-secondary);
+  }
+
+  .openButton {
+    width: 28px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .openButton .buttonIcon {
+    flex: 0 0 auto;
+  }
+
+  .openButtonLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Git-style status letter in a tinted tile: modified, added or deleted. */
+.reviewStatus {
+  --fr-status: var(--fr-accent);
+
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 6px;
+  background: color-mix(in oklab, var(--fr-status) 14%, transparent);
+  color: var(--fr-status);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.reviewStatus[data-status='A'] {
+  --fr-status: var(--fr-add);
+}
+
+.reviewStatus[data-status='D'] {
+  --fr-status: var(--fr-del);
+}
+
+.reviewPath {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 28px;
+  padding: 0 6px 0 2px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  transition: background-color 120ms ease;
+}
+
+.reviewPath:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+}
+
+.reviewPath .buttonIcon {
+  flex: 0 0 auto;
+  color: var(--dsw-alias-label-tertiary);
+  transition: transform 160ms ease;
+}
+
+.reviewPath[aria-expanded='false'] .buttonIcon {
+  transform: rotate(-90deg);
+}
+
+.reviewPathText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reviewFileHeader .stats {
+  gap: 4px;
+  font-weight: 500;
+}
+
+.openButton {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-color: transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font: var(--dsw-font-xs-13);
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease;
+}
+
+.openButton:hover {
+  border-color: var(--dsw-alias-border-l2);
+  background: var(--fr-surface, var(--dsw-alias-interactive-bg-hover));
+  color: var(--fr-accent, var(--dsw-alias-label-primary));
+}
+
+.reviewDiff {
+  color: var(--dsw-alias-label-primary);
+}
+
+.reviewUnavailable {
+  margin: 0;
+  padding: 22px 16px;
+  background: var(--fr-canvas);
+  color: var(--dsw-alias-label-secondary);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/* Aggregate comment reference rendered as an interactive composer dock chip. */
+.commentDock {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 9;
+  width: calc(100% - var(--dsh-composer-side-clearance) - var(--dsh-composer-side-clearance));
+  max-width: var(--dsh-composer-card-max-width);
+  margin: 0 auto -4px;
+  padding: 0 12px;
+}
+
+.reviewCommentPillRoot {
+  position: relative;
+  width: fit-content;
+}
+
+.reviewCommentPillRootMessage {
+  align-self: flex-end;
+}
+
+.commentDockPill {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--dsw-specific-input-major, var(--dsw-alias-bg-layer-1, Canvas));
+  box-shadow:
+    0 0 0 1px var(--dsw-alias-border-l2),
+    0 1px 2px color-mix(in srgb, black 4%, transparent),
+    0 6px 16px -8px color-mix(in srgb, black 14%, transparent);
+  transition: box-shadow 160ms ease;
+}
+
+.reviewCommentPillRoot:hover .commentDockPill,
+.reviewCommentPillRoot:focus-within .commentDockPill {
+  box-shadow:
+    0 0 0 1px
+      color-mix(in oklab, var(--dsw-alias-state-business-primary) 40%, var(--dsw-alias-border-l2)),
+    0 0 0 4px color-mix(in oklab, var(--dsw-alias-state-business-primary) 10%, transparent),
+    0 6px 16px -8px color-mix(in srgb, black 14%, transparent);
+}
+
+.commentDockOpen,
+.commentDockRemove {
+  border: 0;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+}
+
+.commentDockOpen {
+  display: flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px 0 1px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+/* The comment glyph sits in a brand-tinted disc, echoing the diff comment rail. */
+.commentDockIcon {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--dsw-alias-state-business-primary) 13%, transparent);
+  color: var(--dsw-alias-state-business-primary);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.commentDockOpen:hover .commentDockIcon,
+.commentDockOpen[aria-expanded='true'] .commentDockIcon {
+  background: var(--dsw-alias-state-business-primary);
+  color: var(--dsw-static-neutral-00, #fff);
+}
+
+.commentDockRemove {
+  position: relative;
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  margin-left: 5px;
+  border-radius: 50%;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 17px;
+  line-height: 1;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.commentDockRemove::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: -4px;
+  width: 1px;
+  background: var(--dsw-alias-border-l2);
+}
+
+.commentDockRemove:hover {
+  background: color-mix(in oklab, var(--dsw-alias-state-error-primary) 12%, transparent);
+  color: var(--dsw-alias-state-error-primary);
+}
+
+.commentDockOpen:focus-visible,
+.commentDockRemove:focus-visible {
+  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline-offset: 1px;
+}
+
+.reviewCommentPreviewPositioner {
+  position: absolute;
+  z-index: 20;
+  box-sizing: border-box;
+  width: min(360px, calc(100vw - 48px));
+}
+
+.reviewCommentPreview {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  max-height: min(420px, 60vh);
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  overflow: auto;
+  border-radius: 14px;
+  background: var(--dsw-alias-bg-layer-1, Canvas);
+  box-shadow:
+    0 0 0 1px var(--dsw-alias-border-l2),
+    var(--dsw-shadow-lv3);
+  scrollbar-width: thin;
+  animation: frPreviewIn 140ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.reviewCommentPreviewAbove .reviewCommentPreview {
+  transform-origin: bottom left;
+}
+
+.reviewCommentPreviewBelow .reviewCommentPreview {
+  transform-origin: top right;
+}
+
+@keyframes frPreviewIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reviewCommentPreview {
+    animation: none;
+  }
+}
+
+.reviewCommentPreviewAbove {
+  bottom: 100%;
+  left: 0;
+  padding-bottom: 8px;
+}
+
+.reviewCommentPreviewBelow {
+  top: 100%;
+  right: 0;
+  padding-top: 8px;
+}
+
+.commentPreviewCard {
+  position: relative;
+  box-sizing: border-box;
+  padding: 11px 14px 12px 16px;
+  border-radius: 10px;
+  background: color-mix(
+    in oklab,
+    var(--dsw-alias-label-primary) 3.5%,
+    var(--dsw-alias-bg-layer-1, Canvas)
+  );
+}
+
+.commentPreviewCard::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--dsw-alias-state-business-primary);
+}
+
+.commentPreviewHeader {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.commentPreviewPath {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  color: var(--dsw-alias-label-secondary);
+  font: var(--dsw-font-markdown-code-block);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commentPreviewLocation {
+  flex: 0 0 auto;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--dsw-alias-state-business-primary) 11%, transparent);
+  color: var(--dsw-alias-state-business-primary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  line-height: 20px;
+}
+
+.commentPreviewBody {
+  margin: 6px 0 0;
+  color: var(--dsw-alias-label-primary);
+  font: var(--dsw-font-sm-14);
+  line-height: 22px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The interactive dock owns presentation; retain the placeholder occurrence
+   only for model serialization and composer submit eligibility. */
+[data-decoration='chip'][title='​'] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Sent user messages keep the model-only review envelope behind a compact pill. */
+.reviewMessageRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.reviewMessageStack {
+  display: flex;
+  max-width: min(525px, 82%);
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.reviewMessageBubble {
+  max-width: 100%;
+  padding: 10px 16px;
+  border-radius: 22px;
+  background: var(--dsw-specific-bubble);
+  color: var(--dsw-alias-label-primary);
+  font-size: 16px;
+  line-height: 24px;
+  white-space: pre-wrap;
+}
+
+.reviewMessageCommentPill {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 12px 3px 4px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--dsw-alias-bg-layer-1, Canvas);
+  box-shadow:
+    0 0 0 1px var(--dsw-alias-border-l2),
+    0 1px 2px color-mix(in srgb, black 4%, transparent);
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+  transition: box-shadow 160ms ease;
+}
+
+.reviewMessageCommentPill:hover,
+.reviewMessageCommentPill:focus-visible,
+.reviewMessageCommentPill[aria-expanded='true'] {
+  box-shadow:
+    0 0 0 1px
+      color-mix(in oklab, var(--dsw-alias-state-business-primary) 40%, var(--dsw-alias-border-l2)),
+    0 0 0 4px color-mix(in oklab, var(--dsw-alias-state-business-primary) 10%, transparent);
+}
+
+.reviewMessageCommentPill:focus-visible {
+  outline: 2px solid var(--dsw-alias-state-business-primary);
+  outline-offset: 2px;
+}
+
+.reviewMessageCommentIcon {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--dsw-alias-state-business-primary) 13%, transparent);
+  color: var(--dsw-alias-state-business-primary);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.reviewMessageReference {
+  display: inline-block;
+  margin: 0 2px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: rgb(97 135 216 / 22%);
+  color: var(--dsw-alias-label-primary);
+  font-size: 0.85em;
+  line-height: 1.6;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.reviewMessageActions {
+  display: flex;
+  height: 28px;
+  align-items: center;
+  gap: 10px;
+}
+
+.reviewMessageTime {
+  padding-right: 12px;
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 14px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.reviewMessageAction {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--dsw-alias-label-tertiary);
+  cursor: pointer;
+}
+
+.reviewMessageAction:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-secondary);
+}
+
+.reviewMessageActionIcon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4;
+}
+
+.reviewMessageExtraBlock {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.reviewMessageExtraBlock pre {
+  max-height: 240px;
+  margin: 6px 0 0;
+  padding: 10px;
+  overflow: auto;
+  border-radius: 8px;
+  background: var(--dsw-alias-markdown-code-block);
+  white-space: pre-wrap;
+}
+
+@media (hover: hover) {
+  [data-time-hover-root] .reviewMessageTime {
+    opacity: 0;
+    transition: opacity 80ms;
+  }
+
+  [data-time-hover-root]:hover .reviewMessageTime,
+  [data-time-hover-root]:focus-within .reviewMessageTime {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .cardHeader {
+    flex-wrap: wrap;
+    padding-block: 10px;
+  }
+
+  .cardTitleBlock {
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .reviewHeader {
+    gap: 8px;
+    padding-left: 12px;
+  }
+
+  .toolbarButton:not(select) {
+    width: 32px;
+    padding: 0;
+    justify-content: center;
+    overflow: hidden;
+    color: transparent;
+    font-size: 0;
+    gap: 0;
+  }
+
+  .toolbarButton .buttonIcon {
+    color: var(--dsw-alias-label-primary);
+  }
+}

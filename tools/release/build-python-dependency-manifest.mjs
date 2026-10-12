@@ -2,14 +2,16 @@ import { releaseRoot } from '../build/paths.mjs'
 /** Build signed, full-software dependency metadata without rebuilding Python. */
 import { createHash, createPrivateKey, createPublicKey } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { applySourceDistributions, coreManifestDocument, normalizePackageName, parseDirectRequirements, parseLockedPackages, partitionLock, scienceManifestDocument, signDocument } from './python-layer-split.mjs'
+import { resourceSource } from '../build/layout.mjs'
 
 const root = resolve(import.meta.dirname, '../..')
+const pythonRoot = await resourceSource('python')
 const output = resolve(process.env.ZEROWALL_PYTHON_DEPENDENCY_OUTPUT ?? join(releaseRoot, 'python-dependencies'))
 const pythonVersion = process.env.ZEROWALL_PYTHON_VERSION ?? '3.12.10'
 const environmentVersion = process.env.ZEROWALL_PYTHON_ENVIRONMENT_VERSION ?? pythonVersion
-const revision = process.env.ZEROWALL_PYTHON_DEPENDENCY_REVISION ?? `${environmentVersion}-r15`
+const revision = process.env.ZEROWALL_PYTHON_DEPENDENCY_REVISION ?? `${environmentVersion}-r18`
 if (!/^[A-Za-z0-9_.-]{1,100}$/u.test(revision)) throw new Error('Invalid manifest revision.')
 const keyId = process.env.ZEROWALL_MCP_ENVIRONMENT_KEY_ID ?? 'stable-4'
 const trustedKeys = JSON.parse(await readFile(join(root, 'config/catalogs/trusted-keys.json'), 'utf8'))
@@ -19,7 +21,7 @@ const keyFile = process.env.ZEROWALL_MCP_ENVIRONMENT_PRIVATE_KEY_FILE ?? join(ro
 const privateText = (await readFile(keyFile, 'utf8')).trim()
 const privateKey = privateText.startsWith('base64:') ? createPrivateKey({ key: Buffer.from(privateText.slice(7), 'base64'), type: 'pkcs8', format: 'der' }) : createPrivateKey(privateText)
 if (createPublicKey(privateKey).export({ type: 'spki', format: 'pem' }).trim() !== publicKey.trim()) throw new Error(`Signing key does not match pinned ${keyId} public key.`)
-const lockBytes = await readFile(join(root, 'resources', 'python', 'requirements-windows.lock'))
+const lockBytes = await readFile(join(pythonRoot, 'requirements-windows.lock'))
 const lockText = lockBytes.toString('utf8')
 const packages = parseLockedPackages(lockText)
 const lines = lockText.split(/\r?\n/u).filter(line => line.trim() && !line.startsWith('#'))
@@ -35,7 +37,7 @@ for (const [name, expectedVersion] of requiredIntegrityPackages) {
     throw new Error(`Required integrity dependency must be locked as ${name}==${expectedVersion}.`)
   }
 }
-const audit = JSON.parse(await readFile(join(root, 'resources', 'python', 'skill-dependencies.json'), 'utf8'))
+const audit = JSON.parse(await readFile(join(pythonRoot, 'skill-dependencies.json'), 'utf8'))
 const capabilities = new Map()
 for (const skill of audit.skills ?? []) for (const requirement of skill.requirements ?? []) {
   const name = normalizePackageName(requirement.name)
@@ -43,12 +45,12 @@ for (const skill of audit.skills ?? []) for (const requirement of skill.requirem
   if (!capabilities.has(name)) capabilities.set(name, new Set())
   capabilities.get(name).add(skill.name)
 }
-const sourceLock = await readFile(join(root, 'resources/python/requirements-research.lock'), 'utf8')
-const sourceDistributions = JSON.parse(await readFile(join(root, 'resources/python/source-distributions.json'), 'utf8'))
+const sourceLock = await readFile(join(pythonRoot, 'requirements-research.lock'), 'utf8')
+const sourceDistributions = JSON.parse(await readFile(join(pythonRoot, 'source-distributions.json'), 'utf8'))
 const installPackages = applySourceDistributions(packages, sourceLock, sourceDistributions)
 const applicationVersion = JSON.parse(await readFile(join(root, 'package.json'), 'utf8')).version
-const baseRequirements = await readFile(join(root, 'resources', 'python', 'requirements-base.txt'), 'utf8')
-const layerPolicy = JSON.parse(await readFile(join(root, 'resources', 'python', 'science-layer-policy.json'), 'utf8'))
+const baseRequirements = await readFile(join(pythonRoot, 'requirements-base.txt'), 'utf8')
+const layerPolicy = JSON.parse(await readFile(join(pythonRoot, 'science-layer-policy.json'), 'utf8'))
 // This standalone builder intentionally does not depend on a staged Python
 // interpreter. The checked-in policy names the offline bootstrap roots, so the
 // default dependency manifest can never silently grow to the full research lock.
@@ -68,6 +70,8 @@ for (const pkg of split.base) {
 // versions it lacks. The client still lets the user switch mirror at runtime.
 const index = { indexUrl: 'https://pypi.tuna.tsinghua.edu.cn/simple', trustedHost: 'pypi.tuna.tsinghua.edu.cn' }
 const document = scienceManifestDocument({ environmentVersion, scienceRevision: revision, pythonVersion, applicationVersion, index, packages: split.science, keyId })
+document.fallbackWheels = JSON.parse(await readFile(join(pythonRoot, 'fallback-wheels.json'), 'utf8')).filter(wheel => document.packages.some(pkg => normalizePackageName(pkg.name) === normalizePackageName(wheel.name) && pkg.source === 'sdist'))
+document.compatibility.minApplicationVersion = '8.1.3'
 // Packages without a digest keep none: the client resolves their version from
 // the index above rather than verifying bytes the mirror is free to re-publish.
 document.packages = document.packages.map(pkg => {
@@ -78,16 +82,58 @@ document.packages = document.packages.map(pkg => {
 document.source = { lockSha256: createHash('sha256').update(lockBytes).digest('hex'), sourceLockSha256: createHash('sha256').update(sourceLock).digest('hex'), auditGeneratedAt: audit.generatedAt }
 signDocument(document, privateKey, publicKey)
 const bytes = Buffer.from(`${JSON.stringify(document, null, 2)}\n`)
-await mkdir(output, { recursive: true })
-await writeFile(join(output, `manifest-${revision}.json`), bytes)
-await writeFile(join(output, 'latest.json'), bytes)
-await writeFile(join(root, 'resources', 'python', 'dependency-manifest.json'), bytes)
 const core = coreManifestDocument({ environmentVersion, revision: `${revision}-core`, pythonVersion, applicationVersion, index, packages: split.base, keyId })
 signDocument(core, privateKey, publicKey)
 const coreBytes = Buffer.from(`${JSON.stringify(core, null, 2)}\n`)
+const argumentsList = process.argv.slice(2)
+const layerIndex = argumentsList.indexOf('--layer')
+if (layerIndex !== -1) {
+  const layer = argumentsList[layerIndex + 1]
+  const outputIndex = argumentsList.indexOf('--output')
+  const outputPath = outputIndex === -1 ? undefined : resolve(argumentsList[outputIndex + 1] ?? '')
+  const capabilityId = layer === 'capability' ? argumentsList[layerIndex + 2] : undefined
+  if (!['core', 'science', 'capability'].includes(layer)) throw new Error('Layer must be core, science, or capability.')
+  if (layer === 'capability' && (!capabilityId || !/^[a-z0-9][a-z0-9._-]{0,79}$/u.test(capabilityId))) throw new Error('Capability layer requires a valid capability id.')
+  if (!outputPath || outputPath === resolve('')) throw new Error('Independent layer builds require --output <immutable-stage-file>.')
+
+  let selected = layer === 'core' ? core : structuredClone(document)
+  if (layer === 'capability') {
+    selected.layer = 'capability'
+    selected.capabilityId = capabilityId
+    selected.revision = `${revision}-${capabilityId}`
+    selected.packages = selected.packages.filter(pkg => pkg.capabilities.includes(capabilityId))
+    selected.fallbackWheels = selected.fallbackWheels?.filter(wheel => selected.packages.some(pkg => normalizePackageName(pkg.name) === normalizePackageName(wheel.name)))
+    if (selected.packages.length === 0) throw new Error(`No locked Python packages are assigned to capability ${capabilityId}.`)
+    signDocument(selected, privateKey, publicKey)
+  }
+  const selectedBytes = Buffer.from(`${JSON.stringify(selected, null, 2)}\n`)
+  const selectedSha256 = createHash('sha256').update(selectedBytes).digest('hex')
+  await mkdir(dirname(outputPath), { recursive: true })
+  await writeFile(outputPath, selectedBytes, { flag: 'wx' })
+  const layerReceipt = {
+    schema: 1,
+    layer,
+    ...(capabilityId ? { capabilityId } : {}),
+    revision: selected.revision,
+    environmentVersion,
+    pythonVersion,
+    packageCount: selected.packages.length,
+    size: selectedBytes.length,
+    sha256: selectedSha256,
+    signatureKey: selected.signature.keyId,
+    sourceLockSha256: createHash('sha256').update(lockBytes).digest('hex'),
+  }
+  await writeFile(`${outputPath}.receipt.json`, `${JSON.stringify(layerReceipt, null, 2)}\n`, { flag: 'wx' })
+  console.log(JSON.stringify(layerReceipt, null, 2))
+} else {
+await mkdir(output, { recursive: true })
+await writeFile(join(output, `manifest-${revision}.json`), bytes)
+await writeFile(join(output, 'latest.json'), bytes)
+await writeFile(join(pythonRoot, 'dependency-manifest.json'), bytes)
 await writeFile(join(output, `core-${revision}.json`), coreBytes)
 await writeFile(join(output, 'core.json'), coreBytes)
-await writeFile(join(root, 'resources', 'python', 'core-dependency-manifest.json'), coreBytes)
+await writeFile(join(pythonRoot, 'core-dependency-manifest.json'), coreBytes)
 const receipt = { runtimeId: document.runtimeId, revision, environmentVersion, pythonVersion: document.pythonVersion, packageCount: document.packages.length, corePackageCount: core.packages.length, capabilitiesCount: capabilities.size, size: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex'), coreSha256: createHash('sha256').update(coreBytes).digest('hex'), signatureKey: document.signature.keyId, localOnly: true, layers: ['core', 'science', 'capability'] }
 await writeFile(join(output, 'build-receipt.json'), `${JSON.stringify(receipt, null, 2)}\n`)
 console.log(JSON.stringify(receipt, null, 2))
+}

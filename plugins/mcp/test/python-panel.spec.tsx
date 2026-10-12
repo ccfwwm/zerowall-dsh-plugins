@@ -311,19 +311,76 @@ describe('Python dependency panel', () => {
     fireEvent.click(within(dialog).getByRole('button', { name: '安装基础环境' }))
     await waitFor(() => expect(bootstrap).toHaveBeenCalledTimes(1))
   })
-  it('offers an explicit repair when a legacy interpreter is present but the MCP core is incomplete', async () => {
+  it('does not confuse bootstrap update with signed core dependency repair on an older bridge', async () => {
     const repair = vi.fn(async () => ({ phase: 'downloading' }))
     window.zerowallDesktop = {
       getMcpPythonInfo: async () => ({ ...info('legacy', 1), coreReady: false, missingCorePackages: ['mcp==1.30.0'] }),
       updateMcpEnvironment: repair,
     } as any
     render(<PythonEnvironmentPanel t={zhT} />)
-    fireEvent.click(await screen.findByRole('button', { name: '修复核心运行环境' }))
+    const retry = await screen.findByRole('button', { name: '重试核心依赖安装' })
+    expect((retry as HTMLButtonElement).disabled).toBe(true)
+    expect(screen.getByRole('alert').textContent).toContain('不支持核心依赖重试')
     expect(repair).not.toHaveBeenCalled()
-    const dialog = screen.getByRole('dialog', { name: '修复核心运行环境' })
-    expect(within(dialog).getByText('mcp==1.30.0')).toBeTruthy()
-    fireEvent.click(within(dialog).getByRole('button', { name: '修复核心运行环境' }))
-    await waitFor(() => expect(repair).toHaveBeenCalledTimes(1))
+  })
+  it('keeps a retry action visible after a failed core task is restored from disk', async () => {
+    const retry = vi.fn(async (request: any) => request.action === 'status'
+      ? {
+          status: { phase: 'failed', lastUpdateError: 'core verification failed' },
+          inventory: { ready: false, packages: [], coreReady: false, missingCorePackages: [] },
+          task: { taskId: 'core-failed', requestId: 'core-request', action: 'sync', layer: 'core', state: 'failed', stage: 'failed', error: 'core verification failed', logLines: [], createdAt: '2026-10-07T00:00:00Z', updatedAt: '2026-10-07T00:00:01Z' },
+        }
+      : { requestId: request.requestId, taskId: 'core-retry', queued: true, task: { taskId: 'core-retry', requestId: request.requestId, action: 'sync', layer: 'core', state: 'queued', stage: 'queued', logLines: [], createdAt: '2026-10-07T00:00:00Z', updatedAt: '2026-10-07T00:00:00Z' } })
+    window.zerowallDesktop = { pythonEnvironment: retry } as any
+    render(<PythonEnvironmentPanel t={zhT} />)
+    const button = await screen.findByRole('button', { name: '重试核心依赖安装' })
+    fireEvent.click(button)
+    await waitFor(() => expect(retry).toHaveBeenCalledWith(expect.objectContaining({ action: 'sync', layer: 'core', confirm: true, requestId: expect.any(String) })))
+  })
+  it('keeps the core retry visible when a durable failed task conflicts with stale updater progress', async () => {
+    const retry = vi.fn(async (request: any) => request.action === 'status'
+      ? {
+          status: { phase: 'installing', updateJob: { taskId: 'stale-bootstrap', kind: 'install', stage: 'installing' } },
+          inventory: { ...info('shared-python', 42), officialPackageCount: 42, corePackageCount: 1, ready: true, coreReady: false, missingCorePackages: ['mcp==1.30.0'] },
+          task: { taskId: 'core-failed', requestId: 'core-request', action: 'sync', layer: 'core', state: 'failed', stage: 'failed', error: 'core package installation failed', logLines: [], createdAt: '2026-10-07T00:00:00Z', updatedAt: '2026-10-07T00:00:01Z' },
+        }
+      : { requestId: request.requestId, taskId: 'core-retry', queued: true, task: { taskId: 'core-retry', requestId: request.requestId, action: 'sync', layer: 'core', state: 'queued', stage: 'queued', logLines: [], createdAt: '2026-10-07T00:00:00Z', updatedAt: '2026-10-07T00:00:00Z' } })
+    window.zerowallDesktop = { pythonEnvironment: retry } as any
+    render(<PythonEnvironmentPanel t={zhT} />)
+    expect((await screen.findAllByText('核心依赖需要修复')).length).toBeGreaterThan(0)
+    const button = await screen.findByRole('button', { name: '重试核心依赖安装' })
+    expect((button as HTMLButtonElement).disabled).toBe(false)
+    expect((screen.getByRole('button', { name: '安装科研层' }) as HTMLButtonElement).disabled).toBe(true)
+    fireEvent.click(button)
+    await waitFor(() => expect(retry).toHaveBeenCalledWith(expect.objectContaining({ action: 'sync', layer: 'core', confirm: true, requestId: expect.any(String) })))
+  })
+  it('prioritizes retrying a failed core task over a stale paused updater state', async () => {
+    const retry = vi.fn(async (request: any) => request.action === 'status'
+      ? {
+          status: { phase: 'paused', updateJob: { taskId: 'old-bootstrap', kind: 'install', stage: 'paused' } },
+          inventory: { ...info('shared-python', 42), officialPackageCount: 42, corePackageCount: 1, ready: true, coreReady: false, missingCorePackages: ['mcp==1.30.0'] },
+          task: { taskId: 'core-failed', requestId: 'core-request', action: 'sync', layer: 'core', state: 'failed', stage: 'failed', error: 'core package installation failed', logLines: [], createdAt: '2026-10-07T00:00:00Z', updatedAt: '2026-10-07T00:00:01Z' },
+        }
+      : { requestId: request.requestId, taskId: 'core-retry', queued: true, task: { taskId: 'core-retry', requestId: request.requestId, action: 'sync', layer: 'core', state: 'queued', stage: 'queued', logLines: [], createdAt: '2026-10-07T00:00:00Z', updatedAt: '2026-10-07T00:00:00Z' } })
+    window.zerowallDesktop = { pythonEnvironment: retry } as any
+    render(<PythonEnvironmentPanel t={zhT} />)
+    const button = await screen.findByRole('button', { name: '重试核心依赖安装' })
+    expect(screen.queryByRole('button', { name: '继续更新' })).toBeNull()
+    fireEvent.click(button)
+    await waitFor(() => expect(retry).toHaveBeenCalledWith(expect.objectContaining({ action: 'sync', layer: 'core', confirm: true, requestId: expect.any(String) })))
+  })
+  it('offers a direct retry after the Python bootstrap itself has failed', async () => {
+    const retry = vi.fn(async () => ({ phase: 'downloading', message: '正在重试基础环境' }))
+    const pythonEnvironment = vi.fn(async (request: any) => request.action === 'status'
+      ? { status: { phase: 'failed', lastUpdateError: 'bootstrap checksum mismatch' }, inventory: { ready: false, packages: [] } }
+      : { requestId: request.requestId })
+    window.zerowallDesktop = { pythonEnvironment, updateMcpEnvironment: retry } as any
+    render(<PythonEnvironmentPanel t={zhT} />)
+    const button = await screen.findByRole('button', { name: '重试基础环境安装' })
+    fireEvent.click(button)
+    await waitFor(() => expect(retry).toHaveBeenCalledTimes(1))
+    expect(await screen.findByText('基础环境重试任务已启动，可查看当前进度。')).toBeTruthy()
+    expect(screen.queryByRole('dialog')).toBeNull()
   })
   it('saves a selected writable parent and keeps the new path visible until restart', async () => {
     const chooseDirectory = vi.fn(async () => 'C:\\ZeroWall Data')
@@ -393,12 +450,12 @@ describe('Python dependency panel', () => {
     expect(screen.getAllByText('科研层待安装：1').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('操作记录 · 2')).toBeTruthy()
     expect(screen.getByText('Hash mismatch')).toBeTruthy()
-    expect(execute.mock.calls.every(([request]) => ['list_packages', 'configure', 'status', 'diagnose'].includes(request.action))).toBe(true)
+    expect(execute.mock.calls.every(([request]) => ['scan_local', 'list_packages', 'configure', 'status', 'diagnose'].includes(request.action))).toBe(true)
   })
   it('prefers the Host inventory metadata and filters by package capability', async () => {
     const legacy = vi.fn()
     const inventory = { ...info('gen-a', 2), packages: [{ ...info('gen-a', 2).packages[0], capabilities: ['image'], sha256: 'b'.repeat(64) }, { ...info('gen-a', 2).packages[1], capabilities: ['sequence'] }] }
-    window.zerowallDesktop = { getMcpPythonInfo: legacy, pythonEnvironment: async (request: any) => ({ requestId: request.requestId, ...(request.action === 'list_packages' ? { inventory } : {}) }) } as any
+    window.zerowallDesktop = { getMcpPythonInfo: legacy, pythonEnvironment: async (request: any) => ({ requestId: request.requestId, ...(request.action === 'scan_local' ? { scanId: 'actual-scan', scan: { scanId: 'actual-scan', state: 'succeeded', inventory } } : {}) }) } as any
     render(<PythonEnvironmentPanel t={zhT} />)
     reveal('package')
     await screen.findByText('2')

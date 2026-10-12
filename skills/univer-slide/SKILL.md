@@ -1,15 +1,17 @@
 ---
 name: univer-slide
-description: Create, redesign, edit, lint, screenshot and export editable Univer Slide Units. Use when creating or modifying a presentation or importing for editing, not passive PPTX attachment reading. New scientific decks also load zerowall-presentation for image style samples and independent visuals.
+description: Create, redesign, edit, lint, screenshot and export editable Univer Slide Units. For scientific decks load zerowall-presentation for evidence, rich content, independent multi-image assets and batch review. Passive PPTX reading uses Host extraction.
 ---
 
 # Univer Slide Units
+
+The user's requested template, visual language, density, page count and settings take precedence. Layout examples and numerical defaults are guidance for unspecified choices, not restrictions. Follow minimalist, dense, dark or other requested styles, chosen fonts/colors, image labels and requested headers/footers. There are no word-count, image-count or layout quotas. Local edits preserve the surrounding design; redistribute content within the requested total slide count instead of adding pages to meet a density target. Fit images and text together with deliberate hierarchy, alignment and spacing. Omit automatic top-left kickers and decorative labels unless the user or page plan needs them. Generated image prompts follow the requested style and may include readable text; there is no universal palette, background or no-text rule.
 
 Load `univer` first. `univer_execute` provides `univerAPI`, `api` (the same object), and `presentation` (the `FPresentation` selected by `unitId`). Do not redeclare them. A Slide Unit does not provide `workbook`; if it is undefined, verify the selected Unit type.
 
 Facade page indexes are zero-based (`getSlideByIndex`, `getSlides()[i]`). Tool page numbers are one-based: `univer_compile_svg.page` and numeric `univer_lint.pages` use `1` for the first page. Prefer stable page IDs when carrying a page from inspection into Facade code.
 
-For a new scientific deck, follow zerowall-presentation first: current-chat vision check, three generated style samples, seed + style edit_image, independent assets, then editable layouts. Preserve existing imagery unless redesign is requested. Formal text/data are native objects.
+Scientific decks follow zerowall-presentation: extract evidence, plan the complete rich content, design assets and layout together, batch-build all pages, check the deck, repair only failed pages, then export and read back. Multiple literature/generated images per page are supported. Generated graphics may contain accurate readable labels and explanatory text; inspect Chinese glyphs, spelling and layout. Formal report pages show substantive report content, with provenance and production explanations in speaker notes by default. Use clear hierarchy and varied layouts instead of uninterrupted paragraphs. No mandatory style exploration or seed/edit ceremony. Use presentation_prepare with file/unitId/worktreeId and batch presentation_* tools. Preserve model and quality settings.
 
 ## Route the task
 
@@ -22,40 +24,40 @@ For a new scientific deck, follow zerowall-presentation first: current-chat visi
 
 ## Presentation structure
 
-A presentation contains ordered slides. A slide contains elements in bottom-to-top stacking order. Shapes, text boxes, images, groups, tables, and charts are elements. A text box is a shape. Imported decks may contain additional element kinds; query their Facade before editing. Master/layout pages and speaker notes are not edited by this Skill.
+A presentation contains ordered slides. A slide contains elements in bottom-to-top stacking order. Shapes, text boxes, images, groups, tables, and charts are elements. A text box is a shape. Imported decks may contain additional element kinds; query their Facade before editing. After the final SVG replacement, use getSpeakerNotes()/setSpeakerNotes(string) to record per-page sources, figure provenance and image explanations. Master/layout pages require separate explicit support.
 
 ## Multi-page deck workflow
 
 ### 1. Write the page specification
 
-Before drawing, write a workspace `spec.md` precise enough that page generation needs no fresh decisions about copy, palette, or structure. Fix deck-level constants once: `#RRGGBB` colors, font roles in points (`design px × 0.75`), font families, icon/illustration style, and page size.
+Before drawing, write a workspace `presentation-spec.json` (the single content and layout plan; no duplicate spec.md required) with final copy and a coherent visual system derived from the user's requirements. Revise it when content or visual review calls for a better arrangement. Record deck-level choices: `#RRGGBB` colors, font roles in points (`design px × 0.75`), font families, icon/illustration style, and page size.
 
 For every page specify:
 
-1. Exact layout, tier/card counts, and page dimensions.
+1. Planned content regions and page dimensions; use the layout that the content and requested style need.
 2. Structure type such as process, hub-spoke, layers, circular stages, timeline, comparison, card grid, or hero.
-3. One core message.
+3. Page purpose and primary takeaway, allowing multiple topics where the requested content needs them.
 4. Verbatim final copy for every title, label, card, and annotation.
 5. Required workspace image or SVG assets. Describe asset meaning here; select concrete resource handles while building the page.
 
-Adjacent pages should not repeat the same structure. For reconstruction, transcribe reference text exactly.
+Use a coherent page rhythm: repeat structures where comparisons benefit from consistency, and vary them when the content needs it. For reconstruction, transcribe reference text exactly.
 
-### 2. Build each page in a closed loop
+### 2. Batch-build the complete deck
 
-Finish page N before authoring page N+1.
+Plan every page first, then compile pages serially with presentation_compile_pages. Do not finish page N before beginning page N+1. Check and repair affected pages after the initial deck exists.
 
 1. Prepare this page's local assets and record paths in the spec. For bundled icons, logos, emoji, or illustrations, use `univer_resources` `find` followed by `export` into a workspace resource directory. Copy returned handles exactly, keep a consistent registry/style baseline, and reuse prior exports deliberately. Do not substitute Unicode glyphs or empty placeholders for required visuals.
 2. Hand-author the complete `page-NN.svg` with inline styles and workspace-relative assets. Keep every page SVG through delivery.
 3. Call `univer_compile_svg` with explicit `source`, target `file`, draft `worktreeId`, Slide `unitId`, one-based `page`, and default `mode: "replace"`.
-4. Clear every compiler warning. Review every returned lint; retain one only when intentional and justified by evidence.
-5. Call `univer_inspect` for the Slide Unit, then `univer_lint` for page N.
-6. Fix the SVG and repeat replacement until the page is clean or every surviving lint has an explicit justification.
+4. Record compiler warnings per page. Fix fatal compilation errors; review nonfatal warnings after the initial batch and repair only affected pages. Retain a warning only when the actual screenshot confirms the intended result.
+5. After the batch, call presentation_check_pages for actual inspect/lint/screenshot coverage. Native charts, tables and notes are inserted after the final SVG replacement.
+6. After reviewing the deck, fix affected SVGs and replace only those pages. Resolve or explicitly justify each surviving finding.
 
 Never use `mode: "add"` to fix a page. Add overlays the corrected content while leaving the broken elements underneath. Rework by editing the source SVG and replacing the same page. Use `add` only for genuinely new elements on a finished page.
 
 ### 3. Review the deck
 
-After every page passes its own loop, call `univer_screenshot` for every page and review the returned PNGs in batches of at most five pages. Pass the explicit Slide `pages` and a workspace `output` directory; use `contactSheet: true` only as an additional deck overview, never as the only per-page evidence. Check:
+Review the current PNGs already returned by presentation_check_pages in batches of at most five pages. Do not capture the same accepted page revision again; call univer_screenshot only for changed pages or missing screenshot coverage. Pass the explicit Slide `pages` and a workspace `output` directory; use `contactSheet: true` only as an additional deck overview, never as the only per-page evidence. Check:
 
 1. Elements clipped by or beyond the page.
 2. Text overflowing cards or colored regions.
@@ -66,15 +68,15 @@ After every page passes its own loop, call `univer_screenshot` for every page an
 7. Arrowheads disconnected, misdirected, or mismatched in color.
 8. Cross-page consistency in palette, fonts, icon style, margins, and structure diversity.
 
-Treat each defect as a pattern: search all page SVGs for the same mistake, fix sources, replace affected pages, rerun their inspect/lint loop, and re-screenshot the affected pages. Record an explicit PASS or FAIL with observed evidence for every checklist item; report anything that genuinely requires human redesign.
+Treat each defect as a pattern: search all page SVGs for the same mistake, fix sources, replace affected pages, rerun checks only for affected pages, and re-screenshot the affected pages. Record an explicit PASS or FAIL with observed evidence for every checklist item; repair layout defects automatically and ask only for substantive missing requirements or an unrecoverable external failure.
 
 ### 4. Deliver
 
-Follow the `univer` ready/status workflow. Provide the `.univer` artifact and `.pptx` export only when requested. Do not merge unless the user explicitly asks.
+Deliver the requested formats after exported-file validation. For a standalone .univer requested by the user, ready/status/merge the accepted draft and inspect trunk in a fresh call; retain drafts when continued editing is requested.
 
 ## SVG is the generation path
 
-For new pages or generated elements, author SVG and compile it. The compiler owns geometry, baseline conversion, text measurement, page selection, and common Facade workarounds. Native charts are the deliberate exception.
+For new pages or generated elements, author SVG and compile it. The compiler owns geometry, baseline conversion, text measurement, page selection, and common Facade workarounds. Native charts and tables are the deliberate exceptions; reserve their rectangles in SVG and insert them after the final replacement.
 
 A new Slide Unit already contains one empty page. Compile page 1 into it. Do not call `appendSlide()` for the first page; use it only for page two and later. The default page is 960 × 540 with a top-left origin.
 
@@ -92,7 +94,7 @@ Break lines with `<tspan>` using scalar `x` and absolute `y` or non-zero `dy`. D
 
 Center badge/circle text with `dominant-baseline="middle"` and `text-anchor="middle"`. Draw arrowheads with `<marker orient="auto-start-reverse">`; do not hand-place triangle vertices. Gradient coordinates default to object bounding-box fractions, so a vertical gradient uses `x2="0" y2="1"`.
 
-The Slide renderer cannot faithfully reproduce filters, translucent gradients, or radial gradients on non-square shapes. Mark only the affected subtree `data-univer-embed="image"` when bitmap embedding is acceptable; keep editable text and layout structure outside it. Compiler warnings mean content was degraded or dropped and must be handled before continuing.
+The Slide renderer cannot faithfully reproduce filters, translucent gradients, or radial gradients on non-square shapes. Mark only the affected subtree `data-univer-embed="image"` when bitmap embedding is acceptable; keep editable text and layout structure outside it. Compiler warnings can indicate degraded or dropped content. Record nonfatal warnings for review after batch construction and resolve or justify them using actual screenshots before export; compilation failures need immediate correction.
 
 External workspace SVGs may be referenced with `<image href="./path/icon.svg" ...>`. A self-authored graphic reused in one page may use `<defs><symbol>` and `<use>`. Do not copy truncated path data out of an asset merely to inline it.
 
@@ -186,7 +188,7 @@ Use bitmap images for photos, logos, QR codes, complex illustrations, and 3D ico
 <image x="0" y="0" width="240" height="160" href="./materials/photo.png"/>
 ```
 
-The compiler validates PNG, JPEG, GIF, WebP, and SVG files. Facade insertion supports Base64 and URL sources, but local Base64 is more reproducible. Crop values are displayed-element pixel distances, not source pixels or percentages. Never place a full-page reference screenshot behind editable elements.
+The compiler validates PNG, JPEG, GIF, WebP, and SVG files. Register raster images in the page assetIds before composition. Image shape opacity may be lost during PPTX export: the presentation wrapper bakes it into an alpha PNG derivative used by both preview and export. Keep images outside translucent groups. Avoid placing any image above formal text/chart/table bounds; image occlusion is checked in addition to glyph lint. Facade insertion supports Base64 and URL sources, but local Base64 is more reproducible. Crop values are displayed-element pixel distances, not source pixels or percentages. Never place a full-page reference screenshot behind editable elements.
 
 ## Editing existing pages
 
@@ -248,6 +250,8 @@ return slide.getTransition();
 
 Direction applies only to directional transition types and can otherwise be dropped. Auto-advance and sound fields are stored but not played; do not claim support.
 
+Use supported chart axis bounds when needed. The pinned setYAxis facade drops interval/majorUnit; for fixed numeric tick spacing call presentation_set_chart_ticks with page, actual chart_id, axis, mode: fixed and positive major_unit. Use mode: automatic without major_unit to restore automatic ticks. It persists majorUnit through the official snapshot command and keeps native editability. Chart resource changes invalidate only affected pages. The pinned presentation export adapter preserves speaker notes while retaining editable objects. Reserve margin for CJK font metrics with adequate table label-column widths. Render/read back the export before acceptance. For standalone .univer delivery, use univer_worktree(action: ready), the separate univer_status tool, then univer_worktree(action: merge) after export validation and inspect the completed Unit from trunk. Status is never a worktree action. Merged drafts are terminal.
+
 ## Tables
 
 A native table is one editable element, unlike an SVG grid of loose shapes. Build with `slide.newTable()`, configure values, rows/columns, dimensions, position, size, then `slide.insertTable(builder.build())`. Cells are zero-based and expose rich text.
@@ -256,7 +260,7 @@ Table style requires both a valid style ID and matching role options such as `{ 
 
 ## Capability limits
 
-- Element animation, speaker notes, and master/layout-page editing are unsupported.
+- Element animation and master/layout-page editing are unsupported. Speaker notes use the direct FSlide getter/setter after final SVG replacement.
 - Non-image elements do not support arbitrary clipping, masks, blur, or glow.
 - Letter spacing is stored but not rendered.
 

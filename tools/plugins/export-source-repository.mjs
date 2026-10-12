@@ -6,17 +6,19 @@ import { root, stageRoot, releaseRoot, contract } from '../build/paths.mjs'
 const destination = resolve(process.argv[2] ?? join(root, 'artifacts/source/zerowall-dsh-plugins'))
 await mkdir(destination, { recursive: true })
 const tracked = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean)
-const selected = tracked.filter(path => /^(plugins\/|packages\/|store\/|tools\/|config\/|tests\/|patches\/|resources\/python\/|desktop\/src\/shared\/)/u.test(path)
-  || ['tsconfig.base.json', 'vitest.plugins.config.ts', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', '.gitmodules', 'LICENSE', 'LICENSE.md'].includes(path))
+const selected = tracked.filter(path => (/^(plugins\/|packages\/|store\/|tools\/|config\/|tests\/|patches\/|schemas\/|resources\/extensions\/|desktop\/src\/shared\/)/u.test(path)
+  || /^(?:tsconfig.*\.json|vitest.*\.ts)$/u.test(path)
+  || ['pnpm-lock.yaml', 'pnpm-workspace.yaml', '.gitmodules', 'LICENSE', 'LICENSE.md'].includes(path))
+  && !/^packages\/(?:dsh\/)?(?:dsh-auto-review|dsh-capability-menu)(?:\/|$)/u.test(path))
 let copied = 0
 for (const path of selected) {
-  if (/node_modules|(?:^|\/)\.env(?:\.|$)|(?:^|\/)artifacts\//u.test(path)) throw new Error('Private/generated path selected')
+  if (/node_modules|(?:^|\/)\.env(?:\.|$)|(?:^|\/)artifacts\/|^(?:plugins|packages|store)\/.*(?:^|\/)(?:lib|payload|\.yarn)\//u.test(path)) throw new Error('Private/generated path selected: ' + path)
   await access(join(destination, path)).then(() => { throw new Error('Refusing to replace existing source: ' + path) }, error => { if (error.code !== 'ENOENT') throw error })
   await mkdir(dirname(join(destination, path)), { recursive: true })
   await cp(join(root, path), join(destination, path))
   copied++
 }
-await cp(join(stageRoot, 'resources/skills'), join(destination, 'skills'), { recursive: true, dereference: true })
+await cp(join(stageRoot, 'resources/extensions/skills'), join(destination, 'skills'), { recursive: true, dereference: true })
 await mkdir(join(destination, 'mcp'), { recursive: true })
 await cp(join(root, 'config/catalogs/mcp'), join(destination, 'mcp/templates'), { recursive: true })
 await cp(join(stageRoot, 'resources/sci'), join(destination, 'mcp/scimaster'), { recursive: true, dereference: true })
@@ -42,7 +44,7 @@ pkg.scripts = {
   'source:verify': 'node tools/plugins/verify-source-repository.mjs',
 }
 await writeFile(join(destination, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
-await writeFile(join(destination, '.gitignore'), 'node_modules/\nartifacts/\nlib/\ndist/\n.build/\n.env\n.env.*\n*.pem\n*.tsbuildinfo\n*.log\n__pycache__/\n')
+await writeFile(join(destination, '.gitignore'), 'node_modules/\nartifacts/\n/plugins/*/lib/\n/plugins/biogenie/payload/\n/packages/**/lib/\n/store/lib/\ndist/\n.build/\n.env\n.env.*\n*.pem\n*.tsbuildinfo\n*.log\n__pycache__/\n')
 const sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim()
 const dshCommit = execFileSync('git', ['-C', 'deepseek-harness', 'rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim()
 const records = JSON.parse(await readFile(join(releaseRoot, 'plugin-packages.json'), 'utf8'))

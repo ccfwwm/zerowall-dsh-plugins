@@ -1,9 +1,11 @@
 param(
   [string]$Python = $(if ($env:ZEROWALL_PYTHON_ROOT) {
     $root = $env:ZEROWALL_PYTHON_ROOT.TrimEnd('\\','/')
-    if ((Split-Path -Leaf $root) -ieq 'zerowall-python') { Join-Path (Split-Path -Parent $root) 'Python/python.exe' }
-    elseif ((Split-Path -Leaf $root) -ieq 'Python') { Join-Path $root 'python.exe' }
-    else { Join-Path $root 'Python/python.exe' }
+    $leaf = Split-Path -Leaf $root
+    if ($leaf -ieq '.zerowall') { Join-Path (Split-Path -Parent $root) 'python.exe' }
+    elseif ($leaf -ieq 'zerowall-python') { Join-Path (Split-Path -Parent $root) 'Python/python.exe' }
+    elseif ($leaf -ieq 'Python') { Join-Path $root 'python.exe' }
+    else { Join-Path $root 'python.exe' }
   } elseif ($env:LOCALAPPDATA) {
     Join-Path $env:LOCALAPPDATA 'ZeroWall Science/Python/python.exe'
   } else {
@@ -20,7 +22,7 @@ if ((Split-Path -Leaf $runtimeRoot) -ne 'Python') {
   throw 'HE dependencies must use the shared Python path selected in ZeroWall Science; isolated Python paths are not supported.'
 }
 $sitePackages = Join-Path $runtimeRoot 'Lib/site-packages'
-$manifestPath = Join-Path $PSScriptRoot '../../resources/python/dependency-manifest.json'
+$manifestPath = Join-Path $PSScriptRoot '../../resources/extensions/python/dependency-manifest.json'
 $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
 $sharedPackages = @{}
 foreach ($name in @('openslide-python','openslide-bin','pillow','numpy','tifffile','tensorflow','keras','stardist','csbdeep')) {

@@ -1,98 +1,103 @@
 {
-  "applicationVersion": "8.0.5",
+  "applicationVersion": "8.1.3",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "e70c5c11761fea8fcc6359cc545604345057444e",
-  "buildCommit": "c8816bef83099aaee24e17ee531419becb3f7aff",
-  "dshCommit": "86b6740d0e671cee0b3fd0168de484c0efbf46ea",
+  "sourceCommit": "2bd818fb89396f64f79d12c31315776f1e06cccb",
+  "buildCommit": "15aa09b7a586ef71f18e0ab06da9cfec4caff929",
+  "dshCommit": "8c00ce78435cf35300654c41e69336e69dc758b1",
   "packages": [
     {
       "id": "@zerowallscience/plugin-account",
-      "version": "0.1.1",
+      "version": "0.1.6",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-ai-cloud",
-      "version": "0.1.1",
+      "version": "0.1.6",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-base",
-      "version": "0.1.5",
+      "version": "0.1.15",
       "kind": "plugin"
     },
     {
-      "id": "@zerowallscience/plugin-desktop-compat",
+      "id": "@zerowallscience/plugin-biogenie",
       "version": "0.1.3",
       "kind": "plugin"
     },
     {
+      "id": "@zerowallscience/plugin-desktop-compat",
+      "version": "0.1.4",
+      "kind": "plugin"
+    },
+    {
       "id": "@zerowallscience/plugin-environment",
-      "version": "0.1.1",
+      "version": "0.1.5",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-execution",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-extension-center",
-      "version": "0.1.2",
+      "version": "0.1.9",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-files",
-      "version": "0.2.1",
+      "version": "0.2.5",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-images",
-      "version": "0.2.1",
+      "version": "0.2.6",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.2",
+      "version": "0.2.11",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-mineru",
-      "version": "0.1.2",
+      "version": "0.1.5",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-projects",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-publications",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-pubmed",
-      "version": "0.1.1",
+      "version": "0.1.4",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-python",
-      "version": "0.1.1",
+      "version": "0.1.7",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-research",
-      "version": "0.1.2",
+      "version": "0.1.11",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-reviewer",
-      "version": "0.1.1",
+      "version": "0.1.4",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-runs",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "kind": "plugin"
     },
     {
@@ -102,12 +107,12 @@
     },
     {
       "id": "@zerowallscience/plugin-singlecell",
-      "version": "0.1.1",
+      "version": "0.1.4",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-skills",
-      "version": "0.2.1",
+      "version": "0.2.4",
       "kind": "plugin"
     },
     {
@@ -122,24 +127,74 @@
     },
     {
       "id": "@zerowallscience/dsh-bundle-science",
-      "version": "0.1.3",
+      "version": "0.1.13",
       "kind": "plugin"
     },
     {
       "id": "dsh-wechat",
-      "version": "0.9.6",
+      "version": "0.9.11",
       "kind": "plugin"
     },
     {
       "id": "@dingyi222666/dsh-session-notification",
-      "version": "0.1.23",
+      "version": "0.2.3-zws.1",
       "kind": "plugin"
     },
     {
       "id": "dsh-office-tools",
       "version": "1.0.2",
       "kind": "support"
+    },
+    {
+      "id": "dsh-ssh-ops",
+      "version": "0.3.19-zws.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "@everclear077/dsh-progressive-tools",
+      "version": "0.7.2-zws.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-dream-skin",
+      "version": "10.9.4-zws.2",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-better-sidebar",
+      "version": "0.25.0",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-file-review",
+      "version": "0.8.9-zws.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-univer-office",
+      "version": "0.3.7-zws.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-zotero",
+      "version": "0.12.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "@dsh-external/zotero-harvest",
+      "version": "0.2.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "@changfenhuang/dsh-genui",
+      "version": "0.11.5-zws.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-free-search",
+      "version": "0.8.3",
+      "kind": "plugin"
     }
   ],
-  "exportedTrackedFiles": 1871
+  "exportedTrackedFiles": 5125
 }

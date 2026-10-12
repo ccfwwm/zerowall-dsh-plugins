@@ -2,8 +2,12 @@ import type { TranslateNS } from '@deepseek-ai/dsh-client-locale'
 
 export const NS = 'zerowall.extensionCenter' as const
 export const zh = {
+  activationError: '激活失败', activationUnavailable: '尚未确认激活', unchecked: '尚未检查更新', summary: '资源更新摘要', lastChecked: '上次检查',
+  localRefresh: '刷新本地列表', localReady: '本地资源', loadingLocal: '读取本地资源…', missing: '插件包缺失',
+  pinned: '已固定版本', pin: '固定当前版本', unpin: '解除固定', updateSelected: '更新选中项', selectUpdate: '选择更新',
+  dependentWarning: '此操作还会停用以下依赖插件，继续吗？',
   title: '扩展中心',
-  intro: '管理 ZeroWall 插件、Skills 和 MCP 资源。检查只读，安装与升级由你手动触发。',
+  intro: '自动检查插件与 Skills 更新，统一管理 MCP 和 Python；安装与升级由你选择。',
   refresh: '检查更新',
   checking: '正在检查…',
   ready: '已完成检查',
@@ -14,6 +18,7 @@ export const zh = {
   installed: '已安装',
   available: '可更新',
   update: '更新',
+  updateAll: '一键更新可更新项',
   rollback: '回滚',
   disable: '停用',
   enable: '启用',
@@ -24,6 +29,9 @@ export const zh = {
   plugins: '插件',
   skills: 'Skills',
   mcp: 'MCP',
+  python: 'Python',
+  pythonCore: 'Python Core',
+  pythonScience: 'Python Science',
   task: '任务',
   source: '来源',
   version: '版本',
@@ -34,6 +42,7 @@ export const zh = {
   localError: '本地资源读取失败，请重试或检查桌面日志',
   noMatches: '没有匹配的资源', resourceCount: '资源', unversioned: '未声明版本', restartServer: '重启服务',
   job_queued: '等待中', job_running: '处理中', job_succeeded: '已完成', job_failed: '失败', job_cancelled: '已取消',
+  pythonJob_queued: '等待中', pythonJob_running: '处理中', pythonJob_succeeded: '已完成', pythonJob_partial: '部分完成', pythonJob_failed: '失败', pythonJob_interrupted: '中断', pythonJob_cancelled: '已取消',
   name_base: '基础服务与界面', name_account: '账号', name_ai_cloud: 'AI 云平台', name_desktop_compat: '桌面命令桥接', name_environment: '环境变量', name_execution: '任务执行', name_extension_center: '扩展中心', name_files: '文件预览与附件', name_images: '图片生成与管理', name_mcp: 'MCP 管理', name_mineru: 'MinerU 文档解析', name_projects: '项目', name_publications: '成果与出版', name_pubmed: 'PubMed 检索', name_python: 'Python 环境', name_research: '科研工作台', name_reviewer: '科研审稿', name_runs: '运行记录', name_secrets: '安全凭据', name_singlecell: '单细胞分析', name_skills: 'Skills 管理',
   catalogError: '目录检查失败',
   search: '搜索资源',
@@ -51,13 +60,18 @@ export const zh = {
 } satisfies Record<string, string>
 
 export const en: typeof zh = {
+  activationError: 'Activation failed', activationUnavailable: 'Activation unconfirmed', unchecked: 'Updates not checked', summary: 'Resource update summary', lastChecked: 'Last checked',
+  localRefresh: 'Refresh local list', localReady: 'Local resources', loadingLocal: 'Reading local resources…', missing: 'Plugin package missing',
+  pinned: 'Pinned version', pin: 'Pin current version', unpin: 'Unpin', updateSelected: 'Update selected', selectUpdate: 'Select update',
+  dependentWarning: 'This operation will also disable these dependent plugins. Continue?',
   title: 'Extension Center',
-  intro: 'Manage ZeroWall plugins, Skills, and MCP resources. Checks are read-only; installation and upgrades are manual.',
-  refresh: 'Check for updates', checking: 'Checking…', ready: 'Check complete', unavailable: 'Desktop resource service unavailable', failed: 'Check failed', cancelled: 'Resource task was cancelled', empty: 'No updates are available.', installed: 'Installed', available: 'Update available', update: 'Update', rollback: 'Rollback', disable: 'Disable', enable: 'Enable', remove: 'Uninstall', restart: 'Host restart required', signed: 'Signature verified', unsigned: 'Unsigned', plugins: 'Plugins', skills: 'Skills', mcp: 'MCP', task: 'Task', source: 'Source', version: 'Version', status: 'Status', noDesktop: 'The ZeroWall desktop resource bridge is unavailable.', catalogUnavailable: 'Local resources are shown; the signed catalog is unavailable.', catalogError: 'Catalog check failed', search: 'Search resources', import: 'Import', install: 'Install', repair: 'Repair', disabled: 'Disabled', notInstalled: 'Not installed', tasks: 'Resource tasks', noTasks: 'No resource tasks', retry: 'Retry', cancel: 'Cancel',
+  intro: 'Automatically check plugin and Skills updates, and manage MCP and Python. Choose when to install or upgrade.',
+  refresh: 'Check for updates', checking: 'Checking…', ready: 'Check complete', unavailable: 'Desktop resource service unavailable', failed: 'Check failed', cancelled: 'Resource task was cancelled', empty: 'No updates are available.', installed: 'Installed', available: 'Update available', update: 'Update', updateAll: 'Update all available', rollback: 'Rollback', disable: 'Disable', enable: 'Enable', remove: 'Uninstall', restart: 'Host restart required', signed: 'Signature verified', unsigned: 'Unsigned', plugins: 'Plugins', skills: 'Skills', mcp: 'MCP', python: 'Python', pythonCore: 'Python Core', pythonScience: 'Python Science', task: 'Task', source: 'Source', version: 'Version', status: 'Status', noDesktop: 'The ZeroWall desktop resource bridge is unavailable.', catalogUnavailable: 'Local resources are shown; the signed catalog is unavailable.', catalogError: 'Catalog check failed', search: 'Search resources', import: 'Import', install: 'Install', repair: 'Repair', disabled: 'Disabled', notInstalled: 'Not installed', tasks: 'Resource tasks', noTasks: 'No resource tasks', retry: 'Retry', cancel: 'Cancel',
   source_profile: 'User installed', source_bundled: 'Built in', source_runtime: 'Core runtime', source_catalog: 'Remote catalog', source_removed: 'Removed', source_disabled: 'Disabled', runtimeCore: 'Provided by DSH core', bundledResource: 'Included in installer', localResource: 'Local resource',
   catalogUnpublished: 'The independent update catalog has not been published. Local resources remain available; check here after publication.',
   localError: 'Cannot read local resources. Retry or check desktop logs.', noMatches: 'No matching resources', resourceCount: 'Resources', unversioned: 'Version not declared', restartServer: 'Restart server',
   job_queued: 'Queued', job_running: 'Running', job_succeeded: 'Completed', job_failed: 'Failed', job_cancelled: 'Cancelled',
+  pythonJob_queued: 'Queued', pythonJob_running: 'Running', pythonJob_succeeded: 'Completed', pythonJob_partial: 'Partial', pythonJob_failed: 'Failed', pythonJob_interrupted: 'Interrupted', pythonJob_cancelled: 'Cancelled',
   name_base: 'Base services and UI', name_account: 'Accounts', name_ai_cloud: 'AI Cloud', name_desktop_compat: 'Desktop command bridge', name_environment: 'Environment variables', name_execution: 'Execution', name_extension_center: 'Extension Center', name_files: 'File previews and attachments', name_images: 'Images', name_mcp: 'MCP management', name_mineru: 'MinerU document parsing', name_projects: 'Projects', name_publications: 'Publications', name_pubmed: 'PubMed search', name_python: 'Python environment', name_research: 'Research workbench', name_reviewer: 'Research reviewer', name_runs: 'Run history', name_secrets: 'Secure credentials', name_singlecell: 'Single-cell analysis', name_skills: 'Skills management',
 }
 

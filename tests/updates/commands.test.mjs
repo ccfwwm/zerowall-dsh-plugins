@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { createConnection } from 'node:net'
@@ -9,6 +9,7 @@ import { promisify } from 'node:util'
 import { randomUUID } from 'node:crypto'
 import { startCommandServer } from '../../desktop/src/main/command-server.ts'
 import { commandPathWorker } from '../../tools/commands/path-worker.mjs'
+import { buildPowerShellPythonCommand, fixedPythonShellPaths } from '../../tools/commands/python-shell.mjs'
 const run = promisify(execFile)
 
 test('real CLI socket authenticates the owner, rejects another token and supports zws', async () => {
@@ -74,4 +75,39 @@ try {
 `)
   try { const result = await run('powershell.exe', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', script], { windowsHide: true }); assert.match(result.stdout, /ownership verified/) }
   finally { await rm(home, { recursive: true, force: true }) }
+})
+
+test('Python shell PowerShell command uses escaped paths instead of environment variables', () => {
+  const runtimeRoot = "C:\\Users\\O'Neil\\AppData\\Local\\ZeroWall Science\\Python"
+  const executable = `${runtimeRoot}\\python.exe`
+  const command = buildPowerShellPythonCommand(runtimeRoot, executable)
+  assert.match(command, /Set-Location -LiteralPath 'C:\\Users\\O''Neil\\AppData\\Local\\ZeroWall Science\\Python'/)
+  assert.match(command, /function global:pip \{ Invoke-ZeroWallPython -m pip @args \}/)
+  assert.match(command, /function global:python \{ Invoke-ZeroWallPython @args \}/)
+  assert.match(command, /write-lock\.json/)
+  assert.match(command, /\[ZeroWall Python\]/)
+  assert.doesNotMatch(command, /; & 'C:\\Users\\O''Neil\\AppData\\Local\\ZeroWall Science\\Python\\python\.exe'$/)
+})
+
+test('CLI Python shell requires the fixed service root and rejects stale slots', () => {
+  const runtimeRoot = resolve('fixed-install/Python')
+  assert.deepEqual(fixedPythonShellPaths({ runtimeRoot, executable: join(runtimeRoot, 'python.exe') }), { runtimeRoot, executable: join(runtimeRoot, 'python.exe'), managementRoot: join(runtimeRoot, '.zerowall') })
+  assert.throws(() => fixedPythonShellPaths({}), /PYTHON_FIXED_PATH_REQUIRED/)
+  assert.throws(() => fixedPythonShellPaths({ runtimeRoot, runtimeExecutable: join(runtimeRoot, '.zerowall/slots/a/Python/python.exe') }), /PYTHON_FIXED_PATH_REQUIRED/)
+  assert.throws(() => fixedPythonShellPaths({ runtimeRoot: join(runtimeRoot, '.zerowall/slots/a') }), /PYTHON_FIXED_PATH_REQUIRED/)
+})
+
+test('managed Python PowerShell shell binds cwd, python and pip to the selected interpreter', { skip: process.platform !== 'win32' }, async context => {
+  const localAppData = process.env.LOCALAPPDATA
+  if (!localAppData) return context.skip('LOCALAPPDATA is unavailable')
+  const runtimeRoot = join(localAppData, 'ZeroWall Science', 'Python')
+  const executable = join(runtimeRoot, 'python.exe')
+  await access(executable).catch(() => context.skip('Canonical ZeroWall Python runtime is not installed on this host'))
+  const command = buildPowerShellPythonCommand(runtimeRoot, executable)
+  const script = `${command}; Write-Output ('cwd=' + (Get-Location).Path); python -c 'import sys; print(sys.executable)'; pip -V; pip list --format=freeze | Select-Object -First 1`
+  const result = await run('powershell.exe', ['-NoLogo', '-NoProfile', '-NonInteractive', '-Command', script], { windowsHide: true })
+  assert.match(result.stdout, new RegExp(`cwd=${runtimeRoot.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}`, 'iu'))
+  assert.match(result.stdout, new RegExp(executable.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'iu'))
+  assert.match(result.stdout, new RegExp(`${runtimeRoot.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&')}\\\\Lib\\\\site-packages\\\\pip`, 'iu'))
+  assert.doesNotMatch(result.stdout, /Program Files\\Python312\\Lib\\site-packages\\pip/iu)
 })

@@ -12,7 +12,7 @@ import ToolRuntime from '@deepseek-ai/dsh-tools'
 import ZeroWallProjectsService from '../../projects/src/host/index.js'
 import ZeroWallMcpService, {
   ZeroWallMcpService as McpServiceClass,
-  RDATALINUX_R_MCP_LEGACY_URL,
+  RDATALINUX_R_MCP_AUTHORIZATION_ENV,
   RDATALINUX_R_MCP_URL,
 } from '../src/host/index.js'
 
@@ -22,6 +22,7 @@ beforeEach(() => {
   vi.spyOn(SecretBrokerClient.prototype, 'get').mockResolvedValue(undefined)
 })
 afterEach(async () => {
+  vi.unstubAllEnvs()
   delete process.env.ZEROWALL_RESEARCH_DB
   delete process.env.ZEROWALL_DISABLE_DEFAULT_MCP
   delete process.env.R_PLATFORM_MCP_AUTHORIZATION
@@ -73,7 +74,9 @@ describe('ZeroWall MCP Cordis lifecycle', () => {
       expect(starts).not.toHaveBeenCalled()
       process.env.ZEROWALL_MCP_ENVIRONMENT_ROOT = root
       writeFileSync(join(root, 'activation.json'), JSON.stringify({ transactionId: 'before-background-start', candidate: { root: join(root, 'candidate'), health: 'ready' }, createdAt: Date.now() }))
-      await expect.poll(() => { try { return JSON.parse(readFileSync(join(root, 'activation-ready.json'), 'utf8')) } catch { return undefined } }, { timeout: 5000 }).toMatchObject({ transactionId: 'before-background-start', ready: true })
+      await (ctx.zerowallMcp as any).pollEnvironment()
+      expect(() => readFileSync(join(root, 'activation-ready.json'))).toThrow()
+      expect(JSON.parse(readFileSync(join(root, 'activation.json'), 'utf8')).transactionId).toBe('before-background-start')
       process.emit('message', { type: 'unrelated' }, undefined)
       expect(starts).not.toHaveBeenCalled()
       process.emit('message', { type: 'zerowall:desktop:workbench-ready' }, undefined)
@@ -111,7 +114,7 @@ describe('ZeroWall MCP Cordis lifecycle', () => {
     }
   })
 
-  it('migrates only the retired R Platform endpoint to port 8099', async () => {
+  it('normalizes the managed R Platform endpoint to HTTPS', async () => {
     const root = mkdtempSync(join(tmpdir(), 'zerowall-mcp-r-platform-'))
     roots.push(root)
     process.env.ZEROWALL_RESEARCH_DB = join(root, 'zerowall-research.sqlite')
@@ -127,20 +130,21 @@ describe('ZeroWall MCP Cordis lifecycle', () => {
         serverName: 'rmcp',
         transport: 'streamable-http',
         enabled: false,
-        url: RDATALINUX_R_MCP_LEGACY_URL,
+        url: 'http://legacy.example.invalid/r-platform/mcp',
+        headerRefs: { Authorization: RDATALINUX_R_MCP_AUTHORIZATION_ENV },
       })
       const custom = ctx.zerowallProjects.createMcpServer({
         name: 'Custom R',
         serverName: 'custom_r_platform',
         transport: 'streamable-http',
         enabled: false,
-        url: 'http://103.217.185.141:9000/r-platform/mcp',
+        url: 'https://custom.example.invalid/r-platform/mcp',
       })
 
       await ctx.plugin(ZeroWallMcpService)
       const servers = await ctx.zerowallMcp.list()
       expect(servers.find(server => server.id === migrated.id)?.url).toBe(RDATALINUX_R_MCP_URL)
-      expect(servers.find(server => server.id === custom.id)?.url).toBe('http://103.217.185.141:9000/r-platform/mcp')
+      expect(servers.find(server => server.id === custom.id)?.url).toBe('https://custom.example.invalid/r-platform/mcp')
     } finally {
       await ctx.fiber.dispose()
     }
@@ -346,9 +350,9 @@ describe('ZeroWall MCP Cordis lifecycle', () => {
 
   it('starts enabled managed servers once their environment becomes ready and polls the compact pointer every second', async () => {
     const root = mkdtempSync(join(tmpdir(), 'zerowall-mcp-refresh-'))
-    const environmentStore = join(root, 'environment-store')
+    const environmentStore = join(root, 'Python/.zerowall')
     const installed = join(environmentStore, 'versions', '4.1.10')
-    const runtimeRoot = root
+    const runtimeRoot = join(root, 'Python')
     roots.push(root)
     process.env.ZEROWALL_RESEARCH_DB = join(root, 'zerowall-research.sqlite')
     process.env.DSH_HOME = join(root, 'harness')
@@ -358,8 +362,6 @@ describe('ZeroWall MCP Cordis lifecycle', () => {
     const timers = vi.spyOn(globalThis, 'setInterval')
     const server = `const readline=require('node:readline');const lines=readline.createInterface({input:process.stdin});lines.on('line',(line)=>{let req;try{req=JSON.parse(line)}catch{return}if(req.id===undefined)return;if(req.method==='initialize')process.stdout.write(JSON.stringify({jsonrpc:'2.0',id:req.id,result:{protocolVersion:'2024-11-05',capabilities:{tools:{}},serverInfo:{name:'fixture',version:'1'}}})+'\\n');else if(req.method==='tools/list')process.stdout.write(JSON.stringify({jsonrpc:'2.0',id:req.id,result:{tools:[]}})+'\\n');else process.stdout.write(JSON.stringify({jsonrpc:'2.0',id:req.id,result:{}})+'\\n')});`
     for (const relative of ['bio-tools', 'ketcher-chemistry', 'sci/dist']) mkdirSync(join(installed, relative), { recursive: true })
-    mkdirSync(join(runtimeRoot, 'Python'), { recursive: true })
-    copyFileSync(process.execPath, join(runtimeRoot, 'Python', 'python.exe'))
     writeFileSync(join(installed, 'bio-tools', 'run_server.py'), server)
     writeFileSync(join(installed, 'ketcher-chemistry', 'server.js'), server)
     writeFileSync(join(installed, 'sci', 'dist', 'mcp.cjs'), server)
@@ -367,6 +369,10 @@ describe('ZeroWall MCP Cordis lifecycle', () => {
     // cannot leave a detached child process behind on Windows.
     writeFileSync(join(installed, 'sci', 'zerowall-mcp-launcher.cjs'), server)
 
+    vi.stubEnv('ZEROWALL_PYTHON_RUNTIME_ROOT', runtimeRoot)
+    vi.stubEnv('ZEROWALL_BIO_TOOLS_ROOT', join(installed, 'bio-tools'))
+    vi.stubEnv('ZEROWALL_KETCHER_ROOT', join(installed, 'ketcher-chemistry'))
+    vi.stubEnv('ZEROWALL_SCI_ROOT', join(installed, 'sci'))
     const ctx = new Context()
     try {
       await ctx.plugin(SystemPrompt)
@@ -383,17 +389,23 @@ describe('ZeroWall MCP Cordis lifecycle', () => {
         } })
         expect(saved.runtimeState).toBe('blocked')
         expect(saved.reconnect.maxAttempts).toBe(2)
-        await expect(ctx.zerowallMcp.ensureConnected(item.serverName)).rejects.toThrow('environment is not ready')
+        await expect(ctx.zerowallMcp.ensureConnected(item.serverName)).rejects.toThrow('共享 Python/MCP 环境未就绪')
       }
       await expect.poll(async () => (await ctx.zerowallMcp.list()).filter(item => item.serverName.startsWith('zerowall_managed_')).every(item => item.runtimeState === 'blocked'), { timeout: 10_000, interval: 25 }).toBe(true)
       mkdirSync(environmentStore, { recursive: true })
-      writeFileSync(join(environmentStore, 'current.json'), JSON.stringify({ version: '4.1.10', root: installed, runtimeRoot, health: 'ready', manifest: { python: { relativeExecutable: 'Python/python.exe', relativeSitePackages: 'Python/Lib/site-packages' } } }))
+      copyFileSync(process.execPath, join(runtimeRoot, 'python.exe'))
+      writeFileSync(join(environmentStore, 'current.json'), JSON.stringify({ version: '4.1.10', root: runtimeRoot, runtimeRoot, health: 'ready', manifest: { python: { relativeExecutable: 'Python/python.exe', relativeSitePackages: 'Python/Lib/site-packages' } } }))
       const timer = timers.mock.calls.find(call => call[1] === 1000)
       expect(timer).toBeDefined()
       // Fire the production callback to verify the compact-pointer refresh.
       await (timer![0] as () => void)()
       await new Promise(resolve => setImmediate(resolve))
       await expect.poll(async () => (await ctx.zerowallMcp.list()).find(item => item.serverName === 'zerowall_managed_ketcher')?.runtimeState, { timeout: 10_000 }).toBe('active')
+      expect((await ctx.zerowallMcp.list()).find(item => item.serverName === 'zerowall_managed_bio_tools')).toMatchObject({ runtimeState: 'blocked', runtimeError: expect.stringContaining('核心依赖尚未安装') })
+      mkdirSync(join(runtimeRoot, 'Lib/site-packages/mcp'), { recursive: true })
+      writeFileSync(join(runtimeRoot, 'Lib/site-packages/mcp/__init__.py'), '')
+      const bio = (await ctx.zerowallMcp.list()).find(item => item.serverName === 'zerowall_managed_bio_tools')!
+      await ctx.zerowallMcp.update({ id: bio.id, changes: { enabled: true } })
       await expect.poll(async () => (await ctx.zerowallMcp.list()).find(item => item.serverName === 'zerowall_managed_bio_tools')?.runtimeState, { timeout: 10_000 }).toBe('active')
       const beforeInspect = (await ctx.zerowallMcp.list()).map(item => item.tools)
       await (timer![0] as () => void)()

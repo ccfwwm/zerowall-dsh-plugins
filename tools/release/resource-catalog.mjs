@@ -2,6 +2,7 @@ import { createHash, randomUUID, sign, verify } from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { mkdir, open, rename, readFile, rm, stat } from 'node:fs/promises'
 import { join } from 'node:path'
+import { physicalFs } from '../commands/physical-fs.mjs'
 
 export function canonical(value) {
   if (Array.isArray(value)) return value.map(canonical)
@@ -63,11 +64,14 @@ export function assertCompatible(entry, target) {
 }
 export async function fileDigest(path) {
   const hash = createHash('sha256')
-  for await (const chunk of createReadStream(path)) hash.update(chunk)
+  const stream = String(path).endsWith('.asar')
+    ? physicalFs.createReadStream(path, { highWaterMark: 4 * 1024 * 1024 })
+    : createReadStream(path, { highWaterMark: 1024 * 1024 })
+  for await (const chunk of stream) hash.update(chunk)
   return hash.digest('hex')
 }
 /** Download into a new content-addressed generation; never overwrite a live package. */
-export async function downloadResource(entry, directory, { local = false, fetcher = fetch } = {}) {
+export async function downloadResource(entry, directory, { local = false, fetcher = fetch, signal } = {}) {
   await mkdir(directory, { recursive: true })
   const destination = join(directory, entry.sha256 + '.package')
   if ((await stat(destination).catch(() => undefined))?.size === entry.size && await fileDigest(destination) === entry.sha256) return destination
@@ -81,7 +85,7 @@ export async function downloadResource(entry, directory, { local = false, fetche
     if (url.protocol === 'file:' && local) body = [await readFile(url)]
     else {
       if (url.protocol !== 'https:') throw new Error('Resource download must use HTTPS')
-      const response = await fetcher(url, { redirect: 'error', signal: AbortSignal.timeout(120_000) })
+      const response = await fetcher(url, { redirect: 'error', signal: signal ?? AbortSignal.timeout(120_000) })
       if (!response.ok || !response.body) throw new Error('Resource download failed')
       body = response.body
     }

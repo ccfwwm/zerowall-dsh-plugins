@@ -1,0 +1,208 @@
+/**
+ * Hand-written, per-version release notes for dsh-session-notification. The
+ * GitHub release body is built from these (see release-body.ts): 新特性 and
+ * 修复 & 改进 sections come from here verbatim; What's Changed is derived
+ * mechanically from the commit range.
+ *
+ * Every entry is a complete markdown bullet (`- **<scope>**: ...`) so the
+ * body builder can splice the arrays in directly.
+ * @module dsh-session-notification/release-notes
+ */
+
+export interface ReleaseNotes {
+  features: readonly string[]
+  fixes: readonly string[]
+}
+
+/**
+ * Version -> hand-written notes, keyed without the `v` prefix.
+ * A version missing from this map cannot be released: release.ts and
+ * backfill-releases.ts both fail loudly.
+ */
+export const RELEASE_NOTES: Record<string, ReleaseNotes> = {
+  '0.1.0': {
+    features: [
+      '- **通知功能**: 会话完成/出错/提问/权限请求四类事件,浏览器本地偏好(设置 → 通知),零宿主改动',
+      '- **浏览器通知**: 离开标签页时弹系统通知,含诚实的权限状态(已授权/已拒绝/不支持/暂停)与一键授权按钮',
+      '- **测试通道**: 通知行内「测试通知」按钮,授权后立即验证系统通知通道',
+      '- **网页图标**: 通知使用网页自身的 favicon(apple-touch-icon → rel=icon 回退)',
+      '- **提示音**: 四种内置音效(叮咚/低鸣/轻响/警示)Web Audio 实时合成,零音频文件;每种类型可独立开关与选音',
+      '- **安装方式**: 支持 npm / npx dsh / git 仓库 / dsh plugin 多种安装,补齐前后对比截图',
+    ],
+    fixes: [
+      '- **通知权限**: 通知权限被拒或浏览器不支持时如实展示状态,不再静默失败',
+    ],
+  },
+  '0.1.1': {
+    features: [
+      '- **音量范围**: 音量支持 0–200%,可放大内置提示音',
+    ],
+    fixes: [
+      '- **发布名**: 改用完整包名做模块 id 与 bundle patch,插件可被 profile 正确加载',
+      '- **文档**: README 拆分中英单语,截图移到安装说明前并排展示',
+    ],
+  },
+  '0.1.2': {
+    features: [],
+    fixes: [
+      '- **依赖升级**: 依赖迁移至 dsh 0.1.1-rc.2,移除已删除的 web-react,类型自包含',
+    ],
+  },
+  '0.1.3': {
+    features: [
+      '- **响度增益**: 撤销 0–200% 音量方案——改用固定响度增益(约 +6 dB)加软限幅器,音量刻度回到 0–100%,声音更响且不削波',
+    ],
+    fixes: [],
+  },
+  '0.1.4': {
+    features: [],
+    fixes: [
+      '- **harness 大更新适配**: 适配 dsh 0.1.2-alpha.1(客户端运行时拆分、会话绑定/uiConversation 重构等数据模型迁移)',
+    ],
+  },
+  '0.1.5': {
+    features: [],
+    fixes: [
+      '- **模块表**: 按 alpha 平台模块表加载——移除过时的 runtime/client external,bundle 只要求平台种子模块',
+    ],
+  },
+  '0.1.6': {
+    features: [],
+    fixes: [
+      '- **类型来源**: 全部 @deepseek-ai 类型改从 npm 解析(不再指向本地源码路径),与 0.1.2-alpha.2 一致',
+    ],
+  },
+  '0.1.7': {
+    features: [
+      '- **官方控件**: 通知设置采用官方单选下拉(Selector pill)与官方 Button 组件,行布局对齐通用设置的 Setting-Cell 规范',
+    ],
+    fixes: [
+      '- **完成通知复活**: 适配 0.1.2-alpha.2 数据模型——会话快照不再携带 chat 视图与 pendingInteraction,改读 uiConversation chat target 与 uiSession pending map;此前对话完成不再提醒的问题修复',
+      '- **依赖升级**: @deepseek-ai 依赖升至 0.1.2-alpha.5',
+    ],
+  },
+  '0.1.8': {
+    features: [
+      '- **只提醒主会话**: 默认只提醒主会话,并行展开的一堆子会话(subagent)不再每个都响一次;设置 → 通知 →「只提醒主会话」开关可随时关闭,关闭后所有子会话也提醒',
+    ],
+    fixes: [],
+  },
+  '0.1.9': {
+    features: [],
+    fixes: [
+      '- **harness 0.1.3-alpha.1 适配**: dsh-client-runtime 已解散——会话/对话/待交互类型改从 api-session-controller、ui-conversation、ui-session 客户端解析;客户端注入种子更新(按实际消费的服务列 provider 包、移除 runtime),删除失效的 dshClient 旧键',
+      '- **设置作用域契约**: SettingsScope 契约迁至 dsh-client-ui-settings(client 面新增 mutate);本地偏好作用域补齐 mutate(路径化 set/unset),新增相应单测;宿主半区 settings.register 在 0.1.3-alpha.1 类型下原样通过',
+    ],
+  },
+  '0.1.10': {
+    features: [],
+    fixes: [
+      '- **依赖升级至 0.1.3-alpha.2**: @deepseek-ai/dsh-* 依赖升到 ^0.1.3-alpha.2(npm 已发布);tsconfig 的本地检出路径映射全部移除,类型恢复从 node_modules 解析;alpha.1→alpha.2 的差异(连接恢复配置、会话事件校验等)不影响本插件的 API 面,代码零改动',
+    ],
+  },
+  '0.1.11': {
+    features: [],
+    fixes: [
+      '- **依赖升级至 0.1.5-alpha.2**: @deepseek-ai/dsh-* 依赖升到 ^0.1.5-alpha.2(alpha 通道最新);0.1.3-alpha.2→0.1.5-alpha.2 跨度虽大(约 774 提交),但插件消费的 API 面保持稳定——平台模块表仅新增 dockkit 种子(插件未用),settings.section 席位与 inject/external 语义均无变化,代码零改动,typecheck/96 specs/build 全绿',
+    ],
+  },
+  '0.1.12': {
+    features: [
+      '- **多标签页只响一次**: 同一次完成/提问/权限事件在所有同源标签页之间只提醒一次——标签页通过 BroadcastChannel 仲裁,先到者得;你正在看的那个标签页优先,后台标签页让位,不再因为开着多个 dsh 页面而每个页面各响一遍(不同事件仍各自提醒;不同端口/实例的页面互不影响)',
+    ],
+    fixes: [],
+  },
+  '0.1.13': {
+    features: [
+      '- **等子会话全部结束**: 主会话先告一段落、但子会话(subagent)还在跑时不再提前提醒——等所有子会话都结束后再提醒一次(递归覆盖子会话自己再派生的孙会话);失败仍会立即提醒,不被挂起。设置 → 通知 →「等子会话全部结束」开关可关闭,关闭后恢复"主会话一结束就提醒"',
+    ],
+    fixes: [],
+  },
+  '0.1.14': {
+    features: [
+      '- **通知范围三选一**: 「只提醒主会话」与「等子会话全部结束」两个开关合并为一行官方单选下拉——*全部会话* / *只主会话* / *主会话 + 等子会话*(默认);旧偏好按原语义自动迁移到对应模式',
+    ],
+    fixes: [],
+  },
+  '0.1.15': {
+    features: [],
+    fixes: [
+      '- **文案**: 「通知范围」一行补上说明文字——选哪些会话提醒,以及「主会话 + 等子会话」会等子会话全部结束再响',
+    ],
+  },
+  '0.1.16': {
+    features: [],
+    fixes: [
+      '- **npm 关联**: package.json 补上 repository / homepage / bugs 字段,npm 上的包由此关联回本仓库,插件市场与精选列表可据此展示下载量',
+    ],
+  },
+  '0.1.17': {
+    features: [],
+    fixes: [
+      '- **依赖升级至 0.1.5-rc.1**: @deepseek-ai/dsh-* 依赖升到 ^0.1.5-rc.1;alpha.2→rc.1 仅 17 个提交,唯一有实质改动的 ui-primitives 只调整了 markdown 代码块渲染,插件消费的 Button/Menu/图标导出面不变,代码零改动,typecheck/108 specs/build 全绿',
+    ],
+  },
+  '0.1.18': {
+    features: [],
+    fixes: [
+      '- **Windows 横幅恢复**: 通知此前共用同一个 tag 且未设 renotify,Windows/Chromium 下同 tag 通知只"静默替换"、不再弹横幅(通知中心里留着未读通知时,后续提醒全都不会弹出来);现在补上 `renotify: true`,并按事件类型分 tag——完成/失败/提问/权限/测试各自一条,同类型仍合并,但每次都会重新弹横幅,不同类型也不会互相顶掉',
+    ],
+  },
+  '0.1.19': {
+    features: [],
+    fixes: [
+      '- **依赖升级至 0.1.6-alpha.1**: @deepseek-ai/dsh-* 依赖升到 ^0.1.6-alpha.1(804 个提交的大版本);逐项核对插件消费的全部运行时面——SessionSnapshot(running/lastAgentError)、SessionSummary/SessionListState(id/parentId/origin/running/displayTitle/current)、uiSession 待交互表、uiConversation 的 binding().target("chat") 与 ChatSnapshot 节点(turn-error/assistant-step)、SettingsScope 契约、slots/store/primitives 导出、以及 slots/locale/sessions/uiConversation/uiSession 五个服务名——全部保持,代码零改动;平台模块表种子不变,bundle externals 仍为四个',
+    ],
+  },
+  '0.1.20': {
+    features: [],
+    fixes: [
+      '- **依赖升级至 0.1.7-alpha.1**: @deepseek-ai/dsh-* 依赖升到 ^0.1.7-alpha.1,并把 cordis 升到 ^4.0.3、schemastery 升到 ^3.18.3 与 dsh 包的 peer 依赖对齐(此前顶层解析到 3.18.1,与 dsh-settings 期望的 3.18.3 类型不兼容)',
+      '- **会话"当前"判定**: 0.1.7 删除了 SessionListState.current——改为按主视图引用判定(retainedBy.mainView);会话列表其余字段(id/parentId/origin/running/displayTitle)与对话节点(turn-error/assistant-step)不变',
+      '- **待交互订阅**: 0.1.7 把 uiSession 的待交互表合并进 sessionStatus 源(SessionStatusSnapshot:running + pendingInteraction + completionUnread),订阅与问题/权限取值逻辑同步迁移',
+      '- **设置契约更名**: 客户端 SettingsScope 更名为 ConfigForm、settings.register 移除(插件配置表单改由 Loader 条目派生、写入 profile patch);本地偏好作用域改为实现官方 ConfigForm(写入返回 boolean),宿主半区保持惰性',
+      '- **图标命名**: ui-primitives 图标由 16/14 尺寸命名改为 Regular/Medium 笔画命名,按原笔画与尺寸映射(含警示图标显式 size=14)',
+    ],
+  },
+  '0.1.21': {
+    features: [],
+    fixes: [
+      '- **依赖升级至 0.1.7-rc.2**: @deepseek-ai/dsh-* 依赖升到 ^0.1.7-rc.2,cordis/schemastery 对齐 vendor 版本(^4.0.4 / ^3.18.4);alpha.1→rc.2 的 664 个提交改动了会话快照、对话记录、图标等内部结构,但逐项核对插件消费的运行时面——SessionSnapshot.lastAgentError、SessionSummary(running/displayTitle/parentId/origin)、SessionStatus.pendingInteraction、uiConversation 的 chat target 与 assistant-step.blocks / turn-error.seq+message、settings.section 席位——全部保持,代码零改动,typecheck/110 specs/build 全绿',
+    ],
+  },
+  '0.1.22': {
+    features: [],
+    fixes: [
+      '- **提示音不再阻止睡眠(#6)**: 共享 AudioContext 此前创建后永不挂起,处于 running 的上下文会让系统音频流(以及 macOS 的 PreventUserIdleSystemSleep 断言)一直存活到标签页关闭——单次 0.5 秒提示音实测挂住 17 小时不断电;现在内置音效在最后一个振荡器 ended(以排程时长为兜底定时器)后挂起,自定义音频在 ended/error/自动播放被拒时挂起,并断开每次播放的 MediaElementSource(节点不再累积);插件卸载时关闭上下文;音量 0 或静音开关也不再长期占用音频流',
+    ],
+  },
+  '0.2.0': {
+    features: [
+      '- **桌面端通知支持**: 插件在 dsh 桌面应用(Electron 外壳,加载同一套 Web 客户端与插件图)中原样运行;桌面通知即系统原生通知——外壳默认授予通知权限,打开开关即生效、不再弹授权框;通知使用应用图标(`dsh-app://` 与 `data:` SVG 等原生层无法栅格化的图标会被跳过,让打包应用图标生效),并在系统层标记 silent——Electron 会转发该标志,避免系统通知音与插件提示音叠加成「双响」;点击通知经外壳的应用激活恢复并聚焦窗口(关窗只是隐藏);README 补充桌面端安装方式:由桌面应用的「插件」页面安装(desktop profile 由 Electron 独占,CLI 拒绝管理)',
+    ],
+    fixes: [
+      '- **依赖升级至 0.2.0-rc.1**: @deepseek-ai/dsh-* 依赖升到 ^0.2.0-rc.1(cordis/schemastery 对齐 ~4.0.4 / ~3.18.4 peer);0.1.7-rc.2→0.2.0-rc.1 的 261 个提交集中在会话控制器契约与 composer/draft 输入契约,插件消费的面(SessionSnapshot.lastAgentError、SessionSummary 字段、SessionStatus.pendingInteraction、chat target 与 assistant-step.blocks / turn-error.seq+message、settings.section 席位、ConfigForm 契约、平台模块表)全部保持,仅新增桌面通知的图标 scheme 处理',
+    ],
+  },
+  '0.2.1': {
+    features: [],
+    fixes: [
+      '- **依赖升级至 0.2.0-rc.2**: @deepseek-ai/dsh-* 依赖升到 ^0.2.0-rc.2(peer 仍为 cordis ~4.0.4 / schemastery ~3.18.4);rc.1→rc.2 的 187 个提交集中在桌面端命令安装/管理与 desktop-host CLI,通知链路(权限默认放行、dshDesktop 桥、Electron 通知转发)与插件消费的所有 API 面均未变化,图标(Regular 家族)也全部保留,代码零改动,typecheck/123 specs/build 全绿',
+    ],
+  },
+  '0.2.2': {
+    features: [
+      '- **点击通知跳转到对应会话(#7)**: 通知点击时除聚焦页面外,还会经官方导航入口 `ctx.uiWorkspace.openSession(sessionId)` 打开该事件所属会话的对话——Web 与桌面端一致(桌面端关窗隐藏后,点击通知恢复窗口并直接进入那个会话);`uiWorkspace` 采用可选注入(该服务缺失时插件照常运行,点击仅聚焦),并新增两条回归测试(点击行为、分发器把会话 id 传给通知)',
+    ],
+    fixes: [],
+  },
+  '0.2.3': {
+    features: [
+      '- **点击通知跳转到对应会话(#7)**: 通知点击时除聚焦页面外,还会打开该事件所属会话的对话——桌面端关窗隐藏后,点击通知会恢复窗口并直接进入那个会话;v0.2.2 引入该能力,本版修复了它在实际 GUI(尤其桌面端)中未生效的问题(见下)',
+    ],
+    fixes: [
+      '- **点击跳转修复(#7 后续)**: 上一版的可选注入在实际 GUI 里可能未生效——改为与官方 ui-chat 一致的**硬注入 `uiWorkspace`**,打开失败时打印告警;同时把通知对象保持**强引用**(Chromium/Electron 下点击回调可能因 JS 包装对象被回收而丢失),点击回调抛错也不影响关闭通知卡片',
+      '- **通知正文缺少助手回复修复**: 0.1.7+ 起读取 chat target 不会激活视图,未选中的会话拿不到对话节点;现在读取前显式 `activate("chat")`,并在结算前按需用 `sessions.using()` 打开该会话历史——从未打开过的会话也能拿到最终回复文本(桌面端隐藏窗口、只提醒「完成」的场景同样生效);该加载仅在有提醒可能时执行,失败不影响完成/失败分类',
+    ],
+  },
+}

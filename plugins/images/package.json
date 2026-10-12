@@ -1,6 +1,6 @@
 {
   "name": "@zerowallscience/plugin-images",
-  "version": "0.2.1",
+  "version": "0.2.6",
   "description": "ZeroWall Science images domain plugin (desktop 8.0.1).",
   "type": "module",
   "main": "./lib/index.js",
@@ -53,7 +53,7 @@
   },
   "zerowall": {
     "desktop": {
-      "min": "8.0.1"
+      "min": "8.0.6"
     },
     "dsh": {
       "min": "0.2.0-rc.2",
@@ -102,12 +102,14 @@
   ],
   "dependencies": {
     "dsh-better-sidebar": "workspace:^",
-    "dsh-dream-skin": "9.29.0",
+    "dsh-dream-skin": "10.9.3",
     "@zerowallscience/plugin-account": "workspace:^",
     "@zerowallscience/plugin-secrets": "workspace:^",
     "@zerowallscience/plugin-base": "workspace:^",
     "@zerowallscience/plugin-environment": "workspace:^",
     "sharp": "^0.35.3",
+    "@xmldom/xmldom": "0.9.12",
+    "fflate": "0.8.3",
     "lucide-react": "^0.468.0",
     "react": "^18.2.0"
   },

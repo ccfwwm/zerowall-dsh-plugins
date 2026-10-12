@@ -1,4 +1,5 @@
-import { spawn, type ChildProcess } from 'node:child_process'
+import { type ChildProcess } from 'node:child_process'
+import { spawnWithRuntimeLease as spawn } from '../../../python/src/shared/runtime-process.js'
 import { createHash, randomUUID } from 'node:crypto'
 import { mkdir, readFile, realpath, stat, writeFile } from 'node:fs/promises'
 import { createReadStream, existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
@@ -23,7 +24,7 @@ export interface AnnotationBridgeSetup {
 const FIJI_ENTRYPOINTS = process.platform === 'win32'
   ? ['fiji-windows-x64.exe', 'ImageJ-win64.exe', 'fiji.bat', 'fiji']
   : ['fiji', 'ImageJ-linux64', 'fiji.sh']
-export const DEFAULT_REMOTE_R_MCP_URL = 'http://103.217.185.141:8099/r-platform/mcp'
+export const DEFAULT_REMOTE_R_MCP_URL = 'https://rmcp.chengxunkeji.cn/r-platform/mcp'
 
 function isNapariLauncher(path: string): boolean { return /^napari(?:\.exe|\.bat|\.cmd)?$/iu.test(basename(path)) }
 
@@ -97,7 +98,7 @@ export function engineExecutable(engine: ScientificEngineId, config?: Partial<Sc
   if (engine === 'napari') {
     const python = defaultSciencePythonExecutable()
     if (!python) throw new Error('未找到 ZeroWall 唯一共享 Python 环境；napari 不会使用其他解释器。')
-    return discoverNapariExecutable() ?? python
+    return python
   }
   if (config?.executablePath) return config.executablePath
   throw new Error('Unsupported native engine.')
@@ -339,15 +340,14 @@ export class NativeEngineService {
   }
 
   private async probeNapari(config: ScientificEngineConfig): Promise<ScientificEngineStatus> {
-    const python = defaultSciencePythonExecutable()
-    if (!python) return { id: 'napari', name: engineName('napari'), available: false, status: 'invalid', source: config.source, reason: '未找到 ZeroWall 集成 Python；napari 与 BrainGlobe 共用该环境。' }
-    if (!existsSync(python)) return { id: 'napari', name: engineName('napari'), available: false, status: 'invalid', source: config.source, path: python, reason: `未找到 Python：${python}` }
+    const managed = await resolveManagedSciencePython()
+    const python = managed?.executable
+    if (!python) return { id: 'napari', name: engineName('napari'), available: false, status: 'invalid', source: config.source, reason: '未找到受管理的 ZeroWall Python 环境；napari 与 BrainGlobe 共用该环境。' }
     const result = await this.runProbe('napari', engineName('napari'), python, ['-c', 'import napari; print(napari.__version__)'], config)
-    const launcher = discoverNapariExecutable()
     return {
       ...result,
-      ...(launcher ? { path: launcher, capabilities: ['napari', 'shared site-packages launcher'] } : {}),
-      diagnostic: [`共享 Python：${python}`, `napari 启动入口：${launcher ?? '未找到；可回退到 python -m napari'}`, result.diagnostic].filter(Boolean).join('\n').slice(-8000),
+      path: python, capabilities: ['napari', 'fixed Python -m napari'],
+      diagnostic: [`共享 Python：${python}`, 'napari 启动入口：固定解释器 -m napari', result.diagnostic].filter(Boolean).join('\n').slice(-8000),
     }
   }
 
@@ -485,7 +485,7 @@ export class NativeEngineService {
         env.ZEROWALL_ANNOTATION_AUTORUN = '1'
         record.annotationBridge = { viewerId: bridge.viewerId, baseRevisionId: bridge.baseRevisionId, sourceSha256: bridge.sourceSha256, returnPath, adapterSha256: createHash('sha256').update(script).digest('hex') }
         if (engine === 'napari') {
-          const napariPython = defaultSciencePythonExecutable()
+          const napariPython = (await resolveManagedSciencePython())?.executable
           if (!napariPython || !existsSync(napariPython)) throw new Error('napari ROI bridge needs the ZeroWall shared Python interpreter.')
           path = await realpath(napariPython)
           env = await engineEnvironment(engine, path)

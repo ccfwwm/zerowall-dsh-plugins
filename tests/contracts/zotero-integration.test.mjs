@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
-import { readFile } from 'node:fs/promises'
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
 import { resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import test from 'node:test'
 import { loadZoteroReducer, snapshotFromLog } from './zotero-replay.mjs'
 import { zoteroDispatch } from '../../tools/packaging/zotero-dispatch.mjs'
+import { verifyZoteroDispatch } from '../../tools/packaging/verify-zotero-dispatch.mjs'
 import {
   adaptZoteroClient,
   adaptZoteroCommand,
@@ -20,9 +23,17 @@ import { decodeZoteroAuthorizationResponse } from '../../tools/packaging/zotero-
 const root = resolve(import.meta.dirname, '../..')
 const read = path => readFile(resolve(root, path), 'utf8')
 
+test('Progressive Tools 0.7 replays nested structured metadata and parent-only search logs', async () => {
+  const client = adaptZoteroClient(await read('desktop/node_modules/dsh-zotero/lib/client.js'))
+  const dispatcher = await read('packages/dsh/dsh-progressive-tools/lib/index.js')
+  verifyZoteroDispatch(client, dispatcher)
+  assert.throws(() => verifyZoteroDispatch(client, dispatcher.replace('parent: exec.token', 'parent: undefined')), /nested dispatch contract/u)
+  assert.throws(() => verifyZoteroDispatch(client, dispatcher.replace("protocol: 'dsh-progressive-tools/dispatch-v1'", "protocol: 'unknown'")), /presentation metadata/u)
+})
+
 test('Zotero runtime manifest accepts DSH rc.2 without changing the source package', () => {
   const source = JSON.stringify({
-    name: 'dsh-zotero', version: '0.11.0',
+    name: 'dsh-zotero', version: '0.12.1',
     engines: { dsh: '0.1.7-rc.2' },
     dsh: { harnessRange: '0.1.7-rc.2' },
     peerDependencies: { '@deepseek-ai/dsh-tools': '0.1.7-rc.2', react: '^18.2.0' },
@@ -128,14 +139,23 @@ test('Zotero status command remains usable with the pinned commands API', async 
   const adapted = adaptZoteroCommand(original)
   assert.doesNotMatch(adapted, /CommandDefinitionId/u)
   assert.equal(adaptZoteroCommand(adapted), adapted)
-  const { registerStatusCommand } = await import(`data:text/javascript;base64,${Buffer.from(adapted).toString('base64')}`)
-  let command
-  registerStatusCommand({ inject: (_names, mount) => mount({ commands: { register: value => { command = value } } }) }, {
-    status: async () => ({ connected: false, diagnosis: 'Zotero is offline' }),
-  })
-  assert.equal(command.name, 'zotero')
-  assert.equal((await command.handler({ rawInput: 'status' })).text, 'Zotero local API: not connected\nZotero is offline')
-  assert.equal((await command.handler({ rawInput: 'unknown' })).kind, 'error')
+  const directory = await mkdtemp(resolve(tmpdir(), 'zws-zotero-command-'))
+  try {
+    const file = resolve(directory, 'command.js')
+    await writeFile(resolve(directory, 'contract.js'), await read('desktop/node_modules/dsh-zotero/lib/contract.js'))
+    await writeFile(resolve(directory, 'settings-namespace.js'), await read('desktop/node_modules/dsh-zotero/lib/settings-namespace.js'))
+    await writeFile(file, adapted)
+    const { registerStatusCommand } = await import(`${pathToFileURL(file).href}?contract=${Date.now()}`)
+    let command
+    registerStatusCommand({ inject: (_names, mount) => mount({ commands: { register: value => { command = value } } }) }, {
+      status: async () => ({ connected: false, diagnosis: 'Zotero is offline' }),
+    })
+    assert.equal(command.name, 'zotero')
+    assert.equal((await command.handler({ rawInput: 'status' })).text, 'Zotero local API: not connected\nLocal API: not reported\nZotero is offline')
+    assert.equal((await command.handler({ rawInput: 'unknown' })).kind, 'error')
+  } finally {
+    await rm(directory, { recursive: true, force: true })
+  }
   assert.throws(() => adaptZoteroCommand('CommandDefinitionId(unknown)'), /Unrecognized/u)
 })
 
@@ -190,7 +210,7 @@ test('Zotero Sources tab invalidates for nested Progressive Tools calls', async 
   assert.throws(() => adaptZoteroClient('function sessionSignatureOf(snapshot) { return snapshot }'), /Unrecognized/u)
 })
 
-test('Zotero 0.11 ships native annotation traversal and the adapter stays idempotent', async () => {
+test('Zotero 0.12 ships native annotation traversal and the adapter stays idempotent', async () => {
   const detailOriginal = await read('desktop/node_modules/dsh-zotero/lib/local/detail.js')
   const childrenWire = await read('desktop/node_modules/dsh-zotero/lib/local/children-wire.js')
   const detail = adaptZoteroDetail(detailOriginal)
@@ -204,11 +224,15 @@ test('Zotero 0.11 ships native annotation traversal and the adapter stays idempo
 })
 
 test('Zotero ships compiled entries and is mounted once in every profile', async () => {
+  const harvest = JSON.parse(await read('packages/dsh/zotero-harvest/package.json'))
+  assert.equal(harvest.dsh.bundle.patch, './cordis.patch.yml')
+  assert(harvest.files.includes('cordis.patch.yml'))
+  assert.match(await read('packages/dsh/zotero-harvest/cordis.patch.yml'), /name: '@dsh-external\/zotero-harvest'/u)
   const desktop = JSON.parse(await read('desktop/package.json'))
-  assert.equal(desktop.dependencies['dsh-zotero'], '0.11.0')
+  assert.equal(desktop.dependencies['dsh-zotero'], '0.12.1')
   assert.equal(desktop.dependencies['@fylar/dsh-fylar-office-editor'], undefined)
   const manifest = JSON.parse(await read('desktop/node_modules/dsh-zotero/package.json'))
-  assert.equal(manifest.version, '0.11.0')
+  assert.equal(manifest.version, '0.12.1')
   assert.equal(manifest.license, 'MIT')
   for (const entry of ['lib/index.js', 'lib/client.js', 'LICENSE']) {
     assert.ok((await read(`desktop/node_modules/dsh-zotero/${entry}`)).length > 0)
@@ -216,7 +240,7 @@ test('Zotero ships compiled entries and is mounted once in every profile', async
   for (const profile of ['development', 'preview', 'stable']) {
     const source = await read(`profiles/generated/${profile}.yml`)
     assert.equal((source.match(/'dsh-zotero'/gu) ?? []).length, 1)
-    assert.match(source, /'dsh-progressive-tools'/u)
+    assert.match(source, /'@everclear077\/dsh-progressive-tools'/u)
     assert.doesNotMatch(source, /fylar/iu)
   }
   const patch = await read('desktop/build/zerowall.patch.yml')

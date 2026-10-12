@@ -37,10 +37,12 @@ runPnpm(['--filter', '@deepseek-ai/dsh-root', 'exec', 'tsc', '-b', 'tsconfig.hos
 runPnpm(['--filter', '@deepseek-ai/dsh-root', 'exec', 'tsdown', '--env.DSH_BUILD_FACE', 'host'], { NODE_OPTIONS: '--max-old-space-size=8192' })
 runPnpm(['--filter', '@deepseek-ai/dsh-root', 'run', 'build:lib:client'], { NODE_OPTIONS: '--max-old-space-size=8192' })
 runPnpm(['--filter', '@deepseek-ai/dsh-root', 'run', 'build:web'])
-await mkdir(resolve(stageRoot, 'dsh'), { recursive: true })
-await writeFile(resolve(stageRoot, 'dsh/build-receipt.json'), JSON.stringify({
-  commit, version: manifest.version, applicationVersion: rootManifest.version, builtAt: new Date().toISOString(),
-}, null, 2))
+if (!process.argv.includes('--development')) {
+  await mkdir(resolve(stageRoot, 'dsh'), { recursive: true })
+  await writeFile(resolve(stageRoot, 'dsh/build-receipt.json'), JSON.stringify({
+    commit, version: manifest.version, applicationVersion: rootManifest.version, builtAt: new Date().toISOString(),
+  }, null, 2))
+}
 
 function git(args) {
   return execFileSync('git', args, { cwd: source, encoding: 'utf8' }).trim()
@@ -50,7 +52,9 @@ function runPnpm(args, extraEnv = {}) {
   execFileSync(process.execPath, [pnpmCli, ...args], {
     cwd: source,
     stdio: 'inherit',
-    env: { ...process.env, ZEROWALL_CLIENT_VERSION: rootManifest.version, ...extraEnv,
+    env: { ...process.env, ZEROWALL_CLIENT_VERSION: '__ZEROWALL_DESKTOP_VERSION__',
+      DSH_CLIENT_VERSION: '__ZEROWALL_DESKTOP_VERSION__', DSH_CLIENT_TITLE: 'ZeroWall Science',
+      DSH_CLIENT_COMMIT_HASH: commit.slice(0, 7), ...extraEnv,
       NODE_OPTIONS: `${extraEnv.NODE_OPTIONS ?? process.env.NODE_OPTIONS ?? ''} --import=${pathToFileURL(resolve(root, 'tools/build/register-output-resolution.mjs')).href}` },
   })
 }

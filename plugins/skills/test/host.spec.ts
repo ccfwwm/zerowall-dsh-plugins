@@ -20,7 +20,7 @@ describe('ZeroWall capabilities Remote', () => {
   it('ships the editable presentation route and keeps the upstream Univer contract explicit', async () => {
     const previousBundled = process.env.ZEROWALL_BUNDLED_SKILLS
     const previousUser = process.env.ZEROWALL_USER_SKILLS
-    process.env.ZEROWALL_BUNDLED_SKILLS = resolve(import.meta.dirname, '../../../resources/skills')
+    process.env.ZEROWALL_BUNDLED_SKILLS = resolve(import.meta.dirname, '../../../resources/extensions/skills')
     process.env.ZEROWALL_USER_SKILLS = await mkdtemp(join(tmpdir(), 'zerowall-presentation-skill-'))
     const ctx = new Context()
     try {
@@ -30,11 +30,14 @@ describe('ZeroWall capabilities Remote', () => {
       expect(detail.content).toContain('univer-slide')
       expect(detail.content).toContain('univer_compile_svg')
       expect(detail.content).toContain('univer_export')
-      expect(detail.content).toContain('never flatten complete pages')
-      expect(detail.content).toMatch(/independent editable native objects/u)
-      expect(detail.content).toMatch(/input_paths: \[contentSeedPath, selectedStylePath\]/u)
-      expect(detail.content).toContain('Generate **three** candidates')
-      expect(detail.content).toContain('model and quality')
+      expect(detail.content).toContain('Never rasterize complete slides')
+      expect(detail.content).toContain('editable formal text/shapes/connectors')
+      expect(detail.content).toContain('presentation_compile_pages')
+      expect(detail.content).toContain('source_kind')
+      expect(detail.content).toContain('Only referenced assets block compilation')
+      expect(detail.content).toContain('Do not require three style samples')
+      expect(detail.content).toContain('selected chat/image model')
+      expect(detail.content).toContain('exported PPTX')
     } finally {
       await ctx.fiber.dispose()
       if (previousBundled === undefined) delete process.env.ZEROWALL_BUNDLED_SKILLS
@@ -47,7 +50,7 @@ describe('ZeroWall capabilities Remote', () => {
   it('loads the versioned research Skills through the real filesystem parser', async () => {
     const previousBundled = process.env.ZEROWALL_BUNDLED_SKILLS
     const previousUser = process.env.ZEROWALL_USER_SKILLS
-    process.env.ZEROWALL_BUNDLED_SKILLS = resolve(import.meta.dirname, '../../../resources/skills')
+    process.env.ZEROWALL_BUNDLED_SKILLS = resolve(import.meta.dirname, '../../../resources/extensions/skills')
     process.env.ZEROWALL_USER_SKILLS = await mkdtemp(join(tmpdir(), 'zerowall-research-skill-versions-'))
     const ctx = new Context()
     try {

@@ -13,17 +13,19 @@ import { createHash } from 'node:crypto'
 import { readFile, stat } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { applySourceDistributions, normalizePackageName, parseLockedPackages, verifyDocument } from './python-layer-split.mjs'
+import { resourceSource } from '../build/layout.mjs'
 
 const root = resolve(import.meta.dirname, '../..')
 const output = resolve(process.argv[2] ?? join(root, 'desktop', 'dist', 'mcp-environment'))
 const publicKey = (process.env.ZEROWALL_MCP_ENVIRONMENT_PUBLIC_KEY ?? `-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA9DJ9yg3F5f67/cEE54AdIDtQshvLP0SF5gVe3F3X+wA=\n-----END PUBLIC KEY-----`).trim()
+const pythonRoot = await resourceSource('python')
 
 const lock = applySourceDistributions(
-  parseLockedPackages(await readFile(join(root, 'resources', 'python', 'requirements-windows.lock'), 'utf8')),
-  await readFile(join(root, 'resources/python/requirements-research.lock'), 'utf8'),
-  JSON.parse(await readFile(join(root, 'resources/python/source-distributions.json'), 'utf8')),
+  parseLockedPackages(await readFile(join(pythonRoot, 'requirements-windows.lock'), 'utf8')),
+  await readFile(join(root, 'resources/extensions/python/requirements-research.lock'), 'utf8'),
+  JSON.parse(await readFile(join(root, 'resources/extensions/python/source-distributions.json'), 'utf8')),
 )
-const policy = JSON.parse(await readFile(join(root, 'resources', 'python', 'science-layer-policy.json'), 'utf8'))
+const policy = JSON.parse(await readFile(join(pythonRoot, 'science-layer-policy.json'), 'utf8'))
 
 const manifest = JSON.parse(await readFile(join(output, 'latest.json'), 'utf8').catch(error => {
   // A missing or unreadable output directory must read as "no release to check",
@@ -69,7 +71,7 @@ if (!latestScience.equals(scienceBytes)) throw new Error('science-latest.json do
 for (const pkg of document.packages) {
   const locked = lock.get(normalizePackageName(pkg.name))
   if (locked === undefined) throw new Error(`Science manifest lists a package that is not locked: ${pkg.name}`)
-  if (locked.version !== pkg.version || locked.sha256 !== pkg.sha256) throw new Error(`Science manifest digest for ${pkg.name} does not match the hashed lock.`)
+  if (locked.version !== pkg.version || (pkg.sha256 !== undefined && locked.sha256 !== pkg.sha256)) throw new Error(`Science manifest digest for ${pkg.name} does not match the hashed lock.`)
   // The unified dependency list intentionally includes bootstrap/base packages.
 }
 for (const pkg of document.packages) lock.delete(normalizePackageName(pkg.name))

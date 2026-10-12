@@ -20,8 +20,14 @@ const exists = async path => lstat(path).then(() => true, error => {
   throw error
 })
 
-const sharedDependencyManifest = JSON.parse(readFileSync(new URL('../../resources/python/dependency-manifest.json', import.meta.url), 'utf8'))
-const sharedPins = new Map((sharedDependencyManifest.packages ?? []).map(pkg => [String(pkg.name).toLowerCase().replace(/[-_.]+/gu, '-'), pkg.version]))
+const sharedDependencyManifest = JSON.parse(readFileSync(new URL('../../resources/extensions/python/dependency-manifest.json', import.meta.url), 'utf8'))
+const coreDependencyManifest = JSON.parse(readFileSync(new URL('../../resources/extensions/python/core-dependency-manifest.json', import.meta.url), 'utf8'))
+const sharedPins = new Map()
+for (const pkg of [...(coreDependencyManifest.packages ?? []), ...(sharedDependencyManifest.packages ?? [])]) {
+  const name = String(pkg.name).toLowerCase().replace(/[-_.]+/gu, '-')
+  if (sharedPins.has(name) && sharedPins.get(name) !== pkg.version) throw new Error(`Core/science dependency versions conflict for ${name}.`)
+  sharedPins.set(name, pkg.version)
+}
 function sharedPackageVersions(names) {
   return Object.fromEntries(names.map(name => {
     const version = sharedPins.get(String(name).toLowerCase().replace(/[-_.]+/gu, '-'))
@@ -45,10 +51,21 @@ export function engineProfile(id) {
 
 export function sharedPythonExecutable() {
   const managerRoot = process.env.ZEROWALL_PYTHON_ROOT?.trim() || process.env.ZEROWALL_MCP_ENVIRONMENT_ROOT?.trim()
-  const userData = managerRoot
-    ? resolve(managerRoot, '..')
-    : join(process.env.LOCALAPPDATA?.trim() || homedir(), 'ZeroWall Science')
-  return join(userData, 'Python', 'python.exe')
+  if (managerRoot) {
+    const resolved = resolve(managerRoot)
+    const name = basename(resolved).toLowerCase()
+    // 8.0.6 exposes the manager journal as `<Python>\\.zerowall`; the
+    // interpreter and all site-packages stay directly in its parent. Keep the
+    // legacy `zerowall-python` interpretation only for isolated test/tools
+    // callers that do not pass the canonical runtime root.
+    const runtimeRoot = name === '.zerowall'
+      ? dirname(resolved)
+      : name === 'python'
+        ? resolved
+        : join(dirname(resolved), 'Python')
+    return join(runtimeRoot, 'python.exe')
+  }
+  return join(process.env.LOCALAPPDATA?.trim() || homedir(), 'ZeroWall Science', 'Python', 'python.exe')
 }
 
 export function sharedModelRoot(engineId = 'he-stardist') {

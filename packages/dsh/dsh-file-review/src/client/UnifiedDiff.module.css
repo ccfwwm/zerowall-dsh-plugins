@@ -1,0 +1,589 @@
+/* The review layout follows a source-control diff: one content stream with a
+   single line-number gutter. It is deliberately separate from `.block`, so
+   existing inline tool cards keep their compact geometry.
+
+   Palette: change rows keep the primary label color and carry meaning through
+   an OKLab-mixed tint, a stronger gutter tint and a 3px edge rail, so long
+   runs of changed code stay as readable as context lines in both themes. */
+.unifiedBlock {
+  --fr-add: var(--dsw-alias-state-success-primary);
+  --fr-del: var(--dsw-alias-state-error-primary);
+  --fr-accent: var(--dsw-alias-state-business-primary);
+  --fr-surface: var(--dsw-alias-bg-layer-1, Canvas);
+  --fr-add-row: color-mix(in oklab, var(--fr-add) 9%, transparent);
+  --fr-add-gutter: color-mix(in oklab, var(--fr-add) 18%, transparent);
+  --fr-del-row: color-mix(in oklab, var(--fr-del) 8%, transparent);
+  --fr-del-gutter: color-mix(in oklab, var(--fr-del) 16%, transparent);
+  --fr-gutter: color-mix(in oklab, var(--dsw-alias-label-primary) 2.5%, transparent);
+  --fr-hairline: var(--dsw-alias-border-l1);
+
+  position: relative;
+  margin: 16px 0;
+  color: var(--dsw-alias-label-primary);
+  background: var(--dsw-alias-markdown-code-block);
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.unifiedEmbedded {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--fr-surface);
+}
+
+.unifiedCopyButton {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 2;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  cursor: pointer;
+  font: var(--dsw-font-xs-13);
+}
+
+.unifiedFile + .unifiedFile {
+  border-top: 1px solid var(--dsw-alias-border-l2);
+}
+
+.unifiedHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 72px 0 12px;
+  border-bottom: 1px solid var(--dsw-alias-border-l2);
+  font: var(--dsw-font-markdown-code-block);
+}
+
+.unifiedStatus {
+  color: var(--dsw-alias-state-success-primary);
+  font-weight: 700;
+}
+
+.unifiedPath {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unifiedAdded {
+  margin-left: auto;
+  color: var(--dsw-alias-state-success-primary);
+}
+
+.unifiedRemoved {
+  color: var(--dsw-alias-state-error-primary);
+}
+
+.unifiedHunkHeader {
+  padding: 5px 12px 5px 56px;
+  border-block: 1px solid var(--fr-hairline);
+  background: color-mix(in oklab, var(--fr-accent) 7%, transparent);
+  color: color-mix(in oklab, var(--fr-accent) 80%, var(--dsw-alias-label-tertiary));
+  font: var(--dsw-font-markdown-code-block);
+  letter-spacing: 0.02em;
+}
+
+/* The gutter column is painted by the scroller, so it runs unbroken beside
+   inline comments and scrolls horizontally with the line numbers. */
+.unifiedBody,
+.splitPane {
+  background: linear-gradient(
+      90deg,
+      var(--fr-gutter) 47px,
+      var(--fr-hairline) 47px 48px,
+      transparent 48px
+    )
+    local;
+}
+
+.unifiedBody {
+  overflow-x: auto;
+  overflow-y: hidden;
+  font: var(--dsw-font-markdown-code-block);
+  font-variant-ligatures: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dsw-alias-border-l3) transparent;
+}
+
+.unifiedBodyWrap {
+  overflow-x: hidden;
+}
+
+.unifiedLine {
+  display: grid;
+  grid-template-columns: 48px 24px minmax(max-content, 1fr);
+  min-width: max-content;
+  min-height: 22px;
+  line-height: 22px;
+  white-space: pre;
+  transition: background-color 90ms ease;
+}
+
+.unifiedLineNumber {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px 0 8px;
+  color: var(--dsw-alias-label-caption);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  user-select: none;
+}
+
+.commentTrigger {
+  position: absolute;
+  z-index: 1;
+  left: 3px;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: var(--fr-accent);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--fr-accent) 40%, transparent),
+    0 0 0 2px var(--fr-surface);
+  color: var(--dsw-static-neutral-00, #fff);
+  cursor: pointer;
+  font: 600 14px/18px var(--dsw-font-family, system-ui);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 120ms ease,
+    transform 160ms cubic-bezier(0.3, 1.5, 0.6, 1);
+}
+
+.unifiedLine:hover .commentTrigger,
+.commentTrigger:focus-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.commentTrigger:hover {
+  transform: scale(1.12);
+}
+
+.commentTrigger:focus-visible {
+  outline: 2px solid var(--fr-accent);
+  outline-offset: 2px;
+}
+
+.unifiedSign {
+  text-align: center;
+  user-select: none;
+}
+
+.unifiedText {
+  padding: 0 16px 0 2px;
+}
+
+.unifiedBodyWrap .unifiedLine {
+  grid-template-columns: 48px 24px minmax(0, 1fr);
+  min-width: 0;
+  white-space: pre-wrap;
+}
+
+.unifiedBodyWrap .unifiedLineNumber {
+  align-items: flex-start;
+}
+
+.unifiedBodyWrap .unifiedText {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.unified_del {
+  background: var(--fr-del-row);
+}
+
+.unified_add {
+  background: var(--fr-add-row);
+}
+
+.unified_del .unifiedLineNumber {
+  background: var(--fr-del-gutter);
+  box-shadow: inset 3px 0 0 var(--fr-del);
+  color: color-mix(in oklab, var(--fr-del) 75%, var(--dsw-alias-label-primary));
+}
+
+.unified_add .unifiedLineNumber {
+  background: var(--fr-add-gutter);
+  box-shadow: inset 3px 0 0 var(--fr-add);
+  color: color-mix(in oklab, var(--fr-add) 70%, var(--dsw-alias-label-primary));
+}
+
+.unified_del .unifiedSign {
+  color: var(--fr-del);
+  font-weight: 700;
+}
+
+.unified_add .unifiedSign {
+  color: var(--fr-add);
+  font-weight: 700;
+}
+
+.unified_context {
+  color: var(--dsw-alias-label-primary);
+}
+
+.unified_context .unifiedText {
+  color: color-mix(in oklab, var(--dsw-alias-label-primary) 88%, transparent);
+}
+
+.unified_context:hover {
+  background: color-mix(in oklab, var(--dsw-alias-label-primary) 3%, transparent);
+}
+
+.unified_add:hover {
+  background: color-mix(in oklab, var(--fr-add) 14%, transparent);
+}
+
+.unified_del:hover {
+  background: color-mix(in oklab, var(--fr-del) 12%, transparent);
+}
+
+.splitGrid {
+  display: grid;
+  background: var(--fr-surface);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* Both panes share row tracks, including wrapped code and inline comments. */
+.splitPane {
+  display: grid;
+  grid-template-rows: subgrid;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dsw-alias-border-l3) transparent;
+}
+
+.splitPane + .splitPane {
+  border-left: 1px solid var(--dsw-alias-border-l2);
+}
+
+.splitCell {
+  min-width: 0;
+}
+
+.splitEmpty {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      transparent 0 6px,
+      color-mix(in oklab, var(--dsw-alias-label-primary) 5%, transparent) 6px 7px
+    ),
+    var(--fr-gutter);
+}
+
+.unifiedBodyWrap .splitPane {
+  overflow-x: hidden;
+}
+
+/* Inline review note: a lifted card tied to its line by a brand rail. */
+.commentRow {
+  --fr-comment-rail: var(--fr-accent);
+
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  width: calc(100% - 68px);
+  max-width: 560px;
+  flex-direction: column;
+  min-width: 360px;
+  min-height: 78px;
+  margin: 8px 12px 12px 56px;
+  padding: 12px 12px 10px 16px;
+  align-items: stretch;
+  gap: 8px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 12px;
+  background: var(--fr-surface);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, black 5%, transparent),
+    0 8px 24px -8px color-mix(in srgb, black 14%, transparent);
+  white-space: normal;
+  animation: frCommentIn 180ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.commentRow::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--fr-comment-rail);
+}
+
+.commentRow:focus-within {
+  border-color: color-mix(in oklab, var(--fr-accent) 45%, var(--dsw-alias-border-l2));
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--fr-accent) 14%, transparent),
+    0 8px 24px -8px color-mix(in srgb, black 14%, transparent);
+}
+
+@keyframes frCommentIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.99);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commentRow {
+    animation: none;
+  }
+
+  .commentTrigger,
+  .unifiedLine {
+    transition: none;
+  }
+}
+
+.splitPane .commentRow {
+  min-width: 0;
+  width: calc(100% - 16px);
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.splitPane .commentActions {
+  flex-wrap: wrap;
+}
+
+.commentBody,
+.commentEditor {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  font: var(--dsw-font-sm-14);
+  line-height: 22px;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.commentBody {
+  display: flex;
+  min-height: 52px;
+  max-height: 176px;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  appearance: none;
+  cursor: text;
+}
+
+.commentEditor {
+  min-height: 52px;
+  max-height: 176px;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  resize: none;
+  outline: none;
+}
+
+.commentEditor::placeholder {
+  color: var(--dsw-alias-label-caption);
+}
+
+.commentDelete {
+  min-height: 26px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dsw-alias-label-tertiary);
+  cursor: pointer;
+  font: var(--dsw-font-xs-13);
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.commentDelete:hover {
+  background: color-mix(in oklab, var(--fr-del) 10%, transparent);
+  color: var(--fr-del);
+}
+
+.commentActions {
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.commentHint {
+  min-width: 0;
+  margin-right: auto;
+  overflow: hidden;
+  color: var(--dsw-alias-label-caption);
+  font: var(--dsw-font-xs-13);
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commentCancel,
+.commentSave {
+  box-sizing: border-box;
+  min-width: 56px;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  font: var(--dsw-font-xs-13);
+  line-height: 28px;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+.commentCancel {
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+}
+
+.commentCancel:hover {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-primary);
+}
+
+.commentSave {
+  background: var(--fr-accent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--fr-accent) 35%, transparent);
+  color: var(--dsw-static-neutral-00, #fff);
+  font-weight: 600;
+}
+
+.commentSave:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--fr-accent) 88%, black);
+}
+
+.commentSave:disabled {
+  cursor: default;
+  box-shadow: none;
+  opacity: 0.35;
+}
+
+.commentCancel:focus-visible,
+.commentSave:focus-visible,
+.commentDelete:focus-visible {
+  outline: 2px solid var(--fr-accent);
+  outline-offset: 2px;
+}
+
+/* Collapsed context reads as a quiet fold marker, not a toolbar. */
+.unifiedGap,
+.unifiedOmitted {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  min-height: 30px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 16px;
+  border: 0;
+  border-block: 1px solid var(--fr-hairline);
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--fr-accent) 6%, transparent),
+      color-mix(in oklab, var(--fr-accent) 2%, transparent) 60%,
+      transparent
+    ),
+    var(--fr-gutter);
+  color: var(--dsw-alias-label-tertiary);
+  font: var(--dsw-font-xs-13);
+  text-align: left;
+}
+
+.unifiedGap {
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease;
+}
+
+.unifiedGap::before,
+.unifiedOmitted > [aria-hidden='true'] {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 18px;
+  place-items: center;
+  border-radius: 5px;
+  background: color-mix(in oklab, var(--fr-accent) 12%, transparent);
+  color: var(--fr-accent);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.unifiedGap::before {
+  content: '↕';
+}
+
+.unifiedGap[aria-expanded='true']::before {
+  content: '↑';
+}
+
+/* The right split pane mirrors the gap row as an empty spacer. */
+.unifiedGap:empty::before {
+  content: none;
+}
+
+.unifiedGap:hover {
+  color: var(--fr-accent);
+}
+
+.unifiedGap:hover::before {
+  background: var(--fr-accent);
+  color: var(--dsw-static-neutral-00, #fff);
+}
+
+.unifiedGap:focus-visible {
+  outline: 2px solid var(--fr-accent);
+  outline-offset: -2px;
+}
+
+.unifiedOmitted {
+  border-top: 0;
+}
+
+/* In a narrow panel the note spans the visible width instead of hanging off
+   the gutter, and the keyboard hint yields its room to the actions. */
+@container (max-width: 520px) {
+  .commentRow,
+  .splitPane .commentRow {
+    min-width: 0;
+    width: calc(100% - 16px);
+    margin: 6px 8px 10px;
+  }
+
+  .commentHint {
+    display: none;
+  }
+}

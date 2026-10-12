@@ -1,8 +1,17 @@
-import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, rename, writeFile as writeRaw } from 'node:fs/promises'
+import { randomUUID } from 'node:crypto'
 import { resolve } from 'node:path'
 import { researchToolConfig } from '../integration/research-tool-config.mjs'
 
 const root = resolve(import.meta.dirname, '../..')
+// Avoid rewriting unchanged manifests while editors and compilers read them.
+async function writeFile(path, content) {
+  const previous = await readFile(path, 'utf8').catch(error => { if (error.code !== 'ENOENT') throw error; return undefined })
+  if (previous === content) return
+  const temporary = path + '.' + randomUUID() + '.tmp'
+  await writeRaw(temporary, content)
+  await rename(temporary, path)
+}
 const rootPackage = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
 const applicationVersion = String(rootPackage.version)
 const migrationBaseline = '0.1.0'
@@ -48,7 +57,7 @@ const externalClientDependencies = {
   // ZeroWall compatibility changes are reproducible without overwriting the
   // custom host integration with a remote package snapshot.
   'dsh-better-sidebar': 'workspace:^',
-  'dsh-dream-skin': '9.29.0',
+  'dsh-dream-skin': '10.9.3',
 }
 
 const dshDependencies = {
@@ -95,13 +104,14 @@ const dshDependencies = {
 }
 
 const npmDependencies = {
-  python: { '@zerowallscience/integrity-runtime': 'workspace:^', '@zerowallscience/research-store': 'workspace:^' },
+  python: { '@zerowallscience/integrity-runtime': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', yauzl: '3.4.0', pend: '1.2.0', react: '^18.2.0', 'react-dom': '^18.2.0' },
+  biogenie: { '@zerowallscience/research-store': 'workspace:^' },
   pubmed: { compromise: '14.16.0', undici: '^7.16.0', '@zerowallscience/research-store': 'workspace:^', zod: '^4.4.3' },
   base: { 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0' },
   projects: { '@deepseek-ai/dsh-session-format-catalog': 'workspace:^', '@deepseek-ai/dsh-session-persistence-jsonl': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
   account: { qrcode: '^1.5.4', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
   files: { '@open-file-viewer/core': '0.1.49', 'viewer-pdfjs': 'npm:pdfjs-dist@6.3.289', '@deepseek-ai/dsh-api-workspace-files': 'workspace:^', '@deepseek-ai/dsh-office-to-pdf': 'workspace:^', '@deepseek-ai/dsh-client-ui-sidebar-right': 'workspace:^', '@deepseek-ai/dsh-client-file-upload': 'workspace:^', 'dsh-office-tools': 'github:kw78/dsh-office-tools#d92ac3863ece6248a5f8c1e4aa1958a60b8aaccb', jszip: '3.10.1', 'pdf-lib': '^1.17.1', 'pdfjs-dist': '^4.10.38', xlsx: '^0.18.5', 'fast-xml-parser': '^5.11.0', zod: '^4.4.3', 'lucide-react': '^0.468.0', react: '^18.2.0' },
-  images: { sharp: '^0.35.3', 'lucide-react': '^0.468.0', react: '^18.2.0' },
+  images: { sharp: '^0.35.3', '@xmldom/xmldom': '0.9.12', fflate: '0.8.3', 'lucide-react': '^0.468.0', react: '^18.2.0' },
   mcp: { '@zerowallscience/plugin-secrets': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
   skills: { 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
   'extension-center': { 'lucide-react': '^0.468.0', react: '^18.2.0' },
@@ -144,7 +154,8 @@ const plugins = [
   { id: 'mineru', client: true, remote: true, capabilities: ['document-parsing', 'artifacts'], permissions: ['files', 'network', 'attachments', 'credentials', 'processes'], dependencies: ['secrets', 'files', 'research', 'base'], requiredServices: ['tools', 'sessions', 'zerowallFiles', 'zerowallResearch'], optionalServices: ['webServer', 'zerowallExecution', 'zerowallRuns'] },
   { id: 'singlecell', client: true, remote: true, capabilities: ['singlecell-analysis', 'public-data-acquisition', 'scTenifoldKnk', 'analysis-workflow'], permissions: ['files', 'network', 'attachments', 'processes', 'approvals'], dependencies: ['base', 'files', 'projects', 'research', 'runs'], requiredServices: ['tools', 'sessions'], optionalServices: ['zerowallFiles', 'zerowallProjects', 'zerowallResearch', 'zerowallRuns', 'webServer'] },
   { id: 'execution', client: true, remote: true, capabilities: ['execution-contexts'], permissions: ['processes', 'files'] },
-  { id: 'python', capabilities: ['python'], permissions: ['processes', 'files'], dependencies: [], requiredServices: ['tools'] },
+  { id: 'python', client: true, capabilities: ['python'], permissions: ['processes', 'files'], dependencies: ['base'], requiredServices: ['tools'] },
+  { id: 'biogenie', capabilities: ['bio-local'], permissions: ['processes', 'files', 'network'], dependencies: ['python'], requiredServices: ['tools', 'zerowallPython'] },
   { id: 'runs', client: true, remote: true, capabilities: ['runs'], permissions: ['processes', 'files'], dependencies: ['execution'] },
   { id: 'publications', client: true, remote: true, capabilities: ['papers', 'publications'], permissions: ['files'], dependencies: ['runs'] },
 ]
@@ -193,7 +204,7 @@ for (const plugin of plugins) {
       bundle: { patch: 'dsh.bundle.patch.yml' },
       ...(plugin.client ? {
         client: {
-          inject: plugin.id === 'files' ? [...clientInject, 'remote.workspaceFiles', 'sidebarRightTabs', '@deepseek-ai/dsh-client-ui-sidebar-right', '@deepseek-ai/dsh-api-workspace-files'] : clientInject,
+          inject: plugin.id === 'files' ? [...clientInject, 'remote.workspaceFiles', 'sidebarRightTabs', '@deepseek-ai/dsh-client-ui-sidebar-right', '@deepseek-ai/dsh-api-workspace-files'] : ['base', 'environment', 'extension-center'].includes(plugin.id) ? clientInject.filter(name => name !== 'betterSidebar') : clientInject,
           ...(plugin.clientExternal === undefined ? {} : { external: plugin.clientExternal }),
           platform: 'web',
         },
@@ -213,16 +224,17 @@ for (const plugin of plugins) {
     },
     scripts: {
       prepack: 'node ../../tools/plugins/prepare-pack.mjs',
-      bundle: plugin.id === 'research' ? 'node ../../tools/science/build-molecule-runtime.mjs && tsdown' : plugin.id === 'files' ? 'node scripts/prepare-viewer-assets.mjs && tsdown' : 'tsdown',
+      bundle: plugin.id === 'python' ? 'tsdown && node ../../tools/plugins/prepare-python-worker.mjs' : plugin.id === 'biogenie' ? 'node ../../tools/integration/prepare-biogenie.mjs && tsdown' : plugin.id === 'research' ? 'node ../../tools/science/build-molecule-runtime.mjs && tsdown' : plugin.id === 'files' ? 'node scripts/prepare-viewer-assets.mjs && tsdown' : 'tsdown',
       typecheck: plugin.client
         ? 'tsc -p tsconfig.host.json --noEmit && tsc -p tsconfig.client.json --noEmit' + (plugin.id === 'research' ? ' && tsc -p tsconfig.workbench.json --noEmit' : '')
         : 'tsc -p tsconfig.host.json --noEmit',
-      test: 'vitest run --config ../../vitest.plugins.config.ts',
+      test: `vitest run --config ../../vitest.plugins.config.ts${['skills', 'research'].includes(plugin.id) ? ' --no-file-parallelism' : ''}`,
     },
     publishConfig: { directory: `../../artifacts/dev/publish/plugin-${plugin.id}` },
     license: 'AGPL-3.0-only',
     files: [
       'lib', 'src',
+      ...(plugin.id === 'biogenie' ? ['payload'] : []),
       ...(plugin.remote ? [
         'lib/typert.host.js',
         'lib/typert.host.d.ts',
@@ -237,7 +249,7 @@ for (const plugin of plugins) {
     dependencies: {
     ...dshDependencies,
     ...(plugin.id === 'files' ? { '@deepseek-ai/dsh-fs': 'workspace:^', 'dsh-office-tools': 'github:kw78/dsh-office-tools#d92ac3863ece6248a5f8c1e4aa1958a60b8aaccb' } : {}),
-      ...(plugin.client ? externalClientDependencies : {}),
+      ...(plugin.client && !['base', 'environment', 'extension-center'].includes(plugin.id) ? externalClientDependencies : {}),
       ...Object.fromEntries((plugin.dependencies ?? []).map(id => [`@zerowallscience/plugin-${id}`, 'workspace:^'])),
       ...(npmDependencies[plugin.id] ?? {}),
       ...(plugin.id === 'mcp' ? { '@modelcontextprotocol/sdk': '1.30.0', '@modelcontextprotocol/client': '2.0.0' } : {}),
@@ -298,7 +310,7 @@ for (const plugin of plugins) {
   }, null, 2)}\n`)
   await writeFile(resolve(dir, 'tsconfig.host.json'), `${JSON.stringify({
     extends: '../../tsconfig.plugin.host.json',
-    include: ['src/host', 'src/shared'],
+    include: ['src/host', 'src/shared', ...(plugin.id === 'python' ? ['src/worker'] : [])],
     ...(plugin.id === 'mcp' ? { compilerOptions: { paths: {
       ...hostCompilerOptions.paths,
       '@deepseek-ai/dsh-util-values': ['deepseek-harness/packages/util/values/src/index.ts'],
@@ -319,7 +331,7 @@ for (const plugin of plugins) {
           ? ', inlinePngAssets: true'
           : plugin.id === 'files'
             ? ', universalViewer: true'
-          : ''} })`,
+          : plugin.id === 'python' ? ', pythonWorker: true' : ''} })`,
     '',
   ].join('\n'))
   if (plugin.client) {
