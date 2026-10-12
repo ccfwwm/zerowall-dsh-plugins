@@ -2,7 +2,7 @@
 
 ## 源码与交付边界
 
-本轮直接使用当前项目，未创建 worktree、未使用子代理。分支为 `main`，父 HEAD 为 `15aa09b7a586ef71f18e0ab06da9cfec4caff929`；DSH 为 `8c00ce78435cf35300654c41e69336e69dc758b1`，分支 `zerowall/reviewer-history-opaque`，版本线保持 `0.2.0-rc.2`。工作区含本轮及已有用户修改，构建 manifest 标记源码非 clean；未提交、推送、打标签或创建 GitHub Release。
+本轮直接使用当前项目，未创建 worktree、未使用子代理。分支为 `main`，构建前父 HEAD 为 `15aa09b7a586ef71f18e0ab06da9cfec4caff929`；桌面发布提交为 `2bd818fb89396f64f79d12c31315776f1e06cccb`，插件中心发布提交为 `3b1b6ef9af6c0f6601d4a41f2f489702b422ea13`。DSH 为 `8c00ce78435cf35300654c41e69336e69dc758b1`，分支 `zerowall/reviewer-history-opaque`，版本线保持 `0.2.0-rc.2`。工作区含本轮及已有用户修改，构建 manifest 标记源码非 clean；桌面源码、安装包和插件资源已推送到 GitHub Release。
 
 仅发布七牛 Stable。资源使用 Ed25519 `stable-4` 签名，并保留旧稳定公钥兼容；Windows EXE 没有 Authenticode 签名。凭据、私钥、用户数据、Python 和旧 slots 未纳入源码或发布包。
 
@@ -97,4 +97,11 @@
 
 独立运行 `verify-normal-public-urls.mjs`，对不带查询参数的安装器、blockmap、版本 JSON、3 个桌面指针、4 个资源指针及 2 个 Python 清单指针共 12 个普通 URL 完整下载并核对大小和 SHA-256，全部通过。收据为 `artifacts/verification/8.1.3/qiniu-normal-public-urls.json`，complete=true，build ID 与最终包一致；日志 `8.1.3-qiniu-normal-public-urls.log`。
 
-本轮未创建 GitHub Release，未提交/推送源码或标签。所有跳过项、外部限制及源码非 clean 状态仍按前文保留，不因发布成功而改记为通过。
+## GitHub 插件中心发布
+
+- 插件中心源码仓库为 [`ccfwwm/zerowall-dsh-plugins`](https://github.com/ccfwwm/zerowall-dsh-plugins)，`main` 提交为 `3b1b6ef9af6c0f6601d4a41f2f489702b422ea13`。
+- 资源 Release 为 [`resources-8.1.3`](https://github.com/ccfwwm/zerowall-dsh-plugins/releases/tag/resources-8.1.3)，公开、非草稿、非预发布，共 342 项资产。
+- 342 项资产已从 GitHub 完整下载并逐项核对大小和 SHA-256，342/342 通过，缺失 0、额外 0、不一致 0。根仓库收据为 `artifacts/release/8.1.3/publication/github-resources-public.json`，上传 API 收据为 `github-resources-api.json`。
+- 插件中心源码合同 CI 已通过（Run [38232793995](https://github.com/ccfwwm/zerowall-dsh-plugins/actions/runs/38232793995)）。桌面主项目 CI 的 DSH bundle 失败属于主仓库打包依赖缺失，详见桌面验收记录，不影响本 Release 已上传资源的字节核验。
+
+所有跳过项、外部限制及源码非 clean 状态仍按前文保留，不因发布成功而改记为通过。
