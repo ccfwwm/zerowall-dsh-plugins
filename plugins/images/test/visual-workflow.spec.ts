@@ -6,6 +6,7 @@ import sharp from 'sharp'
 import { recordAssetReview, recordVisualAssets, validatePresentationAssets, hash } from '../src/host/visual-assets.js'
 import { prepareSvg, lintImageOcclusion } from '../src/host/presentation-layout.js'
 import { actualCoverage, exportBlockers, normalizeUniverExecutionSource, refreshPages, installPresentationWorkflow, runPresentationImageTasks, validateEditablePagePlan, type PresentationWorkflow } from '../src/host/presentation-workflow.js'
+import { validateEditableSvgPlan } from '../src/host/presentation-layout.js'
 
 async function fixture(action: (root: string) => Promise<void>) {
   const root = await mkdtemp(join(tmpdir(), 'zerowall-presentation-'))
@@ -41,6 +42,16 @@ it('validates editable reconstruction plans while keeping template assets refere
   expect(() => validateEditablePagePlan(1, 'template-page-1', [{ id: 'bad', type: 'text', x: 0, y: 0, width: 20, height: 20 }])).toThrow('requires content')
   expect(() => validateEditablePagePlan(1, 'template-page-1', [{ id: 'bad', type: 'shape', x: 0, y: 0, width: 0, height: 20 }])).toThrow('positive bounds')
 })
+
+it('requires the compiled SVG to carry every planned editable element', async () => fixture(async root => {
+  await writeFile(join(root, 'planned.svg'), '<svg xmlns="http://www.w3.org/2000/svg"><text data-zerowall-element-id="title" data-zerowall-element-type="text">Title</text><rect data-zerowall-element-id="panel" data-zerowall-element-type="shape" width="10" height="10"/></svg>')
+  const plan = { page: 1, elements: [{ id: 'title', type: 'text' }, { id: 'panel', type: 'shape' }] }
+  await expect(validateEditableSvgPlan(root, 'planned.svg', plan)).resolves.toBeUndefined()
+  await writeFile(join(root, 'planned.svg'), '<svg xmlns="http://www.w3.org/2000/svg"><text data-zerowall-element-id="title" data-zerowall-element-type="shape">Title</text></svg>')
+  await expect(validateEditableSvgPlan(root, 'planned.svg', plan)).rejects.toThrow('expected text')
+  await writeFile(join(root, 'planned.svg'), '<svg xmlns="http://www.w3.org/2000/svg"><text data-zerowall-element-id="title" data-zerowall-element-type="text">Title</text></svg>')
+  await expect(validateEditableSvgPlan(root, 'planned.svg', plan)).rejects.toThrow('missing planned editable element panel')
+}))
 it('normalizes the /none execution-source sentinel and rejects real dual sources', () => {
   expect(normalizeUniverExecutionSource({ file: 'deck.univer', unitId: 'slides', worktreeId: 'draft', code: 'return 1', codeFile: '/none' }))
     .toEqual({ file: 'deck.univer', unitId: 'slides', worktreeId: 'draft', code: 'return 1' })
@@ -243,6 +254,9 @@ it('generates reference-only page templates through the image route and persists
   })
   expect(planned.plans.map((plan: any) => plan.templateAssetId)).toEqual(['template-page-1', 'template-page-2'])
   expect((await rt.call('presentation_status')).state.phase).toBe('planned-editable-reconstruction')
+  await expect(rt.call('presentation_compile_pages', { pages: [{ page: 1, source: 'page.svg' }] })).rejects.toThrow('missing planned editable element title')
+  await writeFile(join(root, 'page.svg'), '<svg xmlns="http://www.w3.org/2000/svg"><text data-zerowall-element-id="title" data-zerowall-element-type="text">Editable title</text><rect data-zerowall-element-id="result-chart" data-zerowall-element-type="chart" width="10" height="10"/></svg>')
+  await expect(rt.call('presentation_compile_pages', { pages: [{ page: 1, source: 'page.svg' }] })).resolves.toBeTruthy()
   await expect(rt.call('presentation_plan_editable_pages', { plans: [{ page: 1, template_asset_id: 'art', elements: [{ id: 'title', type: 'text', x: 0, y: 0, width: 100, height: 40, content: 'Title' }] }] })).rejects.toThrow('generated template')
   await writeFile(join(root, 'template.svg'), '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540"><image href="template-page-1.png" width="960" height="540"/></svg>')
   await expect(prepareSvg(root, 'template.svg', 'spec.json', 'assets.json', 1)).rejects.toThrow('not in this page')

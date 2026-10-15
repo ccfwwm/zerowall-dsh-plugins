@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import type { Context } from '@deepseek-ai/cordis'
 import { defineTool, type ToolRunContext, type ToolDispatchExecution } from '@deepseek-ai/dsh-tools'
 import { assetsForPage, hash, readManifest, readSpecification, recordAssetReview, recordVisualAssets, saveJson, validatePresentationAssets, withPresentationLock, workspacePath, type AssetInput } from './visual-assets.js'
-import { lintImageOcclusion, prepareSvg, type PageSnapshot } from './presentation-layout.js'
+import { lintImageOcclusion, prepareSvg, validateEditableSvgPlan, type PageSnapshot } from './presentation-layout.js'
 import { preservePptxNotes } from './presentation-export.js'
 import { chartAxisCode } from './presentation-chart.js'
 
@@ -325,7 +325,12 @@ export function installPresentationWorkflow(ctx: Context): void {
   ctx.tools.register(defineTool({ name: 'presentation_compile_pages', description: 'Compile complete SVG pages serially into the bound draft. Successful earlier pages survive interruption. Add native charts/tables/notes after the final SVG replacement.', parameters: { pages: { type: 'array', required: true, items: { type: 'object', additionalProperties: false, properties: { page: { type: 'integer', required: true }, source: { type: 'string', required: true } } } } }, output, execute: async (args, exec) => {
     const state = await bound(exec), results: any[] = []
     try {
-      for (const page of args.pages) { exec.signal?.throwIfAborted(); results.push(await dispatch(exec, 'univer_compile_svg', { ...state.scope, ...page, mode: 'replace' })) }
+      for (const page of args.pages) {
+        exec.signal?.throwIfAborted()
+        const plan = state.templatePlans?.[page.page]
+        if (plan) await validateEditableSvgPlan(cwd(exec), page.source, plan)
+        results.push(await dispatch(exec, 'univer_compile_svg', { ...state.scope, ...page, mode: 'replace' }))
+      }
     } catch (error) {
       if (exec.signal?.aborted) {
         const latest = (await load(exec))!;latest.phase = 'interrupted'
