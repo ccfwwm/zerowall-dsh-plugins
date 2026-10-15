@@ -18,15 +18,8 @@ export function startArchiveClient(require: HostRequire) {
 		var exports = module.exports;
 		Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 		let _deepseek_ai_dsh_client_store: typeof import("@deepseek-ai/dsh-client-store");
-		let hasSplitClientStore = true;
-		try {
-			_deepseek_ai_dsh_client_store = require("@deepseek-ai/dsh-client-store");
-		} catch {
-			// DSH <= 0.1.1 owns the store engine in client-runtime; 0.1.2+
-			// seeds the split client-store package directly into the module table.
-			hasSplitClientStore = false;
-			_deepseek_ai_dsh_client_store = require("@deepseek-ai/dsh-client-runtime/client");
-		}
+		const hasSplitClientStore = true;
+		_deepseek_ai_dsh_client_store = require("@deepseek-ai/dsh-client-store");
 		let react_jsx_runtime = require("react/jsx-runtime");
 		let react = require("react");
 		type LegacyIcon = (props: { size?: number; className?: string }) => import("react").ReactNode;

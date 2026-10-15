@@ -17,10 +17,7 @@ const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 
 assert.ok(manifest.dsh?.bundle?.patch, "dsh.bundle.patch must declare the cordis patch layer (rc.1 loader requirement)");
 assert.equal(manifest.dsh?.client?.platform, "web", "dsh.client.platform=web is what makes the web loader compose the client bundle");
-assert.ok(
-  manifest.dsh?.client?.inject?.includes("@deepseek-ai/dsh-client-runtime"),
-  "dsh.client.inject must request the client runtime row in the browser module table"
-);
+assert.ok(!manifest.dsh?.client?.inject?.includes("@deepseek-ai/dsh-client-runtime"), "retired client-runtime must not be injected");
 assert.equal(manifest.exports?.["."]?.default, "./lib/index.js", 'exports["."] must map the host entry (exports wins over main)');
 assert.equal(manifest.exports?.["./client"]?.default, "./lib/client.js", 'exports["./client"] must map the browser bundle');
 assert.ok(manifest.files.includes("lib"), "the npm package keeps generated runtime artifacts");
@@ -67,16 +64,27 @@ for (const language of ["en", "zh"]) {
 // bundle must be a conscious checklist update, never an accident.
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, statSync } from "node:fs";
+import { mkdtemp, rm, lstat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { preparePublishPackage } from "../../../tools/plugins/publish-package.mjs";
 
-// The pack list includes lib/, which is a build output. CI builds before
-// testing; a fresh clone running this file directly gets the same courtesy
-// (same pattern as test/db-lazy-load.mjs).
-if (!existsSync(join(root, "lib", "index.js"))) {
-  execFileSync("npm", ["run", "build"], { cwd: root, stdio: "inherit", shell: process.platform === "win32" });
+// Test the same physical publish projection as the release packer. npm does
+// not follow a source lib/ junction when constructing its pack list.
+for (const file of ["index.js", "client.js", "remote.js", "typert.js"]) {
+  assert.ok(existsSync(join(root, "lib", file)), `Build SSH Ops before testing: lib/${file} is missing`);
 }
-const packJson = spawnSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
-  cwd: root, encoding: "utf8", shell: process.platform === "win32"
-});
+const staging = await mkdtemp(join(tmpdir(), "zws-ssh-publish-"));
+let packJson;
+try {
+  const { publish } = await preparePublishPackage(root, staging);
+  assert.equal(publish.scripts, undefined, "published packages must not execute source prepare hooks");
+  for (const file of ["index.js", "client.js", "remote.js", "typert.js"]) {
+    assert.equal((await lstat(join(staging, "lib", file))).isFile(), true, `lib/${file} must be physical publish content`);
+  }
+  packJson = spawnSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], {
+    cwd: staging, encoding: "utf8", shell: process.platform === "win32"
+  });
+} finally { await rm(staging, { recursive: true, force: true }); }
 assert.equal(packJson.status, 0, `npm pack --dry-run failed: ${packJson.stderr}`);
 // Some npm versions run `prepare` during pack even under --ignore-scripts, so
 // build output ("gen-xterm-css: wrote …") can precede the JSON on stdout.
@@ -86,11 +94,13 @@ const start = stdout.indexOf("[");
 const end = stdout.lastIndexOf("]");
 assert.ok(start !== -1 && end > start, `npm pack produced no JSON manifest; stdout was: ${stdout.slice(0, 400)}`);
 const packedFiles = JSON.parse(stdout.slice(start, end + 1))[0].files.map((f) => f.path).sort();
+// README files stay in the source repository; the release projection copies
+// exactly manifest.files. Verify the source documentation separately.
+for (const doc of ["README.md", "README.en.md"]) assert.ok(existsSync(join(root, doc)), `${doc} remains available in source`);
 const expectedPackedFiles = [
   "INSTALL.md",
   "LICENSE",
-  "README.en.md",
-  "README.md",
+
   "cordis.patch.yml",
   "icon.svg",
   "lib/client.js",

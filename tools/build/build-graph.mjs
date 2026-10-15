@@ -217,7 +217,7 @@ async function taskDefinition(id, taskArgs = []) {
     await collect(join(root, 'deepseek-harness'))
     return { id, inputPaths: ['deepseek-harness', 'tools/dsh/build-zerowall.mjs', 'config/deepseek-harness/upstream.json'], dshCommit, dependencyLockHash: createHash('sha256').update(await readFile(join(root, 'deepseek-harness/pnpm-lock.yaml'))).digest('hex'), dependencies, outputs: [...outputDirectories, join(root, 'deepseek-harness/apps/cli/lib/bin.js'), join(root, 'deepseek-harness/apps/web/dist')], lockName: 'runtime', run: async () => run(scriptArgs(['dsh:build:zerowall', ...(command === 'development' ? ['--development'] : [])])) }
   }
-  if (id === 'runtime') return { id, inputPaths: ['plugins', 'packages', 'profiles', 'tools/dsh', 'tools/plugins', 'config/deepseek-harness', 'config/layout'], dshCommit, dependencies, outputs: [join(stageRoot, 'dsh/runtime-closure.json')], lockName: 'runtime', run: async () => {
+  if (id === 'runtime') return { id, inputPaths: ['plugins', 'profiles', 'tools/dsh', 'tools/plugins', 'config/deepseek-harness', 'config/layout'], dshCommit, dependencies, outputs: [join(stageRoot, 'dsh/runtime-closure.json')], lockName: 'runtime', run: async () => {
     run(scriptArgs(['profiles:generate']))
     run(scriptArgs(['dsh:runtime:closure']))
   } }

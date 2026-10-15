@@ -72,7 +72,7 @@ test('explicit store mismatch relinks using official install, journals success a
   try {
     await writeFile(join(root, 'package.json'), '{"dependencies":{"retained":"1.2.3"},"dsh":{"profile":{"bundles":[]}}}')
     await writeFile(join(root, 'pnpm-lock.yaml'), 'lockfileVersion: 9.0\n')
-    await writeFile(pnpm, `import { appendFileSync, existsSync, writeFileSync } from 'node:fs'; const args=process.argv.slice(2); appendFileSync('calls.jsonl', JSON.stringify(args)+'\\n'); if(args[0]==='install' && args.includes('--force')) writeFileSync('relinked','yes'); else if(!existsSync('relinked')) {console.error('ERR_PNPM_UNEXPECTED_STORE'); process.exitCode=1}`)
+    await writeFile(pnpm, `import assert from 'node:assert/strict'; import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs'; const args=process.argv.slice(2); appendFileSync('calls.jsonl', JSON.stringify(args)+'\\n'); if(args[0]==='install' && args.includes('--force')) {assert.equal(JSON.parse(readFileSync('package.json','utf8')).dependencies.retained,'1.2.3'); assert.equal(readFileSync('pnpm-lock.yaml','utf8'),'lockfileVersion: 9.0\\n'); writeFileSync('relinked','yes');} else if(!existsSync('relinked')) {writeFileSync('package.json','{}'); writeFileSync('pnpm-lock.yaml','partial-mutation'); console.error('ERR_PNPM_UNEXPECTED_STORE'); process.exitCode=1}`)
     const before = await readFile(join(root, 'package.json'), 'utf8')
     await execute(process.execPath, [resolve('tools/commands/pnpm-executor.mjs'), pnpm, 'add', 'new-plugin'], { cwd: root, windowsHide: true })
     const calls = (await readFile(join(root, 'calls.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse)

@@ -3,6 +3,7 @@ import { cp, mkdir, readFile, writeFile, access, unlink } from 'node:fs/promises
 import { join, resolve, dirname } from 'node:path'
 import { root, stageRoot, releaseRoot, contract } from '../build/paths.mjs'
 import { sourceFiles, isExportableSource } from './source-files.mjs'
+import { sourceRepositoryReadme } from './source-readme.mjs'
 
 const destination = resolve(process.argv[2] ?? join(root, 'artifacts/source/zerowall-dsh-plugins'))
 await mkdir(destination, { recursive: true })
@@ -64,9 +65,11 @@ pkg.scripts = {
   'source:verify': 'node tools/plugins/verify-source-repository.mjs',
 }
 await writeFile(join(destination, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
-await writeFile(join(destination, '.gitignore'), 'node_modules/\nartifacts/\n/plugins/*/lib/\n/plugins/biogenie/payload/\n/packages/**/lib/\n/store/lib/\ndist/\n.build/\n.env\n.env.*\n/scripts/env/\n*.pem\n*.tsbuildinfo\n*.log\n__pycache__/\n')
+await writeFile(join(destination, '.gitignore'), 'node_modules/\nartifacts/\n/plugins/*/lib/\n/plugins/biogenie/payload/\ndist/\n.build/\n.env\n.env.*\n/scripts/env/\n*.pem\n*.tsbuildinfo\n*.log\n__pycache__/\n')
 const sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim()
 const dshCommit = execFileSync('git', ['-C', 'deepseek-harness', 'rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim()
+const integrations = JSON.parse(await readFile(join(root, 'config/integrations/upstream-sources.json'), 'utf8'))
+await writeFile(join(destination, 'README.md'), sourceRepositoryReadme({ version: contract.version, sourceOnly, sourceCommit, dshCommit, integrations }))
 const records = sourceOnly ? [] : JSON.parse(await readFile(join(releaseRoot, 'plugin-packages.json'), 'utf8'))
 await writeFile(join(destination, 'source-provenance.json'), JSON.stringify({ applicationVersion: contract.version, sourceRepository: 'https://github.com/ccfwwm/zerowallscience', sourceCommit,
   sourceOnly, buildCommit: sourceOnly ? null : JSON.parse(await readFile(join(contract.packages, 'artifact-manifest.json'), 'utf8')).commit, dshCommit,

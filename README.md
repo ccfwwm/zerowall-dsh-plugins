@@ -1,67 +1,74 @@
-# ZeroWall DSH Plugins
+# ZeroWall DSH Plugins — 8.3.0
 
-ZeroWall Science 的独立插件、Skills 和 MCP 源码总仓库。每个包使用自己的 semver，Windows Desktop 8.1.3 提供统一资源桥接与固定 Python 服务；日常扩展更新无需重新安装整个桌面。
+ZeroWall Science 8.3.0 的插件与资源源码总仓库。各插件、Skills、MCP、Python 内容分别使用独立版本；桌面版本变化不会自动提升所有资源版本。
 
-## 使用
+本次导出模式：**source-only，仅源码快照**。源码导出或验证通过不代表 8.3.0 已在线发布；七牛/GitHub 发布状态、资源签名与下载校验以独立发布收据为准。
 
-- [安装与单独更新教程](docs/extensions-update-guide.md)
-- [GitHub 独立插件 Releases](https://github.com/ccfwwm/zerowall-dsh-plugins/releases)
-- [ZeroWall Desktop 8.1.3](https://github.com/ccfwwm/zerowallscience/releases/tag/v8.1.3)
-- 正式资源通过 `https://zerowall.chengxunkeji.cn/stable/catalogs/` 的 `plugin-latest.json`、`skill-latest.json`、`mcp-latest.json` 查询。
+## 当前源码目录
 
-先升级桌面一次，再使用设置内的扩展中心，或启动桌面后运行：
+| 路径 | 内容 |
+| --- | --- |
+| `plugins/` | 自有领域插件、第三方适配、composition bundles、Research Store 与支持包的 canonical 源码 |
+| `resources/extensions/skills/` | Skills 源码 |
+| `resources/extensions/mcp/` | MCP Server 资源源码；SciMaster launcher 位于 `plugins/mcp/src/scimaster/` |
+| `resources/extensions/python/` | Python 签名依赖清单与内容合同 |
+| `resources/extensions/runtimes/` | 独立运行时资源 |
+| `resources/extensions/engines/r/`、`resources/extensions/capabilities/biogenie/` | R 环境与 BioGenie 能力资源 |
+| `config/`、`schemas/`、`tools/`、`tests/` | 版本、来源、构建、签名与验收合同 |
+| `desktop/src/shared/` | 插件所需的桌面共享接口 |
+| `deepseek-harness/` | 固定 DSH 接口与构建依赖（Git 子模块） |
+
+当前源码以以上 canonical 路径为准，不从旧 `packages/`、`store/` 布局读取。顶层 `catalogs/`、`skills/`、`mcp/` 保留既有历史发布/导出快照，包括独立发布收据；它们不代表当前源码或 8.3.0 的线上状态。source-only 导出不会刷新或删除这些历史目录。
+
+Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://github.com/ccfwwm/zerowallscience)；本源码仓库不打包 Electron。桌面交付壳与已验证的 DSH 离线运行时闭包，插件/Skills/MCP/Python 资源仍独立版本化。
+
+## 独立包与上游来源
+
+每个包的名称、semver、能力、权限和兼容范围以对应 `package.json`、`zerowall.plugin.json` 为准。组合 bundle 只声明组合关系，不静态聚合全部领域插件。上游来源及 commit 固定在 `config/integrations/upstream-sources.json`，DSH 合同位于 `config/deepseek-harness/upstream.json`。`resourceVersion` 表示 ZeroWall 适配后的独立资源版本，可能不同于上游版本；保留各自许可证、NOTICE 和本地适配说明。
+
+| 集成/包 | 资源或上游版本 | 仓库 | 固定 commit |
+| --- | --- | --- | --- |
+| deepseekHarness | dsh-v0.2.0-rc.2 | [上游](https://github.com/deepseek-ai/deepseek-harness.git) | 4af4cb76935bd893a6854f38403bd06928878074 |
+| dsh-better-sidebar | 0.26.1-zws.3 | [上游](https://github.com/omdsh-dev/DSH-better-sidebar.git) | 9323f48d0946432ffd94655df1c115a1cd89f34c |
+| fileReviewTab | 0.8.9-zws.3 | [上游](https://github.com/left0ver/dsh-file-review.git) | 7636242d1145708b9f602b32c46cb3a57524ae7e |
+| zotero | 0.12.1 | [上游](https://github.com/Vncntvx/dsh-zotero.git) | 77604ad4829dea52d0e9f498d635c9b59f1cae38 |
+| wechat | 0.9.11 | [上游](https://github.com/pan17/dsh-wechat.git) | 4eb2800a1197cef2e5a6055418149fd26262f097 |
+| @changfenhuang/dsh-genui | 0.12.1-zws.1 | [上游](https://github.com/omdsh-dev/dsh-genui.git) | fef7c7b1df78726737707ef4a806e7f0a5e92c10 |
+| academicResearchSkills | v3.23.0 | [上游](https://github.com/Imbad0202/academic-research-skills.git) | 6ab4b03bf70a118a1b3ee7f3263ed9f19031061b |
+| sshOps | 0.3.19-zws.3 | [上游](https://github.com/caoyiwei850/dsh-ssh-ops.git) | 262953e614db3aae97594a6fe6d76dc1128c2645 |
+| zotero-harvest | 0.2.1 | [上游](https://github.com/Fisfzy/zotero-harvest.git) | 9635a4f27ba186f414d3ba23042bd12ee176cddc |
+| univerOffice | 0.3.7-zws.3 | [上游](https://github.com/dream-num/dsh-univer-office) | 8f85ce4074fdbe51416b6c337468bb916a302c2a |
+| dreamSkin | 10.9.4-zws.2 | [上游](https://github.com/RevolutionLA/dsh-dream-skin.git) | 927a6f1c1a0d694dfc2ec4557f26266a85f91f22 |
+| freeSearch | 0.8.3 | [上游](https://github.com/DDDMUC/dsh-free-search.git) | 0b122443597a9af7964e59e556541b27d71492fd |
+| sessionNotification | 0.2.3-zws.3 | [上游](https://github.com/dingyi222666/dsh-session-notification.git) | 794f6536ee060e3254a8a027c5954ed20e369fd8 |
+| openFileViewer | 0.1.49 | [上游](https://github.com/wenhongquan/dsh-open-file-viewer) | 20aecc32cc597f6de094d2c7febddfb60f3ae1ef |
+| @michengai/dsh-archive-manager | 1.0.17-zws.2 | [上游](https://github.com/MichengAI/dsh-archive-manager.git) | 1f65ada8cc553fbea0a3cfa1564b9136ef196cf8 |
+| @oh-story/dsh | 0.1.16-zws.19 | [上游](https://github.com/zenstory-ai/oh-story-dsh.git) | 83cc99046338c9b74b9dd135ff6b2e80bb3cd35e |
+
+完整来源（含嵌套集成、adapter commit 与本地适配说明）以机器可读配置为准。
+
+## 开发、构建与复用
+
+使用根 `package.json` 声明的 Node/pnpm 版本，并准备固定 DSH 子模块与其 generator。可先运行 `pnpm source:verify`，再按目标运行类型检查和测试。定向命令示例：
 
 ```powershell
-zws plugin check
-zws plugin update plugin-files
-zws skill check
-zws skill update zerowall-presentation
-zws mcp check
+pnpm plugin:build images
+pnpm plugin:pack images
+pnpm package:build dsh-archive-manager
+pnpm plugins:typecheck
+pnpm plugins:test
 ```
 
-默认只检查更新；安装和升级由用户明确触发。使用正式 Ed25519 签名和 SHA-256 校验，版本对象不可覆盖。
+构建图按源码、依赖与工具合同判断变化，复用已验证且未变化的组件输出。插件归档保存在独立共享存储与快照中；桌面打包消费成功收据绑定的插件快照，校验大小与 SHA-256，不因桌面版本变化重建或重新归档全部插件。不要复用同一已发布 ID/版本承载不同字节，也不要绕过不可变归档与签名检查。正式生成物只写入 `artifacts/`，不提交 `lib/`、依赖环境、凭据、密钥、用户数据或本地状态。
 
-## 目录与来源
+## 运行与资源更新
 
-```text
-plugins/       自有插件源码、独立版本、DSH bundle patch 和权限声明
-packages/      science 组合 bundle、自定义第三方适配和支持包
-store/         科研数据服务支持包
-skills/        282 个已适配 Skill 的实际发布内容
-mcp/           Server 源码/launcher 与连接模板
-catalogs/      正式签名 catalog、pointer 和公钥
-config/        兼容清单、源资源版本和集成配置
-tools/         插件构建、打包、签名和验证工具
-schemas/       资源发布合同
-docs/          独立资源管理教程
-deepseek-harness/ 固定版本的 DSH 构建接口（Git 子模块）
-```
+安装、单独更新和回滚见 [扩展更新指南](docs/extensions-update-guide.md)。插件、Skills、MCP 的启动及日常 catalog 检查只读，安装或变更由用户明确触发，并保留禁用、移除、固定版本和自定义配置。
 
-`source-provenance.json` 记录源仓库提交、EXE 构建提交和 DSH 提交。8.1.3 桌面集成仓库保留历史源码以重现该次构建；本次从已验证的 8.1.3 集成源码按导出清单同步，保留插件仓库历史；领域插件保持独立版本，修改后通过相同源码同步合同交付。
+8.3.0 桌面在可用后后台安装/同步签名 Python core 与 science 依赖，逐包核对版本、哈希与导入结果；自动任务可恢复，失败还原同一路径中的文件。capability 可选依赖仍由用户手动选择。Python 始终使用真实安装目录下的固定根或用户明确选择的固定根，不激活旧 slots，也不迁移/删除旧环境。后台安装不阻塞界面。
 
-## 开发与发布
+## 验证与发布边界
 
-需要 Node 24.9.0、pnpm 11.7.0 和固定的 DSH 子模块：
+`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `8cfe6f15531a4b4e404759338a15146ea6cb2bf1`，DSH 为 `4af4cb76935bd893a6854f38403bd06928878074`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
 
-```powershell
-git clone --recurse-submodules https://github.com/ccfwwm/zerowall-dsh-plugins.git
-cd zerowall-dsh-plugins
-pnpm install --ignore-scripts
-pnpm source:verify
-```
-
-插件构建依赖 DSH 的 generator 和共享接口；需要先按 DSH 当前构建合同准备 generator。Desktop 内部共享类型仅作为接口来源保留在 `desktop/src/shared/`，本仓库不打包 Electron。
-
-插件发布使用 `<包名>-v<semver>` 独立 tag/Release；首批 Skills、MCP 与四类 catalog 放在 `resources-8.1.3` 基线 Release 中，之后只发布变化资源的新版本。GitHub tarball 和七牛对象使用相同字节。未变化包不提升版本或重打包覆盖。
-
-`pnpm source:verify` 检查源码版本、DSH 兼容范围及正式 catalog 的签名；它不代替插件类型检查、运行测试和隔离 profile 验收。签名私钥、七牛凭据和用户配置不进入仓库或 Release。
-
-归档管理插件 `@michengai/dsh-archive-manager@1.0.17-zws.1` 位于 [packages/dsh/dsh-archive-manager](packages/dsh/dsh-archive-manager)。在桌面 8.1.3 的扩展中心安装后，进入「设置 → 归档会话」使用。独立构建与打包使用 `pnpm package:build dsh-archive-manager`、`pnpm plugin:pack dsh-archive-manager`，测试使用 `pnpm --filter @michengai/dsh-archive-manager test`。正式签名发布收据保存在 `catalogs/independent/`，详情见 [归档插件验收记录](docs/verification-archive-manager-20261012.md)。
-
-自有代码遵循各包许可证，第三方代码和 Skills 保留原有许可证与来源；不要移除第三方许可说明。
-
-## 8.1.3 资源基线
-
-Python 插件 0.1.10，BioGenie 独立插件 0.1.3（上游 0.6.48），Account / AI Cloud 0.1.6。固定安装根 Python、本地存在即复用、中科大默认镜像及插件批量激活由桌面 8.1.3 接口协调。Python 0.1.10 修复 worker 稳定签名验真、真实本地包检测和逐包依赖状态。
-
-[resources-8.1.3](https://github.com/ccfwwm/zerowall-dsh-plugins/releases/tag/resources-8.1.3) 包含 38 个插件/支持包、282 个 Skills、2 个 MCP、6 个 Python 资源、签名目录与 r18 依赖清单；与七牛已验证资源使用相同字节。目录中的下载 URL 继续指向七牛 Stable，GitHub 作为源码和资源发布镜像。
+当 `sourceOnly: true` 时，`pnpm source:verify` 仅检查插件源码路径/链接与必要源码文件，不验证历史 catalog 的签名、线上资源版本、构建包或发布状态。完整导出模式会核对其资源快照的签名和版本，但仍不能代替类型检查、插件测试、真实安装/运行与公网下载验证。发布另需明确授权和独立收据。

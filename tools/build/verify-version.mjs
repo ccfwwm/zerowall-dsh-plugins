@@ -5,6 +5,7 @@ import { root, contract, applicationVersion } from './paths.mjs'
 import { isAbsolute, join, relative, resolve, sep } from 'node:path'
 import { assertPluginDesktopCompatibility } from '../plugins/compatibility.mjs'
 import { resourceSource } from './layout.mjs'
+import { assertPythonManifests } from './verify-python-manifests.mjs'
 
 async function document(file, required = true) {
   try { return JSON.parse(await readFile(file, 'utf8')) }
@@ -24,16 +25,7 @@ for (const file of ['desktop/package.json', 'config/integrations/upstream-source
 await access(join(root, `docs/release-notes-${applicationVersion}.md`))
 const python = await document(await resourceSource('python', 'dependency-manifest.json'))
 const pythonCore = await document(await resourceSource('python', 'core-dependency-manifest.json'))
-equal(python.applicationVersion, applicationVersion, 'Python science manifest applicationVersion')
-equal(pythonCore.applicationVersion, applicationVersion, 'Python core manifest applicationVersion')
-if (!python.revision || pythonCore.revision !== `${python.revision}-core`) throw new Error(`Python manifest revisions are not paired: ${python.revision ?? '(missing)'} / ${pythonCore.revision ?? '(missing)'}`)
-// Python generations have an independent lifecycle. A previously signed
-// generation remains valid when its minimum desktop version is satisfied;
-// changing applicationVersion would invalidate its Ed25519 signature.
-if (!python.compatibility?.minApplicationVersion ||
-    compareVersions(python.compatibility.minApplicationVersion, applicationVersion) > 0) {
-  throw new Error(`Python generation requires desktop ${python.compatibility?.minApplicationVersion ?? '(missing)'}, current desktop is ${applicationVersion}`)
-}
+assertPythonManifests(python, pythonCore, applicationVersion, await document(join(root, 'config/catalogs/trusted-keys.json')))
 const pythonBootstrap = await document(join(root, 'config/python/bootstrap-inputs.json'))
 equal(pythonBootstrap.applicationVersion, applicationVersion, 'Python bootstrap applicationVersion')
 const desktopMain = await readFile(join(root, 'desktop/src/main/index.ts'), 'utf8')
@@ -93,13 +85,3 @@ if (strict) {
   }
 }
 console.log(`Application version contract verified: ${applicationVersion}${strict ? ' including packaged artifacts' : ''}`)
-
-function compareVersions(left, right) {
-  const parse = value => String(value).split('.').map(Number)
-  const a = parse(left), b = parse(right)
-  for (let index = 0; index < Math.max(a.length, b.length); index++) {
-    const difference = (a[index] ?? 0) - (b[index] ?? 0)
-    if (difference) return difference
-  }
-  return 0
-}

@@ -624,8 +624,13 @@ export class PythonEnvironmentApi {
         ? await this.sync.verifyInstalled(layer, input.capabilityId, report, knownFailures, ...(input.automatic === true ? [{ includeVersionUpdates: true }] : [])) as Record<string, unknown>
         : undefined
       const unresolved = verification ? Number(verification.unresolvedPackageCount ?? verification.pendingPackageCount ?? 0) : 0
-      if (verification && unresolved > 0 && layer === 'core') {
-        throw new Error(`安装后仍缺少 ${verification.pendingPackageCount} 个依赖；请查看失败包日志后重试。`)
+      // A skipped pin still leaves core out of sync even when the package's
+      // old version makes the local name-presence check report coreReady.
+      // Keep successful transactions and the old package, but fail the layer
+      // until every signed version is present.
+      const pending = verification ? Number(verification.pendingPackageCount ?? unresolved) : 0
+      if (verification && pending > 0 && layer === 'core') {
+        throw new Error(`安装后仍有 ${pending} 个依赖缺失或版本未同步；请查看失败包日志后重试。`)
       }
       if (layer === 'core') {
         const pythonCoreInfo = (this.updater as PythonUpdaterService & { pythonCoreInfo?: (() => Promise<McpPythonInfo>) | undefined }).pythonCoreInfo

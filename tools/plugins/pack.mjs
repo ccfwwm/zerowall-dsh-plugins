@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
-import { mkdir, readFile, readdir, writeFile, realpath, stat } from 'node:fs/promises'
+import { mkdir, readFile, readdir, writeFile, realpath, stat, access } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { offlineFiles } from '../commands/offline-profile.mjs'
 import { fileDigest } from '../commands/resource-catalog.mjs'
@@ -11,6 +11,7 @@ import { commitImmutablePackage } from './immutable-package.mjs'
 import { historicalPackage } from './package-history.mjs'
 import { packageSource } from '../build/layout.mjs'
 import { restorePublishedOutput } from './published-output.mjs'
+import { integrationPublishSource, usesReviewedRuntime } from './publish-source.mjs'
 const pnpm = process.env.npm_execpath
 if (!pnpm) throw new Error('Invoke with pnpm plugins:pack')
 const records = []
@@ -95,10 +96,13 @@ sources.push(await packageSource('dsh-wechat'))
 // Optional catalog plugins do not require a desktop offline-profile build.
 const integrations = JSON.parse(await readFile(join(root, 'config/integrations/upstream-sources.json'), 'utf8'))
 for (const integration of Object.values(integrations)) {
-  if (integration?.catalogOptional && integration.source) sources.push(join(root, integration.source))
+  const source = integrationPublishSource(integration, { root, stageRoot })
+  if (!source) continue
+  // A missing reviewed runtime is a failed publication prerequisite, not
+  // permission to change an existing version's archive shape.
+  if (usesReviewedRuntime(integration)) await access(join(source, 'package.json'))
+  sources.push(source)
 }
-// This adapter's published runtime excludes generated TypeScript declarations.
-sources.push(join(stageRoot, 'offline-profile/modules/@dingyi222666/dsh-session-notification'))
 // Preserve the tested Office adapter Git pin as an independently signed
 // support tarball; pnpm 11 correctly rejects Git dependencies nested in bundles.
 sources.push(dirname(await realpath(join(root, 'plugins/files/node_modules/dsh-office-tools/package.json'))))

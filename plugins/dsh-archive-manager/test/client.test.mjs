@@ -93,15 +93,6 @@ const bundle = materialize("@michengai/dsh-archive-manager", {
 		"@deepseek-ai/dsh-client-store": { defineStore }
 	}
 });
-const legacyRequests = [];
-const legacyBundle = materialize("@michengai/dsh-archive-manager", {
-	requests: legacyRequests,
-	staticModules: {
-		...statics,
-		"@deepseek-ai/dsh-client-runtime/client": { defineStore }
-	}
-});
-
 const t = bundle.__test;
 
 test("分叉失败向列表提示回调报告错误，成功时不提示", async () => {
@@ -372,20 +363,16 @@ test("forked row stylesheet does not reuse the official workspace class prefix",
 	assert.equal(injected.includes("@michengai/dsh-archive-manager/WorkspacePicker.module.css"), false);
 });
 
-test("bundle resolves the current client-store and keeps the legacy fallback", () => {
+test("bundle resolves only the pinned client-store contract", () => {
 	assert.equal(alphaRequests.includes("@deepseek-ai/dsh-client-store"), true);
 	assert.equal(alphaRequests.includes("@deepseek-ai/dsh-client-runtime/client"), false);
-	assert.equal(legacyRequests.includes("@deepseek-ai/dsh-client-store"), true);
-	assert.equal(legacyRequests.includes("@deepseek-ai/dsh-client-runtime/client"), true);
 	assert.equal(typeof bundle.__test.createWorkspaceViewStore().create, "function");
-	assert.equal(typeof legacyBundle.__test.createWorkspaceViewStore().create, "function");
 	assert.equal(bundle.__test.hasSplitClientStore, true);
-	assert.equal(legacyBundle.__test.hasSplitClientStore, false);
 });
 
 test("manifest keeps one DSH peer range and both client contracts optional", async () => {
 	assert.equal(PACKAGE_MANIFEST.engines?.node, "^22.19.0 || >=24.0.0");
-	const rootManifest = JSON.parse(await readFile(new URL('../../../../package.json', import.meta.url), 'utf8'));
+	const rootManifest = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf8'));
 	assert.equal(PACKAGE_MANIFEST.packageManager, rootManifest.packageManager);
 	const dshPeerRanges = Object.entries(PACKAGE_MANIFEST.peerDependencies ?? {})
 		.filter(([name]) => name.startsWith("@deepseek-ai/dsh-"))
@@ -409,7 +396,7 @@ test("manifest keeps one DSH peer range and both client contracts optional", asy
 		assert.equal(dependency.version, '0.2.0-rc.2', `${name} must resolve the pinned ZeroWall Harness`);
 	}
 	assert.equal(PACKAGE_MANIFEST.peerDependenciesMeta?.["@deepseek-ai/dsh-client-store"]?.optional, true);
-	assert.equal(PACKAGE_MANIFEST.peerDependenciesMeta?.["@deepseek-ai/dsh-client-runtime"]?.optional, true);
+	assert.equal(PACKAGE_MANIFEST.peerDependenciesMeta?.["@deepseek-ai/dsh-client-runtime"], undefined);
 	assert.equal(PACKAGE_MANIFEST.dsh.client.inject.includes("@deepseek-ai/dsh-client-runtime"), false);
 });
 
