@@ -13,7 +13,7 @@ type Check = { fingerprint: string; findings: unknown[]; screenshot?: string }
 export interface PresentationWorkflow {
   schemaVersion: 2; spec: string; manifest: string; mode: 'new' | 'edit'; scope?: Scope; journal?: string
   changedPages: number[]; pages: Record<string, { fingerprint: string; id: string; checks: Record<string, Check>; review?: { fingerprint: string; observations: string; waivers: string[] } }>
-  phase: string; templatePlans?: Record<string, EditablePagePlan>; failure?: { stage: string; message: string; at: string }
+  phase: string; templatePlans?: Record<string, EditablePagePlan>; reconstructionFailures?: Record<string, string[]>; failure?: { stage: string; message: string; at: string }
   exportReceipt?: { outputPath: string; notesWritten: number; bytes: number; sha256: string }
 }
 export type EditableElementType = 'text' | 'shape' | 'image' | 'table' | 'chart' | 'connector'
@@ -52,6 +52,7 @@ export function validateEditablePagePlan(page: number, templateAssetId: string, 
     if (!element || !/^[a-zA-Z0-9][\w.-]{0,127}$/u.test(element.id) || ids.has(element.id)) throw new Error('Editable element IDs must be unique stable identifiers.')
     ids.add(element.id)
     if (!['text', 'shape', 'image', 'table', 'chart', 'connector'].includes(element.type)) throw new Error(`Unsupported editable element type: ${String(element.type)}`)
+    if (element.editable === false) throw new Error(`Planned element ${element.id} must remain editable.`)
     if (![element.x, element.y, element.width, element.height].every(value => Number.isFinite(value)) || element.width <= 0 || element.height <= 0) throw new Error(`Editable element ${element.id} must have positive bounds.`)
     if (element.type === 'text' && (!element.content || !element.content.trim())) throw new Error(`Editable text element ${element.id} requires content.`)
   }
@@ -128,10 +129,36 @@ export function refreshPages(state: PresentationWorkflow, snapshots: PageSnapsho
 }
 export function exportBlockers(state: PresentationWorkflow): number[] {
   return state.changedPages.filter(page => {
+    if (state.reconstructionFailures?.[page]?.length) return true
     const entry = state.pages[page]
     if (!entry || entry.review?.fingerprint !== entry.fingerprint) return true
     return ['univer_inspect', 'univer_lint', 'univer_screenshot'].some(name => entry.checks[name]?.fingerprint !== entry.fingerprint)
       || Object.values(entry.checks).some(check => check.findings.some(finding => !entry.review?.waivers.includes(hash(JSON.stringify(finding)))))
+  })
+}
+/** Verify the persisted Univer page, not author-supplied SVG labels. Native
+ * chart/table requirements cannot be satisfied by rectangles or bitmap text. */
+export function editableReconstructionFailures(snapshot: PageSnapshot, plan: EditablePagePlan): string[] {
+  const remaining = Object.values(snapshot.data.elements ?? {}) as any[]
+  const normalized = (text: string) => text.replace(/\s+/gu, '')
+  return plan.elements.flatMap(planned => {
+    const index = remaining.findIndex(element => {
+      const text = element.text ?? element.shapeData?.shapeText?.text ?? element.textData?.body?.dataStream ?? element.shapeData?.shapeText?.textData?.body?.dataStream ?? ''
+      const actualType = element.type === 'shape' && String(text).trim() ? 'text' : element.type
+      const image = element.type === 'image' || !!element.shapeData?.fill?.fillImageSource
+      if (planned.type === 'image' ? !image : actualType !== planned.type) return false
+      if ((planned.type === 'chart' && !element.chartId) || (planned.type === 'table' && !element.tableId)) return false
+      if (planned.type === 'text' && !normalized(String(text)).includes(normalized(planned.content ?? ''))) return false
+      const box = element.transform
+      if (!box || ![box.left, box.top, box.width, box.height].every(Number.isFinite) || box.width <= 0 || box.height <= 0) return false
+      // Font measurement may change a text run's precise box. Require each
+      // object to remain within its planned region with a small metric margin.
+      const margin = 8
+      return box.left >= planned.x - margin && box.top >= planned.y - margin && box.left + box.width <= planned.x + planned.width + margin && box.top + box.height <= planned.y + planned.height + margin
+    })
+    if (index < 0) return [`Planned ${planned.type} ${planned.id} has no matching editable Univer object/content within its bounds.`]
+    remaining.splice(index, 1)
+    return []
   })
 }
 function presentationFindings(state: PresentationWorkflow, pages = state.changedPages) {
@@ -182,7 +209,12 @@ export function installPresentationWorkflow(ctx: Context): void {
       if (!spec.slides[page.page - 1]) throw new Error(`Page ${page.page} is missing its content plan.`)
       deps[page.page] = JSON.stringify({ plan: spec.slides[page.page - 1], template: state.templatePlans?.[page.page], assets: assetsForPage(spec, manifest, page.page).map(asset => ({ id: asset.assetId, sha256: asset.sha256, source: asset.source, parent: asset.parentAssetId })) })
     }
-    refreshPages(state, snapshots, deps); return snapshots
+    refreshPages(state, snapshots, deps)
+    state.reconstructionFailures = Object.fromEntries(Object.values(state.templatePlans ?? {}).map(plan => {
+      const snapshot = snapshots.find(page => page.page === plan.page)
+      return [plan.page, snapshot ? editableReconstructionFailures(snapshot, plan) : ['Planned page has not been compiled into the bound Univer draft.']]
+    }))
+    return snapshots
   }
   async function bound(exec: ToolRunContext | ToolDispatchExecution): Promise<PresentationWorkflow> { const state = await load(exec); if (!state?.scope) throw new Error('Call presentation_prepare with file, unitId and worktreeId first.'); return state }
   // Serialize the complete read/check/write against one .univer file. Nested
@@ -202,6 +234,8 @@ export function installPresentationWorkflow(ctx: Context): void {
       try {
         if (exec.name === 'univer_compile_svg') {
           await validatePresentationAssets(cwd(exec), state, args.page)
+          const plan = state.templatePlans?.[args.page]
+          if (plan) await validateEditableSvgPlan(cwd(exec), args.source, plan)
           const source = await prepareSvg(cwd(exec), args.source, state.spec, state.manifest, args.page)
           const value = await dispatch(exec, exec.name, { ...args, source }, true)
           await sync(exec, state); state.phase = 'building'; delete state.failure; await persist(exec, state)
@@ -212,7 +246,7 @@ export function installPresentationWorkflow(ctx: Context): void {
           delete state.exportReceipt
           await validatePresentationAssets(cwd(exec), state)
           const blocked = exportBlockers(state)
-          if (blocked.length) throw new Error(`Export requires current inspect/lint/screenshots and actual visual reviews for pages: ${blocked.join(', ')}. Use presentation_check_pages, fix only these pages, then presentation_record_reviews.`)
+          if (blocked.length) throw new Error(`Export requires current inspect/lint/screenshots, actual visual reviews and matching editable reconstruction objects for pages: ${blocked.join(', ')}. Use presentation_status to inspect reconstructionFailures, fix native objects/content, then presentation_check_pages and presentation_record_reviews.`)
         }
         const result = await next()
         if (result.isError) { await persist(exec, state); return result }
@@ -327,8 +361,6 @@ export function installPresentationWorkflow(ctx: Context): void {
     try {
       for (const page of args.pages) {
         exec.signal?.throwIfAborted()
-        const plan = state.templatePlans?.[page.page]
-        if (plan) await validateEditableSvgPlan(cwd(exec), page.source, plan)
         results.push(await dispatch(exec, 'univer_compile_svg', { ...state.scope, ...page, mode: 'replace' }))
       }
     } catch (error) {

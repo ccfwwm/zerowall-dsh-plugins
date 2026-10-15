@@ -415,7 +415,7 @@ else: print('\\nZEROWALL_IMPORT_RESULT:'+json.dumps({'deferred':False}))
 `
   try {
     const output = await pythonOutput(executable, code, [site, packageName, JSON.stringify(pendingNames)])
-    const result = output.split(/\r?\n/u).findLast(line => line.startsWith('ZEROWALL_IMPORT_RESULT:'))
+    const result = output.split(/\r?\n/u).reverse().find(line => line.startsWith('ZEROWALL_IMPORT_RESULT:'))
     if (!result) throw new Error('Python 未返回导入检测结果。')
     const parsed = JSON.parse(result.slice('ZEROWALL_IMPORT_RESULT:'.length)) as { deferred: boolean; message?: string }
     if (typeof parsed.deferred !== 'boolean') throw new Error('Python 导入检测结果无效。')

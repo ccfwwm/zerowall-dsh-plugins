@@ -4,9 +4,8 @@ import { tmpdir } from 'node:os'
 import { expect, it, vi } from 'vitest'
 import sharp from 'sharp'
 import { recordAssetReview, recordVisualAssets, validatePresentationAssets, hash } from '../src/host/visual-assets.js'
-import { prepareSvg, lintImageOcclusion } from '../src/host/presentation-layout.js'
-import { actualCoverage, exportBlockers, normalizeUniverExecutionSource, refreshPages, installPresentationWorkflow, runPresentationImageTasks, validateEditablePagePlan, type PresentationWorkflow } from '../src/host/presentation-workflow.js'
-import { validateEditableSvgPlan } from '../src/host/presentation-layout.js'
+import { prepareSvg, lintImageOcclusion, validateEditableSvgPlan } from '../src/host/presentation-layout.js'
+import { actualCoverage, editableReconstructionFailures, exportBlockers, normalizeUniverExecutionSource, refreshPages, installPresentationWorkflow, runPresentationImageTasks, validateEditablePagePlan, type PresentationWorkflow } from '../src/host/presentation-workflow.js'
 
 async function fixture(action: (root: string) => Promise<void>) {
   const root = await mkdtemp(join(tmpdir(), 'zerowall-presentation-'))
@@ -52,6 +51,23 @@ it('requires the compiled SVG to carry every planned editable element', async ()
   await writeFile(join(root, 'planned.svg'), '<svg xmlns="http://www.w3.org/2000/svg"><text data-zerowall-element-id="title" data-zerowall-element-type="text">Title</text></svg>')
   await expect(validateEditableSvgPlan(root, 'planned.svg', plan)).rejects.toThrow('missing planned editable element panel')
 }))
+it('requires actual native reconstruction objects, content and bounds before export', () => {
+  const plan = validateEditablePagePlan(1, 'template', [
+    { id: 'title', type: 'text', x: 10, y: 10, width: 200, height: 60, content: 'Editable title' },
+    { id: 'chart', type: 'chart', x: 20, y: 100, width: 300, height: 200 },
+    { id: 'table', type: 'table', x: 400, y: 100, width: 300, height: 200 },
+  ])
+  const text = { type: 'shape', transform: { left: 10, top: 10, width: 180, height: 40 }, shapeData: { shapeText: { text: 'Editable title' } } }
+  const chart = { type: 'chart', chartId: 'real-chart', transform: { left: 20, top: 100, width: 300, height: 200 } }
+  const table = { type: 'table', tableId: 'real-table', transform: { left: 400, top: 100, width: 300, height: 200 } }
+  const snapshot = { page: 1, id: 'p1', fingerprint: 'r1', data: { elements: { text, chart, table } } }
+  expect(editableReconstructionFailures(snapshot, plan)).toEqual([])
+  expect(editableReconstructionFailures({ ...snapshot, data: { elements: { text, chart: { ...chart, type: 'shape' }, table } } }, plan).join()).toContain('Planned chart chart')
+  expect(editableReconstructionFailures({ ...snapshot, data: { elements: { text: { ...text, shapeData: { shapeText: { text: 'wrong content' } } }, chart, table } } }, plan).join()).toContain('Planned text title')
+  expect(editableReconstructionFailures({ ...snapshot, data: { elements: { text, chart, table: { ...table, transform: { ...table.transform, left: 800 } } } } }, plan).join()).toContain('Planned table table')
+  const state: PresentationWorkflow = { schemaVersion: 2, spec: '', manifest: '', mode: 'new', changedPages: [1], pages: {}, phase: 'reviewed', reconstructionFailures: { 1: ['missing native chart'] } }
+  expect(exportBlockers(state)).toEqual([1])
+})
 it('normalizes the /none execution-source sentinel and rejects real dual sources', () => {
   expect(normalizeUniverExecutionSource({ file: 'deck.univer', unitId: 'slides', worktreeId: 'draft', code: 'return 1', codeFile: '/none' }))
     .toEqual({ file: 'deck.univer', unitId: 'slides', worktreeId: 'draft', code: 'return 1' })
@@ -257,6 +273,19 @@ it('generates reference-only page templates through the image route and persists
   await expect(rt.call('presentation_compile_pages', { pages: [{ page: 1, source: 'page.svg' }] })).rejects.toThrow('missing planned editable element title')
   await writeFile(join(root, 'page.svg'), '<svg xmlns="http://www.w3.org/2000/svg"><text data-zerowall-element-id="title" data-zerowall-element-type="text">Editable title</text><rect data-zerowall-element-id="result-chart" data-zerowall-element-type="chart" width="10" height="10"/></svg>')
   await expect(rt.call('presentation_compile_pages', { pages: [{ page: 1, source: 'page.svg' }] })).resolves.toBeTruthy()
+  await rt.call('presentation_check_pages', { pages: [1, 2], output: 'screenshots' })
+  await rt.call('presentation_record_reviews', { reviews: pageReviews })
+  await expect(rt.call('univer_export', rt.scope)).rejects.toThrow('matching editable reconstruction')
+  expect((await rt.call('presentation_status')).state.reconstructionFailures['1'].join()).toContain('result-chart')
+  snapshots[0].data.elements = {
+    title: { type: 'text', text: 'Editable title', transform: { left: 40, top: 30, width: 800, height: 60 } },
+    chart: { type: 'chart', chartId: 'native-result', transform: { left: 60, top: 140, width: 840, height: 280 } },
+  }
+  snapshots[1].data.elements = { table: { type: 'table', tableId: 'native-comparison', transform: { left: 60, top: 120, width: 840, height: 300 } } }
+  snapshots[0].fingerprint += '-native'; snapshots[1].fingerprint += '-native'
+  await rt.call('presentation_check_pages', { pages: [1, 2], output: 'screenshots' })
+  await rt.call('presentation_record_reviews', { reviews: pageReviews })
+  await expect(rt.call('univer_export', rt.scope)).resolves.toEqual({ ok: true })
   await expect(rt.call('presentation_plan_editable_pages', { plans: [{ page: 1, template_asset_id: 'art', elements: [{ id: 'title', type: 'text', x: 0, y: 0, width: 100, height: 40, content: 'Title' }] }] })).rejects.toThrow('generated template')
   await writeFile(join(root, 'template.svg'), '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540"><image href="template-page-1.png" width="960" height="540"/></svg>')
   await expect(prepareSvg(root, 'template.svg', 'spec.json', 'assets.json', 1)).rejects.toThrow('not in this page')
