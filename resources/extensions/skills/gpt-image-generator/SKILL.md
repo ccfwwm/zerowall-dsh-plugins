@@ -1,11 +1,13 @@
 ---
 name: gpt-image-generator
-description: Generate or edit PNG images with ZeroWall's built-in generate_image and edit_image tools and the current AI Cloud account's configured gpt-image-2 model. Use for 生图、生成图片、改图、局部重绘、换背景、删除元素、调整颜色、保持构图、插画、海报、封面、背景图、视觉概念图、科研配图 or other raster-image requests. When the user has not supplied a separate API key and endpoint, automatically use the signed-in ZeroWall AI Cloud configuration without asking for credentials again.
+description: Generate or edit PNG images with ZeroWall's built-in generate_image and edit_image tools and the environment's configured image model, group and parameters. Use for PPT/PPTX 配图、幻灯片插图、报告配图、生图、生成图片、改图、局部重绘、换背景、删除元素、调整颜色、保持构图、插画、海报、封面、背景图、视觉概念图、科研配图 or other raster-image requests. Use the configured image route without asking for credentials again.
 ---
 
 # ZeroWall Image Generation
 
 这是 ZeroWall 唯一默认的生图工作流。直接使用当前对话上下文，不启动额外提示词摘要模型；尽量保留用户原话，只补足缺少的构图、用途、格式或尺寸约束。
+
+PPT/PPTX、幻灯片、文档和报告的配图也使用本技能。通过 `generate_image` / `edit_image` 取得工作区 PNG 与真实 `.generation.json` 回执，再交给 `presentation_record_assets` 和 Univer；不调用 `media_models`、`media_import`、`media_project` 或 `media_job`，不创建媒体项目、时间线或任务。用户另行明确要求独立媒体项目、视频、音乐或宣传片时，该独立交付物才使用 `media-create`。图片配置由 Host 从环境配置读取，助手不要读取或打印环境变量中的秘密；环境配置错误要如实报告，不能改走媒体任务、切换分组或换模型。
 
 ## 工具路由
 
@@ -36,7 +38,7 @@ description: Generate or edit PNG images with ZeroWall's built-in generate_image
 
 - 用户没有显式提供独立 Key 和地址时，必须直接调用 `generate_image` / `edit_image` 使用当前 AI Cloud 配置；不要扫描项目 `.env`、用户目录、Codex/Claude 配置或进程环境，也不要要求已经登录的用户再次提供 Key。
 - 不得把 `gpt-image-2` 发送到聊天 `/messages` 或 `/chat/completions`；新图走 Image generations，编辑走 Image edits。
-- 如果工具提示未登录、没有 `gpt-image-2` 或分组凭据缺失，引导用户打开左下角 AI Cloud，登录并刷新模型列表，然后重试。
+- 如果工具提示未登录、所选生图模型不可用或分组凭据缺失，按实际错误引导用户检查 AI Cloud 登录、模型目录或环境中的生图配置后重试；保留所选模型、分组、质量和参数，不擅自降级或切换路线。
 - 如果用户明确指定了另一套 Key/地址，只能通过用户明确授权的外部连接方式临时使用；不得把凭据写进脚本、技能、日志、项目文件或持久化配置。
 
 ## 输出约束

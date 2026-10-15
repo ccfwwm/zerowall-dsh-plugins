@@ -1,4 +1,5 @@
 import { mkdtemp, readFile, rm, symlink, truncate, writeFile } from 'node:fs/promises'
+import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import React from 'react'
@@ -6,7 +7,9 @@ import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
 import sharp from 'sharp'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { AiCloudImageGenerator } from '../src/host/generator.js'
+import { createImageConfiguration } from '../src/host/index.js'
 import { recordVisualAsset } from '../src/host/visual-assets.js'
+import type { AiCloudMediaModel } from '@zerowallscience/plugin-account/types'
 import type { AccountSecretStore } from '@zerowallscience/plugin-account'
 
 class MemorySecrets implements AccountSecretStore {
@@ -34,24 +37,21 @@ async function raster(format: 'png' | 'jpeg' | 'webp' = 'png', width = 8, height
 }
 
 function signedIn() {
-  return {
-    status: 'signedIn' as const,
-    balanceFreshness: 'current' as const,
-    lowBalance: false,
-    models: [{
-      providerId: 'zerowall-ai-cloud-7', groupId: '7', groupName: '生图', capability: 'image-generation',
-      modelId: 'gpt-image-2', baseUrl: 'https://code.aicodeme.xyz/v1',
-    }],
-  }
+  const models: AiCloudMediaModel[] = [{ providerId: 'zerowall-ai-cloud-7', groupId: '7', groupName: '图片音频视频分组', capability: 'media',
+    modelId: 'gpt-image-2', baseUrl: 'https://code.aicodeme.xyz/v1', profileId: 'test-profile', version: '1', mediaType: 'image', operations: ['image','image_edit'], sizes: ['auto','1024x1024','2048x2048'], qualities: ['auto','low','medium','high'], resolutions: [], aspectRatios: [], duration: {}, materials: {mask:{max_count:1,max_file_bytes:50*1024*1024,formats:['file_png']},image: {max_count:16,max_file_bytes:50*1024*1024,formats:['file','data_url']}}, formats: [], pollSeconds: 1 }]
+  return { status: 'signedIn' as const, email: 'image-fixture@example.test', gatewayBaseUrl: 'https://code.aicodeme.xyz', balanceFreshness: 'current' as const, lowBalance: false, models: [], mediaModels: models, mediaSync: { status: 'succeeded' as const, checkedAt: 'now', groups: models.map(m=>({groupId:m.groupId,groupName:m.groupName,checkedAt:'now',status:'succeeded' as const,count:1})) } }
 }
 
-function generator(fetcher: typeof fetch, attachment?: ImageAttachmentRef | Error, imageQuality?: () => Promise<'auto' | 'low' | 'medium' | 'high' | undefined>, models = signedIn().models) {
+function generator(fetcher: typeof fetch, attachment?: ImageAttachmentRef | Error, imageQuality?: () => Promise<'auto' | 'low' | 'medium' | 'high' | undefined>, models = signedIn().mediaModels) {
+  const mediaCacheDir=mkdtempSync(join(tmpdir(),'images-media-test-'));roots.push(mediaCacheDir)
   const secrets = new MemorySecrets()
   for (const model of models) secrets.values.set(`zerowall.ai-cloud.group.${model.groupId}`, 'host-only-secret')
   return new AiCloudImageGenerator({
     secrets,
+    mediaCacheDir,
     retryDelayMs: 0,
-    account: { current: async () => ({ ...signedIn(), models }) },
+    account: { current: async () => ({ ...signedIn(), mediaModels: models, mediaSync: {...signedIn().mediaSync,groups:models.map(m=>({groupId:m.groupId,groupName:m.groupName,checkedAt:'now',status:'succeeded' as const,count:1}))} }) },
+    imageModel: async () => ({providerId:models[0]!.providerId,groupId:models[0]!.groupId,modelId:models[0]!.modelId}),
     fetch: fetcher,
     ...(imageQuality === undefined ? {} : { imageQuality }),
     ...(attachment === undefined ? {} : {
@@ -85,18 +85,32 @@ it('limits image requests to two concurrent jobs and deduplicates concurrent ide
   await Promise.all([1, 2, 3, 3].map(number => service.generate({ prompt: `concept ${number}`, outputPath: `parallel-${number}.png` }, workspace)))
   expect(maximum).toBe(2); expect(fetcher).toHaveBeenCalledTimes(3)
 })
-it('retries transient 503 responses but returns parameter errors without replaying them', async () => {
+it('recovers transient 503 with the original idempotency key and rejects definitive parameter errors', async () => {
   const workspace = await root(), png = await raster()
   const transient = vi.fn().mockResolvedValueOnce(new Response('', { status: 503 })).mockResolvedValueOnce(imageResponse(png))
-  await generator(transient as typeof fetch).generate({ prompt: 'concept', outputPath: 'retry.png' }, workspace)
+  const recovering = generator(transient as typeof fetch)
+  await expect(recovering.generate({ prompt: 'concept', outputPath: 'retry.png' }, workspace)).rejects.toThrow('MEDIA_SUBMISSION_UNCERTAIN')
+  await recovering.generate({ prompt: 'concept', outputPath: 'retry.png' }, workspace)
+  expect(new Headers(transient.mock.calls[0]?.[1]?.headers).get('Idempotency-Key')).toBe(new Headers(transient.mock.calls[1]?.[1]?.headers).get('Idempotency-Key'))
   expect(transient).toHaveBeenCalledTimes(2)
   const invalid = vi.fn(async () => new Response('sensitive response', { status: 400 }))
-  await expect(generator(invalid as typeof fetch).generate({ prompt: 'concept', outputPath: 'bad.png' }, workspace)).rejects.toThrow('Correct the request parameters')
+  await expect(generator(invalid as typeof fetch).generate({ prompt: 'concept', outputPath: 'bad.png' }, workspace)).rejects.toThrow('MEDIA_HTTP_400')
   expect(invalid).toHaveBeenCalledOnce()
   expect(await readFile(join(workspace, 'bad.png.generation.failed.json'), 'utf8')).not.toContain('sensitive response')
 })
 
 describe('AI Cloud image generation and editing', () => {
+  it('keeps standalone image skill settings separate from media selections', async () => {
+    const readImageModelSelection = vi.fn().mockResolvedValue({ providerId: 'env-provider', groupId: 'env-group', modelId: 'env-image' })
+    const getImageQuality = vi.fn().mockResolvedValue('high')
+    const readMediaModelSelections = vi.fn().mockResolvedValue({ image: { selection: { providerId: 'media-provider', groupId: 'media-group', modelId: 'media-image' }, parameters: { quality: 'low' } } })
+    const config = createImageConfiguration({ readImageModelSelection, getImageQuality, readMediaModelSelections } as any)
+    await expect(config.imageModel()).resolves.toMatchObject({ modelId: 'env-image' })
+    await expect(config.imageQuality()).resolves.toBe('high')
+    expect(readImageModelSelection).toHaveBeenCalledOnce()
+    expect(getImageQuality).toHaveBeenCalledOnce()
+    expect(readMediaModelSelections).not.toHaveBeenCalled()
+  })
   it('records a seed/style edit as a verified independent presentation asset', async () => {
     const workspace = await root()
     const png = await raster()
@@ -131,19 +145,19 @@ describe('AI Cloud image generation and editing', () => {
     expect(JSON.parse(String(bodies[2]))).toMatchObject({ quality: 'auto' })
   })
 
-  it('falls back to auto when environment quality is missing', async () => {
+  it('uses auto when environment quality is missing and reports unavailable settings', async () => {
     const service = generator(vi.fn() as typeof fetch, undefined, async () => undefined)
     await expect(service.resolveQuality()).resolves.toBe('auto')
     const unavailable = generator(vi.fn() as typeof fetch, undefined, async () => { throw new Error('environment unavailable') })
-    await expect(unavailable.resolveQuality()).resolves.toBe('auto')
+    await expect(unavailable.resolveQuality()).rejects.toThrow('IMAGE_CONFIGURATION_UNAVAILABLE')
   })
 
   it('passes an explicit model override and rejects a model unavailable to the account', async () => {
     const workspace = await root()
     const png = await raster()
     const models = [
-      ...signedIn().models,
-      { providerId: 'zerowall-ai-cloud-8', groupId: '8', groupName: '生图', capability: 'image-generation' as const, modelId: 'gpt-image-2-pro', baseUrl: 'https://code.aicodeme.xyz/v1' },
+      ...signedIn().mediaModels,
+      { ...signedIn().mediaModels[0]!, providerId: 'zerowall-ai-cloud-8', groupId: '8', modelId: 'gpt-image-2-pro' },
     ]
     const fetcher = vi.fn(async () => imageResponse(png))
     const service = generator(fetcher as typeof fetch, undefined, undefined, models)
@@ -175,7 +189,7 @@ describe('AI Cloud image generation and editing', () => {
     expect(fetcher).toHaveBeenCalledTimes(1)
     expect(fetcher.mock.calls[0]?.[0]).toBe('https://code.aicodeme.xyz/v1/images/generations')
     const request = fetcher.mock.calls[0]?.[1] as RequestInit
-    expect(JSON.parse(String(request.body))).toMatchObject({ model: 'gpt-image-2', prompt: 'A scientific cover', size: 'auto', quality: 'auto', output_format: 'png' })
+    expect(JSON.parse(String(request.body))).toMatchObject({ model: 'gpt-image-2', prompt: 'A scientific cover', size: 'auto', quality: 'auto' })
     expect(String(request.body)).not.toContain('messages')
     expect(JSON.stringify(result)).not.toContain('host-only-secret')
   })
@@ -306,12 +320,12 @@ describe('AI Cloud image generation and editing', () => {
     const service = generator(fetcher as typeof fetch)
 
     await expect(service.generate({ prompt: 'spring', outputPath: 'spring.png' }, workspace))
-      .rejects.toThrow('could not be reached')
+      .rejects.toThrow('MEDIA_SUBMISSION_UNCERTAIN')
     await expect(service.generate({ prompt: 'spring', outputPath: 'spring-2.png' }, workspace))
       .rejects.not.toThrow('host-only-secret')
     const failure = JSON.parse(await readFile(join(workspace, 'spring.png.generation.failed.json'), 'utf8'))
     expect(failure.request).toMatchObject({ operation: 'generate_image', prompt: 'spring', model: 'gpt-image-2', quality: 'auto' })
-    expect(failure.reason).toContain('could not be reached')
+    expect(failure.reason).toContain('MEDIA_SUBMISSION_UNCERTAIN')
     expect(JSON.stringify(failure)).not.toContain('host-only-secret')
   })
 
@@ -368,7 +382,7 @@ describe('AI Cloud image generation and editing', () => {
     const failed = generator(vi.fn(async () => new Response('bad', { status: 502 })) as typeof fetch)
 
     await expect(failed.edit({ prompt: 'x', inputPaths: ['source.png'], outputPath: 'source.png', overwrite: true }, workspace))
-      .rejects.toThrow('HTTP 502')
+      .rejects.toThrow('MEDIA_SUBMISSION_UNCERTAIN')
     expect(Buffer.compare(await readFile(join(workspace, 'source.png')), original)).toBe(0)
 
     const service = generator(vi.fn(async () => imageResponse(replacement)) as typeof fetch)
@@ -394,7 +408,7 @@ describe('AI Cloud image generation and editing', () => {
     await expect(service.generate({ prompt: 'x', outputPath: 'cancelled.png' }, workspace, controller.signal)).rejects.toThrow('cancelled')
 
     const broken = generator(vi.fn(async () => new Response('bad', { status: 429 })) as typeof fetch)
-    await expect(broken.generate({ prompt: 'x', outputPath: 'http.png' }, workspace)).rejects.toThrow('HTTP 429')
+    await expect(broken.generate({ prompt: 'x', outputPath: 'http.png' }, workspace)).rejects.toThrow('MEDIA_HTTP_429')
   })
 
   it('rejects paths outside the session and unconfigured image models before network access', async () => {
@@ -406,7 +420,7 @@ describe('AI Cloud image generation and editing', () => {
       fetch: fetcher as typeof fetch,
     })
     await expect(service.generate({ prompt: 'x', outputPath: '../outside.png' }, workspace)).rejects.toThrow("must not contain '..'")
-    await expect(service.generate({ prompt: 'x', outputPath: 'inside.png' }, workspace)).rejects.toThrow('no configured gpt-image-2')
+    await expect(service.generate({ prompt: 'x', outputPath: 'inside.png' }, workspace)).rejects.toThrow('名称含“图片”或“生图”的分组')
     expect(fetcher).not.toHaveBeenCalled()
   })
 })

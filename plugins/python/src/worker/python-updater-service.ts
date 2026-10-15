@@ -1,6 +1,6 @@
 import { fork, spawn, type ChildProcess } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
-import { delimiter, dirname, join } from 'node:path'
+import { delimiter, dirname, join, resolve } from 'node:path'
 import { mkdir, readFile, writeFile, readdir, rename } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import type { McpEnvironmentControllerOptions } from './mcp-environment.js'
@@ -44,6 +44,10 @@ export class PythonUpdaterService {
    */
   private progressWatchers: Array<(status: McpEnvironmentStatus) => void> = []
   watchProgress(listener: (status: McpEnvironmentStatus) => void): void { this.progressWatchers.push(listener) }
+  /** In-process controller progress uses the same durable job identity as IPC. */
+  publishOperation(status: McpEnvironmentStatus): void {
+    this.publish({ ...status, updateJob: status.updateJob ? { ...status.updateJob, taskId: this.activeTaskId ?? status.updateJob.taskId, kind: this.activeMethod ?? status.updateJob.kind } : undefined })
+  }
   publish(status: McpEnvironmentStatus): void {
     this.status = status
     this.options.publish(status)
@@ -182,6 +186,9 @@ export class PythonUpdaterService {
           this.publish({ ...this.status, ...result, lastUpdateError: message, updateJob: { taskId, kind: method, stage: 'failed', canPause: false } })
           return
         }
+        if (method === 'applyPackagePlan' && result?.verification && (result.verification.imports === false || result.verification.pipCheck === false)) {
+          throw new Error(result.verification.message ?? 'Python 依赖安装后导入或 pip check 未通过；已完成的单包事务保留，可重试失败项。')
+        }
         const info = result?.packages ? result : method === 'initialize' ? await this.pythonCoreInfo() : await this.pythonInfo()
         const next = await this.rpc<McpEnvironmentStatus>('localStatus')
         if (this.cancelledTasks.has(taskId)) throw new Error('PYTHON_OPERATION_CANCELLED')
@@ -221,7 +228,13 @@ export class PythonUpdaterService {
     // package transaction. Returning true for a missing id made the outer
     // Python sync resume and plan a second install while the original updater
     // receipt was still paused or unavailable.
-    if (taskId && (!pending || pending.method !== 'applyPackagePlan')) return false
+    if (taskId && !pending) {
+      // A live task can already have been requeued by another recovery path.
+      // Treat only that exact active/scheduled id as resumed; an unrelated or
+      // missing id must still fail closed in the outer durable sync task.
+      if (this.activeTaskId !== taskId && !this.scheduled.has(taskId)) return false
+    }
+    if (taskId && pending && pending.method !== 'applyPackagePlan') return false
     this.paused = false
     if (taskId && pending) {
       this.interrupted.delete(taskId)
@@ -303,7 +316,7 @@ export class PythonUpdaterService {
     if (local.phase === 'ready' || local.phase === 'manual') {
       if (this.options.runtimeRoot) {
         const current = await readFile(join(this.options.root, 'current.json'), 'utf8').then(JSON.parse, () => undefined)
-        if (current?.root !== this.options.runtimeRoot || current?.generation === true || local.packageInventory?.pipReady === false) {
+        if (typeof current?.root !== 'string' || resolve(current.root) !== resolve(this.options.runtimeRoot) || current?.health !== 'ready' || current?.generation === true || !local.environmentVersion || local.packageInventory?.pipReady === false) {
           const started = this.updateForUser()
           return started.updateJob?.taskId ? this.waitForTask(started.updateJob.taskId) : this.status
         }
@@ -375,6 +388,6 @@ export class PythonUpdaterService {
   selectManual(root: string): { taskId: string } { return this.enqueue('selectManual', [root]) }
   rollback(): { taskId: string } { return this.enqueue('rollback') }
   async previewPackages(names: string[]): Promise<unknown> { return this.rpc('previewPackages', [names]) }
-  async previewDependencyManifest(manifest: PythonDependencyManifest, taskId?: string): Promise<StoredPackagePlan> { return this.rpc('previewDependencyManifest', [manifest, taskId]) }
+  async previewDependencyManifest(manifest: PythonDependencyManifest, taskId?: string, options?: { includeVersionUpdates?: boolean }): Promise<StoredPackagePlan> { return this.rpc('previewDependencyManifest', [manifest, taskId, options]) }
   async applyPackagePlan(planId: string): Promise<{ taskId: string }> { await this.ensurePackageRuntime(); return this.enqueue('applyPackagePlan', [planId]) }
 }

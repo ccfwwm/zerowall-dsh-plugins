@@ -1,3 +1,4 @@
+import type {} from '@zerowallscience/plugin-ai-cloud'
 import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-attachment'
 import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
@@ -14,10 +15,23 @@ import { installVisualAssets } from './visual-assets.js'
 
 export * from './generator.js'
 export const name = 'zerowall-image-generation'
+type ImageEnvironmentSettings = {
+  readImageModelSelection(): Promise<import('@zerowallscience/plugin-environment/types').ImageModelSelection | undefined>
+  getImageQuality?(): Promise<import('@zerowallscience/plugin-environment/types').ImageGenerationQuality | undefined> | import('@zerowallscience/plugin-environment/types').ImageGenerationQuality | undefined
+}
+
+/** The standalone image skill reads only its own environment settings. */
+export function createImageConfiguration(environment: ImageEnvironmentSettings) {
+  return {
+    imageModel: () => environment.readImageModelSelection(),
+    imageQuality: async () => await environment.getImageQuality?.() ?? 'auto' as const,
+  }
+}
 // The generator persists generated PNGs through the durable attachment store.
 // Declare the service explicitly so Cordis does not reject ctx.get('attachments')
 // in the composed Host loader.
-export const inject = ['tools', 'zerowallEnvironment', 'attachments', 'llm']
+export const inject = [
+  'zerowallMedia','tools', 'zerowallEnvironment', 'attachments', 'llm']
 
 export interface ResolvedImageModel {
   providerId: string
@@ -141,16 +155,13 @@ export function apply(ctx: Context): void {
   installVisualAssets(ctx)
   const secrets = new SecretBrokerClient()
   const account = new AiCloudClient({ secrets })
-  const environment = ctx.get('zerowallEnvironment') as {
-    readImageModelSelection(): Promise<import('@zerowallscience/plugin-environment/types').ImageModelSelection | undefined>
-    getImageQuality?(): import('@zerowallscience/plugin-environment/types').ImageGenerationQuality
-  }
+  const environment = ctx.get('zerowallEnvironment') as ImageEnvironmentSettings
   const generator = new AiCloudImageGenerator({
     secrets,
     account,
+    media: ctx.get('zerowallMedia')!,
     attachments: () => ctx.get('attachments'),
-    imageModel: () => environment.readImageModelSelection(),
-    imageQuality: async () => environment.getImageQuality?.() ?? 'auto',
+    ...createImageConfiguration(environment),
   })
   ctx.on('zerowall/account-updated', snapshot => generator.update(snapshot))
   void account.current().then(snapshot => generator.update(snapshot)).catch(() => undefined)
@@ -167,7 +178,7 @@ export function apply(ctx: Context): void {
 
   ctx.tools.register(defineTool({
     name: 'generate_image',
-      description: '使用环境配置中选择的生图模型生成 PNG。需要修改已有图片时请使用 edit_image。',
+      description: '生成独立 PNG 与真实生成回执，包括 PPT/PPTX、幻灯片、文档和报告配图。先加载 gpt-image-generator，沿用环境配置的生图模型、分组和参数，不创建媒体项目/任务。修改已有图使用 edit_image。',
     parameters: {
       prompt: { type: 'string', required: true, description: 'Detailed image-generation prompt.' },
       output_path: { type: 'string', required: true, description: 'New PNG path inside the current session working directory.' },
@@ -204,7 +215,7 @@ export function apply(ctx: Context): void {
 
   ctx.tools.register(defineTool({
     name: 'edit_image',
-    description: '使用环境配置中选择的生图模型编辑 PNG、JPEG 或 WebP 图片，并按请求保留被引用内容。',
+    description: '编辑 PNG、JPEG 或 WebP 并保留被引用内容，适用于 PPT/PPTX 配图及普通改图。使用 gpt-image-generator 和环境配置的生图模型、分组、参数，返回 PNG 与生成回执，不创建媒体项目/任务。',
     parameters: {
       prompt: { type: 'string', required: true, description: 'Detailed edit instruction, including what must remain unchanged.' },
       input_paths: { type: 'array', items: { type: 'string' }, description: 'Optional source image paths inside the session working directory.' },

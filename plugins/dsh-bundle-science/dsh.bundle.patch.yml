@@ -1,0 +1,74 @@
+- insert:
+    - id: zerowall-account
+      name: '@zerowallscience/plugin-account'
+- insert:
+    - id: zerowall-ai-cloud-llm
+      name: '@zerowallscience/plugin-ai-cloud'
+- insert:
+    - id: zerowall-base
+      name: '@zerowallscience/plugin-base'
+- insert:
+    - id: zerowall-desktop-compat
+      name: '@zerowallscience/plugin-desktop-compat'
+- insert:
+    - id: zerowall-environment
+      name: '@zerowallscience/plugin-environment'
+- insert:
+    - id: zerowall-execution
+      name: '@zerowallscience/plugin-execution'
+- insert:
+    - id: zerowall-files
+      name: '@zerowallscience/plugin-files'
+- insert:
+    - id: zerowall-image-generation
+      name: '@zerowallscience/plugin-images'
+- insert:
+    - id: zerowall-mineru
+      name: '@zerowallscience/plugin-mineru'
+- insert:
+    - id: zerowall-projects
+      name: '@zerowallscience/plugin-projects'
+- insert:
+    - id: zerowall-publication
+      name: '@zerowallscience/plugin-publications'
+- insert:
+    - id: zerowall-pubmed
+      name: '@zerowallscience/plugin-pubmed'
+- insert:
+    - id: zerowall-python
+      name: '@zerowallscience/plugin-python'
+- insert:
+    - id: zerowall-biogenie
+      name: '@zerowallscience/plugin-biogenie'
+- insert:
+    - id: zerowall-research
+      name: '@zerowallscience/plugin-research'
+- insert:
+    - id: zerowall-reviewer
+      name: '@zerowallscience/plugin-reviewer'
+- insert:
+    - id: zerowall-runs
+      name: '@zerowallscience/plugin-runs'
+- insert:
+    - id: zerowall-secrets
+      name: '@zerowallscience/plugin-secrets'
+- insert:
+    - id: zerowall-singlecell
+      name: '@zerowallscience/plugin-singlecell'
+- insert:
+    - id: zerowall-skills-plugin
+      name: '@zerowallscience/plugin-skills'
+# dsh bundle layer: mount the dsh-wechat bridge plugin (dsh/index.js via the
+# package root export). The profile's cordis.patch.yml stays the user's own
+# patch layer; this file ships with the package and is applied as a bundle.
+- insert:
+    - id: dsh-wechat
+      name: 'dsh-wechat'
+# The dsh-session-notification bundle patch: one plugin row added to the host
+# composition. Applied after the web-app bundle's patch layer; the row joins
+# the Loader entry list, so the node half registers the `dsh-session-notification`
+# settings namespace, and the modules node half serves lib/client.js into the
+# boot graph (the 通知 / Notifications settings section).
+- insert:
+    - id: dsh-session-notification
+      name: '@dingyi222666/dsh-session-notification'

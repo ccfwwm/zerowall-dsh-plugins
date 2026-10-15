@@ -40,7 +40,7 @@ function validSourceFilename(pkg: { name: string; version: string; filename?: (s
 }
 
 /** Validate the entire signed payload before using names as pip arguments. */
-export function parsePythonDependencyManifest(value: unknown, keys: Record<string, string>, applicationVersion?: string): PythonDependencyManifest {
+export function parsePythonDependencyManifest(value: unknown, keys: Record<string, string>, _applicationVersion?: string): PythonDependencyManifest {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Python 依赖清单格式无效。')
   const doc = value as PythonDependencyManifest
   if (doc.schema !== 3 || doc.runtimeId !== 'zerowall-science-python' || doc.platform !== 'win32-x64') throw new Error('Python 依赖清单平台或版本不兼容。')
@@ -73,8 +73,9 @@ export function parsePythonDependencyManifest(value: unknown, keys: Record<strin
   }
   if (doc.layer === 'capability' && (typeof doc.capabilityId !== 'string' || doc.capabilityId.trim() === '')) throw new Error('能力层清单缺少 capabilityId。')
   if (!doc.compatibility || !/^\d+\.\d+\.\d+$/u.test(doc.compatibility.minApplicationVersion) || (doc.compatibility.maxApplicationVersion && !/^\d+\.\d+\.\d+$/u.test(doc.compatibility.maxApplicationVersion))) throw new Error('Python 应用兼容范围无效。')
-  const compare = (a: string, b: string) => { const aa = a.split('.').map(Number); const bb = b.split('.').map(Number); for (let i = 0; i < 3; i++) { const d = aa[i]! - bb[i]!; if (d) return d } return 0 }
-  if (applicationVersion && (compare(applicationVersion, doc.compatibility.minApplicationVersion) < 0 || (doc.compatibility.maxApplicationVersion && compare(applicationVersion, doc.compatibility.maxApplicationVersion) > 0))) throw new Error('请先更新 ZeroWall Science，再安装此依赖清单。')
+  // Desktop provenance is not a Python dependency constraint. Validate the
+  // signed schema, platform and packages; the resolver checks the interpreter
+  // and wheel tags before a file transaction can install anything.
   return doc
 }
 
@@ -107,7 +108,7 @@ export async function fetchPythonDependencyManifest(url: string, keys: Record<st
  * artifact digest, verify that too; otherwise the plan records the exact
  * SHA-256 returned by the selected mirror's index.
  */
-export function assertManifestWheels(manifest: PythonDependencyManifest, wheels: Array<{ name: string; version: string; hash?: (string) | undefined; sourceArchiveSha256?: (string) | undefined }>, installed: Array<{ name: string; version: string }> = [], failedNames: Iterable<string> = []): void {
+export function assertManifestWheels(manifest: PythonDependencyManifest, wheels: Array<{ name: string; version: string; hash?: (string) | undefined; sourceArchiveSha256?: (string) | undefined }>, installed: Array<{ name: string; version: string }> = [], failedNames: Iterable<string> = [], allowInstalledReplacement = false): void {
   const locked = new Map(manifest.packages.map(pkg => [normalize(pkg.name), pkg]))
   // Readiness is based on distribution presence for every layer. The signed
   // version and digest constrain new downloads, never a user's installed copy.
@@ -120,7 +121,7 @@ export function assertManifestWheels(manifest: PythonDependencyManifest, wheels:
     seen.add(name)
     const expected = locked.get(name)
     if (!expected || expected.version !== wheel.version) throw new Error(`依赖 ${wheel.name} 与签名清单的版本不一致，已拒绝安装。`)
-    if (present.has(name)) throw new Error(`依赖 ${wheel.name} 已安装，已拒绝覆盖现有版本。`)
+    if (present.has(name) && !allowInstalledReplacement) throw new Error(`依赖 ${wheel.name} 已安装，已拒绝覆盖现有版本。`)
     if (expected.sha256 && (expected.source === 'sdist' ? wheel.sourceArchiveSha256 !== expected.sha256 : wheel.hash !== expected.sha256)) throw new Error(`依赖 ${wheel.name} 与签名清单的 SHA-256 不一致，已拒绝安装。`)
     present.add(name)
   }
@@ -128,8 +129,8 @@ export function assertManifestWheels(manifest: PythonDependencyManifest, wheels:
   for (const name of failed) if (!locked.has(name)) throw new Error(`安装计划把清单外依赖 ${name} 标记为失败。`)
 }
 
-/** Report only absent manifest dependencies; installed package versions are left alone. */
-export function dependencyManifestChanges(manifest: PythonDependencyManifest, installed: Array<{ name: string; version: string }>) {
-  const existing = new Set(installed.map(pkg => normalize(pkg.name)))
-  return manifest.packages.filter(pkg => !existing.has(normalize(pkg.name))).map(pkg => ({ name: pkg.name, to: pkg.version, required: pkg.required, capabilities: pkg.capabilities }))
+/** Report absent or explicitly outdated manifest dependencies. */
+export function dependencyManifestChanges(manifest: PythonDependencyManifest, installed: Array<{ name: string; version: string }>, includeVersionUpdates = false) {
+  const versions = new Map(installed.map(pkg => [normalize(pkg.name), pkg.version]))
+  return manifest.packages.filter(pkg => !versions.has(normalize(pkg.name)) || includeVersionUpdates && versions.get(normalize(pkg.name)) !== pkg.version).map(pkg => ({ name: pkg.name, ...(versions.get(normalize(pkg.name)) ? { from: versions.get(normalize(pkg.name)) } : {}), to: pkg.version, required: pkg.required, capabilities: pkg.capabilities }))
 }

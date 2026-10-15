@@ -13,6 +13,7 @@ export interface StartupStatus {
   progress: number
   message: string
   startedAt: number
+  finishedAt?: number
   segment?: string
   durationMs?: number
   diagnostics?: { code?: string; applicationVersion?: string; buildId?: string; contentDigest?: string; extraFiles?: number; missingFiles?: number; sizeMismatches?: number; hashMismatches?: number; logicalArchiveMismatch?: { extraFiles?: number; missingFiles?: number; sizeMismatches?: number; hashMismatches?: number } }
@@ -88,6 +89,8 @@ export interface PythonDependencyTask {
   ownerPid?: number | undefined
   underlyingTaskId?: (string) | undefined
   requestId: string
+  /** True when the desktop startup reconciler owns this task and may resume it. */
+  automatic?: boolean | undefined
   action: 'check_manifest' | 'preview_sync' | 'apply_sync' | 'sync' | 'install_package' | 'install_runtime'
   layer: PythonDependencyLayer
   packageSpec?: (string) | undefined

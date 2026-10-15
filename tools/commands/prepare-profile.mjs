@@ -11,9 +11,9 @@ const core = []
 // arrive through the signed profile catalog, so their patch rows must not
 // make the Core installer depend on their source packages.
 const optionalOverlayIds = new Set([
-  'ssh-ops', 'progressive-tools', 'session-notification', 'dream-skin',
+  'ssh-ops', 'session-notification', 'dream-skin',
   'better-sidebar', 'univer-office', 'zotero', 'zotero-harvest',
-  'dsh-wechat', 'genui',
+  'dsh-wechat', 'genui', 'archive-manager', 'oh-story',
 ])
 for (const line of lines) {
   if (/^    - id:/.test(line)) {
@@ -40,9 +40,10 @@ const defaults = [...new Set([
 const bundled = []
 for (const name of await readdir(join(root, 'plugins'))) {
   if (name === 'wechat') continue
-  const manifest = JSON.parse(await readFile(join(root, 'plugins', name, 'package.json'), 'utf8'))
+  const manifest = await readFile(join(root, 'plugins', name, 'package.json'), 'utf8').then(JSON.parse, () => undefined)
+  if (!manifest?.name?.startsWith('@zerowallscience/plugin-')) continue
   if (!defaults.includes(manifest.name)) defaults.push(manifest.name)
-  bundled.push({ id: manifest.name, version: manifest.version, desktop: manifest.zerowall.desktop, dsh: manifest.zerowall.dsh, managed: true, core: runtimeProfile.corePlugins.includes(manifest.name), offline: true })
+  bundled.push({ id: manifest.name, version: manifest.version, desktop: manifest.zerowall?.desktop, dsh: manifest.zerowall?.dsh, managed: true, core: runtimeProfile.corePlugins.includes(manifest.name), offline: true })
 }
 const known = new Set(bundled.map(item => item.id))
 const coreIds = new Set(['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app', '@deepseek-ai/dsh-experimental-voice-input-bundle'])
@@ -64,7 +65,6 @@ await writeFile(join(stageRoot, 'commands/bundled-skill-versions.json'), JSON.st
 const optional = configuredDefaults.filter(id => !runtimeProfile.corePlugins.includes(id))
 await writeFile(join(stageRoot, 'commands/optional-plugins.json'), JSON.stringify(optional))
 await writeFile(join(stageRoot, 'commands/default-profile.patch.json'), JSON.stringify([
-  { id: 'progressive-tools', config: { mode: 'stable-proxy', toolName: 'tool_search', dispatchToolName: 'tool_dispatch', maxResults: 5, requireDiscovery: true, statusGrantsDiscovery: false, deferToolGuidance: true } },
   { id: 'univer-office', config: { telemetry: false } },
   { id: 'dsh-wechat', config: { autoStart: false } },
 ]))

@@ -12,7 +12,6 @@ const productionPath = name => `resources/${runtimeProfile.corePlugins.includes(
 
 const thirdPartyOrder = [
   'dsh-ssh-ops',
-  '@everclear077/dsh-progressive-tools',
   '@dingyi222666/dsh-session-notification',
   'dsh-dream-skin',
   'dsh-better-sidebar',
@@ -22,6 +21,8 @@ const thirdPartyOrder = [
   '@dsh-external/zotero-harvest',
   'dsh-wechat',
   '@changfenhuang/dsh-genui',
+  '@michengai/dsh-archive-manager',
+  '@oh-story/dsh',
 ]
 const zeroWallOrder = [
   'base', 'secrets', 'environment', 'desktop-compat', 'projects', 'mcp',
@@ -137,7 +138,6 @@ const thirdPartyPlugins = thirdPartyPackages.map(name => ({
   package: name,
   version: name === 'dsh-dream-skin' ? integrations.dreamSkin.resourceVersion ?? integrations.dreamSkin.version
     : name === 'dsh-file-review' ? integrations.fileReviewTab.resourceVersion ?? integrations.fileReviewTab.version
-      : name === '@everclear077/dsh-progressive-tools' ? integrations.progressiveTools.resourceVersion ?? integrations.progressiveTools.version
       : desktop.dependencies?.[name] ?? null,
   owner: 'third-party',
   registrationSource: 'user-profile-bundle',
@@ -165,7 +165,7 @@ const inventory = {
   profiles: profileInventory,
   thirdPartyPlugins,
   zeroWallPlugins,
-  sharedPackages: [{ package: '@zerowallscience/integrity-runtime', source: 'packages/support/integrity-runtime', plugin: false, productionPath: 'resources/app.asar/node_modules/@zerowallscience/integrity-runtime' }],
+  sharedPackages: [{ package: '@zerowallscience/integrity-runtime', source: 'plugins/integrity-runtime', plugin: false, productionPath: 'resources/app.asar/node_modules/@zerowallscience/integrity-runtime' }],
 }
 
 await writeFile(output, `${JSON.stringify(inventory, null, 2)}\n`)

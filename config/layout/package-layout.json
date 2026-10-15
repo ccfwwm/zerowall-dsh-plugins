@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "version": "8.1.2",
+  "version": "8.3.0",
   "roots": {
     "dsh": [
       "dsh-archive-manager",
@@ -10,8 +10,8 @@
       "dsh-wechat",
       "dsh-session-notification",
       "dsh-ssh-ops",
-      "dsh-progressive-tools",
-      "zotero-harvest"
+      "zotero-harvest",
+      "oh-story-dsh"
     ],
     "support": [
       "integrity-runtime"
@@ -21,10 +21,11 @@
       "dsh-bundle-core"
     ]
   },
+  "canonicalRoot": "plugins",
   "legacyRoot": "packages",
   "migration": {
-    "readLegacy": true,
-    "writeCanonical": false,
-    "deleteLegacy": false
+    "readLegacy": false,
+    "writeCanonical": true,
+    "deleteLegacy": true
   }
 }

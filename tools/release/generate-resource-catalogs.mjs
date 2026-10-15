@@ -4,18 +4,20 @@ import { mkdir, readFile, readdir, stat, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { contract, root, releaseRoot, stageRoot } from '../build/paths.mjs'
-import { fileDigest, signCatalog, verifyCatalog, verifySignedDocument } from './resource-catalog.mjs'
+import { downloadResource, fileDigest, signCatalog, verifyCatalog, verifySignedDocument } from './resource-catalog.mjs'
 import { deterministicArchive } from './deterministic-archive.mjs'
-import { historicalResources, preserveImmutableResource } from './immutable-resource.mjs'
+import { historicalResources, preserveImmutableResource, publishedResources } from './immutable-resource.mjs'
 import { resourceSource, packageSource } from '../build/layout.mjs'
 import { resourcePublicationScope } from './resource-publication-scope.mjs'
 import { pluginDependencyContract } from './plugin-dependency-contract.mjs'
 import { satisfiesPackageRange } from '../commands/package-range.mjs'
-import { mergePublishedPlugin } from './targeted-plugin-catalog.mjs'
+import { mergePublishedPlugins, selectedPluginArguments } from './targeted-plugin-catalog.mjs'
+import { applyAuditedPluginCompatibility } from './plugin-compatibility.mjs'
 
 const publicationArgs = process.argv.slice(2)
-const pluginArgument = publicationArgs.indexOf('--plugin')
-const { kinds } = resourcePublicationScope(pluginArgument < 0 ? publicationArgs : publicationArgs.filter((_, index) => index !== pluginArgument && index !== pluginArgument + 1))
+const { plugins: selectedPlugins, remaining } = selectedPluginArguments(publicationArgs)
+const targeted = selectedPlugins.length > 0
+const { kinds } = resourcePublicationScope(remaining)
 const destination = join(releaseRoot, 'catalogs')
 const catalogGeneration = `${contract.buildId}-${Date.now()}`
 await mkdir(destination, { recursive: true })
@@ -42,10 +44,9 @@ if (configured) {
 }
 const baseUrl = process.env.ZEROWALL_RESOURCE_BASE_URL?.replace(/\/$/, '')
 const localOnly = !baseUrl
-const selectedPlugin = process.argv.includes('--plugin') ? process.argv[process.argv.indexOf('--plugin') + 1] : undefined
-if (process.argv.includes('--plugin') && (!selectedPlugin || selectedPlugin.startsWith('--') || kinds.length !== 1 || kinds[0] !== 'plugin' || localOnly || !configured)) throw new Error('Targeted plugin catalogs require --kind plugin --plugin <package-name>, a public base URL and a release signing key')
-const records = kinds.includes('plugin') ? JSON.parse(await readFile(join(releaseRoot, 'plugin-packages.json'), 'utf8')).filter(record => !selectedPlugin || record.id === selectedPlugin) : []
-if (selectedPlugin && records.length !== 1) throw new Error('Targeted plugin has no unique packed artifact: ' + selectedPlugin)
+if (targeted && (kinds.length !== 1 || kinds[0] !== 'plugin' || localOnly || !configured)) throw new Error('Targeted plugin catalogs require --kind plugin --plugin <package-name>, a public base URL and a release signing key')
+const records = kinds.includes('plugin') ? JSON.parse(await readFile(join(releaseRoot, 'plugin-packages.json'), 'utf8')).filter(record => !targeted || selectedPlugins.includes(record.id)) : []
+for (const id of selectedPlugins) if (records.filter(r => r.id === id).length !== 1) throw new Error('Targeted plugin has no unique packed artifact: ' + id)
 const resourceVersions = JSON.parse(await readFile(join(root, 'config/catalogs/resource-versions.json'), 'utf8'))
 async function entry({ id, version, path, kind, key, metadata = {} }) {
   const size = (await stat(path)).size
@@ -57,11 +58,12 @@ async function entry({ id, version, path, kind, key, metadata = {} }) {
 const integrations = JSON.parse(await readFile(join(root, 'config/integrations/upstream-sources.json'), 'utf8'))
 const plugins = await Promise.all(records.map(async record => {
   const sourcePath = record.id.startsWith('@zerowallscience/plugin-') ? join(root, 'plugins', record.id.slice('@zerowallscience/plugin-'.length), 'package.json')
-    : record.id === '@zerowallscience/dsh-bundle-science' ? join(await packageSource('dsh-bundle-science'), 'package.json') : undefined
+    : record.id === '@zerowallscience/dsh-bundle-science' ? join(await packageSource('dsh-bundle-science'), 'package.json')
+    : Object.values(integrations).find(i => i?.packageName === record.id || i?.package === record.id)?.source ? join(root, Object.values(integrations).find(i => i?.packageName === record.id || i?.package === record.id).source, 'package.json') : undefined
   const source = sourcePath ? await readFile(sourcePath, 'utf8').then(JSON.parse).catch(error => { if (error.code === 'ENOENT') return undefined; throw error }) : undefined
   return entry({ ...record, kind: record.kind ?? 'plugin', key: `plugins/${record.id.split('/').at(-1)}/${record.version}/${record.path.split(/[\\/]/).at(-1)}`, metadata: { ...record.manifest, ...pluginDependencyContract(record, source, integrations) } })
 }))
-if (selectedPlugin) {
+if (targeted) {
   // Preserve the exact signed public entries, including versions older than
   // other pending local builds. Installing one optional plugin must not
   // publish unrelated work or remove catalog resources.
@@ -75,9 +77,14 @@ if (selectedPlugin) {
   if (bytes.length !== pointer.catalog.size || createHash('sha256').update(bytes).digest('hex') !== pointer.catalog.sha256) throw new Error('Published plugin catalog integrity mismatch')
   const previous = verifyCatalog(JSON.parse(bytes), keys)
   if (previous.kind !== 'plugin' || previous.localOnly) throw new Error('Invalid published plugin catalog')
-  const merged = mergePublishedPlugin(previous.resources, plugins[0], keys)
+  const merged = mergePublishedPlugins(previous.resources, plugins, keys)
   plugins.splice(0, plugins.length, ...merged)
-  await writeFile(join(destination, 'plugin-targeted-baseline.json'), JSON.stringify({ selectedPlugin, pointer, previousCatalog: previous }, null, 2) + '\n')
+  await writeFile(join(destination, 'plugin-targeted-baseline.json'), JSON.stringify({ selectedPlugins, pointer, previousCatalog: previous }, null, 2) + '\n')
+}
+if (kinds.includes('plugin')) {
+  const rules = JSON.parse(await readFile(join(root, 'config/integrations/plugin-compatibility.json'), 'utf8')).rules
+  const compatible = applyAuditedPluginCompatibility(plugins, rules, targeted ? selectedPlugins : plugins.map(entry => entry.id), entry => signCatalog(entry, privateKey, keyId))
+  plugins.splice(0, plugins.length, ...compatible)
 }
 for (const parent of plugins) for (const [id, range] of Object.entries(parent.dependencies ?? {})) {
   const child = plugins.find(resource => resource.id === id)
@@ -87,10 +94,17 @@ const skills = []
 const mcpServers = []
 const immutableResources = []
 const histories = new Map(await Promise.all(kinds.filter(kind => ['skill', 'mcp'].includes(kind)).map(async kind => [kind, await historicalResources(releaseRoot, kind)])))
+if (baseUrl && configured) for (const [kind, history] of histories) {
+  const published = await publishedResources({ baseUrl, kind, keys, cache: join(contract.cache, 'published-resources', kind) })
+  for (const [identity, entry] of published) history.set(identity, entry)
+}
 async function archiveResource(kind, id, version, source, path) {
   await deterministicArchive(source, path)
   const previous = histories.get(kind).get(id + '@' + version)
-  if (previous) immutableResources.push({ kind, id, version, ...await preserveImmutableResource(path, previous.path, previous.sha256) })
+  if (previous) {
+    const baseline = previous.entry ? await downloadResource(previous.entry, join(contract.cache, 'published-resources', kind)) : previous.path
+    immutableResources.push({ kind, id, version, ...await preserveImmutableResource(path, baseline, previous.sha256) })
+  }
 }
 const sciDirectory = join(stageRoot, 'resources/sci')
 if (kinds.includes('mcp') && await stat(join(sciDirectory, 'dist/mcp.cjs')).catch(() => undefined)) {
@@ -124,9 +138,13 @@ for (const [kind, resources] of [['plugin', plugins], ['skill', skills], ['mcp',
   if (kind === 'python') {
     const version = resourceVersions.python?.['science-dependencies']
     if (!version) throw new Error('Python resource version must be pinned independently from Desktop')
-    resources.push(await entry({ id: 'science-dependencies', version, path: await resourceSource('python', 'dependency-manifest.json'), kind, key: `python/layers/science/${version}/dependency-manifest.json`, metadata: { role: 'dependency-manifest', restartRequired: false } }))
+    const manifestPath = await resourceSource('python', 'dependency-manifest.json')
+    const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
+    const wheelRevision = process.env.ZEROWALL_PYTHON_DEPENDENCY_REVISION ?? manifest.revision
+    if (typeof wheelRevision !== 'string' || !/^[A-Za-z0-9_.-]{1,100}$/u.test(wheelRevision)) throw new Error(`Invalid Python dependency revision: ${wheelRevision ?? '(missing)'}`)
+    resources.push(await entry({ id: 'science-dependencies', version, path: manifestPath, kind, key: `python/layers/science/${version}/dependency-manifest.json`, metadata: { role: 'dependency-manifest', restartRequired: false, desktop: { min: '0.0.0' }, revision: manifest.revision } }))
     const wheels = JSON.parse(await readFile(await resourceSource('python', 'fallback-wheels.json'), 'utf8'))
-    for (const wheel of wheels) resources.push(await entry({ id: `fallback-wheel-${wheel.name}`, version: wheel.version, path: join(releaseRoot, 'python-wheels', wheel.filename), kind, key: `python/wheels/3.12.10-r18/${wheel.filename}`, metadata: { role: 'fallback-wheel', restartRequired: false, rollbackSupported: false, desktop: { min: '8.1.3' } } }))
+    for (const wheel of wheels) resources.push(await entry({ id: `fallback-wheel-${wheel.name}`, version: wheel.version, path: join(releaseRoot, 'python-wheels', wheel.filename), kind, key: `python/wheels/${wheelRevision}/${wheel.filename}`, metadata: { role: 'fallback-wheel', restartRequired: false, rollbackSupported: false, desktop: { min: '8.1.3' }, revision: wheelRevision } }))
   }
   const document = signCatalog({ schema: 1, kind, applicationVersion: contract.version, localOnly,
     generatedAt: new Date().toISOString(), resources }, privateKey, keyId)

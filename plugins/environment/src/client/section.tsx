@@ -26,6 +26,8 @@ interface Props extends PropsRuntime<'settings.section'> {
 const defaultReviewer = { autoReview: false, modelMode: 'follow-session' as const, provider: '', model: '', reasoningEffort: '' }
 const VALUE_SEPARATOR = '\u0000'
 const SCI_MASTER_KEY_URL = 'https://scimaster.bohrium.com/vibe-write/home'
+const mediaIdentity = (model: any): string => JSON.stringify([model.providerId, model.groupId, model.modelId, model.profileId ?? ''])
+const isImageGroup = (name: unknown): boolean => typeof name === 'string' && /生图|图片/u.test(name.trim())
 
 type LoadState = 'loading' | 'ready' | 'unavailable' | 'error'
 
@@ -90,8 +92,9 @@ export function EnvironmentSection({ reviewerScope, environmentRemote, accountRe
       if (accountRemote?.current === undefined) throw new LocalizedError('accountUnavailable')
       const snapshot = await unwrap(accountRemote.current()) as any
       if (cancelled) return
-      const rows = Array.isArray(snapshot?.models) ? snapshot.models : []
-      setImageModels(rows.filter((model: any) => model.capability === 'image-generation'))
+      const rows = Array.isArray(snapshot?.mediaModels) ? snapshot.mediaModels : []
+      const available = rows.filter((model: any) => model.mediaType === 'image' && isImageGroup(model.groupName) && !model.stale)
+      setImageModels([...new Map(available.map((model: any) => [mediaIdentity(model), model])).values()])
     })
     void load('catalog', async () => {
       const value = await modelCatalog()
@@ -147,15 +150,21 @@ export function EnvironmentSection({ reviewerScope, environmentRemote, accountRe
   const reviewerModelIsKnown = reviewerModels.some((model: any) => model.providerId === reviewer.provider && model.modelId === reviewer.model)
 
   const imageModelValue = image.providerId && image.groupId && image.modelId
-    ? `${image.providerId}${VALUE_SEPARATOR}${image.groupId}${VALUE_SEPARATOR}${image.modelId}`
+    ? `${image.providerId}${VALUE_SEPARATOR}${image.groupId}${VALUE_SEPARATOR}${image.modelId}${VALUE_SEPARATOR}${image.profileId ?? ""}`
     : ''
-  const imageModelIsKnown = imageModels.some((model: any) => model.providerId === image.providerId && model.groupId === image.groupId && model.modelId === image.modelId)
+  const imageModelIsKnown = imageModels.some((model: any) => mediaIdentity(model) === mediaIdentity(image))
   const imageGroups = useMemo(() => {
     const groups = new Map<string, { providerId: string; groupId: string; label: string; models: any[] }>()
+    const modelCounts = new Map<string, number>()
+    for (const model of imageModels) {
+      const key = `${model.providerId}${VALUE_SEPARATOR}${model.groupId}${VALUE_SEPARATOR}${model.modelId}`
+      modelCounts.set(key, (modelCounts.get(key) ?? 0) + 1)
+    }
     for (const model of imageModels) {
       const key = `${model.providerId}${VALUE_SEPARATOR}${model.groupId}`
       const group: { providerId: string; groupId: string; label: string; models: any[] } = groups.get(key) ?? { providerId: model.providerId, groupId: model.groupId, label: model.groupName ?? model.groupId, models: [] }
-      group.models.push(model)
+      const modelKey = `${model.providerId}${VALUE_SEPARATOR}${model.groupId}${VALUE_SEPARATOR}${model.modelId}`
+      group.models.push(modelCounts.get(modelKey)! > 1 && model.profileId ? { ...model, name: `${model.name ?? model.modelId} · ${model.profileId}` } : model)
       groups.set(key, group)
     }
     return [...groups.values()]
@@ -301,7 +310,12 @@ export function EnvironmentSection({ reviewerScope, environmentRemote, accountRe
 
       <article className={css.card}>
         <div className={css.cardHeader}><div><h3>{t('imageTitle')}</h3><p>{t('imageDescription')}</p></div><span className={css.status}>{statusText('account', t('imageSynced'))}</span></div>
-        <label className={css.field}><span>{t('currentImageModel')}</span><select className={css.control} value={imageModelIsKnown ? imageModelValue : ''} disabled={busy || status.account !== 'ready'} onChange={event => { const [providerId = '', groupId = '', modelId = ''] = event.target.value.split(VALUE_SEPARATOR); saveImageSelection({ providerId, groupId, modelId }) }}><option value="">{t('autoSelect')}</option>{!imageModelIsKnown && imageModelValue ? <option value={imageModelValue}>{image.providerId} / {image.modelId}{t('currentConfig')}</option> : null}{imageGroups.map(group => <optgroup key={`${group.providerId}${VALUE_SEPARATOR}${group.groupId}`} label={group.label}>{group.models.map((model: any) => <option key={`${model.providerId}${VALUE_SEPARATOR}${model.groupId}${VALUE_SEPARATOR}${model.modelId}`} value={`${model.providerId}${VALUE_SEPARATOR}${model.groupId}${VALUE_SEPARATOR}${model.modelId}`}>{model.modelId}{model.name && model.name !== model.modelId ? ` · ${model.name}` : ''}</option>)}</optgroup>)}</select></label>
+        <label className={css.field}><span>{t('currentImageModel')}</span><select className={css.control} value={imageModelIsKnown ? imageModelValue : ''} disabled={busy || status.account !== 'ready'} onChange={event => { const [providerId = '', groupId = '', modelId = '', profileId = ''] = event.target.value.split(VALUE_SEPARATOR); saveImageSelection({ providerId, groupId, modelId, profileId }) }}><option value="">请选择媒体分组模型</option>{!imageModelIsKnown && imageModelValue ? <option value={imageModelValue}>{image.providerId} / {image.modelId}{t('currentConfig')}</option> : null}{imageGroups.map(group => <optgroup key={`${group.providerId}${VALUE_SEPARATOR}${group.groupId}`} label={group.label}>{group.models.map((model: any) => <option key={`${model.providerId}${VALUE_SEPARATOR}${model.groupId}${VALUE_SEPARATOR}${model.modelId}${VALUE_SEPARATOR}${model.profileId}`} value={`${model.providerId}${VALUE_SEPARATOR}${model.groupId}${VALUE_SEPARATOR}${model.modelId}${VALUE_SEPARATOR}${model.profileId}`}>{model.modelId}{model.name && model.name !== model.modelId ? ` · ${model.name}` : ''}</option>)}</optgroup>)}</select></label>
+        {!imageModelIsKnown && imageModelValue && <p role="alert">历史模型或能力配置已失效，请重新选择。</p>}
+        {imageModels.filter((m:any) => m.providerId === image.providerId && m.groupId === image.groupId && m.modelId === image.modelId && m.profileId === image.profileId).map((m:any) => <div key={`${m.providerId}${VALUE_SEPARATOR}${m.groupId}${VALUE_SEPARATOR}${m.modelId}${VALUE_SEPARATOR}${m.profileId}`}>
+          {([['resolution','分辨率',m.resolutions],['aspectRatio','比例',m.aspectRatios]] as const).map(([key,label,values]) => values?.length ? <label className={css.field} key={key}><span>{label}</span><select className={css.control} value={image[key] ?? ''} disabled={busy} onChange={event=>saveImageSelection({...image,[key]:event.target.value})}><option value="">默认</option>{values.map((v:string)=><option key={v}>{v}</option>)}</select></label> : null)}
+          {imageQuality !== 'auto' && !m.qualities.includes(imageQuality) && <p role="alert">当前模型不支持已保存的质量 {imageQuality}，请选择支持的质量或 auto。</p>}
+        </div>)}
         <label className={css.field}><span>{t('defaultQuality')}</span><select className={css.control} value={imageQuality} disabled={busy} onChange={event => saveImageQuality(event.target.value as ImageGenerationQuality)}><option value="auto">{t('auto')}</option><option value="low">{t('low')}</option><option value="medium">{t('medium')}</option><option value="high">{t('high')}</option></select><small>{t('qualityNote')}</small></label>
       </article>
 

@@ -23,6 +23,10 @@ for (const file of ['desktop/package.json', 'config/integrations/upstream-source
 }
 await access(join(root, `docs/release-notes-${applicationVersion}.md`))
 const python = await document(await resourceSource('python', 'dependency-manifest.json'))
+const pythonCore = await document(await resourceSource('python', 'core-dependency-manifest.json'))
+equal(python.applicationVersion, applicationVersion, 'Python science manifest applicationVersion')
+equal(pythonCore.applicationVersion, applicationVersion, 'Python core manifest applicationVersion')
+if (!python.revision || pythonCore.revision !== `${python.revision}-core`) throw new Error(`Python manifest revisions are not paired: ${python.revision ?? '(missing)'} / ${pythonCore.revision ?? '(missing)'}`)
 // Python generations have an independent lifecycle. A previously signed
 // generation remains valid when its minimum desktop version is satisfied;
 // changing applicationVersion would invalidate its Ed25519 signature.
@@ -42,7 +46,7 @@ if (typeof dshContract.commit !== 'string' || dshContract.commit.length !== 40) 
 }
 for (const name of await readdir(join(root, 'plugins'))) {
   // Retired adapter source remains for historical compatibility. The active
-  // WeChat bundle is packages/dsh/dsh-wechat with its own upstream version.
+  // WeChat bundle is plugins/dsh-wechat with its own upstream version.
   if (name === 'wechat') continue
   const manifest = await document(join(root, 'plugins', name, 'package.json'), false)
   if (!manifest?.name?.startsWith('@zerowallscience/plugin-')) continue

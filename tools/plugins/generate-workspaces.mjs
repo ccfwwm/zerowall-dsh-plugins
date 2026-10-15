@@ -1,7 +1,6 @@
 import { access, mkdir, readFile, rename, writeFile as writeRaw } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { resolve } from 'node:path'
-import { researchToolConfig } from '../integration/research-tool-config.mjs'
 
 const root = resolve(import.meta.dirname, '../..')
 // Avoid rewriting unchanged manifests while editors and compilers read them.
@@ -130,21 +129,21 @@ const plugins = [
   { id: 'pubmed', remote: true, capabilities: ['literature', 'evidence-graph'], permissions: ['files', 'network', 'credentials', 'approvals'], dependencies: ['secrets', 'research'], requiredServices: ['settings', 'tools', 'sessions', 'zerowallResearch'] },
   // These services are accessed directly by plugin-base during activation.
   // Keep the generated manifest in sync so Loader injects them before apply.
-  { id: 'base', client: true, clientExternal: [], capabilities: ['ui.locale', 'ui.update'], permissions: [], requiredServices: ['webServer', 'systemPrompt'], optionalServices: ['updater'] },
+  { id: 'base', client: true, clientExternal: [], capabilities: ['ui.locale', 'ui.update'], permissions: [], requiredServices: ['webServer', 'systemPrompt', 'workspaceRegistry'], optionalServices: ['updater'] },
   { id: 'desktop-compat', capabilities: ['desktop.profiles', 'desktop.plugins'], permissions: [], requiredServices: [], optionalServices: ['desktopProfiles', 'desktopPnpm'] },
   { id: 'secrets', capabilities: ['credentials.read', 'credentials.write'], permissions: ['credentials'], requiredServices: [], optionalServices: ['credentialBroker'] },
   { id: 'environment', client: true, remote: true, capabilities: ['environment-config'], permissions: ['credentials', 'processes'], dependencies: ['secrets', 'base'], requiredServices: ['settings'] },
   { id: 'projects', client: true, remote: true, capabilities: ['projects', 'workspaces'], permissions: ['files'] },
   { id: 'account', client: true, remote: true, capabilities: ['account'], permissions: ['credentials', 'network'], dependencies: ['secrets', 'base'] },
-  { id: 'ai-cloud', client: true, capabilities: ['llm.cloud'], permissions: ['credentials', 'network'], dependencies: ['account', 'secrets'], requiredServices: ['llm', 'zerowallAccount'] },
+  { id: 'ai-cloud', client: true, capabilities: ['llm.cloud', 'media.cloud'], permissions: ['credentials', 'network', 'files'], dependencies: ['account', 'secrets'], requiredServices: ['llm', 'zerowallAccount'] },
   { id: 'files', client: true, remote: true, capabilities: ['files', 'data-assets', 'office-tools', 'universal-file-preview', 'automatic-attachment-extraction'], permissions: ['files'], requiredServices: ['tools', 'sessions', 'fs', 'webServer'] },
   {
     id: 'images',
     client: true,
     capabilities: ['images', 'image-generation'],
     permissions: ['files', 'network'],
-    dependencies: ['account', 'secrets', 'base', 'environment'],
-    requiredServices: ['tools', 'zerowallEnvironment', 'attachments', 'llm'],
+    dependencies: ['account', 'ai-cloud', 'secrets', 'base', 'environment'],
+    requiredServices: ['tools', 'zerowallEnvironment', 'attachments', 'llm', 'zerowallMedia'],
   },
   { id: 'mcp', client: true, remote: true, capabilities: ['mcp'], permissions: ['files', 'network', 'credentials'], dependencies: ['projects', 'base', 'secrets'], requiredServices: ['zerowallProjects', 'tools'] },
   { id: 'skills', client: true, remote: true, capabilities: ['skills'], permissions: ['files'], dependencies: ['base'], requiredServices: ['skills', 'systemPrompt'] },
@@ -251,6 +250,7 @@ for (const plugin of plugins) {
     ...(plugin.id === 'files' ? { '@deepseek-ai/dsh-fs': 'workspace:^', 'dsh-office-tools': 'github:kw78/dsh-office-tools#d92ac3863ece6248a5f8c1e4aa1958a60b8aaccb' } : {}),
       ...(plugin.client && !['base', 'environment', 'extension-center'].includes(plugin.id) ? externalClientDependencies : {}),
       ...Object.fromEntries((plugin.dependencies ?? []).map(id => [`@zerowallscience/plugin-${id}`, 'workspace:^'])),
+      ...(plugin.id === 'images' ? { '@zerowallscience/plugin-ai-cloud': '^0.1.12' } : {}),
       ...(npmDependencies[plugin.id] ?? {}),
       ...(plugin.id === 'mcp' ? { '@modelcontextprotocol/sdk': '1.30.0', '@modelcontextprotocol/client': '2.0.0' } : {}),
     },
@@ -298,7 +298,6 @@ for (const plugin of plugins) {
     '- insert:',
     `    - id: ${{ 'ai-cloud': 'zerowall-ai-cloud-llm', images: 'zerowall-image-generation', publications: 'zerowall-publication', skills: 'zerowall-skills-plugin' }[plugin.id] ?? `zerowall-${plugin.id}`}`,
     `      name: '${name}'`,
-    ...(plugin.id === 'mcp' ? ['- id: progressive-tools', `  config: ${JSON.stringify(researchToolConfig)}`] : []),
     '',
   ].join('\n'))
   await writeFile(resolve(dir, 'tsconfig.json'), `${JSON.stringify({
