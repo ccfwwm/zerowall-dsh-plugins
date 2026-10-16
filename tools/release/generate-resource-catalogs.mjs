@@ -104,7 +104,11 @@ async function archiveResource(kind, id, version, source, path) {
   const previous = histories.get(kind).get(id + '@' + version)
   if (previous) {
     const baseline = previous.entry ? await downloadResource(previous.entry, join(contract.cache, 'published-resources', kind)) : previous.path
-    immutableResources.push({ kind, id, version, ...await preserveImmutableResource(path, baseline, previous.sha256) })
+    try {
+      immutableResources.push({ kind, id, version, ...await preserveImmutableResource(path, baseline, previous.sha256) })
+    } catch (cause) {
+      throw new Error(`Immutable ${kind} resource conflict: ${id}@${version}. ${cause.message}`, { cause })
+    }
   }
 }
 const sciDirectory = join(stageRoot, 'resources/sci')

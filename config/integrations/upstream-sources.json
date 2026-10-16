@@ -75,6 +75,7 @@
   },
   "zotero-harvest": {
     "repository": "https://github.com/Fisfzy/zotero-harvest.git",
+    "package": "@dsh-external/zotero-harvest",
     "version": "0.2.1",
     "commit": "9635a4f27ba186f414d3ba23042bd12ee176cddc",
     "license": "MIT",
