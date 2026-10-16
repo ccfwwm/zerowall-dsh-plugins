@@ -1,10 +1,10 @@
 {
-  "applicationVersion": "8.3.1",
+  "applicationVersion": "8.3.2",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "a9047664fb03fa174ae323510a983dcab16c9b8a",
+  "sourceCommit": "2179ba0fabd41ab1684c4464850abf2d73e474d3",
   "sourceOnly": false,
-  "buildCommit": "696f894dee20e04343fdda6e8f538d856d404b86",
-  "dshCommit": "4af4cb76935bd893a6854f38403bd06928878074",
+  "buildCommit": "2179ba0fabd41ab1684c4464850abf2d73e474d3",
+  "dshCommit": "cf5cb0fc02a1e08dda3540c037835ceb58a85851",
   "packages": [
     {
       "id": "@zerowallscience/plugin-account",
@@ -93,12 +93,12 @@
     },
     {
       "id": "@zerowallscience/plugin-files",
-      "version": "0.2.6",
+      "version": "0.2.7",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-images",
-      "version": "0.2.18",
+      "version": "0.2.19",
       "kind": "plugin"
     },
     {
@@ -153,7 +153,7 @@
     },
     {
       "id": "@zerowallscience/plugin-reviewer",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "kind": "plugin"
     },
     {
@@ -207,5 +207,5 @@
       "kind": "plugin"
     }
   ],
-  "exportedSourceFiles": 4908
+  "exportedSourceFiles": 4912
 }
