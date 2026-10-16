@@ -13,6 +13,7 @@ import { pluginDependencyContract } from './plugin-dependency-contract.mjs'
 import { satisfiesPackageRange } from '../commands/package-range.mjs'
 import { mergePublishedPlugins, selectedPluginArguments } from './targeted-plugin-catalog.mjs'
 import { applyAuditedPluginCompatibility } from './plugin-compatibility.mjs'
+import { prepareFallbackWheel } from './python-wheel-artifacts.mjs'
 
 const publicationArgs = process.argv.slice(2)
 const { plugins: selectedPlugins, remaining } = selectedPluginArguments(publicationArgs)
@@ -144,7 +145,11 @@ for (const [kind, resources] of [['plugin', plugins], ['skill', skills], ['mcp',
     if (typeof wheelRevision !== 'string' || !/^[A-Za-z0-9_.-]{1,100}$/u.test(wheelRevision)) throw new Error(`Invalid Python dependency revision: ${wheelRevision ?? '(missing)'}`)
     resources.push(await entry({ id: 'science-dependencies', version, path: manifestPath, kind, key: `python/layers/science/${version}/dependency-manifest.json`, metadata: { role: 'dependency-manifest', restartRequired: false, desktop: { min: '0.0.0' }, revision: manifest.revision } }))
     const wheels = JSON.parse(await readFile(await resourceSource('python', 'fallback-wheels.json'), 'utf8'))
-    for (const wheel of wheels) resources.push(await entry({ id: `fallback-wheel-${wheel.name}`, version: wheel.version, path: join(releaseRoot, 'python-wheels', wheel.filename), kind, key: `python/wheels/${wheelRevision}/${wheel.filename}`, metadata: { role: 'fallback-wheel', restartRequired: false, rollbackSupported: false, desktop: { min: '8.1.3' }, revision: wheelRevision } }))
+    const trustedKeys = JSON.parse(await readFile(join(root, 'config/catalogs/trusted-keys.json'), 'utf8'))
+    for (const wheel of wheels) {
+      const path = await prepareFallbackWheel(wheel, { manifest, keys: trustedKeys, cache: join(contract.cache, 'python-wheels'), output: join(releaseRoot, 'python-wheels') })
+      resources.push(await entry({ id: `fallback-wheel-${wheel.name}`, version: wheel.version, path, kind, key: `python/wheels/${wheelRevision}/${wheel.filename}`, metadata: { downloadUrl: wheel.url, role: 'fallback-wheel', restartRequired: false, rollbackSupported: false, desktop: { min: '8.1.3' }, revision: wheelRevision } }))
+    }
   }
   const document = signCatalog({ schema: 1, kind, applicationVersion: contract.version, localOnly,
     generatedAt: new Date().toISOString(), resources }, privateKey, keyId)

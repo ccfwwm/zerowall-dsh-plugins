@@ -113,6 +113,6 @@ export async function recoverFixedTransactions(root: string): Promise<void> {
   for (const id of await readdir(transactions).catch(() => [])) {
     if (!/^[a-f0-9-]{36}$/u.test(id)) continue
     const journal = await readFile(join(transactions, id, 'journal.json'), 'utf8').then(JSON.parse, () => undefined)
-    if (journal?.state === 'applying' || journal?.state === 'pending-verification') await restoreFixedTransaction(root, id)
+    if (journal?.state === 'prepared' || journal?.state === 'applying' || journal?.state === 'pending-verification') await restoreFixedTransaction(root, id)
   }
 }

@@ -55,7 +55,10 @@ if (result.code !== 0 && /ERR_PNPM_UNEXPECTED_STORE/u.test(result.tail) && mutat
   // mutation. The failed first attempt may already have changed either file.
   await restore()
   process.stderr.write('ZeroWall: relinking this profile with the bundled pnpm; existing package versions and plugin selections are retained.\n')
-  const repairArgs = ['install', '--force', ...(existsSync('pnpm-lock.yaml') ? ['--frozen-lockfile'] : [])]
+  // pnpm 11's optimistic repeat-install can return success before inspecting
+  // .modules.yaml, even with --force. Disable that fast path for this repair
+  // so pnpm actually recreates links in the selected store.
+  const repairArgs = ['install', '--force', '--config.optimistic-repeat-install=false', ...(existsSync('pnpm-lock.yaml') ? ['--frozen-lockfile'] : [])]
   const repaired = await run(repairArgs)
   if (repaired.code === 0) {
     await record('relinked')

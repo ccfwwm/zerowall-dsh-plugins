@@ -651,7 +651,7 @@
     {
       "id": "python",
       "package": "@zerowallscience/plugin-python",
-      "version": "0.1.15",
+      "version": "0.1.17",
       "source": "plugins/python",
       "manifest": "plugins/python/zerowall.plugin.json",
       "client": true,

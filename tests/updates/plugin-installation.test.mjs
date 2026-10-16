@@ -76,7 +76,7 @@ test('explicit store mismatch relinks using official install, journals success a
     const before = await readFile(join(root, 'package.json'), 'utf8')
     await execute(process.execPath, [resolve('tools/commands/pnpm-executor.mjs'), pnpm, 'add', 'new-plugin'], { cwd: root, windowsHide: true })
     const calls = (await readFile(join(root, 'calls.jsonl'), 'utf8')).trim().split('\n').map(JSON.parse)
-    assert.deepEqual(calls, [['add', 'new-plugin'], ['install', '--force', '--frozen-lockfile'], ['add', 'new-plugin']])
+    assert.deepEqual(calls, [['add', 'new-plugin'], ['install', '--force', '--config.optimistic-repeat-install=false', '--frozen-lockfile'], ['add', 'new-plugin']])
     assert.equal(await readFile(join(root, 'package.json'), 'utf8'), before)
   } finally { await rm(root, { recursive: true, force: true }) }
 })

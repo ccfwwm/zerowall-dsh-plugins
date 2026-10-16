@@ -166,7 +166,7 @@ export class PythonSyncService {
     // Read the updater's actual plan too: a changed on-disk plan must not
     // inherit the approval of the previously reviewed file.
     const stored = JSON.parse(await readFile(join(this.options.root, 'plans', `${planId}.json`), 'utf8')) as StoredPackagePlan
-    if (JSON.stringify(stored.wheels) !== JSON.stringify(plan.wheels) || JSON.stringify(stored.preparationFailures ?? []) !== JSON.stringify(plan.preparationFailures ?? []) || JSON.stringify(stored.changes) !== JSON.stringify(plan.changes) || stored.snapshotId !== plan.snapshotId || !stored.dependencyManifest || stored.dependencyManifest.revision !== revision || dependencyManifestSha256(JSON.stringify(stored.dependencyManifest)) !== plan.manifestSha256) throw new Error('依赖安装计划已改变，请重新预览。')
+    if (JSON.stringify(stored.wheels) !== JSON.stringify(plan.wheels) || JSON.stringify(stored.preparationFailures ?? []) !== JSON.stringify(plan.preparationFailures ?? []) || JSON.stringify(stored.changes) !== JSON.stringify(plan.changes) || stored.snapshotId !== plan.snapshotId || stored.replaceInstalled !== plan.replaceInstalled || !stored.dependencyManifest || stored.dependencyManifest.revision !== revision || dependencyManifestSha256(JSON.stringify(stored.dependencyManifest)) !== plan.manifestSha256) throw new Error('依赖安装计划已改变，请重新预览。')
     const installed = await this.packageInfo((stored.dependencyManifest?.packages ?? []).map(pkg => pkg.name))
     // Packages may have been installed from the terminal since preview. Keep
     // those copies and validate only the wheels that are still missing.
