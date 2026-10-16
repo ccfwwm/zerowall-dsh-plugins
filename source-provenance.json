@@ -1,9 +1,9 @@
 {
-  "applicationVersion": "8.3.2",
+  "applicationVersion": "8.3.3",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "2179ba0fabd41ab1684c4464850abf2d73e474d3",
+  "sourceCommit": "05d0bf62f308efe90b09c207bd485c063e1f751b",
   "sourceOnly": false,
-  "buildCommit": "2179ba0fabd41ab1684c4464850abf2d73e474d3",
+  "buildCommit": "05d0bf62f308efe90b09c207bd485c063e1f751b",
   "dshCommit": "cf5cb0fc02a1e08dda3540c037835ceb58a85851",
   "packages": [
     {
@@ -98,7 +98,7 @@
     },
     {
       "id": "@zerowallscience/plugin-images",
-      "version": "0.2.19",
+      "version": "0.2.20",
       "kind": "plugin"
     },
     {
@@ -118,7 +118,7 @@
     },
     {
       "id": "@oh-story/dsh",
-      "version": "0.1.16-zws.19",
+      "version": "0.1.16-zws.20",
       "kind": "plugin"
     },
     {
@@ -193,7 +193,7 @@
     },
     {
       "id": "dsh-univer-office",
-      "version": "0.3.7-zws.6",
+      "version": "0.3.7-zws.7",
       "kind": "plugin"
     },
     {

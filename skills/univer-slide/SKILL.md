@@ -279,7 +279,7 @@ For every newly authored PPT/PPTX page, load zerowall-presentation and gpt-image
 
 ## ZeroWall illustration routing
 
-For PPT/PPTX illustrations load gpt-image-generator and use generate_image/edit_image with the environment-configured image model, group and parameters. Register the real workspace PNG and .generation.json receipt with presentation_record_assets. Do not create media projects or jobs or call media-create/media_models/media_import/media_project/media_job for deck images. Keep the selected image settings on errors and report the actual configuration failure; do not switch routes. A separately requested independent media project, video or music may use media-create without changing the deck image workflow.
+For PPT/PPTX illustrations load gpt-image-generator and use generate_image/edit_image with the environment-configured image model, group and parameters. Register the real workspace PNG and .generation.json receipt with presentation_record_assets. Do not create media projects or jobs or call media-create/media_models/media_import/media_project/media_job for deck images. Keep the selected image settings on errors and report the actual configuration failure; do not switch routes. Only explicitly requested video, audio/music or promotional-video generation may use media-create; its images are video references. Ordinary image generation and editing always use gpt-image-generator without changing the deck image workflow.
 
 
 ## ZeroWall checks and export recovery
