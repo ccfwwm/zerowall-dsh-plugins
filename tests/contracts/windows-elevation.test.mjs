@@ -16,7 +16,10 @@ test('Windows packaged runtime requests elevation for plugin profile operations'
 
   assert.match(builder, /win:\s*\{[\s\S]*requestedExecutionLevel:\s*'requireAdministrator'/u)
   assert.match(builder, /nsis:\s*\{[\s\S]*allowElevation:\s*true/u)
-  assert.match(installer, /!insertmacro\s+UAC_RunElevated/u)
+  assert.match(installer, /!macro customHeader[\s\S]*RequestExecutionLevel admin[\s\S]*!macroend/u)
+  assert.doesNotMatch(installer, /UAC_RunElevated|StdUtils\.ExecShellAsUser/u)
+  assert.match(installer, /entry-token=administrator/u)
+  assert.match(installer, /Exec '"\$INSTDIR\\\$\{APP_EXECUTABLE_FILENAME\}"'/u)
   assert.match(offlineProfile, /process\.platform === 'win32' \? 'junction' : 'dir'/u)
   assert.match(legacyProfile, /process\.platform === 'win32' \? 'junction' : 'dir'/u)
 })

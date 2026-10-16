@@ -27,10 +27,11 @@ describe('environment settings client', () => {
         readVariable: vi.fn().mockResolvedValue({ ok: true, value: 'private-test-value' }),
         deleteVariable: vi.fn().mockResolvedValue({ ok: true, value: [] }),
         listVariables: vi.fn().mockResolvedValue({ ok: true, value: [{ name: 'SCI_TOKEN', configured: true }] }),
-        getImageModelSelection: vi.fn().mockResolvedValue({ ok: true, value: undefined }),
+        getImageModelSelection: vi.fn().mockResolvedValue({ ok: true, value: { providerId: 'reverse', groupId: '53', modelId: 'gpt-image-2.5' } }),
+        setImageModelSelection: vi.fn().mockResolvedValue({ ok: true, value: undefined }),
       },
       zerowallAccount: {
-        current: vi.fn().mockResolvedValue({ ok: true, value: { models: [{ providerId: 'cloud', modelId: 'claude-sonnet-5', name: 'Claude Sonnet 5', capability: 'chat' }] } }),
+        current: vi.fn().mockResolvedValue({ ok: true, value: { models: [{ providerId: 'cloud', modelId: 'claude-sonnet-5', name: 'Claude Sonnet 5', capability: 'chat' }, { providerId: 'reverse', groupId: '53', groupName: '生图分组-gpt逆向', modelId: 'gpt-image-2.5', capability: 'image-generation', qualities: ['low', 'medium', 'high', 'xhigh', 'max'] }], mediaModels: [{ providerId: 'media', groupId: '66', groupName: '图片音频视频分组', modelId: 'gpt-image-2.5-4k', profileId: 'media-profile', mediaType: 'image', qualities: [] }] } }),
       },
       zerowallMcp: {
         getSciMasterCredentialStatus: vi.fn().mockResolvedValue({ ok: true, value: { configured: true } }),
@@ -90,6 +91,18 @@ describe('environment settings client', () => {
     }
     expect(screen.getAllByRole('option', { name: '高' }).length).toBeGreaterThanOrEqual(1)
     expect(screen.getByRole('option', { name: '中（推荐）' })).toBeTruthy()
+    const imageModel = screen.getByLabelText('当前生图模型') as HTMLSelectElement
+    const quality = screen.getByRole('combobox', { name: /^默认质量/u }) as HTMLSelectElement
+    expect([...quality.options].map(option => option.value)).toEqual(['auto', 'low', 'medium', 'high', 'xhigh', 'max'])
+    const reverseRoute = imageModel.value
+    fireEvent.change(imageModel, { target: { value: [...imageModel.options].find(option => option.text === 'gpt-image-2.5-4k')!.value } })
+    await waitFor(() => expect(remotes.zerowallEnvironment.setImageModelSelection).toHaveBeenCalled())
+    expect([...quality.options].filter(option => !option.disabled).map(option => option.value)).toEqual(['auto'])
+    expect(quality.value).toBe('medium')
+    expect(quality.selectedOptions[0]!.disabled).toBe(true)
+    await waitFor(() => expect(imageModel.disabled).toBe(false))
+    fireEvent.change(imageModel, { target: { value: reverseRoute } })
+    await waitFor(() => expect([...quality.options].map(option => option.value)).toContain('max'))
     expect(screen.queryByText('科研 MCP 能力')).toBeNull()
     expect(screen.getByRole('link', { name: /获取 API Token 与接入说明/ }).getAttribute('href')).toBe('https://huagongshe.com/mcp-guide')
     const token = screen.getByLabelText('化工社 API Token')

@@ -8,7 +8,7 @@ import type {
   AiCloudSavedLogin, AiCloudMediaModel,
 } from '../shared/types.js'
 import type {} from 'zod'
-import { isImageGenerationGroup, uniqueMediaModels } from '../shared/types.js'
+import { imageQualityChoices, isImageGenerationGroup, uniqueMediaModels } from '../shared/types.js'
 export { isImageGenerationGroup, uniqueMediaModels } from '../shared/types.js'
 
 export type {
@@ -289,7 +289,7 @@ export class AiCloudClient {
             // itself. Keeping the protocol-specific base here avoids the
             // erroneous `/v1/v1/messages` URL for Claude routes.
             baseUrl: modelBaseUrl(session.baseUrl, modelId),
-            ...(isImageGenerationGroup(group.name) ? { capability: 'image-generation' as const } : {}),
+            ...(isImageGenerationGroup(group.name) ? { capability: 'image-generation' as const, qualities: imageQualityChoices(modelId, modelQualities(modelReply, modelId), group.name) } : {}),
           })
         }
         results.push({ groupId, groupName: group.name, status: 'succeeded', count: models.filter(model => model.groupId === groupId).length, checkedAt })
@@ -452,7 +452,7 @@ export class AiCloudClient {
         ...model,
         providerId: managedProviderId(model.groupId, model.modelId),
         ...(model.capability === 'image-generation' || isImageGenerationGroup(model.groupName)
-          ? { capability: 'image-generation' as const } : {}),
+          ? { capability: 'image-generation' as const, qualities: imageQualityChoices(model.modelId, model.qualities ?? [], model.groupName) } : {}),
       })),
     }
   }
@@ -573,7 +573,7 @@ function parseMediaCapabilities(body: string, group: AvailableGroup, baseUrl: st
       ...(typeof raw.reference_shape === 'string' ? { referenceShape: raw.reference_shape } : {}),
       duration: { ...(typeof duration.mode === 'string' ? { mode: duration.mode } : {}), values: Array.isArray(duration.values) ? duration.values.filter((x): x is number => typeof x === 'number') : [],
         ...Object.fromEntries(['min', 'max', 'default', 'required'].filter(key => ['number', 'boolean'].includes(typeof duration[key])).map(key => [key, duration[key]])) },
-      sizes: strings(raw.sizes), resolutions: strings(raw.resolutions), aspectRatios: strings(raw.aspect_ratios), qualities: strings(raw.qualities), formats: strings(raw.formats), materials,
+      sizes: strings(raw.sizes), resolutions: strings(raw.resolutions), aspectRatios: strings(raw.aspect_ratios), qualities: raw.media_type === 'image' ? imageQualityChoices(raw.model, strings(raw.qualities), group.name) : strings(raw.qualities), formats: strings(raw.formats), materials,
       pollSeconds: typeof raw.poll_seconds === 'number' ? Math.max(1, raw.poll_seconds) : 5,
       ...(typeof raw.max_request_bytes === 'number' ? { maxRequestBytes: raw.max_request_bytes } : {}),
       ...(typeof raw.observation_seconds === 'number' ? { observationSeconds: raw.observation_seconds } : {}),
@@ -679,6 +679,12 @@ function modelCapacity(body: string, id: string): Partial<AiCloudManagedModel> {
   const context = entry?.context_window ?? entry?.contextWindow
   const output = entry?.max_output_tokens ?? entry?.maxOutputTokens
   return { ...(positive(context) ? { contextWindow: context, capacitySource: 'gateway' as const } : {}), ...(positive(output) ? { maxOutputTokens: output, capacitySource: 'gateway' as const } : {}) }
+}
+function modelQualities(body: string, id: string): string[] {
+  const value = JSON.parse(body)
+  const rows = Array.isArray(value) ? value : value.data
+  const entry = Array.isArray(rows) ? rows.find((row: any) => row.id === id) : undefined
+  return Array.isArray(entry?.qualities) ? entry.qualities.filter((quality: unknown): quality is string => typeof quality === 'string') : []
 }
 function snapshot(session: StoredSession, freshness: 'current' | 'stale'): AiCloudAccountSnapshot { return { status: 'signedIn', email: session.email, balance: session.balance, currency: session.currency, balanceFreshness: freshness, gatewayBaseUrl: session.baseUrl, ...(session.rechargeUrl === undefined ? {} : { rechargeUrl: session.rechargeUrl }), lowBalance: session.lowBalanceThreshold !== undefined && session.balance <= session.lowBalanceThreshold, models: session.models, mediaModels: session.mediaModels ?? [], ...(session.mediaSync ? { mediaSync: session.mediaSync } : {}), ...(session.modelSync ? { modelSync: session.modelSync } : {}) } }
 function gatewayLabel(baseUrl: string): string { return baseUrl === PRIMARY_BASE ? 'Hong Kong (default)' : baseUrl.includes('.xyz') ? 'Global XYZ backup' : 'Global CN backup' }

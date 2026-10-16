@@ -26,7 +26,7 @@ PPT/PPTX、幻灯片、文档和报告的配图也使用本技能。通过 `gene
    - `output_path`：当前项目内的相对或绝对 PNG 路径。
    - `model`：用户未指定时省略，沿用环境配置的生图模型；用户明确指定时只覆盖当前请求。
    - `size`：用户未指定时省略，沿用 Host 配置；指定时使用 `WIDTHxHEIGHT`。
-   - `quality`：用户未指定时不要自行填写；工具会先读取环境配置并明确把最终值发送给 API。正常环境默认是 `medium`，没有环境配置时发送 `auto`。用户明确指定时才传 `low`、`medium`、`high` 或 `auto`。
+   - `quality`：用户未指定时省略，读取环境配置；用户明确指定时可传 `auto`、`low`、`medium`、`high`、`xhigh` 或 `max`，并遵守当前分组及模型的实际质量选项。`auto` 省略 API 质量参数，不擅自改变已保存的质量。“生图分组-gpt逆向”的 GPT Image 2.5 可选 `high`、`xhigh`、`max`，不将此能力推广到其他分组的同名模型。
    - `overwrite`：只有用户明确要求替换已有图时才设为 `true`。
    - `input_attachment_ids`：优先传当前会话附件 ID；`input_paths` 可用于用户指定或当前已生成的工作区资源，按源图优先级排列，主图放第一张。
 - `mask_path`：仅 `edit_image` 可选；必须是独立于 `input_paths[0]` 的 alpha 蒙版，且与主图尺寸、格式一致。整图编辑时省略此字段，禁止传空字符串，也绝不能把主图路径重复填入 `mask_path`；工具会将这种模型回显视为未提供蒙版。

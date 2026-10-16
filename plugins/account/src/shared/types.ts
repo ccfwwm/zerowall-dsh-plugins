@@ -4,6 +4,13 @@ export type AiCloudBalanceFreshness = 'current' | 'stale'
 /** Managed image groups are named by the account, not a fixed group id/name. */
 export function isImageGenerationGroup(name: string): boolean { return /生图|图片/u.test(name.trim()) }
 
+/** Quality support belongs to a route, not just a model name. */
+export function imageQualityChoices(modelId: string, declared: string[], groupName: string): string[] {
+  return declared.length || !/^gpt-image-2\.5(?:-|$)/u.test(modelId) || groupName.trim() !== '生图分组-gpt逆向'
+    ? declared
+    : ['auto', 'low', 'medium', 'high', 'xhigh', 'max']
+}
+
 export function mediaModelIdentity(model: Pick<AiCloudMediaModel, 'providerId' | 'groupId' | 'modelId' | 'profileId'>): string {
   return JSON.stringify([model.providerId, model.groupId, model.modelId, model.profileId])
 }
@@ -31,6 +38,8 @@ export interface AiCloudManagedModel {
   baseUrl: string
   /** Capability exposed by the managed group. Image routes never enter chat. */
   capability?: 'chat' | 'image-generation' | 'media'
+  /** Explicit image quality choices for this group/model route. Empty means omit quality. */
+  qualities?: string[]
   stale?: boolean
   contextWindow?: number
   maxOutputTokens?: number

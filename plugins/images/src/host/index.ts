@@ -62,9 +62,9 @@ const IMAGE_OUTPUT_SCHEMA = {
     requestedSize: { type: 'string' as const, required: true },
     actualWidth: { type: 'integer' as const, required: true },
     actualHeight: { type: 'integer' as const, required: true },
-    quality: { type: 'string' as const, enum: ['auto', 'low', 'medium', 'high'] as const, required: true },
-    requestedQuality: { type: 'string' as const, enum: ['auto', 'low', 'medium', 'high'] as const, required: true },
-    actualQuality: { type: 'string' as const, enum: ['auto', 'low', 'medium', 'high', 'unreported'] as const, required: true },
+    quality: { type: 'string' as const, enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'] as const, required: true },
+    requestedQuality: { type: 'string' as const, enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'] as const, required: true },
+    actualQuality: { type: 'string' as const, enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max', 'unreported'] as const, required: true },
     modelInfo: {
       type: 'object' as const,
       additionalProperties: false,
@@ -184,7 +184,7 @@ export function apply(ctx: Context): void {
       output_path: { type: 'string', required: true, description: 'New PNG path inside the current session working directory.' },
         model: { type: 'string', description: '可选的生图模型 ID；未填写时使用环境配置或账户目录中的唯一可用模型。' },
       size: { type: 'string', description: 'auto 或 WIDTHxHEIGHT，例如 2048x2048；不要假设 1024x1024 是最大尺寸。' },
-      quality: { type: 'string', enum: ['auto', 'low', 'medium', 'high'], description: 'Optional explicit override. Omit unless the user requested a quality level; the environment setting is otherwise authoritative (default: medium). Image dimensions do not imply high quality.' },
+      quality: { type: 'string', enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'], description: 'Optional explicit override. Omit unless the user requested a quality level; the environment setting is otherwise authoritative (default: medium). Image dimensions do not imply high quality.' },
       overwrite: { type: 'boolean', description: 'Replace an existing output file. Defaults to false.' },
     },
     output: {
@@ -224,7 +224,7 @@ export function apply(ctx: Context): void {
       output_path: { type: 'string', required: true, description: 'PNG output path inside the current session working directory.' },
         model: { type: 'string', description: '可选的生图模型 ID；未填写时使用环境配置或账户目录中的唯一可用模型。' },
       size: { type: 'string', description: 'auto 或 WIDTHxHEIGHT，例如 2048x2048；不要假设 1024x1024 是最大尺寸。' },
-      quality: { type: 'string', enum: ['auto', 'low', 'medium', 'high'], description: 'Optional explicit override. Omit unless the user requested a quality level; the environment setting is otherwise authoritative (default: medium). Image dimensions do not imply high quality.' },
+      quality: { type: 'string', enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'], description: 'Optional explicit override. Omit unless the user requested a quality level; the environment setting is otherwise authoritative (default: medium). Image dimensions do not imply high quality.' },
       overwrite: { type: 'boolean', description: 'Replace an existing output file, including a source image. Defaults to false.' },
     },
     output: {
