@@ -1,21 +1,21 @@
 {
   "schema": 1,
   "kind": "python",
-  "applicationVersion": "8.1.3",
+  "applicationVersion": "8.3.1",
   "localOnly": false,
-  "generatedAt": "2026-10-12T08:25:12.701Z",
+  "generatedAt": "2026-10-16T08:40:23.002Z",
   "resources": [
     {
       "id": "science-dependencies",
-      "version": "8.1.3",
+      "version": "8.3.0",
       "kind": "python",
-      "applicationVersion": "8.1.3",
+      "applicationVersion": "8.3.1",
       "dshRange": {
         "min": "0.2.0-rc.2",
         "max": "0.2.0-rc.2"
       },
       "desktopRange": {
-        "min": "8.0.0"
+        "min": "0.0.0"
       },
       "platform": [
         "win32"
@@ -23,23 +23,27 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/python/layers/science/8.1.3/dependency-manifest.json",
-      "sha256": "02279d5feae1dfac9774fa3e3307e9214c14f9571de962e9ba5ff79d67c79c3e",
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/python/layers/science/8.3.0/dependency-manifest.json",
+      "sha256": "d4242d8fb93850289fc828f3dcce876e79cfe2439fd1bb1280dd614aa0fb720c",
       "size": 88266,
       "restartRequired": false,
       "rollbackSupported": true,
       "role": "dependency-manifest",
+      "desktop": {
+        "min": "0.0.0"
+      },
+      "revision": "3.12.10-r19",
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "SZRr8YBGohZhCjWY/MS+viwyFbkroqEz1ilgVaMUpJznPJS+6ZuMDnPdjvdj1B32OWCJrIB+DPW3En5BUczLBA=="
+        "value": "coVcJvOqbfTNVH1AbjSwJkRu5QphYHxjtLEnIV7EPeULa4KxKJRav0o62+d5JwSVdVqvgBECDN7bSUMmFFMnAg=="
       }
     },
     {
       "id": "fallback-wheel-flowio",
       "version": "1.4.0",
       "kind": "python",
-      "applicationVersion": "8.1.3",
+      "applicationVersion": "8.3.1",
       "dshRange": {
         "min": "0.2.0-rc.2",
         "max": "0.2.0-rc.2"
@@ -62,17 +66,18 @@
       "desktop": {
         "min": "8.1.3"
       },
+      "revision": "3.12.10-r19",
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "zNuKzNgWgLQRKrRjwEC6odh302xP0p6S3YxKtUmEsdD5YPJVXk3gq0MUBUDqR5IZNSWbLLG9OKEsDIvrSJ2UCw=="
+        "value": "x/2uqc/yTMleiigEFU0WKxRkWMUkGOC327t8Z/r8o0mDfjJIDnnISa1kGQYh/FVbEpoT/FgnQv4GAjYw7w7oCQ=="
       }
     },
     {
       "id": "fallback-wheel-bibtexparser",
       "version": "1.4.4",
       "kind": "python",
-      "applicationVersion": "8.1.3",
+      "applicationVersion": "8.3.1",
       "dshRange": {
         "min": "0.2.0-rc.2",
         "max": "0.2.0-rc.2"
@@ -95,17 +100,18 @@
       "desktop": {
         "min": "8.1.3"
       },
+      "revision": "3.12.10-r19",
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "9oJGW+kTi+I4EmY3SOqHtoIPCyLCy8+GdK8fGci2VU8HHw7EFBrvb0AWCjc/IJn38dyjE6tcujlrHinI/+ZPBQ=="
+        "value": "OYeOFb/cSLAudhdm2LbrX66SDy9s+rEOq8VlNl79RdwDL1m1Q4y+Ov5BtR2bSYCGjYVMTTHuQUFzWlB5uygdAQ=="
       }
     },
     {
       "id": "fallback-wheel-autograd-gamma",
       "version": "0.5.0",
       "kind": "python",
-      "applicationVersion": "8.1.3",
+      "applicationVersion": "8.3.1",
       "dshRange": {
         "min": "0.2.0-rc.2",
         "max": "0.2.0-rc.2"
@@ -128,17 +134,18 @@
       "desktop": {
         "min": "8.1.3"
       },
+      "revision": "3.12.10-r19",
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "QZVmNRipXdaixA2i6RCgrsh7J+nwGNWQCXfqKEMXQvGD24XzVpgBaZHZkvbGNEAKmslX2kDfLBaxj6yKfY7rAg=="
+        "value": "tZ48iL2PzfPdxxE1KRqEviniPjofIJ4R28ju6cSFg2cCcJ4RTftCDMlyKzDjiTfJgyZKmJ2YGa9T6F9oXWpsDQ=="
       }
     },
     {
       "id": "fallback-wheel-docopt",
       "version": "0.6.2",
       "kind": "python",
-      "applicationVersion": "8.1.3",
+      "applicationVersion": "8.3.1",
       "dshRange": {
         "min": "0.2.0-rc.2",
         "max": "0.2.0-rc.2"
@@ -161,17 +168,18 @@
       "desktop": {
         "min": "8.1.3"
       },
+      "revision": "3.12.10-r19",
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "L0E42f90L0uegye1M11pmY/0bahVik5jdM+EEN9efEFlbF2Do9ex4+hrQPAXUL040ENZOmCVuHWNpvVhT9PQCA=="
+        "value": "2sX9MMtkrQFcaJl1q4SUAb+P+gPUCLT2u8M3WJ526fCauMy3QBJk8lN15kaemVcUMR9ARZFcyNr43h4sa++sBQ=="
       }
     },
     {
       "id": "fallback-wheel-nglview",
       "version": "4.0.1",
       "kind": "python",
-      "applicationVersion": "8.1.3",
+      "applicationVersion": "8.3.1",
       "dshRange": {
         "min": "0.2.0-rc.2",
         "max": "0.2.0-rc.2"
@@ -194,16 +202,17 @@
       "desktop": {
         "min": "8.1.3"
       },
+      "revision": "3.12.10-r19",
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0S4K7lWDufNrRWQ/Hxhu8xMukZTeI10NwVuADiF2nRGGWqBPFhDKPpdpTv96xaKFolOD8WuV7Uc+CdaOQ9e1Ag=="
+        "value": "xdv06BKLi58xG0Xpi0p2EQS3O0XTHck04CNqbMt9wYJmmxCGkAIviCbhEFdSfCViXErF2hnEbnItY9hJvMFrDA=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "G7eBCVM7zgpHcwdEprFC3zftLZ8wXlHV6U7X0dKqEpiJyvQfIeQ6E+UuePs1oKHHUNc0sKdURz5sGUCY7yDbDA=="
+    "value": "RbwYRiwIwUwBlWj4PxzuwlRRbBZ2nWT557sx1xfwKEbCvmfcqiti5X6CACFPuv717f25cG4Ch1fsKp4srz8lCg=="
   }
 }

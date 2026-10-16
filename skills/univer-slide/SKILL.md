@@ -265,3 +265,23 @@ Table style requires both a valid style ID and matching role options such as `{ 
 - Letter spacing is stored but not rendered.
 
 Always finish with complete structural readback, `univer_lint` for every changed page, rendered screenshots of every page, and the `univer` ready/status workflow.
+
+
+## Editable reconstruction and image refinement
+
+Continue using gpt-image-generator generate_image/edit_image during reconstruction and final polishing for separate illustrations, icons, textures and backgrounds. Keep the environment image configuration, independently of media-project models. Inspect new assets, keep real PNG/.generation.json receipts, register distinct asset IDs with presentation_record_assets and suitable illustration/icon/background roles, and update the page assetIds, editable image-element plan and SVG together. Backgrounds omit formal titles/body/data labels; reconstruct those as editable objects. Preserve the complete prototype separately as reference-only role: template. Raster assets remain independently movable/replaceable; never flatten the final page. Reuse successful assets and only recheck affected pages. Independent image requests have at most two-way concurrency; writes to the same draft are serial.
+
+
+## Required ZeroWall page prototypes
+
+For every newly authored PPT/PPTX page, load zerowall-presentation and gpt-image-generator. After the complete content plan and presentation_prepare, call presentation_generate_templates to generate a whole-page non-editable PNG prototype using the environment image configuration, inspect it, then call presentation_plan_editable_pages and reconstruct the editable SVG/native objects. A background or illustration alone does not satisfy this stage. Keep the whole-page PNG as reference-only; final titles, body, shapes, connectors, charts and tables must be editable. Do not silently skip prototypes if generation fails. Independent page images may run in parallel with at most two image requests; writes to one draft are serial. Local edits may reuse existing prototypes and preserve unaffected pages.
+
+
+## ZeroWall illustration routing
+
+For PPT/PPTX illustrations load gpt-image-generator and use generate_image/edit_image with the environment-configured image model, group and parameters. Register the real workspace PNG and .generation.json receipt with presentation_record_assets. Do not create media projects or jobs or call media-create/media_models/media_import/media_project/media_job for deck images. Keep the selected image settings on errors and report the actual configuration failure; do not switch routes. A separately requested independent media project, video or music may use media-create without changing the deck image workflow.
+
+
+## ZeroWall checks and export recovery
+
+Read presentation_check_pages top-level presentationFindings or presentation_status for page numbers, finding hashes and export blockers. These fields belong to ZeroWall, not the canonical univer_lint result. Record page reviews with presentation_record_reviews(reviews: [{kind: "page", target: "N", observations: "actual screenshot observations", waivers: []}]). For command-line recovery resume presentation_prepare with the same spec/manifest/file/unitId/worktreeId, check and review only blocked pages, then univer_export to a new .pptx path. presentation_status state.exportReceipt records the final notes-preserved size and SHA-256. Exported-awaiting-readback requires rendering/reopening the actual exported PPTX. INVALID_TOOL_OUTPUT involving presentationFindings is a plugin interface failure; keep the draft and update the plugin. Do not bypass review checks or substitute an older output.

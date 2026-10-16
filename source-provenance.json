@@ -1,10 +1,211 @@
 {
-  "applicationVersion": "8.3.0",
+  "applicationVersion": "8.3.1",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "e5720fb33ddfe7a70ff0d0a9e8d4025417698100",
-  "sourceOnly": true,
-  "buildCommit": null,
+  "sourceCommit": "a9047664fb03fa174ae323510a983dcab16c9b8a",
+  "sourceOnly": false,
+  "buildCommit": "696f894dee20e04343fdda6e8f538d856d404b86",
   "dshCommit": "4af4cb76935bd893a6854f38403bd06928878074",
-  "packages": [],
-  "exportedSourceFiles": 4902
+  "packages": [
+    {
+      "id": "@zerowallscience/plugin-account",
+      "version": "0.1.10",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-ai-cloud",
+      "version": "0.1.19",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-base",
+      "version": "0.1.18",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-biogenie",
+      "version": "0.1.4",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-desktop-compat",
+      "version": "0.1.5",
+      "kind": "plugin"
+    },
+    {
+      "id": "@michengai/dsh-archive-manager",
+      "version": "1.0.17-zws.2",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-better-sidebar",
+      "version": "0.26.1-zws.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/dsh-bundle-core",
+      "version": "0.1.0",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/dsh-bundle-science",
+      "version": "0.1.16",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-file-review",
+      "version": "0.8.9-zws.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "@changfenhuang/dsh-genui",
+      "version": "0.12.1-zws.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "@dingyi222666/dsh-session-notification",
+      "version": "0.2.3-zws.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-ssh-ops",
+      "version": "0.3.19-zws.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-wechat",
+      "version": "0.9.11",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-environment",
+      "version": "0.1.13",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-execution",
+      "version": "0.1.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-extension-center",
+      "version": "0.1.13",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-files",
+      "version": "0.2.6",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-images",
+      "version": "0.2.18",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/integrity-runtime",
+      "version": "6.2.1",
+      "kind": "support"
+    },
+    {
+      "id": "@zerowallscience/plugin-mcp",
+      "version": "0.2.13",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-mineru",
+      "version": "0.1.7",
+      "kind": "plugin"
+    },
+    {
+      "id": "@oh-story/dsh",
+      "version": "0.1.16-zws.19",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-projects",
+      "version": "0.1.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-publications",
+      "version": "0.1.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-pubmed",
+      "version": "0.1.5",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-python",
+      "version": "0.1.19",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-research",
+      "version": "0.1.13",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/research-store",
+      "version": "4.1.2",
+      "kind": "support"
+    },
+    {
+      "id": "@zerowallscience/plugin-reviewer",
+      "version": "0.1.5",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-runs",
+      "version": "0.1.3",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-secrets",
+      "version": "0.1.0",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-singlecell",
+      "version": "0.1.4",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-skills",
+      "version": "0.2.5",
+      "kind": "plugin"
+    },
+    {
+      "id": "@dsh-external/zotero-harvest",
+      "version": "0.2.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-office-tools",
+      "version": "1.0.2",
+      "kind": "support"
+    },
+    {
+      "id": "dsh-dream-skin",
+      "version": "10.9.4-zws.2",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-univer-office",
+      "version": "0.3.7-zws.6",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-zotero",
+      "version": "0.12.1",
+      "kind": "plugin"
+    },
+    {
+      "id": "dsh-free-search",
+      "version": "0.8.3",
+      "kind": "plugin"
+    }
+  ],
+  "exportedSourceFiles": 4908
 }
