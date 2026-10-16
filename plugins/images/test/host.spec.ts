@@ -42,11 +42,11 @@ function signedIn() {
   return { status: 'signedIn' as const, email: 'image-fixture@example.test', gatewayBaseUrl: 'https://code.aicodeme.xyz', balanceFreshness: 'current' as const, lowBalance: false, models: [], mediaModels: models, mediaSync: { status: 'succeeded' as const, checkedAt: 'now', groups: models.map(m=>({groupId:m.groupId,groupName:m.groupName,checkedAt:'now',status:'succeeded' as const,count:1})) } }
 }
 
-it.each(['high', 'xhigh', 'max', 'auto'] as const)('uses the selected native image group with optional quality %s independently of media', async quality => {
+it.each(['high', 'xhigh', 'max', 'auto'] as const)('uses the selected native image group with undeclared optional quality %s independently of media', async quality => {
   const workspace = await root()
   const secrets = new MemorySecrets()
   secrets.values.set('zerowall.ai-cloud.group.53', 'host-only-secret')
-  const model = { providerId: 'zerowall-ai-cloud-53-responses', groupId: '53', groupName: '生图分组-gpt逆向', modelId: 'gpt-image-2.5', baseUrl: 'https://code.aicodeme.xyz/v1', capability: 'image-generation' as const, qualities: ['auto', 'high', 'xhigh', 'max'] }
+  const model = { providerId: 'zerowall-ai-cloud-53-responses', groupId: '53', groupName: '生图分组-gpt逆向', modelId: 'gpt-image-2.5', baseUrl: 'https://code.aicodeme.xyz/v1', capability: 'image-generation' as const, qualities: [] }
   const fetcher = vi.fn<typeof fetch>(async (url, init) => {
     expect(url).toBe('https://code.aicodeme.xyz/v1/images/generations')
     expect(JSON.parse(String(init?.body))).toEqual({ model: 'gpt-image-2.5', prompt: 'full slide template', ...(quality === 'auto' ? {} : { quality }) })
@@ -91,7 +91,7 @@ function imageResponse(data: Uint8Array, extra: Record<string, unknown> = {}): R
 
 it.each(['high', 'xhigh', 'max'] as const)('sends the exact environment quality %s and preserves the provider-reported quality', async quality => {
   const workspace = await root(), png = await raster()
-  const models = signedIn().mediaModels.map(model => ({ ...model, modelId: 'gpt-image-2.5-4k', qualities: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'] }))
+  const models = signedIn().mediaModels.map(model => ({ ...model, modelId: 'gpt-image-2.5-4k', qualities: [] }))
   const fetcher = vi.fn<typeof fetch>(async (_url, init) => {
     expect(JSON.parse(String(init?.body)).quality).toBe(quality)
     return imageResponse(png, { quality })

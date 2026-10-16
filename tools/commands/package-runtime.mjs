@@ -10,7 +10,6 @@ export function resolveCommandUserData(env = process.env, userHome = homedir()) 
   try { if (statSync(roaming).isDirectory()) return roaming } catch { /* optional old profile */ }
   return join(env.LOCALAPPDATA || join(userHome, 'AppData', 'Local'), name)
 }
-
 export function resolveCommandDshHome(env = process.env, userHome = homedir()) {
   return env.DSH_HOME?.trim() ? resolve(env.DSH_HOME) : join(resolveCommandUserData(env, userHome), 'harness')
 }
@@ -27,4 +26,3 @@ export function packageRuntime({ commandRoot = import.meta.dirname, executable =
     env: { ...(runAsNode ? { ELECTRON_RUN_AS_NODE: '1' } : {}), ZEROWALL_PNPM_NODE: executable },
   }
 }
-

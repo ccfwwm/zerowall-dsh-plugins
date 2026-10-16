@@ -71,6 +71,9 @@ export class AiCloudMediaService implements ZeroWallMedia {
     const p = input.parameters ?? {}
     for (const [key, allowed] of [['size', model.sizes], ['quality', model.qualities], ['resolution', model.resolutions], ['aspect_ratio', model.aspectRatios]] as const) {
       const selected = p[key]
+      // Some image routes accept optional quality without listing its values.
+      // Preserve the explicit request and let the provider validate it.
+      if (key === 'quality' && allowed.length === 0) continue
       if (selected !== undefined && (allowed.length === 0 || !allowed.includes(selected))) throw new Error(`MEDIA_UNSUPPORTED_PARAMETER: ${key}; 当前所选模型配置不支持此值，请在环境配置中确认参数。`)
     }
     if (p.duration !== undefined) {

@@ -283,7 +283,7 @@ export class AiCloudImageGenerator {
     if (model.capability === 'media') return this.mediaResponse(model as AiCloudMediaModel, input, signal)
     const url = new URL(model.baseUrl)
     if (url.protocol !== 'https:' || !['hkcode.aicodeme.xyz', 'code.aicodeme.xyz', 'code.aicodeme.cn'].includes(url.hostname) || url.port || url.username || url.password || url.search || url.hash || !['/v1', '/v1/'].includes(url.pathname)) throw new Error('IMAGE_UNTRUSTED_GATEWAY')
-    if (input.quality !== 'auto' && !model.qualities?.includes(input.quality)) throw new Error('IMAGE_UNSUPPORTED_QUALITY: 当前分组未声明此质量；请在环境配置中选择支持的质量。')
+    if (input.quality !== 'auto' && model.qualities?.length && !model.qualities.includes(input.quality)) throw new Error('IMAGE_UNSUPPORTED_QUALITY: 当前模型不支持所选质量，请选择其他质量或自动。')
     const key = await this.options.secrets.get(`zerowall.ai-cloud.group.${model.groupId}`)
     if (!key?.trim()) throw new Error('IMAGE_CREDENTIAL_UNAVAILABLE: 请刷新账号。')
     const headers: Record<string, string> = { authorization: `Bearer ${key.trim()}`, 'Idempotency-Key': input.requestId }

@@ -90,9 +90,12 @@ export function EnvironmentSection({ reviewerScope, environmentRemote, accountRe
     }
     void load('account', async () => {
       if (accountRemote?.current === undefined) throw new LocalizedError('accountUnavailable')
-      const snapshot = await unwrap(accountRemote.current()) as any
+      let snapshot = await unwrap(accountRemote.current()) as any
+      if (snapshot?.status === 'signedIn' && accountRemote.discoverModels) {
+        try { snapshot = await unwrap(accountRemote.discoverModels()) } catch { /* Keep the last available directory when offline. */ }
+      }
       if (cancelled) return
-      const rows = [...(Array.isArray(snapshot?.models) ? snapshot.models.filter((model: any) => model.capability === 'image-generation') : []), ...(Array.isArray(snapshot?.mediaModels) ? snapshot.mediaModels.filter((model: any) => model.mediaType === 'image') : [])]
+      const rows = [...(Array.isArray(snapshot?.models) ? snapshot.models.filter((model: any) => model.capability === 'image-generation' || (model.capability === undefined && isImageGroup(model.groupName))) : []), ...(Array.isArray(snapshot?.mediaModels) ? snapshot.mediaModels.filter((model: any) => model.mediaType === 'image') : [])]
       const available = rows.filter((model: any) => isImageGroup(model.groupName) && !model.stale)
       setImageModels([...new Map(available.map((model: any) => [mediaIdentity(model), model])).values()])
     })
@@ -114,7 +117,7 @@ export function EnvironmentSection({ reviewerScope, environmentRemote, accountRe
       const value = environmentRemote?.getImageQuality === undefined
         ? 'medium'
         : await unwrap(environmentRemote.getImageQuality())
-      if (!cancelled && ['auto', 'low', 'medium', 'high'].includes(value)) setImageQuality(value)
+      if (!cancelled && ['auto', 'low', 'medium', 'high', 'xhigh', 'max'].includes(value)) setImageQuality(value)
     })
     void load('mcp', async () => {
       if (mcpRemote?.getSciMasterCredentialStatus === undefined) throw new LocalizedError('mcpUnavailable')
@@ -154,7 +157,7 @@ export function EnvironmentSection({ reviewerScope, environmentRemote, accountRe
     : ''
   const imageModelIsKnown = imageModels.some((model: any) => mediaIdentity(model) === mediaIdentity(image))
   const selectedImageModel = imageModels.find((model: any) => mediaIdentity(model) === mediaIdentity(image))
-  const imageQualityChoices = ['auto', ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).filter(quality => selectedImageModel?.qualities?.includes(quality))]
+  const imageQualityChoices = ['auto', ...(['low', 'medium', 'high', 'xhigh', 'max'] as const).filter(quality => !selectedImageModel?.qualities?.length || selectedImageModel.qualities.includes(quality) || quality === imageQuality)]
   const imageGroups = useMemo(() => {
     const groups = new Map<string, { providerId: string; groupId: string; label: string; models: any[] }>()
     const modelCounts = new Map<string, number>()
@@ -316,7 +319,6 @@ export function EnvironmentSection({ reviewerScope, environmentRemote, accountRe
         {!imageModelIsKnown && imageModelValue && <p role="alert">历史模型或能力配置已失效，请重新选择。</p>}
         {imageModels.filter((m:any) => mediaIdentity(m) === mediaIdentity(image)).map((m:any) => <div key={`${m.providerId}${VALUE_SEPARATOR}${m.groupId}${VALUE_SEPARATOR}${m.modelId}${VALUE_SEPARATOR}${m.profileId}`}>
           {([['resolution','分辨率',m.resolutions],['aspectRatio','比例',m.aspectRatios]] as const).map(([key,label,values]) => values?.length ? <label className={css.field} key={key}><span>{label}</span><select className={css.control} value={image[key] ?? ''} disabled={busy} onChange={event=>saveImageSelection({...image,[key]:event.target.value})}><option value="">默认</option>{values.map((v:string)=><option key={v}>{v}</option>)}</select></label> : null)}
-          {imageQuality !== 'auto' && !m.qualities?.includes(imageQuality) && <p role="alert">{t("unsupportedQuality", { quality: imageQuality })}</p>}
         </div>)}
         <label className={css.field}><span>{t('defaultQuality')}</span><select className={css.control} value={imageQuality} disabled={busy} onChange={event => saveImageQuality(event.target.value as ImageGenerationQuality)}>{!imageQualityChoices.includes(imageQuality) && <option value={imageQuality} disabled>{t(imageQuality)}{t("currentConfig")}</option>}{imageQualityChoices.map(quality => <option key={quality} value={quality}>{t(quality as ImageGenerationQuality)}</option>)}</select><small>{t('qualityNote')}</small></label>
       </article>
