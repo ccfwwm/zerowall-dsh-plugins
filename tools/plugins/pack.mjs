@@ -12,7 +12,7 @@ import { historicalPackage } from './package-history.mjs'
 import { packageSource } from '../build/layout.mjs'
 import { restorePublishedOutput } from './published-output.mjs'
 import { integrationPublishSource, usesReviewedRuntime } from './publish-source.mjs'
-import { pluginSnapshotId as snapshotId, readVerifiedPluginFeed, assertFeedNotRegressed, mergePluginFeed } from './snapshot.mjs'
+import { pluginSnapshotId as snapshotId, readRetiredPluginIds, withoutRetiredPlugins, readVerifiedPluginFeed, assertFeedNotRegressed, mergePluginFeed } from './snapshot.mjs'
 const pnpm = process.env.npm_execpath
 if (!pnpm) throw new Error('Invoke with pnpm plugins:pack')
 const records = []
@@ -27,6 +27,7 @@ await mkdir(pluginStoreRoot, { recursive: true })
 await mkdir(pluginSnapshotStoreRoot, { recursive: true })
 const sharedRecordsPath = join(pluginStoreRoot, 'plugin-packages.json')
 
+const retiredPluginIds = await readRetiredPluginIds()
 const sharedRecords = await readVerifiedPluginFeed(pluginStoreRoot) ?? []
 
 async function writeSnapshot(records) {
@@ -70,7 +71,7 @@ for (const historyRoot of [dirname(releaseRoot), process.env.ZEROWALL_PACKAGE_HI
   try { historical.push(...JSON.parse(await readFile(join(historyRoot, version, 'plugin-packages.json'), 'utf8'))) }
   catch (error) { if (error.code !== 'ENOENT') throw error }
 }
-const existingRecords = await readFile(join(releaseRoot, 'plugin-packages.json'), 'utf8').then(JSON.parse, () => [])
+const existingRecords = withoutRetiredPlugins(await readFile(join(releaseRoot, 'plugin-packages.json'), 'utf8').then(JSON.parse, () => []), retiredPluginIds)
 const packCachePath = join(cacheRoot, 'plugin-packages.json')
 const cachedRecords = await readFile(packCachePath, 'utf8').then(JSON.parse, () => [])
 async function checkpoint() {
@@ -170,6 +171,7 @@ for (const source of selectedSources) {
   const packed = JSON.parse(execFileSync('tar', ['-xOf', candidate, 'package/package.json'], { encoding: 'utf8' }))
   if (JSON.stringify(packed.dependencies ?? {}).match(/workspace:|github:|git\+|git:/)) throw new Error(`Non-publishable dependency in ${manifest.name}`)
   const contents = execFileSync('tar', ['-tf', candidate], { encoding: 'utf8' })
+  for (const entry of manifest.zerowall?.runtimeFiles ?? []) if (!contents.split(/\r?\n/u).includes('package/' + entry)) throw new Error(`Missing runtime asset for ${manifest.name}: ${entry}`)
   if (manifest.main && !contents.includes('package/' + manifest.main.replace(/^\.\//, ''))) throw new Error(`Missing Host bundle for ${manifest.name}`)
   if (manifest.zerowall?.capabilities && !manifest.zerowall?.rollbackSupported) throw new Error('Missing plugin rollback contract')
   immutableReceipts.push({ id: manifest.name, version, ...await commitImmutablePackage(candidate, archive, baseline?.path) })

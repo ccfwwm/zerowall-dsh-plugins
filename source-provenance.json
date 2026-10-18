@@ -1,9 +1,9 @@
 {
-  "applicationVersion": "8.3.3",
+  "applicationVersion": "8.3.6",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "05d0bf62f308efe90b09c207bd485c063e1f751b",
+  "sourceCommit": "522f6456b3c7fede54ea410cefd26e96b83486f4",
   "sourceOnly": false,
-  "buildCommit": "05d0bf62f308efe90b09c207bd485c063e1f751b",
+  "buildCommit": "fbb235cc04d293c9bc533abc06ec36b55e4518ef",
   "dshCommit": "cf5cb0fc02a1e08dda3540c037835ceb58a85851",
   "packages": [
     {
@@ -13,12 +13,12 @@
     },
     {
       "id": "@zerowallscience/plugin-ai-cloud",
-      "version": "0.1.19",
+      "version": "0.1.27",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-base",
-      "version": "0.1.18",
+      "version": "0.1.19",
       "kind": "plugin"
     },
     {
@@ -57,8 +57,8 @@
       "kind": "plugin"
     },
     {
-      "id": "@changfenhuang/dsh-genui",
-      "version": "0.12.1-zws.1",
+      "id": "dsh-ppt-maker",
+      "version": "1.0.1-zws.6",
       "kind": "plugin"
     },
     {
@@ -93,12 +93,12 @@
     },
     {
       "id": "@zerowallscience/plugin-files",
-      "version": "0.2.7",
+      "version": "0.2.12",
       "kind": "plugin"
     },
     {
       "id": "@zerowallscience/plugin-images",
-      "version": "0.2.20",
+      "version": "0.2.27",
       "kind": "plugin"
     },
     {
@@ -118,7 +118,7 @@
     },
     {
       "id": "@oh-story/dsh",
-      "version": "0.1.16-zws.20",
+      "version": "0.1.16-zws.25",
       "kind": "plugin"
     },
     {
@@ -143,7 +143,7 @@
     },
     {
       "id": "@zerowallscience/plugin-research",
-      "version": "0.1.13",
+      "version": "0.1.16",
       "kind": "plugin"
     },
     {
@@ -192,11 +192,6 @@
       "kind": "plugin"
     },
     {
-      "id": "dsh-univer-office",
-      "version": "0.3.7-zws.7",
-      "kind": "plugin"
-    },
-    {
       "id": "dsh-zotero",
       "version": "0.12.1",
       "kind": "plugin"
@@ -207,5 +202,5 @@
       "kind": "plugin"
     }
   ],
-  "exportedSourceFiles": 4912
+  "exportedSourceFiles": 4858
 }
