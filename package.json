@@ -1,6 +1,6 @@
 {
   "name": "zerowall-dsh-plugins",
-  "version": "8.4.0",
+  "version": "8.4.2",
   "description": "ZeroWall independently versioned DSH extensions and signed resources.",
   "private": true,
   "type": "module",
