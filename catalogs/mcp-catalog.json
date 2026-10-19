@@ -1,21 +1,21 @@
 {
   "schema": 1,
   "kind": "mcp",
-  "applicationVersion": "8.3.6",
+  "applicationVersion": "8.4.0",
   "localOnly": false,
-  "generatedAt": "2026-10-18T05:11:36.381Z",
+  "generatedAt": "2026-10-19T03:59:06.385Z",
   "resources": [
     {
       "id": "scimaster",
       "version": "0.3.15-zws.2",
       "kind": "mcp",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
-        "min": "8.0.0"
+        "min": "8.4.0"
       },
       "platform": [
         "win32"
@@ -42,20 +42,20 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "88B9yCH/Jnqg2+MjLXbdeKVeFvFsNQFmHfht6FYsEpfqibrOJKqL+eDAYevpMdq+7/lVT4IOjlIauZ79yu7UAQ=="
+        "value": "6sZaat2E+YBjpz1IHtEH0QUQHTaN7LxCygP2jXwkBPcCoZjP0fjRveU6HLHvqOYpczeGCzFwURY1uBMnmF40DQ=="
       }
     },
     {
       "id": "r-platform",
       "version": "0.1.1",
       "kind": "mcp",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
-        "min": "8.0.0"
+        "min": "8.4.0"
       },
       "platform": [
         "win32"
@@ -71,13 +71,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "8h/xV02ORSyaT1HQpvfw+ZsV+tnnR2/RgxllnlVMuwvYsdSEQTOxPf9McmO0BADjZ1HlHfehUHLgQIitALucAg=="
+        "value": "YBtsimG5+fo11+l2EjNMxutdCUFl/nWmtGNdJ4cZ5SSXRZKZ7msVzMbHnkl+ZJA+/FnWoo8dt6UmKCT3yXlPAQ=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "UZ1otAe+JL7XUzp6toZhBV2jx8+T+EMwcVCGdmegH1b60O/K52xMJ27F/q7fQuXGgqtEpxMu8Eyu1TyUrQUODw=="
+    "value": "R7ATOM3MD4VUXI6KaWcVmcbmOr9QLVhRE6DVEfHEuG3alB4VUH6oXqN4PIKZtHKabb/1HyTtJoYoQ6BB3cnHAA=="
   }
 }

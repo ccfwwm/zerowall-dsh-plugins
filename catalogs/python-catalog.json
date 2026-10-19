@@ -1,18 +1,18 @@
 {
   "schema": 1,
   "kind": "python",
-  "applicationVersion": "8.3.6",
+  "applicationVersion": "8.4.0",
   "localOnly": false,
-  "generatedAt": "2026-10-18T05:11:36.446Z",
+  "generatedAt": "2026-10-19T03:59:06.443Z",
   "resources": [
     {
       "id": "science-dependencies",
       "version": "8.3.0",
       "kind": "python",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
         "min": "0.0.0"
@@ -36,17 +36,17 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "cTcrUJ9QTD4t1WBZDyIXZMWc4/bQJizrQPYDYvjEfFadu9Hcez7eamAAWzQOf1RGfQ7Oqi1Qj08h7KQZPaQvBQ=="
+        "value": "QmyEkbM8+yFCMMgGJgQsJLBkp3n4+cH5cU3eT6sPpJ5Dun0m/J9TUoDBBb5C1KlsqzGRMfG3bxZhdpJM812vDg=="
       }
     },
     {
       "id": "fallback-wheel-flowio",
       "version": "1.4.0",
       "kind": "python",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
         "min": "8.1.3"
@@ -70,17 +70,17 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "UVvlkqzOEzWU9LMSlOBTKyti1Kg9Wjy/eUGZsBVZDbNY+rXR5eBtfsaa7Sq1MU4oM7llu2JEnFGEkWpszHBQBA=="
+        "value": "ngze/395E049UUN/fc+/6zFIdHrLjtHpjrh6ajCwvdyeHMc48e3VdHEWSZwjootWMBOTdbY9R0DfjsDA1mE/DA=="
       }
     },
     {
       "id": "fallback-wheel-bibtexparser",
       "version": "1.4.4",
       "kind": "python",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
         "min": "8.1.3"
@@ -104,17 +104,17 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "/HZqjr5nPlRY/kJAWNEyFGNB+wHCnULxpO1x5OkRXwvmcQWOiBSAEmyOVwLKYaYlLhAF8qRW9PxVsnwS8jD4Aw=="
+        "value": "q0rL3VqQWoanI73plbUhpMNMGQq0zeyKmZoApMi17rvrxEwYtaTW5xYxqkKfYVJXW79ZvxfyEiM92FXneMzDBw=="
       }
     },
     {
       "id": "fallback-wheel-autograd-gamma",
       "version": "0.5.0",
       "kind": "python",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
         "min": "8.1.3"
@@ -138,17 +138,17 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "rWpunbf7QB4GTdHb9d41CzORvHzbF1n6ZFG8s6R+IskmX08cDOJMD/t/nHCI50zbPxKVNiMZ3ttEmZk2GMI2CQ=="
+        "value": "/0ZfZdfCWgEYsXXfSbZ/rR+mlN/9XI7cB4sW62RyVu4gYDtLUE4wK9g+VdvQ/MPOltRCCPfB4TuqSQAZ6iXpBg=="
       }
     },
     {
       "id": "fallback-wheel-docopt",
       "version": "0.6.2",
       "kind": "python",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
         "min": "8.1.3"
@@ -172,17 +172,17 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "FPgbLK4YfW+c6UBYYfmrUc4HAFlI/QBcyWg1A2uE708JHTMo6X4oX3ON7x4LIRyl5VH+pLFcELcDqTtWmDsRCw=="
+        "value": "IsiljT9E9FWZLugK0tcP5eB6fwRcNNM0rsWP7zfl+sOP3pMC+JkdKw8ZL2z3Li3GUrSAYdHDYxYxSGRLpIrRBw=="
       }
     },
     {
       "id": "fallback-wheel-nglview",
       "version": "4.0.1",
       "kind": "python",
-      "applicationVersion": "8.3.6",
+      "applicationVersion": "8.4.0",
       "dshRange": {
-        "min": "0.2.0-rc.2",
-        "max": "0.2.0-rc.2"
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
       },
       "desktopRange": {
         "min": "8.1.3"
@@ -206,13 +206,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "X9S7mpqF+ESR1Cm6c9DkLF259jOg5ieqpGQqEy7Q8Gv40JIQohC+gp2bG/qkZNEbEFyw90R9kCteAhQiV/67DA=="
+        "value": "4D51+QdeWXuLkyYxZ2s2wIDvcSBsGqkjT6nAuWh1fIJ5tSsq95nVXfGfGXRR74lEH1EvZV/pIAVuikhICIo8DQ=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "MwmvSDMHpeopnwswU5EEBLz6kHoJqtRZi3ERRduaYGddWWaX1AbvCrzUD1S+IaVlQCL1kIhhkhISLkszs51IBg=="
+    "value": "KH2DKlSxPBksq91mDP6Z/3mqG/djOdsHfChRMwEqBTyI+vAXArlNmmye5uR9X0ci526xEeVynIq14KMXGGPtDQ=="
   }
 }
