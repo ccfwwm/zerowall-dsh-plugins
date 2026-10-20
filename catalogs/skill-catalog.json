@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "kind": "skill",
-  "applicationVersion": "8.4.0",
+  "applicationVersion": "8.4.4",
   "localOnly": false,
-  "generatedAt": "2026-10-19T03:59:06.367Z",
+  "generatedAt": "2026-10-20T15:37:09.435Z",
   "resources": [
     {
       "id": "academic-paper",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -31,14 +31,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "9fVeDCmwDvWwiRN6BWlqgC8aQJ4GT8deXmoKDKziPgDPQs6AcARgRvRwTcNFt+FuQMN3wsq/paMxF663OycjDw=="
+        "value": "4nY5WpDXmjDa2Rl5ySoIwWHfawO2DO782X3FQGy/C8UFGnUcFJnm+j7Isc312PQKbCvThhIQj8dNaqnUJBYFDg=="
       }
     },
     {
       "id": "academic-paper-reviewer",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -60,14 +60,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "IYKvbd1TP6M80j036zqx5eO/iDFjcU8NPX4g23WaMl1jzyIAR5TKrIp/G7Znh9I8vqPGKPvY+RT+tCPSzqwhDQ=="
+        "value": "p//R38qmiNbAL84A9LglFd/bJPtujptkyxTYpW+CcIrWWUzf346RK+WYyS71mJLMn75HIFOdXKvFx9XSg9S5Bg=="
       }
     },
     {
       "id": "academic-pipeline",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -89,14 +89,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "CxsX7wRtib0KYwtGmFbrEpE+Fz87crPomcsfn+ysoNevrNbMuAYdS6C4SHn/2itLUTCV1Lhrb0bfvXQZR2tbCg=="
+        "value": "idHX73tOjrAZMUViznHMLnw7cD6lW0Akq5eawuRT7wCQ2mZJ5BYopa1eK/5Jz3pmcnlVgA+qIfDvoD5PHmB9AA=="
       }
     },
     {
       "id": "academic-research-shared",
       "version": "0.1.0",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -118,14 +118,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "OlpP3PpJK2gNC0SLNBQCzWDP6AHJvT4WrPTvf1sulKsbMiW1Fe6SVel9v9bVC8Kg9zfaaLn4maj2qAMMxzV3Ag=="
+        "value": "DmEsXm+pArJNwhpx28VInEuWVNM7YlfDRCA8pQxF/ighHoHxwDvU/GU8jdOH7yGD3wpiuYTOfmRloQgXF6SCBA=="
       }
     },
     {
       "id": "adaptyv",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -147,14 +147,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "X1BYUt/RLmsX0GFTfkbvVLY3VXvSZtAj9hDxIfg/8/PGlXU6ORyYzDex2TAhXrkdKTZEsf1Pq/wnOd4TJ8jEAw=="
+        "value": "MvXC+Fk+6L2Y+LY4/xy65PHk+cWAvgzVOrFpNbIAKoobdiFmXTrmGNf0kIbbHisbg6qhB2zPfz2fqG7SZ6+dDQ=="
       }
     },
     {
       "id": "aeon",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -176,14 +176,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "dUFvlsrUzZYXHcgPVrfDVpdIc4QlBJXlv2BZgWHptBmi+bZ8rKv3cvJiUz+L+zytAl9khbYu8aWa1ohLPUe6BA=="
+        "value": "iambjjh3XxXAIx2/ULAKAzBGnXa3igI78VM+hTj1TuWsagxPSyR5QV56Qbae/0jv0Ii8uCnjoapP3/zdryjKBg=="
       }
     },
     {
       "id": "agent-infini",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -205,14 +205,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4N086t3vv1QOkHPj+Yd5fpn2XpvFvWccHNQa2ZFG6rf4PPisYpk5mpEK7X7NL6vaQKMFpD03/fBeZT0LDly7Bw=="
+        "value": "a85cgss2mK6ogGKiNuuy8REriPTdEKxGlqpYZF2rT3EySlNaOFtG0lpQe2P85MQNAYHOUdFvrn5krQWt0tPDAQ=="
       }
     },
     {
       "id": "alphafold2",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -234,14 +234,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "K9HHBe/AhIbl/9+zwvWxnKOwvTxCyd0c9PH3bLhUZP+mZ2F6auwCHvvbdcGWcqAqQzSo7Vxjfzzj1lEUvbIBCw=="
+        "value": "1Kycze6D9G6PGky2aUHHuc0kakY9qdyWSyMKrNCD3JhQ2VBNIZSlbfmVCCuy66PnVvST4G+PghY5ttRzh7WmAA=="
       }
     },
     {
       "id": "analysis-workflow",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -263,14 +263,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wZNtKx8Du3jPMVJvi5ojPVpsROX4bDIPil2oY/BsTDmpMR7GhHpqvvUbiNOj2sp9uQFLGA1X9Q5KkdYvKdGOBA=="
+        "value": "Rn+KhjCyO4SWGS+hby3bHeo2K5cynCloFvymqdvKimHOZxNV09QfAAh8uWNmzDDnTRo1lYt0wLhYSGAhxK9nCA=="
       }
     },
     {
       "id": "analytical-method-validation",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -292,14 +292,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "t2EVIVbuCnzSlDUCfAP4Yy5uMF7qC5Y13d/2CFLTuC1vt0c2VC6abTFBucsprtcjF+Oq4K+hIjlnEXyUiIjxDQ=="
+        "value": "re962B/yphsH62hwQq9ZsIy+cCW8S+G/P7z9BUbFbFElRH/7rYjfJPQYpI5BtG5uEBX8KKM30bWGTlIDDZKUDw=="
       }
     },
     {
       "id": "anndata",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -321,14 +321,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "JTVLVYP9OG9GimxSeXuQ3M3XAETm3zBdjHgdDK5covPGIt9aTL0zNLIjzE/m5Ojle/ltQjYaVvo3GNEV5pE4Bw=="
+        "value": "6VOZbD4ZZ9oOMQScPhexoQzDzijT9++iBuMdk/6DXPK3aSSzlL148ziCPllEp7gxIDDdWnDZVydITQLtaJw/Cg=="
       }
     },
     {
       "id": "arboreto",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -350,14 +350,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Fwvqq87NjbvCfO1Iv6r1WrwXhwBvNm3oJzYt6VNtYOddNjR9MEqkj1OkQ/dEcGyVwKVAPL2a46zyHVlx09agCQ=="
+        "value": "MvDwjgnsxuqlaHPmYV0pD1ZGI2xaclcep5uYXOocMcmbN7D9jMrVSRHCICVhefQwVlhiBTnS/EojBTSYT8xRAw=="
       }
     },
     {
       "id": "ars-3w",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -379,14 +379,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "QQfLXgxjo0TqNCgJWp30w5UOaeIXN6EPpoQ5bqwSYdFh8+HXfb1WpstqC296EV6dQeNJ6SFON6BYKBqFHBjIDg=="
+        "value": "TSQMQmzv4RhdlRXw595lEy/w707q+n0/qFwRQj8UhR/0Ic7voyLO5NahA3oFyvioo8i9Jukijgmn9vw1QLa1Aw=="
       }
     },
     {
       "id": "ars-abstract",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -408,14 +408,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "BTGKWcqm3ahz4aDou0dWjiocwMQ3eD1SodeN2I+avflErMC8o7nee/iKIf2YqoI9lvKnGcmAAc4V2E4yFu9eBw=="
+        "value": "ebtCdzbJK+aD6ioQtya1F5rgmfXP7dzF047lH5wBumKkDc/gAKrzjJlLrbyT7Y/3j+lWykiOFVuGMiX4cMyaAQ=="
       }
     },
     {
       "id": "ars-cache-invalidate",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -437,14 +437,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "lJ1eCdO5jX4LgBBxKHFZIdaq526QLKwR56k2DkfRyPfmr25tRGp58bQlV9NCQgKlZkneEnTPZ6N7DodZf8IOBA=="
+        "value": "5yBNTDDNZvbkrJ2bInIEeDrDtWWO5RM6qSzigAxZ3iDFiA91/we/sE/nhNpRVGzoYi9U3vk+sm0+bz866yGrDQ=="
       }
     },
     {
       "id": "ars-citation-check",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -466,14 +466,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "pW6Fd8/zABpn1Sy5UW+thgboNjnHPYkOGBX6HDVJcFNP1MHVuW9mwWKaNrsAF/lOWEKhC6yMIvmgmVcZ7XxtAA=="
+        "value": "x6bxzxPSDKwtna+eCb2nvK7Kx/sL1dslYKVQWwIWTdrny+CYhQafF55QKsJVKWGsNsL0nEsgPdPsOhQlx7Q1Aw=="
       }
     },
     {
       "id": "ars-disclosure",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -495,14 +495,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "yO9NyGoQ7WrdIBj6RH6lKk9YRZJiejevRi89EXNqiX6s6eXjSNO/kjW9wYOZUIwKxilbuqP+xxIeEK2m6NFzDg=="
+        "value": "BQaP3hOOmx9Tv9RnWOxTsk2JJpSw8xK4yrLivNngGgIcJ20nQea3li8EA+BQxy21MceAHZtUHvNDLUwxc9ZkAQ=="
       }
     },
     {
       "id": "ars-format-convert",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -524,14 +524,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "+cxtZrFvmqH9iwQZ8D4mv6jWAILwwqcxEBom9GwZUeq1rGQL0oFFvQlJPL5lH1eV42erGBtv1MepbLb7ufOKBQ=="
+        "value": "Ibfn9/6ZzlKD+W/Baaz4r212PuzXMAqOk1vCaseF9/hQKjBDZgpXuqUipIQu/KNmcWfj/snexntp28YM8KHRCQ=="
       }
     },
     {
       "id": "ars-full",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -553,14 +553,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4tPnMsMsHTzwFmYET1ect+GrL96uKcOCTnmZE9fF8EpOt2WXE9Q+J8RtSyzs2KSBtIO3P4x0pfKXugKUn0UFBQ=="
+        "value": "Q0pE500W4pQqF50C1lZs+dZ1wG69APMWcAaRH9B7Nfb5WKx5esIiUUmJ6yZySygZSZC+XoGhXoDug3B+CLOIBA=="
       }
     },
     {
       "id": "ars-lit-review",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -582,14 +582,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "F91h0kG6tUai1mFgV7AzFOgtgvLxQqCrHqxhJsF+RHPzkdS0KHgxW31uWBLOSQBO0F7F+QdvVkXDlScDOVQhBw=="
+        "value": "LQsRCsXShheCliQpOiwZXDwLamfYYHFYmmo+GBZLiQ27Mq4bZPDK+g0mfltLd3hr06pKd5mQc5+yOFTgZQvXCg=="
       }
     },
     {
       "id": "ars-mark-read",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -611,14 +611,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "f9snT3Sp/rowQZVYRhYuE+tZykqgdcA8jft1ILfW6BH4MaB+3+uBt9pAhG0y6YzogcF1Yipu1b91B90kTC5yCA=="
+        "value": "WfHtZQlHr6whQp9wxvVGffhnNwFbXZ3AX9OJqUy4VR8h7RtS0pwMlpe1fLwUPnqAjqaU7GDRgyDsbg4I8X7QCw=="
       }
     },
     {
       "id": "ars-outline",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -640,14 +640,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "vYZ1o7poAkDzzx5pzyYc+7Zvxc9ypWyhwMo6wMGW5803LhupoAAuloiu39JRkq6uSP3lY2UbhTNx9tPrfAlDAQ=="
+        "value": "JdBgT+4pAthU9g5EBCHTeqNsoiMKTIuISoyLIH626I5wS3ht18y1sTENvfeVgUmljVRY3CXR0KYpG2cVZuaJCQ=="
       }
     },
     {
       "id": "ars-plan",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -669,14 +669,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "NqhnzRWBfoZX229PlCEXmKe4Hnjgs1KZcPuC0BBSEm6pykYJYJnpRA3DYY4Er2b5KGO9ZHyOMMEaSeY4ZToKDg=="
+        "value": "MalJDAL+71EARgLT01xx3p/JyRMUbu3+IYv/LlaNPFGiOj/9/NGjB2hQrwZb5VOzv6Mg9z271mcCZ+dcTr94DA=="
       }
     },
     {
       "id": "ars-rebuttal-audit",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -698,14 +698,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "+Y6L0GXIPg/XupnHn2YQ+HOJ/2B6aXFSAF8CldzbdPrrPOVYWOTunPxi10GkfQsmZY7H5SHXxzNkgHQb+B1/BQ=="
+        "value": "FDQicJRKl8sr8DEaX+KjxBQeSBwfCtP+zgwHJxWT3kQBp5CyKgLvdudFILXQfc/Esu3zvQHAnyVYbXxsMmr7CA=="
       }
     },
     {
       "id": "ars-reviewer",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -727,14 +727,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qTXGSKFknUHBz3n6X1lE8v+Hz3jV3v1WFcLz//5Li44r7GbBQOuRvYtHJ3mFLvIM7dLlhbx/WBjTmQrT8WnvAQ=="
+        "value": "NRNk8k0gw6U58eYsAxYB4/zVpexhlRF3RBRBlcjelKiD/uCadHwooqrdjSJRrizaAyj+EyvX2nE0BxC+ha2nBQ=="
       }
     },
     {
       "id": "ars-revision",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -756,14 +756,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "nOt9RgKbg5RknNd0U/V+KQlmSNXytdVfNYqgqjKAfz5im2Luy1Mrbayyslx1FiP8wEKDpERToSD206DI1yTsCQ=="
+        "value": "C8hAtq5hpeLN9c0xlwfPY4Zs2gykcy7rSzHjmTFcGPyKW68Qz0P9ZhBVPczZMqEgziFwMTifDbBgZLLL5RzzAQ=="
       }
     },
     {
       "id": "ars-revision-coach",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -785,14 +785,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "i+5OnNVDsHlCh/lwdh0yZb8GC5gcJbQsWJoR4QMWc6W2vbbuy/80XJOY/aLea4mPi3rRjxPuPk+8agiVpvGbAg=="
+        "value": "8YrVEoAMr1JFXhshgWEvI2JVHTTiV9BKASWcjpTB1SR0/mgP1kPXeBBxoz7uqJ21AN9ivbEF6KRv8fxsoaa3DA=="
       }
     },
     {
       "id": "ars-unmark-read",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -814,14 +814,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "yc6dv7usvFBPZMR9vpuUrErk1RyWy6gaQ0aZPamHKYV7djR+X5x7rWIuIHYo7cksDsq44dfiTQU0E+PNwexaBA=="
+        "value": "cE/PJ4Kxidyhbvx4WpiE1xrqb4Ar6kH8Eh1Yi4xDAltPYbPiEuEWkcxlTAf+IGdastjANJ/2WgDSKoe2B+PMAA=="
       }
     },
     {
       "id": "astropy",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -843,14 +843,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "HREoqBK/2ROBIzIq5+j2jd9cJ8GmFJoov9DBgO7kOnTD7diFUuZDChpa3K7O7hQh3e2vCio9J132zLVab/+kBg=="
+        "value": "HXScmZIXxqgD6I7G5wNm6+cmbTgrBCnrLpKq7ZljfV8Gf3dNHqZOTYIiwd2ttF3WCvlVDc2ja9PxWLa084hNBg=="
       }
     },
     {
       "id": "bear-counter",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -872,14 +872,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "jc9EcE/3BRfpn3Wlv3gO/3t1GtRnBL8GXUAWYL//cKy2tBOuoxfvEKYUxkho20ly8YjE7DUIkqZm8M/s8yxkDg=="
+        "value": "H0JiF3dTXi0F20R3PhP+L8b9YDAI6y/Xjprg8Ph9RA3zpTN4Zk4hjcVx2ypp0VcONfF+6WuUiRVJlEPx7PGgAg=="
       }
     },
     {
       "id": "bear-map",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -901,14 +901,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "O/jOLcY4brLrXh2PN9XAMQW3+ogMH1v/BLPorbtowvwI5Io/qbleq4H9sgzJNloW4Vnfc+DHUZTwy3PAEKhHAg=="
+        "value": "CeOGGm+5GF+L1IU+0RbJSmXAh0dGvhvTtQu6aXKBWcc8oHLMJZZewH8C+3PLxVVfvSimWSCfNpJnYvInc5LzCQ=="
       }
     },
     {
       "id": "bear-onboard",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -930,14 +930,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4U/GBXYQogMDEsziGErZ8V+CS6nXpjsyBxLcF2UwVcq4EFx17+XK8/jn62qjZHcjux65jBf3psbRcBtT6G3XCw=="
+        "value": "gv+9+t67ZWsvp9LYY/15UPsAjPrtB95EKh5ushNSHmdjOWqE7TXT7uc1JeWgA4YWDpxqjABogUX7rm/fM8LEBA=="
       }
     },
     {
       "id": "bear-propose",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -959,14 +959,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "vSHnGXG1KVejBCmkNBPlV2bgkmauMz0O/zMdMbJXIaumvGTTjALB140oSvL7mp6oPtHyKGAqg0BsOYYyq0eUDA=="
+        "value": "69E/Rvo+3tQap0KnHfAi2SbxAGXezSwtEAfsa3ZrMFqPf8mjJjKJHri7ZrIdNxCWhSjTwhBSzRZdIWHHHK4HAA=="
       }
     },
     {
       "id": "bear-review",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -988,14 +988,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "28/X6rUQvuwtooUO06iZ87PHJQTGtBC30n5yzXoaNAg0Oi3/wWuUWh5DQubQd5y6/l38yL0R87phHMDKusiiCQ=="
+        "value": "lrZeaaR9+MHcdKiNlIIuF0Um5cR38sNwkUSb1yhZZBFsAjpezKBRRvvgczJdd/69zFPZiPpbS3vyXySdI2H2CQ=="
       }
     },
     {
       "id": "bear-scoop",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1017,14 +1017,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "GF9Y4QYm1ts9cw36rcyzqV8Cnh98Qq+OlG/zF9NMwF8NjwMhdl7bN4qsXzGVXumBzoMNbf46VO5wpNB63KEYDg=="
+        "value": "0wi7bNGQrtZnxOEC7g+IRrRfTV2DASzzmK6GAlyfvhPo9t6n5dfLn5KdM+bfk3qn8yI8L9mmKGCMbnYWi/QiAw=="
       }
     },
     {
       "id": "bear-support",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1046,14 +1046,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "fodHwGhEr7qirjGbALqXWh6VqsgoVwzBeW7pLZH1WWBfZUcj1pqSkFeUzCesyAlB13wVdmvUE62xCWD8xAwxAA=="
+        "value": "vMrnmUZCAGKXueESeuHuVt251ajmp+o9MDKNnt63RHLRt0UfYMzpXZZItewfatC3xbqhNzBS+CLdB3xHt1WpAA=="
       }
     },
     {
       "id": "bear-trace",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1075,14 +1075,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "RICC9P3L70eB9OhUQHr0Ka6Am+bRu8qtpD6yhGJcNVgCbwTf9f1M7Ka78/3yJ/ahxAMmocMAAVIE2aQec64mBQ=="
+        "value": "0iHwyrgYbMtpwdPDGUcoH/mIjL7CC1kp548f17345guf2gY0T/AWLwbOrmM4zu0Xlxy1oiQUG+rImmjgM+0zAA=="
       }
     },
     {
       "id": "benchling-integration",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1104,14 +1104,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "WUSuNUea6xPSJmcbgvQnqhl42WvCH/TYHWD0aEQM4h0zOg1c21N7enSxrJGvU7ClWpjq4VrlL7E33ulQb6KWCg=="
+        "value": "hMKaY2MHZTVNP7TLNQPOVg5c3pSXeB9h6Q88yYktAIB8Qg6m0iva0ai4eh4Ra4S8nRoHPoQMqpA2p+0a0aNIDw=="
       }
     },
     {
       "id": "bibliometric-analysis",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1133,14 +1133,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "C3AByCRVyquohHnDlSiLPKAfM+6OG1iLmLqHDei1iAeqLmSrnjdEsmMhbYRfgqVvdCFsIzJuOYI7K521GQ93AQ=="
+        "value": "Y7OY4ypoycaDa32/Uss71ajcQBcFptCEAy7Fc/6lkQo0pwL0eR7zxn+J5FaquBi/7oAxWyHQEKtdB2BXi42PDg=="
       }
     },
     {
       "id": "bids",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1162,14 +1162,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ReuL3jbxgY4WdBg73t+wTAJMr5opAxc96Y44rXx9724aOnkfB7uCkXQEv8eNwaGVJpoIBZSu4KjLX1Hos8+cAw=="
+        "value": "o91rU9YuQMzyCzcNSnqrCtIuzjj/F4TLHEV7MMFpta6RJOJeYC5W2ybQx0IQKfjxV1ED1Oc2yAAcf8Ln2zavCw=="
       }
     },
     {
       "id": "bio-plausibility",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1191,14 +1191,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "dzXfjr/i/uMweNft/E8T1r7TCtVoxUgcK1bRx5ikIxC2fP1LgffBFFoGfiBF6o68iGBmz5gcI3B6oyhFx7ipAw=="
+        "value": "agVmlwAMBlQwGzUf27BxWFV9WFziqxVMEuEQFG9I2UBwVzlMKfetGqkJfTPYYIBuxPCoe2jdefpCMJvbSKkbDw=="
       }
     },
     {
       "id": "bioinfor-figure-export",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1220,14 +1220,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aJHfaWOyT0fVFaEYGdbOnskCXxJ6zTNKbTH5rRt+1LUJSGzoGLSZ+Gj+nppW0S4sbaqjWkBAaC/64JuaTvAJBg=="
+        "value": "aqkXmB5wc939O7c8nlxU3EHRnDWnDMFwSGU3TAnimopBHK3Antfe5EJGPjuHsMmOWS3+dHfBIaCI7Brg5h73DA=="
       }
     },
     {
       "id": "bioinfor-literature-search-digest",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1249,14 +1249,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "nVM+Najeq6G2rpzYA50xrjZZRtmKqvsWWhFFNF63aXcSQV34pgvV3AwnUYaJmxJvisbpAHTM49N9i25DGVwqBQ=="
+        "value": "Y+aX1gELmZRI/JyTtg3U712ZuaxjXmey+FMnsU5vAHoEZAPPk3Ff2R9n6rjHZlNsGuYQ4oonIKCWfFkHBpJQBg=="
       }
     },
     {
       "id": "bioinfor-public-data-access",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1278,14 +1278,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "/jjoQKuek+ZuiJahsnJYZyTkcRwiwJH+KFa06suIiyXF1B5UObQhRgT5LUBwHWjA/yNkAH53+lV9cftX5/EMDw=="
+        "value": "GRkh2Vi01DKrknut65pb39hFcM2QHrmC62zrC58UauPPKjRelKn7AnxyKoX30hWjspBS8K4cRm6KMFRzWviZAQ=="
       }
     },
     {
       "id": "biopython",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1307,14 +1307,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "2tKxZHojNU9iAOxeGuv/1NPv7zbc3Yfwkrh5YIxItjQvTc5Y1eQNcZ2c1XRM9pA/ejfP7PfFIvp57iuvLfzACA=="
+        "value": "WNFA2zwFh92cHxgCG4yjxpqQpqUitSDedThNisGevG/JzevcKSBAB/S2WPIdWtS07c+lT1niAH3Kye1RwnhOBA=="
       }
     },
     {
       "id": "bioservices",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1336,14 +1336,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qMRvYATT4yUUXU69JZgjIWgypwn8ucMAXdYwo5yqfGmcasFM8TAKBFcQ1y1SQQT7mi9oQ452TaCyd0xQ3PAbAA=="
+        "value": "INlIGJjiCfSp3OQqXHHa1FpDeC/DFPFeaWmTYR/NWrzB5b7u9cDy0LGmAbj7GrR/070eTQJUtUCn29K0l8TNBg=="
       }
     },
     {
       "id": "boltz",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1365,14 +1365,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Q1bJ9UJeaZvfcNtK8jznTFGXurH+wErZXUUkCfnvjqAQFGjpLohk6/jg9cYGIHbVCMyZKq58GlIMABw0Wg5MBA=="
+        "value": "q/ISRGEkDtixIIBZlRB+A72WlI2nJ04JNECbFJgBDaS1oxohllyi4qRq3KWB7YjoNSQt3xGliUm00mCJC0YNCw=="
       }
     },
     {
       "id": "borzoi",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1394,14 +1394,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "/ATElUlmYSjC2Idfg/kene63evVXgKss2sop7WvYG1fzSx0hENqi027QPs3xHQaWKd975H2eoMc71W3/7w/9Bw=="
+        "value": "XZsM6Y5TwAKucTdChdJKXdzillMHCTcYCYJTwnDfx0mLcWoMLk5BYujRhXGBlXKdN/rh432nmBH+bOLWYEoDAA=="
       }
     },
     {
       "id": "browser-use",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1423,14 +1423,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "1YSCVi9kUtOm9DyyUd+iYv4pU1FdJBcsHRhx2HNBgo93kJc27TMR0RDd0VVK7o/E6cIYd7F2ZKoGXvDFb0SuCw=="
+        "value": "fCUyNi71dMV6Pg8pKm9tpjTD+paq9l4VjsO8lgV0J8Gru1ie1fu3F9ElMXBEKffu9Xarm+ThDhiMTisyfV81CQ=="
       }
     },
     {
       "id": "bulk-rnaseq",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1452,14 +1452,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "jtLzAZcC0pf0YGVtrP11LZ16QQ2++yT5qEZCkxQ23+dSxwVfaoG+Dk4WvsVDDn0kyZG/1BJ3mdiCNkHkoYPWDA=="
+        "value": "YXTcU9+rBZSrBBd+UIRSmgGpLtKI+rIBf02ThWhWSlFtqF3ws8HMnXzCmuoiEez7ZPg3E/UJyV7YKnXaQ3ChBA=="
       }
     },
     {
       "id": "cellxgene-census",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1481,14 +1481,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "iGBGRlIRFEM1yAqXR/6vYvIr1ZwV0SzxLr6917NnEbL6TSGmoqCXphlK5fJ7/3FWRdU+NL2SiR+6apEwKrhDBg=="
+        "value": "5/gHewXRP9kRSt9UNwGSfNo8ygeKRFsmtDh7cEig7lrvjWYL7/DYe9HesArN2yuP2aVkq1Dh8VPigYDmKAaACw=="
       }
     },
     {
       "id": "chai1",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1510,14 +1510,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4U3iow+/fDJPmvEOiZb4yv/o6XA4b5u2KsFu3TS3cIDLBLIRWQc31Xutat4G/6mcaGQ2M9pUlVuykDJrAs4uDQ=="
+        "value": "NI4hxf5IZ0rPImtIFoflmac8B/fQJrzCQrVeThW4W+QYIVTapZHL+6x0NZ9xXdshfRjDLcsLrTIN22AhibxIAw=="
       }
     },
     {
       "id": "cirq",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1539,14 +1539,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "p44EDlJi2Hh+guQHWsC6B6fHLJTSBqfHBqXk6px2EUU2TW59n1z8LTWOthoQuomryCV17zT5Mps6RBCZCt8LDQ=="
+        "value": "0wCTTvn/8W02xXouV2T+0ULMEPhEhSQZF2mR50P4oYHTJU0W8TCRC8MSpjpOoJm15aVYWyCNDqJnpdxdtJirAQ=="
       }
     },
     {
       "id": "citation-reviewer",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1568,14 +1568,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "XxnVNXIXb9qxLjW62H34eoCM2tBtDFmwLjK9scCT1AObTkpLp0rNRZbWXMOKSuKF///0raY5JHn3HWPzvQ0BBQ=="
+        "value": "k4mSaO9G4IIJqjmmrAPh7w/V9/JEFOFicekfpXwc6BCWVZS3X2frFPCzZut/O2c6QMtqZ3NVkS9HOimTSy1gCw=="
       }
     },
     {
       "id": "clinical-decision-support",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1597,14 +1597,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "O7yIPyFz5FhlEalDF3x2OWK4Y7OVUIdoT5ofxhN5DnuMPlWm8WivUO7wBAbVPHUvsKB4HRKuAoEt7cXj1FjHBw=="
+        "value": "yO/ttgwwPD1zImfHRoDnGyuVBa+KaOI0NmckQr1qymr0pKXRcUMK9oYE+z5JDG3rN+bKUaOv/BIQ0tV2S17DDA=="
       }
     },
     {
       "id": "clinical-reports",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1626,14 +1626,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "AyszZEIjRsU4IR/gxpONDv1Ffwu0E10ETGS2TFmjVwrTapwoJDBKfzj/YtnEQpL7mWgQ9HIpuiiy3kIYrecIDw=="
+        "value": "dFbYMbB5FtiHiuATvnR/uBG2l9i5IHcrH0QbBzW712YFaDV5Yw8Z67xDmOLX9Jk9MruG0AMTGqTP5h5jJB+yAw=="
       }
     },
     {
       "id": "cobrapy",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1655,14 +1655,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "zR+knkpJFgmUOkfs3va+FLcFxQiT86fPfFjI7jbnX0B9LDSb+nt191NC0f7YB39OzmKSVaws+CnC4w+Thu1wCA=="
+        "value": "uQ5+0kRFDmtSntP8ow1S19+PMrNIB/upUp8vkf9U1mV6GxN0XoD5Ifhb144uX5ZxPQSsGmYREJOh7HMZgsXKDA=="
       }
     },
     {
       "id": "code-organization",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1684,14 +1684,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "OzMtiinqeo+GTPwe229XrofnT3vlzGCujaXvIIZVeccOqZhNv/MqjEwKtJiw6N7lR+tdl4LDkX5pTHQU4BqUDw=="
+        "value": "6JvpN0VGOJ4g9JIu33UT9ArepikQOnvvh8WcNLFQLsSw4CbDsGhjUqfkel8//JmMAfmgDwvpJ/TlC+gnrU++CA=="
       }
     },
     {
       "id": "compute-env-setup",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1713,14 +1713,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "7vWSdEaMR8TgDTORgRzpxTH0a6MvlXQjSjStZzUrZuQKkzSR+dXj6yxcl/jeux430s+pJU5I6GjA7xM2pftIAg=="
+        "value": "yDNNEIwyDBVgYBCYvvjm/gs4a05p26Yj+qyizjYtFI/GWmdRo404QITIqn5PBqPklISQLKc2LJ+8uCCXNT/bBg=="
       }
     },
     {
       "id": "customize",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1742,14 +1742,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Yh/khuzj/Uw4Pcxj82xWSif46wnz2EuMoSiWT3Z50VhIqVRjd8AVN5epeOdRMU0CWyKIZSXEHgUKnKghCx/rBg=="
+        "value": "VtjLFe5IrFvp9Qvz2ZNoctDbz3ArNMpX7WFN0u2ucSlEusz8RqwoztlEWHDiFmKvpVU6GIRMLBDlwoF5bECICQ=="
       }
     },
     {
       "id": "dask",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1771,14 +1771,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Tsj/Vp0EZeiwUn2YtMcYUsjycJmLNyHHAHWPhG9iKnKTaOo5h8lu2796Qv3gsJjikmAcEqx4WEI3zA3LsQQxCw=="
+        "value": "OzDUBOErvTIjPTdRGDaHpxb6846cs2eB4zeMpfWC+SNxdqFNVWXy65s1R2w69st9QI1OQbvx7+TMG76tbvmfDg=="
       }
     },
     {
       "id": "datamol",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1800,14 +1800,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0MtvdULC89MhrgO2iokhIJhSi8g9209HCb+UilZdtY4OspjepgwjRHTSchz0SGGslaY6TsswVKffLl1JM5vgAA=="
+        "value": "3msSJFwkwUKQzYJKEJ2zThh3Hk3gpI0A4iRdVpYLsG3okwtlHvb+tHkbUggiyA0COrM/PEwnmAhTVwzW2AKmBw=="
       }
     },
     {
       "id": "deep-research",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1829,14 +1829,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "tEVmsH7URlX0dQaoKGHjSEx44GFF0+QG0aLSrAbU8pf2ZsGOzkJREoJM5yV4jQDD3VcK+whzVyvuFWPMdg3BBw=="
+        "value": "B6xhamqiZ1QC1HOdR76AEDEqjIIe67g4Gyoyt7vs/RWXYEqZpxzzbXUFR46purMv2TZXeLwj5W9Q+fF2YzxZCQ=="
       }
     },
     {
       "id": "deepchem",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1858,14 +1858,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "HfB+alzKLApguMx44/9UG/alAKt1C4ZoGvSZifjaV3fEDjJg68LRHz5nrp24yFNM/WWdo6lnE/DNUk4N0UBvAw=="
+        "value": "nnrY+TsW+qmHp8pQvWzbm3Ef+1Dp0PPip152b6aJQwL5NNyie7gDkVRuZjRuVOoKYPja7Y/6F95cuVg/ZDEVBA=="
       }
     },
     {
       "id": "deepspot-m",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1887,14 +1887,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "QXkbRyvW+Dzktb8bm4dcw8DfiwZrqAatSddmZ7NkBjbrLe//aElswBvn0FXBn+uNfzlJUfd+SEfjvULaGtS1Dw=="
+        "value": "efU2JE4ene3IqbgjnepwBrn3X0vDMWpTqNGcz4Mbq1mR2CL+gZ+Fs4uC21YAKWfQQqRnRvinMOsA8iHxxe/jDg=="
       }
     },
     {
       "id": "deeptools",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1916,14 +1916,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "pWd+Ce+9flH0Jwf2YXCJlQFG38O3ZQDwWw+mf6zFNwi4I27K00ly2GLPEKgMe1Swbw2zwqC1WcJr5Ztz1dv+Dg=="
+        "value": "afINPzaMV0f04X1blJ7rvYOiLcSVdcrHnIz0dWt3Gh8vtbFotpN2hlIQepOTzd7F0gD85wpwRiqnfTPgkdWpDw=="
       }
     },
     {
       "id": "depmap",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1945,14 +1945,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "YWML6iAXe55tk83agrn+k6b8/KaNdSk3Y6Bep/gS8uHbymvZo6vMrYXRz265s+0UfGCjV2pcIQfbB7QyQD9UAA=="
+        "value": "wkYg7GK7M8+bRnPa3V/+kDNmOL4dGON4yJbJooD9b8qX0TLaSAeJdeVJ2ddihaA4qF01NurO4ZcAa74w7rjPAg=="
       }
     },
     {
       "id": "diffdock",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1974,14 +1974,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "PcORcTMN29LK2jlEltBhWT1wJYrthUMAZRPm9SmhLa7Jsz4zicCcFw42wluYnw0YGIy4oG/eQvwDO3ZDgsjPBg=="
+        "value": "ZWGGEowZlXYlCOD45QGkfJXUgzYK4fyIQHtFPDQCue4QCbN3JXlde4XLVnvjCEL+uYUru2ImOCiuxrJweo66Cg=="
       }
     },
     {
       "id": "dnanexus-integration",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2003,14 +2003,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "fwHUB77nmylbxaFIMPdFWmSRjXPgQskHD/hViqiz6BYIuE7ueVSUprEL3T90tCzjwPeYItTie7wlXZ0mGgGlCg=="
+        "value": "DDP7ie5lCon+bcddPI1sQsM1JypEy2anooURaNXF55uovuG9dTW3TDS7rzhTTKQ98RKg64NzsFMu7fhOv8bXCA=="
       }
     },
     {
       "id": "domain-check",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2032,14 +2032,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "HIa3X9iCMWeY/axEoAsDG0ORCuFMJX06zLF7rIJ48E7T2th9KcCmIfGhX+sHymS+c9DH7dkezOFXWI1vUi3rBA=="
+        "value": "25++T9y2xKAMzJ5HlDgaavjeNT/KHlSy4wUEKSIT3mt+x+MAZGAYHUpy0lSgz+lBrWlo2bTcr30hw/60/mxpCg=="
       }
     },
     {
       "id": "esm",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2061,14 +2061,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "OJgUubBCDu+tElRV824DTUeoa/G1kgMGS4qZDtNln7JQ+ookst3oe4/J23m6cn6mq0wqUqJbx6zcac/9WT64BA=="
+        "value": "vz1P15lCYHmalxYAgFsoDkcVBpvIDvVO3VI27PnHCeFnTKn7m9ajqknoBNtyRuQ9ju8jma8qvUCNijy7E8mLDg=="
       }
     },
     {
       "id": "esmfold2",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2090,14 +2090,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aTQrVN4LXumONhOEFSNhlbJCT7S6FHp88I8J0nWkgEw5aXzAyC1xVJMn5bPCqqMqeTLK8iyZaJ5EYR9oiYawAQ=="
+        "value": "Kdj4ZHue9Y9USSKDr2i57dtAnFLBpdyGAz365BElf2zhdIl0wXtuTyxLSxaJZLU9WAoQFObXW3jsoMfZVQiDDA=="
       }
     },
     {
       "id": "etetoolkit",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2119,14 +2119,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aJ9e05XqdcImCzOW81e2fwIs9PqXvr9zOmWtRcU4xMw8+2/c92i6bhugqTWJJV8tR9k4vvNTS9qB5SNq/JoDAg=="
+        "value": "ztnDdBlRxQ/U+8HfiguhXmbfpyVb898swYHOUkXK1xZtFPoiqPVMg5MbG24R0ZOogziW9JmjNa8bx0kCbrViCg=="
       }
     },
     {
       "id": "evo2",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2148,14 +2148,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "2AFYQkEEkA0MGPNZ8iGa6ROf/6IjcEA7zsvQr/3IDFLc3dCoumT3nBh6mIaiu1jZ0jSMxM5UkDY8z5yWM/EACw=="
+        "value": "/bHH31E2n6yBwDChXUwIGI3txy7cSfrhB2esSrIrKRqyBZk8aUcjB/fIdSMcUzUaRQRbyL8mrHjS+TLd6JhbAg=="
       }
     },
     {
       "id": "experimental-design",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2177,14 +2177,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "a4IzAmQtkrQTosvdomyLnjY59sv+2LxwfPPhcMNYGWeh4MWpRitRL7nEDlA+XCJvqLpNOU+DxnZ8ybbIFLbyBg=="
+        "value": "YTSwGkAAvxvN3YS3hsyguQzoA5sGGfpqS+v+Ych2aycU8wcUrSDB5ZUhTo4iSHct+IHKcqpZXQgZWa93PWAlAw=="
       }
     },
     {
       "id": "exploratory-data-analysis",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2206,14 +2206,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "R1PNB7AAh5VgvNQNYKndk5zSrOklUGI5zi+l/oFbkVP2t5pQphJKSyQ1yfd0xX2c3mlwk7c+FAlEvsAcMfEpBQ=="
+        "value": "lNJBQTo7q9nCRD8xbb6MYeWMUrMYw7nSO/AGlbBil2j0EzW1rZX5xkNRJ6g1CdpRb8x/2d52rjeH9VYi9/ECDQ=="
       }
     },
     {
       "id": "fair-esm2",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2235,14 +2235,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "KPaa/4dft2fCg2cULSU4c0BBlyHu9SFgvVLjTy+IlC7IRooGVXkvaLtRWpK2w15kTND4q+eRzNMPYHjiHaKTCw=="
+        "value": "K4OOVvuZHg1STWt6k6jy04A35MbYIvKOh5ItLpknvKznl6nnV6oJUntXV7mojJ5rQ0H15WvQQM3+gpIp4JFBAA=="
       }
     },
     {
       "id": "figure-composer",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2264,14 +2264,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "g7JJSuQT3kNvIv8idTzflR72enoGBwlFgWJCAoOZx9HT+DmEYvNIfyPrLrcqCHL9fZ92FyP7qp7b6gCMohelAw=="
+        "value": "XtYBcTPB7AT3X0u++Pn2FaLhcAwR6Yqbn1AlL21rPcxS0jREzUH6QUvbfd0bSlFmkmKjLVTq0h7r2sAdSwOcAA=="
       }
     },
     {
       "id": "figure-provenance",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2293,14 +2293,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Y8pZrsuVgMo++7/8GQ2bqcU12tlQ8h6D0SiNFQvpQxT0qUt+g3h8Jmoe2k7MjJd4+0TA8Z01I2G5EmoAHPo3Cw=="
+        "value": "ueUt9twX/7f6XN4UJML6FXN0eYEvMc2AK8ckhTnXA+y/ALm2Lda+FU4YsYVON/Eqjb47ZHWmsMuA1slgjQGyCg=="
       }
     },
     {
       "id": "figure-style",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2322,14 +2322,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wdxXNvNVVDnZtO/LQttcyOADhNG8OnK3FtLEM8/AD8TAcrvPnjvIXA0mO7ZchWgV0sH+/IftQaAOI0PfQ7TnDQ=="
+        "value": "GOqsWI93WisdT0HVWaVgp2o1j5VNTL+elA/M7uxjwfsrJCy/yWvnFzq0fRO1QU2krJaUWxQN/POSqrI0CSsQBg=="
       }
     },
     {
       "id": "flowio",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2351,14 +2351,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aV09aYu7il7wuYgxNKOQko1haw5rqL/A0T2uMHwJzXlHeJuSsGLPaik4L9mpFRXOt3rEeYoeX9Xy8wO1zyZwDw=="
+        "value": "NKCs+8yM/MTIJ20qr/NH9yLPyH+CFD4p9QefFD0aviig2sisnSkNmajp/ytTyqd9Pk/GK5eubfU8aSTBDIgeDg=="
       }
     },
     {
       "id": "fluidsim",
       "version": "0.1.4",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2380,14 +2380,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "zUqq2w3s64q7knklYtI9d4a4VK+Ft0lx+YAIUd3vSaGFWkwEBV2SXRO+zoi7XDvCAx8OLxGG/DsBAi7xQZF0DA=="
+        "value": "7slm1EMi0yV2G/89HRj4OHBWeQwXNXA3ffjVgFDPij4X4VovMD2GzanMtKZptVzKTbW0rsYzGAyWaryFF+AcAA=="
       }
     },
     {
       "id": "geniml",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2409,14 +2409,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "KE6zWBXJ4GsMQ/T8qYrL/8uACpiOmaWxbNxU4zVZEB9GICNdQGi2CsW3IHii3+YKsDgyylDmBF2tQSMhyrq+Dw=="
+        "value": "QZPTJ1OVr6NETl6K9Ps6V5bjl9Y+yVqkzdDG0aCYVXY+/0kD+C+CZkdhVuQnypBjh65JvonGLCeFHKLc5faODA=="
       }
     },
     {
       "id": "genomic-coordinates",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2438,14 +2438,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "6zVYChOThP/wln610Cg3mK00AbPSE6gId7akwPSM/Hx6SkqKQVZvyq18Pel+GPwLEGzf7uVOW4r8WbcrLDjUDQ=="
+        "value": "QnGc93v/Jh12G4OlNxQBsQ/PSj2Q49b0M8czyjZuCWVhT7zkHn6gU/PRbe2CCc/IKzjPU2UB2RXOzCt2XbVUCw=="
       }
     },
     {
       "id": "genomic-intelligence",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2467,14 +2467,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wgqHdaZ7kUYBHoaQUDC14op0RO/DKYms6noseshGqs//0Q9MIAHtcy/bX77HQhTPidUSwi9/8tx4WWURhSD0DA=="
+        "value": "6tTl8wNxZyfKrrwyhLs4n52qb/A/lGNNWdKDjLV45YfmxfMo2HZuYYvXER9c2cte/xZqeES1Y3XKoAgcPP2YAw=="
       }
     },
     {
       "id": "geomaster",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2496,14 +2496,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "gtwCI6MYNSF64E8wczTFVkw5PiEYfInG3Jzbee6rwROBjUmKy42vHeToWfJrE/2RPCI8ZtN3/XbrfwBDI8NEBg=="
+        "value": "HHl2ecNePEV9uyfdc6vZKMSLVt65vMsNyqqPnsmj1X/JOSOIjgCDRniRDBQo6aFfwVcROBpytiLdD76FLeBTBA=="
       }
     },
     {
       "id": "geopandas",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2525,14 +2525,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qe8/NLpsJOpk031Lqb8q67cp3FnIUCsWrluf47W1NHf/wLsD4w8YCbaJQHg550nRFeWeOrvXatFOKNsO+ln1Dg=="
+        "value": "czhE6VGZ0g9gq2RX2tGNyLq0Ee4vLYNxV66cAagaPUJT4mYiYU84Aq5EGP7x2K3gDzjk+OmJGmSgk9WUGGewCw=="
       }
     },
     {
       "id": "gget",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2554,14 +2554,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "EuQNZVm9OA6RZpvlKhVxWOxyuTqgH+7MW1WMfM9qm29/FmTA7Jdo7T9+24meO7K/sbzat6tB1xXQ9r256Dk7Dw=="
+        "value": "nGtJVnyE3yjSeDBHsrEaXqIwfzcjHIz3FZsIHlBoc5eAkgg6nN68W8+lYWoYScIqaGamTLKqjxeKk+o7Z++GCg=="
       }
     },
     {
       "id": "ginkgo-cloud-lab",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2583,14 +2583,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "OFinNFdpmneL4bDESkzw7uPYlaEPOyEGzM6Xh6EMbU88AdBK1yOclrwNZXv4qC47LeFEk5gMds/Id+Q6iHBtBQ=="
+        "value": "rkNLH97H6YhUnVmHp4Oz6qZhatGRDf4mZdObrKPvXk1efJmlMt/9OQsYysNXnhUN4CrcXZepvMQbed2RhcUrBA=="
       }
     },
     {
       "id": "glycoengineering",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2612,14 +2612,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "vm3ooFGRkfHqojXZ+Q59SsVGloncqWzWXTge2q+P0ckKwopDbs9njqhJDz2PRRFep6OLThBf5w9x3Q9oYzIJCw=="
+        "value": "emZlxlL+BFmPXvJUVwxw3g46bwHE+CQNGdWPZLEtuW2bgCUGxzq+UPfQCel1U/DCLeGjFwACGqNQgBpl+re5Cg=="
       }
     },
     {
       "id": "gpt-image-generator",
       "version": "0.1.8",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2641,14 +2641,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "oChxkzsUBSTQiwyTDxZ4o1AY6eDQTjParRz1TYk+JdL6RIxFVJ+2ZouQl5far2ZjWTZ/3+wUvJXwWVzXfxpvDQ=="
+        "value": "E8MMAuMnfwKJCcf/vOwU3ZjSzmwKEqjnh8xHBvZDz1L3k7PTCH8i4DVU+OtlS0/3XDGw8THIYImO3Z6xIMMYBg=="
       }
     },
     {
       "id": "gtars",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2670,14 +2670,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "DMyVZowHBaX75Dmz4c3Jf4QpuVHW5wm+9/AL7IpmLK//N0gr/9EN0pnOqfcpb703wGEJf2DQtrNWgR2FFWq1AA=="
+        "value": "xbOL8IBjnWUPfDTFPirQS57v3CYHjxtyqbPtDomivz0mzofqHjQj0EVD06l3RepTqBFSdsb+onQCZXiS1h9MCA=="
       }
     },
     {
       "id": "histolab",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2699,14 +2699,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "2ztfSsSU0RCdjHONC0q2FbV0oX0XAmIPkzlOkGY3vW9s5d5ED4TF1wlThk3HGaCaG/rcrFY3SgXlfKkvx3CYAQ=="
+        "value": "O7FVdlfwtl50z2q6BJORw0kGf4Dc9y77o8FwMsL5snLtO9YbZi55szutINB/s/fpGXQk3P41LvhJxYbc5d2ODg=="
       }
     },
     {
       "id": "hugging-science",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2728,14 +2728,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "N7xk40glFMWCvFoeuBzI0uXsjRvojlVg7n5qbI1ByA65x5kx0L95BcyDYVZZRP8ovPVdCWBAhl5RrI5ejKV0BQ=="
+        "value": "BGzk+0G+V1CnGcC9/2fct/BrjwNQBS69VDzd4/zOuuvrLWXOYvQQ3hIWsZoF/+sGPkXeMQPl12opR8coDJSdCw=="
       }
     },
     {
       "id": "hypogenic",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2757,14 +2757,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "NV9x6WmR0AY5gypaEICXYPhmyfXi1d+R1hkuDAx0PN9RaOxKeFeWP5n36Nzq+vU1uejAwsw+X9XImwFQoLlwCQ=="
+        "value": "x9PHMT+sZqpN1P/zvOmikyn4KQf5iuuHZUTkZ1/0yHHi+yW5O/9XB3SiCuVLIPhaP16MxNg0+O5jvKlI6gkfBg=="
       }
     },
     {
       "id": "hypothesis-generation",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2786,14 +2786,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Rk0OTgSbMzY6WylkC32c+z3mqykFmJPj/CfeHG2imXDX+hCdxOpEenvDbRPgZ4dD8C2MET+oEPrmV6euwjVNDw=="
+        "value": "5k5d2IPUIWWqHju90cisEksWlOsD0ukcNzgihzWYuxYiWrQ1JSOsM6X3/aHxib3vC3A6Jd2Jg8LHi6xkkCBRDg=="
       }
     },
     {
       "id": "image-base64-render",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2815,14 +2815,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ziU/0ALfHGLR2b3/X7bPsl2xzmtHsBnzI2XBVuo0eRmit+BEdNFK43A9klUEf/AE7I2mOlFKLwsRIl/RI3W5Ag=="
+        "value": "W5ymR6Md/mjCBTZTnIRiFd9spIXp/L5a+1dO4rlWUuiWa9nVUy8nUxWgh939QFqS/PTFVtc9ZO5//QvnMTCoBA=="
       }
     },
     {
       "id": "imaging-data-commons",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2844,14 +2844,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "DWbVU04/lVOSu6Du1vF/CKTifDcrKyFWaj/o9mZ5fYM2It7XDb+Bj3Hjs5u34CJiR0gAyeu5e0cZlhgD/bSLCg=="
+        "value": "B2reL/h+Ku8lneYXPQEjd6tbWx8j6B0UT5qMFUkLiiyYKPF7YPcGJecXMJMr+zLkf1ap74AwbmVOrYJ6nUHXDQ=="
       }
     },
     {
       "id": "indication-dossier",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2873,14 +2873,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "GbHa41mzG4XhCfQ0f2mCeOYk0wO2vj1Mk8JiTsen5Ne46hBrgSaL0CfdB7DIkPhV7mCCZ09pYCGz0jvuQaL/Aw=="
+        "value": "gdnoDf8b9iOy1kjt60/SNCmK5OIbcX64ZAmSj17vYyhM/qohe6TuHLuV5IczDoHqXNhWE3KXxanH6Ih0kaslCQ=="
       }
     },
     {
       "id": "iso-standards-readiness",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2902,14 +2902,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "68Rk+QlaUj+nFfFqaw/TAOsIWc53esSpCoWVXdkzIsfUxGElAQYEJkcIfZXcbO7ZPbkrW5JwRjJumpP8thqSBA=="
+        "value": "92efrmmX3k6DufQkI/Gy1vJwanrZLt/giKaLRJuLc0yseUtgZrFI8CUu5beOUTn6QCP2Wg4MgORtUuuUppzvCQ=="
       }
     },
     {
       "id": "labarchive-integration",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2931,14 +2931,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "n0NTJY81rOePSZ664msorgXiUxxKurIZpL+xEO2k4N32w9hcUpCXT0s7ZsSkpQkBIv2NCsisBO37aHTM1OoEDg=="
+        "value": "/B8PprxrY4UkBBSqE3YTcs9fusaYAOrIBIN+1E+dVWbP1l882A4xIva2Pt8eW5783ofLUsKdX77koJgJTZQUCQ=="
       }
     },
     {
       "id": "lamindb",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2960,14 +2960,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "9D9FqSi+cjPhc2lSg+49XIzsNY5YqazD2XdX5DxVpMvS7xpJlIeb08jzARvn+PK+tfVD0Cxz+wepsLfdD74CAg=="
+        "value": "lifC+V7DcpWN76dVp+6wOkequNyGi9IMr8eGocigiNCM6buzWoO3SY1TY0j9FTCssPntCUoC9EEvKf90GBG0Bg=="
       }
     },
     {
       "id": "large-file",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2989,14 +2989,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "AxQDmFYd8TczrUqGiWr1NJwcbdmIjsuSJhgWCuFsg5pnwifPEVFehECJk9TYwKu1AVrc/2dSk0zt8zh+NgnFAA=="
+        "value": "I96TtXJDy/MlBg2FPXbpKs2bvIt9v3R6YCB8vYEzI/vgAqOAY2NlkeVTYSD4NZ4UaNiPoo1ElAll27EsgNRzDA=="
       }
     },
     {
       "id": "latchbio-integration",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3018,14 +3018,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "jmy0CnXodlyfnP/LdKN+lHGXC8k8qaI5giM8yjpzpRSaoyZwO7TN/xJ41D0LcrX4HYmEJhfPRQrGrbbvuTZmCw=="
+        "value": "87snpMC3EdYnj9bkuzYySwfc0Zg/NPVNG+dvvlWw8YOkN1u47mpramITDU9igYuoghyg+sDpalXooL73r6a8DA=="
       }
     },
     {
       "id": "latex-posters",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3047,14 +3047,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "dtl5KlD4C+63brZ3/XQi43R8E+lRUQp5L5/O0SVQ2oSSI+UD8UoBY3+KZHXqSI0voZN3fIZUa2rj1uJLqt9tDQ=="
+        "value": "mjupJKkL1EFVCW4M6F/3prSniu09JuI5mM61TJYcexOS4UoTXg+Ppuzjt02FV1Q0jXJynnjNJJaoZBoAagqxDQ=="
       }
     },
     {
       "id": "ligandmpnn",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3076,14 +3076,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "U0f06LwAdAqQqXcVYfDcwZJe+xV+g2enSHGmou2FsCfHoZPwvX32TuUX81TgClACISAjHl8bjlPL3CHJ0w0VDQ=="
+        "value": "h+fOuseUJzAm91YIgrPckdE/goycf4YdekVE8KNtAqLZssGRUrO82+AMmqDLDVCi3kQ3FpdmTs1eBX1pFs45Cg=="
       }
     },
     {
       "id": "liteparse",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3105,14 +3105,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "r6D0RgRhvJhpAIkTnd1Gd7emuJgLPj4mZ0ladddISbs8T2CMIH93Bo51ZH9GPznxzAxgZ8Sx3PJxrgpBIWfRBw=="
+        "value": "vN2SFxwUFIfUSAJUWKB3QC3C4eLYDkhq9qwmh57j0t1Sn+JZHGogtdyUowHNEUObg1/zpFO/jg+Wru7v/TAaCQ=="
       }
     },
     {
       "id": "literature-review",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3134,14 +3134,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "dt0s5tXIs+xs/4Graq74fRGaIv/inic/sTMzgq5aut/FLYKC9CBjnhRSXT9mJisAatCG19N3LJXexZjJ1XsKCw=="
+        "value": "TJ6FaOm9gGKzXrTYcc/b/ym72l5yIjCzkO34haP/Y1ynC11XKHXmk0fzHP6WcVYr4xEa2eh9qlgM+i+IMdlICQ=="
       }
     },
     {
       "id": "local-env-setup",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3163,14 +3163,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "1iHr+iPD6ITHPy/KfQeHXHoqLwsCNuVJH9ddVzb5Fib6166FW0AKO2WYK+5sVWIFau4dZbHHiTraAmYl575xCg=="
+        "value": "oJYhW0hQdbocZ7VV+K5jenS5FLMjKWZW5MjlwFrj0FelTu9FoG92dikj3IzSatQmkp/ftDD2bzNtY5BaWG/1Bg=="
       }
     },
     {
       "id": "managed-model-endpoints",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3192,14 +3192,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0/A+nzK5vw9DqteviWxfuubd0461hRD9ozx7RS3hiDEUBqOWuwQzYmjJHUp6arlL4Q/Pw/kxfyEheb7UTsz9CQ=="
+        "value": "zIU1NvIqoGkei2BHjKUOLhMQsO00gqzKVbNLKqdVkKEgReNVGN7CNjLaMOOqiy7QnsCZxWEyMQP2lKPM/Ms8Bg=="
       }
     },
     {
       "id": "managing-pixi-environments",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3221,14 +3221,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "TGpjxnlI0CTRa78wiZJ3xVeN6TidfOIcWSKJ5oxCd2/qjjX1SCGRoXXyswRqBOEDaTLANQT3/nQWR3qycX6JBg=="
+        "value": "TlQGSs4SQ03a/BiWJNSQaGRWD9h92HTNEuRgGy5z2kxp1xN/VxSA4aD8SozlFGHM9PFhhwbJQud9gnif7HLQCQ=="
       }
     },
     {
       "id": "markdown-mermaid-writing",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3250,14 +3250,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ixYHM9w7QCU+8uNb2ULydPl2dgvo1DxNuetMBGn5GvoaZy4vU8Y3RFHNdBUWuWWpUjRxaut0cVUo7WVgJq1DAg=="
+        "value": "slQIPSql84KK3tfhVu9B7W4ni+EWyHTHs1C/Ulc1vSdNCAcuxCRoHeXIm0cpzqIj8/1TtvmM3x8JjK9ltUVvBA=="
       }
     },
     {
       "id": "markitdown",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3279,14 +3279,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "jRAL56RGqvC5P/+3tSsZIld5Be+vVlkRkkI9J0AIaG01PvuFZfv2+OQnr0EVRGhWSO1RmHVKfj1k+8mpkJtIBQ=="
+        "value": "0jjRU5nD4LaXegARxJrNenWA+dLyftAmsrVtajvFO25jsjNjXOIgDhZLz1PiGKZioNGQdl+RV8Zk8sfZitkfAg=="
       }
     },
     {
       "id": "matchms",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3308,14 +3308,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "EVJl9pwS50xj+ReekdqQr4Z/uJ55ke8rudxdt/N7zSibKrxMH146DCRYiaaxNcQq1HbV77EBX8EfptLTm3pVCg=="
+        "value": "GXEynQmxT4U9YU0rvLs4B3K7RCh0IcP89ElTWAOsU1RLt2WJ30jE5CXG52XqXgPOw+8FaD/gwIGxejcaHBfsBg=="
       }
     },
     {
       "id": "matlab",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3337,14 +3337,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ZwAaWK5IlJOzA8t15JuldGL8ThV6A/WMveKTu4VXuY18d5Bmcgv9zIaNesC/NFllZxrc64SijyysSseqF0C7Bg=="
+        "value": "pF7Q/5bkcTfjxfY/c+dcGCHTbxfTtPwKBn5lg0pbEvcSRH3QIuLw0+HxFYRXPPWbf6foSka3PlaX5xyJ36bjAg=="
       }
     },
     {
       "id": "matplotlib",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3366,14 +3366,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "5v0dXwP2Stl1X7g9/F5pyiIQZ7RhlnwI5Hg4yPeIF3jnoBolQFcf2b9k/n+zKAq5ldIgxN1u0DQpFjUpBzyWDg=="
+        "value": "Aa4jAgvve7hZDr9JIr2FjSuvylQEGhar+PdYlkXG4gb8MaINqeCyKD2Lr54Z0+ql6K/43TgClXnrbuPF3D7kAw=="
       }
     },
     {
       "id": "medchem",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3395,14 +3395,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "p/6HHnM6R7/nWkvaG9PUGyUXXdiBdVQPh779jlLz6bi2NUpFYJPJdkDQE5v98k4s1x9Tr1/uNvby889fLBANAA=="
+        "value": "cSMnMCCYYlHDCh4G0eBrfYz0eLuiXqrm6CmRlVQjLpSj6Rksb/jQiyz4iar3Uo34lNErMxF9QKS8Zwiq5gWJAw=="
       }
     },
     {
       "id": "method-choice",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3424,14 +3424,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "UpyM7FtkH3ca0xmqV+PhfESEmpjnlD0b1oAXg6D0gU53VYPH4N1pX8b3c/IbV6NjUJcY3TjDJQbOOt8+1H4KDw=="
+        "value": "g3peTIRPs2a61KTMGjHQojELENBNac+T8co5OcTr/bxehxRDZYg5qDfSTEKsnX35W6LoBvJc2tBIxiiLfDstCA=="
       }
     },
     {
       "id": "mineru-document-parser",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3453,14 +3453,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "jHBmynLUN7/ktjsGZhRIS81r0S6jcTGh6d4nhLs+XEcRc2JP0D/QIb6bLcxxNfodjFfFlJ9jUHg/yfVywWYdAw=="
+        "value": "6qzTM2VO9EgZQ9ouFNCdaYApMyQ2im3K0tjVQ90UxQ5kmiVKjgLzQFTcqBXPOE8PoKpO6d9T9d4ECy5RS9gYAQ=="
       }
     },
     {
       "id": "molecular-dynamics",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3482,14 +3482,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "y499VnSPAPDj4hgO6tB4nQDsx98BfKYkFlBQ+5yVpaS8a87wzsJSQ8tS3eek8nvssBvWeb5xy5q0ZZ7zOXnGAQ=="
+        "value": "8gWLRUiwGY59eGn7ngFWqRQ/RzJnXSoKBcfrwxR4NGuDLIB2fINVX8XMbbKaKdGBreu2GSYX7ndwn3QETNleAQ=="
       }
     },
     {
       "id": "molfeat",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3511,14 +3511,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "KqqL0TmBOftNqWpgT/bZ+q6lKK7/gIkrr/O21rs8fHi6VPsLTz5R3BLajZCwxMdlMsat5sptlA152zxq8IT3CQ=="
+        "value": "R/PErq/JOH+ERpoje4ksVEDEAhXvLLA9Pz8DKeF+ykakrjlntOiyuRailND74Rm9AzrHoG0FcxMXOh0AodWNAQ=="
       }
     },
     {
       "id": "ncats-arax",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3540,14 +3540,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "mlviAZ7CangTi5f3gIfydmKvtlSimv491yb0R+cOb+yKvhiwTNWMdLMmBFst86u4kxo2AIKuEfWaYd8/xk1nDg=="
+        "value": "YMUb3PshLwpbB4EA3rEq2DjuvOsr3LGQ8Vb32Q/0pMrtNUyz2TjNWot5DVigntAyJaD5omLMaBhRka362tM/Bg=="
       }
     },
     {
       "id": "networkx",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3569,14 +3569,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "dWdMWadYwAby6vsY/95bpSDlfXkzsgoynfgwGkN5WnUfHmYpFBYWLvSPunjGPyDBD+MW4nbP/ubGzbfEfGUJCQ=="
+        "value": "FEfzc9nAh3pvZ1nr7aIjl9aUTBXp2uNNCt6cNkgADedR0s620k3+SaFqAiOTUDDw46S6VcDF1J816zRv8x0SBw=="
       }
     },
     {
       "id": "neurokit2",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3598,14 +3598,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "mtE0JX0M2Om3XkNL9d+ez8wnDyyU6hHSJqf2g78VY2uFvaOtjVDVq+mZ7JMo0eOUXu801ZyeFMzfq95h/uuqCw=="
+        "value": "ha/d/urIG4cioD1hLYP76Qmr39L7UqsLVu1trg/PwwLgmo9cHhaGjlEusvXaEQgxEqV9xzT9gFJ4HlnK1wvrCw=="
       }
     },
     {
       "id": "neuropixels-analysis",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3627,14 +3627,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "lV1zU7sIiN9qv7KVVKIH7rvwFH7k5y3StlMRkPQfbt8syJzAtOWLKfcVQMYetr/i4WsDH/y/IQ8qhZw4YP2uDw=="
+        "value": "4hUN3N+41gg6IZduIeK4ZfzM/DvgBIA3x4nIsi2s/QqC5tZcTIKZRdvSHOSLYdiL8KGX7ab0AAwRTjyftOQXDw=="
       }
     },
     {
       "id": "nextflow",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3656,14 +3656,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ArxFW8GsX9kHCXva9iFYQFPpGTUzVK/NYbKDj5nQ3wRI+PM/CMYBxHeJb2iapxOAS33LzR4jgmkhBGhVNoZ8CA=="
+        "value": "FefHrDpu1sEq3Y3BSF92yk8oKEbNQZnaA+fMWx9UB5Y84N6tTyiZPEy3pp6O5jenmIyXV+aembOPSY/1wq19Bg=="
       }
     },
     {
       "id": "omero-integration",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3685,14 +3685,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "g431AA3Y5VQtWzmjoKmgC2eBnsFXxqcvctHiij6b0hIoOwy/yG/QpZMPpFGQLub9u1L7KkHz866D8ODXqcIhBQ=="
+        "value": "Rw62AaQz/F1W7Be/t7w1dfpm2POcGEWuC1Eq8cRBjyWdQTJhRCJsmp3zxgNbRuhFMcmHHJi/HC3M7vZNy4VZDA=="
       }
     },
     {
       "id": "onekgpd",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3714,14 +3714,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "mZj6UgKrxmMf5mV8fSgRcs4dGYV4bdfQY8ffzZ2SFK5Js28lFIzfpy6frtUI2eK+t5YevARzoLwnO3eKTjZqDQ=="
+        "value": "FV3VlF5keT94iGB5+L6sRV/dlxmxNPDuNr/plnqATauYGGpWA9ylSIfs+W6i8h7ZK7XcAxLVkPUVD1T4Wdm0Ag=="
       }
     },
     {
       "id": "ontology-term-resolution",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3743,14 +3743,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Jqmgp1cklZlKFXc1Evhlp7Fhkr/+2EiLEspSmc1Gd9iKYoBkoJG7gIplHsRra22SPDUQ7fEx/PUO7nhosLgZAA=="
+        "value": "NlylPRbcMPhF1pU1u2aK8AvAnf1hTffXk79igBFTUS4+AqnpWL0S6iKR/vFtC/JdWNTmFMRpPF5qfHpWb3TkDw=="
       }
     },
     {
       "id": "open-notebook",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3772,14 +3772,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "NUzC1zmOae1SwUX0zDlH9ES5N0UUGM9+EkVdvTbJibcDomlWDFj2Dm2iHNISrJhgMhiE7MHCIvZfw57KClV+Dw=="
+        "value": "fdVAQMiQPsN9kLWVc5vrS2FfasxU4RDpMUB7fRNuprclbtpYjWnSqPLxpdnYe60b8Hp4hNxP7PVZGwq8Zy9eCA=="
       }
     },
     {
       "id": "openfold3",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3801,14 +3801,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "GM/RL4wLV2JUyGlSLPdPLIyK3IvFZeJCzs2jwIOdlXo27CsjzN8zsLWJEoE3VPyAw0XI1b/5q7xIo22YyDxlCA=="
+        "value": "TnwvgiqqDaeIpMo6TO83YF2EzqXcnQoQJbl/wltIEbYpy1xtMCl3cbSeEsV8+tNK02KY4jgfcUz830fvNSnaAw=="
       }
     },
     {
       "id": "openpiv",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3830,14 +3830,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "skS9vp0um9oJqdTSGVtzUIB4QNafsAtwk9IsESdPd/2SoDa4KV4eFEWF2YmMmTatjfoFBMCXwfp76FldLGUGBg=="
+        "value": "JWTCxQiJhpRmNG2KgvOXmxdaLMySweROaGqmZc42DwMBA9O2+8Gqpj/WBgbcZhOPyrKzQWXSjOmhgsu5CwMvAw=="
       }
     },
     {
       "id": "opentrons-integration",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3859,14 +3859,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qINKq8ctnE2Rl5wUqZn8P6CjBtvzx78aLfRIbtEJ/bEDpLLl841QxCzHA37+L/qY1q2nHglg1tnocwVNEjSGBg=="
+        "value": "Zqr5dd9cW3vonq70Ooaa0MlFzHQgwbApDClJ/ZmeJAQ2sTFFY9rP7B985kEkfl2EsetCWteXWBdy9QIeq0CHDw=="
       }
     },
     {
       "id": "optimize-for-gpu",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3888,14 +3888,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "rSR8CRJBIEb1H6Sl9XlbBTMlzO6hXLhmCj3wcpV5zAUIKAZf8Z2lW7DbYNVzkfJzHdJHHP4z3kd05zJZTj3vDQ=="
+        "value": "aK5G+dKeC7XqOLgvf/HYPCJa88LWhlS+2/OSZwnRWMwJQCiWsH98kk97CGadwBpRuWC1e3itctBJ9upu72UjBw=="
       }
     },
     {
       "id": "pacsomatic",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3917,14 +3917,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ifxBXx2a946CEDhiLHHt4OUrGyLPuod0RcN14TsU+7ZGmryA0FpS6XvEEI2+eTvwDthrFrr4NT3NQyveKeobBw=="
+        "value": "u+Yfo2xNOVYoCer5Cou4/3ET34huP735e+USXzzmh97Dib1UhpHKfQ/Z1vGPk40FGnDySW8+QElnIS+ALN0FCw=="
       }
     },
     {
       "id": "paper-download",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3946,14 +3946,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "y9RrVmWImaJ9ffvwpYOFaMLxVEM18BYy7AUg0vPYCLOtVXuPxp2K6aeCjhPe16Wia16pS+vvowfFPBDrQMY8AQ=="
+        "value": "eLVT+9GYjuIRz4QsxPVvjtqKHAvAn/WJhCrM4nYSkPBZSUoo3n2OtzMiAeBszHZcWvXq6oHlLmxOJlxuJjczBA=="
       }
     },
     {
       "id": "paper-download-pdf-cascade",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -3975,14 +3975,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "WtHL2XGKZxmE3FisN+j8MiDh29ZZ84tkSkk5SQkhKKIYgfKqOUAvzfMB3x4BVk/QU4jth++pmTnCZQ0PRNNNCw=="
+        "value": "VJtl7CItbo7LW7w/q1NOX1H8n+ei68OTqCrgi6/rDAMGRCpLsZzne2dtZMPHZpheP3xlN/JffgErZiuihRWeAw=="
       }
     },
     {
       "id": "paper-narrative",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4004,14 +4004,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "T3jrZ/riWSCBwoPHnmV1gwfrLEEk5sVTg1dTyXhsIt0o/GxppEvQ3QZSQjB2dNUXcguThRB4S/vNKAEGeKbmCg=="
+        "value": "uvxoXSqOpnM2t8j5ZiQao1YmEC/BN/qHfl9vOP62ve5zwv4iDzm0qhDQYjZSFjAVTmROdDboeJN38mJZT//VBg=="
       }
     },
     {
       "id": "paper-to-report",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4033,14 +4033,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "LRRVb8kZwWV0ChnwagLs9Wx9kp5oxwYyzHEH955SiThT7i7PLy821cLBRq6pk/+h0EgiD0IYGTYkAHInFYcNCg=="
+        "value": "65E2CpcEWxVSNvm7FNQU+tnqvg65YgBF6MpAloHl3tKPFPSuo4fRNOIXAaSwdH80ojmq0wKPl8KFKJ3XsfOsAw=="
       }
     },
     {
       "id": "pathml",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4062,14 +4062,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "FhOtWRriUMNwqWNR4Vu59CVc8KKwKZshgA4xvYZVKxcv8C8x2uJOzZmowmwvLInNFkuTeGft3tc0q9VjED3JCg=="
+        "value": "wsfq9AvT8/TxQrD3QihxSOfcQji0Ry03PXzdHtDiffjiby9d+T4l+o1ppzhSZBG0/HkOv8xhQ7gNcz0vZIU8Ag=="
       }
     },
     {
       "id": "pathogen-variant-surveillance",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4091,14 +4091,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "tL59DRjhRzb+woAaTVXBWnnaGY5CN2GZnRLW9Z6j0XFZ2Nudv4C2oswKqbFAgR0e5U7opoObiSFGaXxV0bPSBg=="
+        "value": "J90VIW19M2PP8Y+FAFv8cjnpBRE0oMkvJYSQDj1stBsQZuQa2Z4tppiWJraRy/LEeP+u2M8dN90MMtwPxdNSDw=="
       }
     },
     {
       "id": "pathway-enrichment",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4120,14 +4120,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "H1pjaz8oaI57lsHMAO6K4cwAoJ9IXBVOsKU1ruGoaENU+kXPcQ8y/+JaDmDmUXioyqTY4zmJ7nIyl1jd2GGaAQ=="
+        "value": "js4brjRivcuBhhqFjCac9W/OLDV9GXMHpBlq+IznwOaxpe8I/+tG4vFdlhVnrX9pxu2a4FcKOq/o7u2SK8HMBw=="
       }
     },
     {
       "id": "pdf-explore",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4149,14 +4149,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "o0MBKBTeuQjo3luy2sZzAorVKVtDlbB8gc+sgvDHhdUxj0JNYsjxg9RdlLNZlCi+4VCeBTtNOS7Fp1CYpYD0Cg=="
+        "value": "97vDR0S8+H7m4XqiAXwbWs5P2oHyj3wMvvacfG+jxKW9KA2nAyUpxknjriurR286hEpNTZbodZwwR/i7vDRKDQ=="
       }
     },
     {
       "id": "peer-review",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4178,14 +4178,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "PogsLbzBopdwhV6RJQeddGJ1IIM4UQ1qFP4nnpGnT2yXiYL3reaf3Ct2A3Bj/y+SuC1XN27wAfDA1HFoHKdKBw=="
+        "value": "0nafJZu8//EGfwlAhVPZ8kX9To/RFy0W3j4rVnLkGqUDNI55meQ9T0zh7GEPSYdfufSrKSXjNUP9ySpvqZkmAw=="
       }
     },
     {
       "id": "pennylane",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4207,14 +4207,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aPubIjTSyCOcChpKJb6D0mNiwCF5qTHwm7UYg79cgAGmZjq20nf39ub1mRmkFSpW04Rse41v8B/d2TD43Ni7DA=="
+        "value": "6TKipzqAEpkc8phP3E+yny8vNsaJpVxWNUX2wi9Ea+kgDLMdba/vnFUnXdVNCS2mnQirnZiOEZQcCCJ2Hx5CBg=="
       }
     },
     {
       "id": "phylogenetics",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4236,14 +4236,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "v5Pr07cpCXnRXX6dhODr8b33jKuEbuqXubdz47x32t714+zGP4w0hk7Wei3ESr7EqgN8HMofTg7QhScq5ZkdAA=="
+        "value": "0FqOso3eDKekfq1Iv+OezGrRjwTk8ULwK+QtO11TMny2EmXM37HqY8yQI9juKHwDGxbRP3cKdYZm0hM3JKHkBg=="
       }
     },
     {
       "id": "pixi-environment-builder",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4265,14 +4265,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0iNmGSv8wWNq8R3AHyoaPfhCAsVIsucrMH6eDpa20+wuxejnwGlIFlrpcs4f5uih4HQ2FYK8U1IKTqa/FS4aDg=="
+        "value": "ihLZDZdEV1hPJGQeEaec9wcbgpLkCPZNrgR+rVWTNCKjoHB/X1x/YS2jhbbdnG/jfk7Tw28NWOIYQ5Xj7O2DAQ=="
       }
     },
     {
       "id": "pkpd-modeling",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4294,14 +4294,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wFyqmAE0yALX+flqfkcqoTKchOGmsLXXaqg3tMwbbZrvekLo8/707EHYWHkCg8LC+te65lec1Yf2aCG4LhNsBQ=="
+        "value": "xrCBRFmH9hx977PMJqA9UhGn6th68NYF5VCtMZl4pkECZLUJQ7hI8QAG96bj8YMCCsT75rxNYiw2cfF52KqMBg=="
       }
     },
     {
       "id": "polars",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4323,14 +4323,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "SLIdB8aMt9sDdhL/85c5e7BsEhHPQa3EHZ1Yvt7IMAcR1Iu2Fl93xwACYhKAi89/oMehPpZEKr0Dcj90HqtmBA=="
+        "value": "3p46VJbFSoEWxdNAhZ+RwXQOxbQxY7bxzf74HUy+EizsLnOSjxJasnfua/TGkfTIN92m315pmw4rpe07MZnlAg=="
       }
     },
     {
       "id": "polars-bio",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4352,14 +4352,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "d7x7wAO8VU8kWKu0hYjFCY6PwIN4wDrlJueCv2gEGw3f+Af7lJ1/hLKzOR67YawevahVimp7Ho1BY6ypW6AVBg=="
+        "value": "7HZtMD5bGDBTWTem00qFDU/3LKco4Yy0jIxzLFhtdsjD7+HbtuP6duEagauyq+wFrX48/e6Y8aUpiXX7nerdCw=="
       }
     },
     {
       "id": "primekg",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4381,14 +4381,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "bcIqnI8Pbe+JOpqweA++wT1BmCGeUyw1Glj5p8DTHjnLe8Z7zl0WFZCMPLTrsRXhcYNuwyyrxhLeMwkxncEwCQ=="
+        "value": "uzsMZkOkhY5h76PnBG3ySKgB7yl7zYb1Dd0B31+N61W5hp791uxiQeaWsxO7DJaHfRnEZC+H45wvGh2o7HXJAQ=="
       }
     },
     {
       "id": "probe-compute-environment",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4410,14 +4410,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "loNkWFfEThqYJZkLyUpnrOtdABb81IuZx3N0zQh1YoSXgDBnXl1TfszOzBdd57nL6P38ALsfYe/w25mTqkx1DA=="
+        "value": "y1XtWzpn0zb0XUWX+TINfXCBTilsw7WoCzEqTuk2O2TbJYhXzo6gc9vdvZzURUjLSCMsEU5AgLzb5gRPTVycCg=="
       }
     },
     {
       "id": "product-self-knowledge",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4439,14 +4439,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "F8XzFyRneHRFYtwSrGTyzPSY8H2qNujh3epJTt/UBQ4PEgSbye7TS/vLYDLMGKf4krSEGfm+D5OJmYiaCmE+AA=="
+        "value": "djEoeSZOtH9Ivtk77SSz3kd1DKzy0GHuXSYyX69xBmnNJwRXjLHXkj6uKSv5YsJDgK1DigLNQ7IfwnSXoMxXBQ=="
       }
     },
     {
       "id": "project-scaffold",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4468,14 +4468,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "R9EYo/oWJI6LN9XGO/aO4YiriiinXewBFP6ucUYYGe+wvNTHnR+5Gf/N5pJPwtH+cwS20/o3P5edJKuryTt/CQ=="
+        "value": "3CdVPrcu3OrVKlk9/0cU7/oq+Ds9W6ZEQoM2ePyDw+ZUD5qrmYA0k48aD5O7rRANKf0rF+LWgeBv8tWdRPxPBw=="
       }
     },
     {
       "id": "proteinmpnn",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4497,14 +4497,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Khr4twTrh1hg5F6PLbHESU6JZ7K18Nhh2Gs/UJgKTzDx1RTtXmg2lEkCC6D9hRtDFvQOQ2SpJ3RViGanfaXyCg=="
+        "value": "zeoJQ00u31NHMDSltbppaLWl1gLwCPDoR7x2UiD2LMj+pe/pk7Fg54dV52jgpUsXJG/PnbV2AJS28X+DvBpEAw=="
       }
     },
     {
       "id": "protocolsio-integration",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4526,14 +4526,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0W8uJSUtwJIAGDrjwBwtBTrpWdi7Xffo/MJ/urKZKDf5uMr7wrSS3eu53upKelvRL8yFtvAyF+W89pHiXxeLCg=="
+        "value": "AXZRoXedqHwPI+OJyycQ34lez64yfdUOBVxYsZvVgoxBunoZs7Jcag1fX+bZO0gjwldWJfHZw98yVeg8ANA8Bw=="
       }
     },
     {
       "id": "publication-figures",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4555,14 +4555,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "3u23rKcGopYnxObkUyNjWlt5WyS9znZrDwy1a3vVCQAiUNuBSOd66ShzjotdvSlNI84MjMvcRsJbbZs2AgZ/Dw=="
+        "value": "no3qoLZcRJUmGKATZNq2nEXyge6yFJIH+9oXSRW818kaYCb6kSU29mGtn1lAso5fR+TojkUbpAdrAQ+dm26PAg=="
       }
     },
     {
       "id": "pubmed-literature",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4584,14 +4584,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Kw27Kf68tyyBaSeZxOTFcV16S/hIJTKin92iOKpKNgqlCT4lzXO/ikaZrLN0DwV2+ojYFNj2s2fvTIAWG8deCQ=="
+        "value": "DoeqQtJGGyBjJL4hy1BwwFFRzFfsLJJGX0xFKTvlHkLj1TFtgfYk8Q9LfxuwyAenHtDuxTDa7QKTLUfAW/HJDw=="
       }
     },
     {
       "id": "pufferlib",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4613,14 +4613,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "xbo1OecEe4aw7CArtHf+hmCCOgsushKK+ZExCKFYWIHnl6WQ746OjAKUqdIh32wwXszwP353i0kzv7eVZwMVCw=="
+        "value": "Xc0c+/CIGwPEft1APoDXJ0ohTsO/4XVAGsDXjSFi819d5l7rqacoUcOsYxjsmaD+AyZXW+U2fGKGtZmEhiWnDA=="
       }
     },
     {
       "id": "pydeseq2",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4642,14 +4642,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "gMQJQk7ZEDxHvlEU4lq0gSC1uatsZTqf8gVC4hWrJSSGRLzK/JM5FhulUnCx8HzVPm9tlNO2Z7DyLzL/XFGZAA=="
+        "value": "n5fXfHFY7Al26j3lkce+H4vQyXDC1YyZhGyCEIE5wlE07SqeMbJFWSteWwev+xZU1qbyXWKkaWb9vkicx5FEDQ=="
       }
     },
     {
       "id": "pydicom",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4671,14 +4671,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "rI9Mu4HeOUTOLCnyWugyE3r/cQhmVSBpBXirzbtFCwicVW4+nVu4mQtrcSV9B1hZat2x53S8HtRffz5U2q8aDA=="
+        "value": "1MTSjTTKb/npAGTKxPjm8R4D57szmsoZRoYljh5CXg3hq3/OSZfIXIBNis8B4JTyCDJLA4VWNwkX4SIiLGDxAA=="
       }
     },
     {
       "id": "pyhealth",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4700,14 +4700,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "nmCgxyQUuD0B9lP0/sXG5x8qSOoKPhm/M8OzP4Zw8pCj8Qw2QBIK4l/AWIIES1TsR4eIPDyayQ6Doc8O3fP+DQ=="
+        "value": "FfgVeBxsUM+egIqkrdWb2ol0us5Z5SZjtKPrnp9jeRCx8MkE4Bt5iPLrpx9w93ghJK/Kq2XuoSAT3QRBYjzPBw=="
       }
     },
     {
       "id": "pylabrobot",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4729,14 +4729,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "U/3sUguFROT9p1mGeTgcF0g3H24z+VGMghIMIdnvfInIBoXtdqs8q6APSxFect42ne8ELZ+61c5srN5HtVBfBA=="
+        "value": "6nXOuZfaKPlzfdyh3qF5ToXFz9ulyBYwzwTpC6/K/xYfLmQrHoNDJvy3gh9DvzqWkRKeMUWO3OFoFZ5yvmg7AA=="
       }
     },
     {
       "id": "pymatgen",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4758,14 +4758,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "MUE+ozcDIaCubcica+wFmBh7G1s4PpCxtiK3vfV6Cwbmiq3JNx7ikx/vSsvUVlJiyUS2h8TKmmOhCIjz2mHSDg=="
+        "value": "YUEsTs1jGpLpIdKCpqLq6uptUxfEa3zaetnjPVxcdFwwchypFRf8HWIwkOezvF7p0o1snbld6lIZJ9mwhvSTAg=="
       }
     },
     {
       "id": "pymc",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4787,14 +4787,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4kh0zOqxuq5OT1j3UbM6lBNx7637UGk/tgDkEZdkuEX74xBVb/Th1HrMQlYteBdrSSiUdZYU1yuP/aMeCzDzDg=="
+        "value": "4WcGoVBZevsC0cfUK6CCGlBUm/1n5vM17LcieCK9OHsxlTijs348DtVMgoSPGRdB8F2qFhPPXXiSGtxU/DUCBw=="
       }
     },
     {
       "id": "pymoo",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4816,14 +4816,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "RCVWca5V1PZPVNeNtUBAz+Vf8RPkUdKkJie2d8ZlH7RE7IOw4nK+qHU2MaWvvaabKtHtxPuthyc8c9njXxNPAw=="
+        "value": "q/5Rh4qeAYlFFXGYulPf917fMHR14AWN8c5vRr4CKRTylrsuaYTUA4nkm4rFUBHh5sZztUBkABIIoAVMNKhiAw=="
       }
     },
     {
       "id": "pyopenms",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4845,14 +4845,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "xsuIAimszmgySze03EvHwJFZ2tdaxxHtqeavoLlvkmQkXyMaaH4j0XQvTxnwK0tEvlUHe19/MoIG9+Tn36SVAw=="
+        "value": "dToJ7upH/CBBflvOL9Kw7VwiehuqQWyn0poQp/EAIW4fjW/2QrFsxP1UsK9FUeAhjnCREdKLWB6NbsscBKYXDA=="
       }
     },
     {
       "id": "pysam",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4874,14 +4874,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wB1/kArrFkRcHSbOR3WE0TBVHAlAPxPNtAUzhEUTTBFIYbD3I4kttueY7Gxm+7Ch7wS2EnEt9u9mArCLSj21DQ=="
+        "value": "EtRSp5oRuVifNACRNcldc9VXBgxZwDW4mShiTJuzUC4RJoil8If98j7fQdCGjdCKGZ+eUCggJAbJcglDxliYDQ=="
       }
     },
     {
       "id": "pytdc",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4903,14 +4903,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "hAI3HLv9LtceSObZ0HQlUHOyfIZNcowG9zqXxu3YfwIDH0scm0RJm8UPNKreJ9XiGj+HckPGjeaGXe148V05Dw=="
+        "value": "b85TE8kykajGN4eJgzxnEEyGY7DS5KMiDKqcJ9Ww7nVrDyB13CS1UhHv4tPYAc61NhvaBTWF937JlRhUyHJLAw=="
       }
     },
     {
       "id": "pytorch-lightning",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4932,14 +4932,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "vhmY6mVmAo+qw6vQJLbHz6h5rg/avl0959hOlesPBTRVFPUv4vkdHFTaWhkoUR0bDt6S6hbzVw9BrrtGhZg8CA=="
+        "value": "nyPBaMTUegAY2bTQHNlWQW3Xr1T9hzHoZx73l7t1vXBSatx6KKRePmxP5v++ndaP3SQReu8W7Bjtu7nCFX44AQ=="
       }
     },
     {
       "id": "pyzotero",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4961,14 +4961,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0xdtDMy/LaQMz/7i6XI65MbYE0xr1USsyA1atr/g0pKIqHqRgsHPX++FhSpnBIGF2zOzbYIB2WlwwDh1vsZoBA=="
+        "value": "OOn6ESWzc7EFmiTeQtqZGy3JmdIAUgO/38ByM+wgZSo5DzQbpZpckAeDhMY6Pf9iZS5tRYEGuaqUA3G1pca0Aw=="
       }
     },
     {
       "id": "qiskit",
       "version": "0.1.4",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -4990,14 +4990,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "BduCLi2hjxFOilwqB3byeluoJmuSR4271RmUNLV/CKJ4vEE7I0eW2Qxd45DUDvjGvXOaXo1r1JpBFnq9XmZVAg=="
+        "value": "e/0buS8e+Ei+6MEVeMI0zEtLge0f/1x+mC0xv2BCRUClB5SwsdHKzaybN2r3BQOu8jHKoWLZBqiwEsoS4SwxDQ=="
       }
     },
     {
       "id": "qutip",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5019,14 +5019,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "3um6llTu8YPaIQrhA9InAJ08HJ6j2LJrFNyY4bA1fdU6GFCeq2FGsmOBF3sIUF05K3+WBPj6vsAZneqqVpTUDQ=="
+        "value": "UFbtXNfq+MtcM3Qip7+OhPaHw8KzzIUmlIUNH6oAT+NItG7TZi4VkLDTPv4eC862OJ2hfz9ZHsjfonOEwh6mDg=="
       }
     },
     {
       "id": "rdkit",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5048,14 +5048,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "xxIrZOptnuFgQW3tmZ5yHkIbyKhDDnqHuHrNe28Yw5qcwSsubzLoEkVoSvGTRVB0NZAeUjpTlnMh0sD3d+0CBg=="
+        "value": "qFOMLXvw1FGxtuIM93Mj7TJyFfD+8ZDnPjyIr7URvLfBnpZOxIIdvbFyxDeD7WANxMcUgnzvOM4LKYAnSV2nCA=="
       }
     },
     {
       "id": "reasoning-trace",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5077,14 +5077,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "nBNhkaXsVWFX7W/QCzhalMjRrZFE6rKdaz6ifUIFLBuaU6jfe61gpqJVRauQYMqEzFV1AlZWYf3jbLUe32OCDQ=="
+        "value": "bIsxs2AA07+qjIcFbBU/gcamWMxinjE+tKpcxv+tKxVwve2xa9eIjIXD/O3I7HE9UoVZ5oED4OG2CJrAA7CJCg=="
       }
     },
     {
       "id": "relsa-severity-assessment",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5106,14 +5106,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "1MKRdMxsZoK8tVxv4hFzyn4LY1qNSQidl7GimKql/Cwlrohic66CKAkG3wmaNieKYce9CSXs3HpP/MPUpuHCAQ=="
+        "value": "8fgOd9rFK7Mm35XRcY+dhcvj45rrKjN9kMMkZnXzTxfbH341VZNiStuodbzuO0Ys/VmK3cuF6ox71xCOFjSLAg=="
       }
     },
     {
       "id": "remote-compute-modal",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5135,14 +5135,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "gDGVT+Ldbcu+IClUWaS3+mjujnMQFJJ2kE8n1CBQmEvO/bRzMEVHNlpwRyTslZjyyuBDiDquzefrxmklxvvYCw=="
+        "value": "h6Vd+pU5+t7I4I89jGvQXIZ+oZV8hbrYYV3vkd6S8f5Bao2+P3BAx3xW5G67cBlaNricpUUzmXTYjgJ5IOmmCg=="
       }
     },
     {
       "id": "remote-compute-ssh",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5164,14 +5164,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "yKFtiazCWZ32CT3qC+OkAOZ/Q1u3iXnMt6ZhCKIc5xbErVrQMpiQYmo9JCLZLPYT830mA8EQFag8K96HTyWVCg=="
+        "value": "QTzupUVIyow1WKHorwyFyP87EcaEuyW2yEQtbCdAyHuALMYjhpGbIZuM059elTkP5YBGFhd5UaIuviqi1T2/Bg=="
       }
     },
     {
       "id": "reproducible-research",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5193,14 +5193,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "x3qCzok9e3tUtPHQcFQFk0y5R88eWpfnBfmf+bVkaN5Kbp8PKkueRfTw6Q1IThk9i9EJAXFVx5Ca0UeJUpFPDw=="
+        "value": "RjODsBCsvkShbJSc/0P6nWIXwtJOq9t4K02MXIQEHvmuQv3xpFXimlk4mZ1k1xzXtjW3fdr1vgr4iBS7x/0XDQ=="
       }
     },
     {
       "id": "research-grants",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5222,14 +5222,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "YnzUnvX7qXxJ4gAtbOUF1dCJFZYeXIkCAu6c9Ho6JBGyN9NYbd8enF3eYMCDwlukw0Bd8XBJ+BGnEnOOxhlQDg=="
+        "value": "iNHxkbnst2s8xYIvde5uL9RsW4woriteRT8gMBp1F4Sq2GzlGO0Ft9Trp22T8SoUjoa9hvAz0DRdwSGGbvpDDg=="
       }
     },
     {
       "id": "rowan",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5251,14 +5251,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aG37fvWNBJxPX3msLdZOXofN1Tprh4W6HQ/gFGsKImOzePj5wks8Z5m721qWDSpzSE+/IiM8f4PhsGbtzYPRDA=="
+        "value": "bKZMp/q+Nn+KIqJJKCbQnkSXrWRjWh8YQRQGQbRpvIWlzUnsGRYJuOl4FzzqcLHb2XMYL/xGWeu/sjU0VBUHCQ=="
       }
     },
     {
       "id": "sc-tenifold-knockout",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5280,14 +5280,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "c129kHGFNN+Pp9ij0ZC/rtvLBkNdVvf3NNdMxiNqwZJqT7eOJXKLJL4Q4N2JEFCzzYhuiqK1DDK1j/UuX//1AA=="
+        "value": "rgdcLaiAEJha4CkqsPfPSmmgthS4J5U0Cla5tPa1QY9ivaXU/tPnDijzhsOChIWBaB1qFT4Xld3EsFOW53nuBw=="
       }
     },
     {
       "id": "sc-upstream",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5309,14 +5309,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ZWoMYppRCbe0GfN/9wL35UJcOZH633NGkgLO+8NIo8X9pJeDCEMPl6uKeLYAOjgqJnoTSdFJeB1SwHPun/VJCQ=="
+        "value": "N1Z3HgISxI7nAHvz8qf4LsvJcNuCuB4+2OmJT7eJaLNvYbwcbqO2/cGqbxeovxWKheQ9SprBHrnZEqIT957UAg=="
       }
     },
     {
       "id": "scanpy",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5338,14 +5338,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "IOfdkiGkCB4HYzVoI23P6UzqPzyglw56ZtX8InDF3fc3TfcaIkgcOd+MtqodN2Skmcf4mMCNh3KpMP9Hbe3+BQ=="
+        "value": "0wX6AmLkYSZPKfc2H9Nd7I7Rl/M14T2x8IqBbiRtuVxjgi/Gjdr/T3swyHcKv7Nc3hiqQ094Ic+nojoQamlUDg=="
       }
     },
     {
       "id": "scgpt",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5367,14 +5367,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "2U9nDXHA5xU4oBj9LOjWLscyLAH/E5dhen35J7+Xbh9ag7BdU7HbltQXzHzcokuOGhhKA6E4HXmd1seWDi1gAA=="
+        "value": "+imKPxTmym20nXopSAINyoQkMajlu49Q+rBrv/udPcydB5M0dbvvU7UW43EUPhaOn8FupW6Yy3EIBfkFKnb8CA=="
       }
     },
     {
       "id": "scholar-evaluation",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5396,14 +5396,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "F70LCwWjsQWUKvOeUM7uuMQTIrdzq+S+td5tU2L+mPiPa4SGXlxCEM4F7g0mjVC+PQCyCx5YxnP2UT7V4KQFCw=="
+        "value": "TA+iG1thA0NkrytGqmBRogl2tQUbCIQ+5DMkpnJJyGrvNEH1siG2Fpy5S48q2QwvMldSkexYx7WF7HVwHUt2Bw=="
       }
     },
     {
       "id": "scientific-brainstorming",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5425,14 +5425,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "nw5RHzcs1p32jo5GCpWHAi0Yo1G+iorG9CW62pu6Ed1vr3fnFYve7gxjU/B3DttQ+0ysWREL1PUIK+NSEspqBg=="
+        "value": "Aj7IIIEqVjuQumPEk+hm704iUqMjICBVM2a5R6DpJAxCghRqwyS3CzVy0AUL6dWoKbf4a8Twe4qdTuSCLrzOCw=="
       }
     },
     {
       "id": "scientific-critical-thinking",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5454,14 +5454,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "eAWI0tpMAZuLB5Y4UeGLSEMYXDuvWsW6GEGfD3vFI0XnTIfvlTL3w+MtSp1obJw45f9OTgwIiTcXK6D5dihtCQ=="
+        "value": "UWwFG3gJxL3J0+xJ736mWofjsYGufSO/l8szGnQ+V+5mVFZXTcy150O84HGlbAxfmzaTuRc0Xok5EBblrF69BQ=="
       }
     },
     {
       "id": "scikit-bio",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5483,14 +5483,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "i3elrDkL+r1mlTkqzBx+3xfkQvqznPI/3dTETtYcM2tWXIuyzWI7O5I+7D6AH9WTgQF9l9/u0xdbmK1IKkrCCw=="
+        "value": "1U7n8F2dXGQ56Kf9uhokCza16rQzNUodIEBTIpWAoCXLo+gMBaP2JE2hQsIutUPcLABbzhetOpIlyJjSXYsmBw=="
       }
     },
     {
       "id": "scikit-learn",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5512,14 +5512,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "c2S9pBlLFl1Y9pqcc/iE6HpWuet0ebtel9CWWmnrkn5lLPadu40zT/6IprhUC2Fp6iQbsZ3JdBI+t7D2ILvAAw=="
+        "value": "NUs2SU8QJwr98Eh+Ythp9sgeBksIPIUSaDg4z4PGy8BBl3sI3KKHv2Rj8BYAGpB8L2cGZDZcpU6+WJe9jorcDA=="
       }
     },
     {
       "id": "scikit-survival",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5541,14 +5541,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "kXYy16ev2Jedpjeu6t9QqLdWpirwVehVKQzzgOAZJ9zAIS48QaxY2H4sNGN3vz+Yyrc6RxP9liqcsc+STDTgAA=="
+        "value": "yauHeWcbdL2zloUzCLZsmKxlqlwDWXktakow+uZk7XgRnemzQOgu1h3lYPiYJXzWjQ0aBogPavYFlhZWJWPiDA=="
       }
     },
     {
       "id": "scvelo",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5570,14 +5570,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "uWEptU0F7/m+2jRW1kgSb9YU/yY3VRJcAK0Y5mcowPkxNHoZu2mT58dVMvvqrlKLCc1CJAy/xGVdFPkXXJ6+BA=="
+        "value": "gwl1UnD9W/XrzJa3HlmkcxOoGry/q9c966swiwLF5w6p0XCBaIsRf0Crtkw0QiIVn/tbm6Szr0mpg9WRT7kRCQ=="
       }
     },
     {
       "id": "scvi-tools",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5599,14 +5599,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "HpKd5x4/R7r1FqvXEvLEZzs9psBUEPggM+HSjmHRbfbNSgrR/UDnXjqhRZDyHDVhDAiDKvURUq272/Xxm4r+Aw=="
+        "value": "Oc9lPi7YJAP+iLCr/jR1091J4NieHgge1i4SudvDlY5aOxC0Vd2fqpMtWz/yCbRRV1h6z+E4nMbDva4QCJJjAA=="
       }
     },
     {
       "id": "seaborn",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5628,14 +5628,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "kKodOOdlJD5NjG52JKaN/x5QUIAByY/fetZtiqiftXxPJM4zJtusqNl1Pu2NQS7CT+n8wZEzR/icxj+wGlcwBQ=="
+        "value": "JmkwIx0/+/a2k4Kx6RX2ddUOsfQCfDSO/UEbRyZCH/YGsFnWHXB9Ai9iEhJFgDokrq6Rcai0xTcGCcWhKUSSBg=="
       }
     },
     {
       "id": "self-awareness",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5657,14 +5657,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aairpVC2Gzh2I+HneOLB7mJ2fXZPhyp+zxJ5iDdr7rHu/qQqN70XdjvXsOl9GXUrJJIoLD/DaUEB9r4BdulAAA=="
+        "value": "//jYbzrwj6LAF8hUndbgFr+QGbG6xLEKAEdiBVzwtWsYRDg45r4kfDqfEopXURCpGL3ZIq/Nwbp/Hqki8TDiAw=="
       }
     },
     {
       "id": "shap",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5686,14 +5686,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "oorIL3XSpiOhwKnt4fOpkO85H1OA4fs3mC7UpdXnZZ+heZ8HnUg27hx3REw0JzoOHqNZhpFVf2ZSpkyF6rxKDQ=="
+        "value": "BrP/FbYFeNQUGtRbwfJ48P8IfRRBdxCC60446lqv2XI0FeFmoDU2DZer9c2wx4A6jyZKvfZOInkfHJrcec+SDA=="
       }
     },
     {
       "id": "simpy",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5715,14 +5715,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "I/UP1UWI4EVfT2gTTe5Do9w6lFoCjad6sfS0R2xCz1ApW6okGrQR0gxzhHJ1LZcYjdILoGlPSVsXG44/EFilCg=="
+        "value": "7eXro6lz2bOoPdhDmJa62a8OL6+8AeBH4KNzwSZNYYI19WqgW6FakJqzoxmvd1UeX3rAaeK0IQp+lid8kn0MDw=="
       }
     },
     {
       "id": "singlecell-milor",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5744,14 +5744,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "BzLWWnWpC9nhOTzjzM7lcaWzgNpNACb/wTrjHuD9IqYHKJJakiNpmi914ChcM7nA8LYzJ5eAa9LWNx3Rkj4fAQ=="
+        "value": "ScrERU9nkwTBe/sMEWp1qZTukoMlzNkwuY1/pqpdUHsxTxV90R8nMuIg+Yo8S3sNczEOFaWQ0WQTgbd08FyjAA=="
       }
     },
     {
       "id": "singlecell-qc",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5773,14 +5773,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "BcDZcOXQk9OwM/roCqihvmvZYHhcKPidatPsKPNg6LCOx8bUtZu9H3QJgHJmeeeoWlTXwm35mU1jAME8hLqvCQ=="
+        "value": "C95FwOMGk1m6+YNio4eITu5shdAIjzRyaTDAM/mpUH5E4rewiM0j9QILKnilV8RM5SaRmyStuUz2IafJ6M3KCQ=="
       }
     },
     {
       "id": "skill-creator",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5802,14 +5802,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "NNnvE2DFJ8Z2LD7WkhhyzwFp5nADA0UlFqkqWqpn8M2V2WiQ5pSJ4dJAPfea6latHP4p/GXgrOi3xKKYjGm5CA=="
+        "value": "9mZd5qyBR680ziWojIoGmo3GqweWpgUI9WYMlpmsyQf/i+hzPJu+p0I5QqMFqjWkdwbv/R5mqwsNN215L6OABQ=="
       }
     },
     {
       "id": "solublempnn",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5831,14 +5831,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "+xBkd3QGmlbg967ph2wK8YVyGLKyyEFbfygErSZx9GXDUUvBihoQ/mbhpPUnBOHBbOqdm/FW7iLMk3UA1krIAA=="
+        "value": "tEFn91DYJNqW4qPzzwtsB6tbMVGixjCU25l3vYLip5Xf1+JL1UQAmABZpNKMIqmdf8VHyLH50lilrMMPa5QUBA=="
       }
     },
     {
       "id": "sr-screener",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5860,14 +5860,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "aVLitvZ8Tdnu3NhxaRJSnFVDTKS/Ww0PXp/3In/6zl5uge5Wb6/C3ptoQAoPXhKYO0CQoVlNy11PA+p4PLBGCQ=="
+        "value": "Hu6vf+zVmDS/UFVSQo66KBT+6owfWkZkuarFkV7fUnx/FfSst/PGbyqWwd4V+fNy2unk+QGhpovMOziL6SzLCw=="
       }
     },
     {
       "id": "stable-baselines3",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5889,14 +5889,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "j4P+fJE9fpL8Z1JQC9u7hPM3EyjMWconBFwbNLkVvIrf7dyo1lkab0n7qBZFKdi0+yAnH/+2pZtLe+h9toqxAQ=="
+        "value": "Sr5qwRPbaGncUza2/1Gs1dP0HY27lQtiAM8y/oo+6VKYAzXQJJ8BytE4EWMvWlQo9aTFCibvnwnOe0RVYevwBw=="
       }
     },
     {
       "id": "statistical-analysis",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5918,14 +5918,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Qp9hq7LIg6NNMjsQ9POnWe34KlASRuoqoQnDu03YB11ipM7ApzWhZTbfsJ8eK1keoGn1hshDHnjoMn6Pi8wKCg=="
+        "value": "xtBnVBiUKhVDRcrCLwcHxE/7MCZvAb6GSjA6D0YnaQn8Uk3EyQ6BAlO57k3xQh3gayWAi3vre7zA8XIDDA8iAw=="
       }
     },
     {
       "id": "statistical-power",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5947,14 +5947,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "B+UnOYDWBG12Z0+EuzWX25PT6lIoDPDpBCBQsdLJlsaEQUHb+HaSJ23+CgKLZJRMb0PDwdVPYtz+iQ7N1lD3Bg=="
+        "value": "BKNEF4aVWDnYHUJJl3IrnY5nQaampzPFxjSCpgXo8ev3ZQwlhue9V2pkUO9myx7J06E803kVXEiyRcsh0WDLDQ=="
       }
     },
     {
       "id": "stats-integrity",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -5976,14 +5976,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "FX1Te+CaoS/4w5cfoELtQSM+LQ/h8BW3NGdWBkVLEf46W+5mIiJhLuwsk5qv1aZ37hiSk63QimLpm05EhwWwBg=="
+        "value": "HO5VXQb9tY8M3vyA+rOzCCiGyXOy4WMY5qHlOIT5vlE7p+2qDTcCgNlvyKrWY/M+IcUANca2NKFW5cKMD+x6BQ=="
       }
     },
     {
       "id": "statsmodels",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6005,14 +6005,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "WZUIgqjmq5fSIjNWswjVOvS0FLi+T/HPG0cp7wew+WGP84JZTPf5bDRkhD26OThKB741dmYUmocxJxaKkb7VCA=="
+        "value": "QBoSTjdZAE5r7G/ET+m/rbAMxuTVdj7TxzvSL+7RnjH0rP2cEF1CJohuuo/8puzsI7S1adR3hHEEAHzUnehyDg=="
       }
     },
     {
       "id": "sympy",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6034,14 +6034,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "a6xK7SufvUPA4GlhURbgOE5dzhoUju7juxNYVCqOWw/0JUEw7QQRLsrS23/rNqBtanZeCVjw+itaC06bvBN+AA=="
+        "value": "xSMXGGKBTn12A3qGFKLToFBQBW+J6YbgoJTJB0+GFrNWPBd25jkXPQos0B1X3VUW0AwXmPwfGMGGAQAvuUPVAg=="
       }
     },
     {
       "id": "tamarind",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6063,14 +6063,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "hFghHXEL5K1CqlI4s3zwf6cTzyDGrl/SCTOGgIQ08Cpt9/N1bPIATk2DDJou4mTeuHZl5AIbQkOAoyk9nX/FAg=="
+        "value": "KpwPXOmroSJNBqXHAywnRBaJEW/S82p75iHsvyHFyE3f0soumdHan5AYyqCN4hjumwAXbRMbZpxBB1VzO0urDg=="
       }
     },
     {
       "id": "tiledbvcf",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6092,14 +6092,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "5nxWQpvtXOe103sCfvhXYWOOIai03dvtZzKCrPRq79fCYtdwFPz9CX5pKk8tvxgoxJfk2oVqLy1gJ/DVSS8ADw=="
+        "value": "gqhaXw9Y+O+4/g6CTrsZVqmA14O4r5WPMxSFvFPQC91mWKZz7/m22psUOz34YvEkVPO4QvgfL4NwrGR2M1SlBw=="
       }
     },
     {
       "id": "timesfm-forecasting",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6121,14 +6121,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "NaHZzof8GEevXrr6uNbwt1ScVOfs33Dd2qX5GLRBJh9iH81oBkA0aSkIJg9xLlFr4YoPp0Cb2UvNvsNqpYvrBg=="
+        "value": "iyFz2WAq8dEtadbFVSyQDYfiSXtN2Ugi6VYLgf1TX4NfYpiU/mWGQrArAfIfCaX7jNIHcUmysT2w8/cd59/pAQ=="
       }
     },
     {
       "id": "torch-geometric",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6150,14 +6150,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "B8HGCPXcSn4Qbdl1QviHr08x2tRUqFRffFxJ855hb3mPCm6as+SYc6Pmw6eF3Pn2MyBRFRSqzGkM6PP7KkrPDQ=="
+        "value": "Q7LbAjDsj7U4FPgdPfADN19FCNvopP7m0Tqp5H01swkSe4gtbJP4DF7JbJNjlGnkJPbmRgYpitnYUe6xW2SNAg=="
       }
     },
     {
       "id": "torchdrug",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6179,14 +6179,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Po/DuSkQJt9fnYXcez5XaAP/MID/cu6FISHQ99VGrqqUrSLa5ZfgDLccXU2bjKARlLTr0OSbiYAyO6GwbFT8BA=="
+        "value": "HvnhV1GMo9N+fRYYwhaxwcjm27UN7u4JmMQEX/+k7vlA1FDBJ5iKCW0CnFKx1KXBni7S7+N2h4dEzPVL5KJQBw=="
       }
     },
     {
       "id": "traceability-review",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6208,14 +6208,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4uNyUDe57U0VPB6lMvumJweEJ83Y2JEk2jR8mZdkjtbBw6pLyefh8oWBriYE9LnG6K8y3mG4lKPtLqR4eg3GDA=="
+        "value": "sZ+F9FQElzvvZbJLOSOedQrUZiG9T3q7xWSAGWgXl7bIim7vZlguRKvzCnbBW5HJ23zBXl8OyFV2MRzwTXtbBQ=="
       }
     },
     {
       "id": "transformers",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6237,14 +6237,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "/OFPufHTtRPGCF3jFjN5yDjv2CRpfC6Np+7qfMvpGi7njzcNjGqEjWrBGG1QHMf1m2njiFrCfiUN38n7Xq84DA=="
+        "value": "Szv98ZaTRwXimE6OULscAFjONF/r0GaC2YVUehLhJ1HVJ5IMxnaHhbGmpLpXUk69GvyHZr39oKUFgeu77WS3Bw=="
       }
     },
     {
       "id": "treatment-plans",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6266,14 +6266,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "u21+p52v1HpObwvWvCC20AO5nO3p8l84Q1oPsgsDYiB3PV/fZc4jCylymN/tssewLltIK37FrFBfWkTZ175LBQ=="
+        "value": "+PnQpm11qu3fJD+mIloOM7PuFjyu3rbt9WKIBOzM/8f8q3p2F5t13r2595Y0QY8gt2xPPct39+4PKDmA7xO5Dg=="
       }
     },
     {
       "id": "umap-learn",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6295,14 +6295,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "8ycGJqF/P/1szMZxphWpN1/G0gansPuWf+/9Yj+1gcmfUwQXYLckkYxQ/qu/pS2xh6D5Gs/eL+PT8ixlAf4ADg=="
+        "value": "LH7+yAGfufn7TFoXO1FIm10VqZvUDDWhh1GVoJ4jogpl+8zheNO9uQHBUJ0OxbDEk/Cng8gZKsa1WD1A54jMBg=="
       }
     },
     {
       "id": "uncertainty-and-units",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6324,14 +6324,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Su+wJ1AKS/XmDZqQIX2SmmDmZW1xYbiWxOuR9lDSPeZ9ROWwvafGRf0z/mJkf3JVgUHPi0n0Slg7hXyFAEs9CA=="
+        "value": "+cf0aerUkU8O+bHpO2kjo/TZu5ZxzR5UFAVZDEADJygPNMibmb4DmnCWd1LrG2vj/tRAKBGfNXmRO+k2rvsIBw=="
       }
     },
     {
       "id": "usfiscaldata",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6353,14 +6353,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "7Geq+88zbv6er28xFecq4EBKP5my5jSTNFIWBQOxgfby8TBDQFZWuaeuCW3DnchU4aHsgFWhGredcS1XxrWzDA=="
+        "value": "rsTt9jvbzxO9gKqVHXm3k8mgpfq1pZXJdKo05i3/Q6OznxHzAhRmipnZObq4hie+q2kTOGwahTKIHwx0rqvdAQ=="
       }
     },
     {
       "id": "using-model-endpoint",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6382,14 +6382,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "cIFGHX780mNwF5Btz0AxKbfHs16389C7ADoFeK8LrQbV5a7XMnRBbWWH3kxhhP9Zp/wYwZnsQZeW+UpT08oxDQ=="
+        "value": "edS9BIJ5P3dDYNEjEZ7/kKxWKF3VxnM5lLhkVvN46H934gzRc2f4tYSpjv92IQ4/KvF2kG9Gy6XNwizcU/nLBA=="
       }
     },
     {
       "id": "vaex",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6411,14 +6411,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "jittibv3M0CR8RzAQzmsF1NtH46hmziRgp/mKtTLd19urGxooEuee9G+E+KdhoWkCY54i0WVG8eIIdNnKhBbCw=="
+        "value": "AATkZ7Ps6p8XyOZyrn2TZG7Gejr0lfv/EH1YLz3faTXOoP+26YCyih3nzuaeuC88WG6ZFL4ELhKoUlpNQOuADg=="
       }
     },
     {
       "id": "venue-templates",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6440,14 +6440,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "+aIy8R+d/zCsycuNWb21RVw3JjNcAra45qDVEHKaQLfBtEp1JCMqi4Koizbb+i0DXordzTcFIUDPdS8xG7JeCQ=="
+        "value": "MoToMwx4vSbQqQglaM7Yd89x9lwvanczmK7nXfuL4bPMd090bebYYFuw2wVGiuJBfc3hiWwdrRgRt6ZTMbgaDg=="
       }
     },
     {
       "id": "zarr-python",
       "version": "0.1.3",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6469,14 +6469,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "e9rTk5wuW+4gD+dgSLqJbE11S0CbQexByCa3botafepdkhV7t0hKpv998+nlvUaLTLkneDtTE7uW+a08F7oACw=="
+        "value": "oYeHesYUjpQnveT7SNDnV0zdAEMZeTeklOso6taRWS2wAJOcRHZttrZ7UN0l9o+CyGWRmFi8VvlwtoJY4fQIDw=="
       }
     },
     {
       "id": "zerowall-aichem",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6498,14 +6498,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "DJ1vxVzk9Mk66T+zcn+qHlExHI2kWGzNLjKwjgVobU8mVCgxZZX9uZcJjJ8NNUqP47mWcLXBg4g25iq0HvpjCg=="
+        "value": "HyU/CM/eME9XWzY+IsPOXwSOsgoOiXSizXfnavcoMhHtnuWAOmHVnDJbuSVavnPpXBckq8djwv5KbHoI3efuBw=="
       }
     },
     {
       "id": "zerowall-bio",
       "version": "0.1.4",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6527,14 +6527,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Ubf6zcLDUEhhDToMCj4QCLZQrR9r46vnFNeuqrjTRxvg3ItFOHYiMUSWn/jX3bJ7Ur3brKIpMufrO7GsE/V3Cg=="
+        "value": "UCE2Ka/GOrhOCk77endmJlVjpzVKUdMHUFwo31d24yum1TC2azj+njHccy02U1TFOc/u8tAeNqfqu+kQrpF0Bg=="
       }
     },
     {
       "id": "zerowall-bio-tools",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6556,14 +6556,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "YmeyfKS8FeSrCrFllQa2gfra7USp3FJhM+GcjPDcoviAwW0LA6Xf2fI0Fmy6AX05S294O/1IJhWBQskOYqLADg=="
+        "value": "AvOSb3Aw4ipa7lt5XE94XZoknPG9JePDRWoAzF6pZ6i4v8wmBLKoosRUbryF5BikQnRsnVeXhgKElcwZyQZqCg=="
       }
     },
     {
       "id": "zerowall-brainglobe",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6585,14 +6585,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Ve6T3M1lwpfuD6+ixBUaikXe5Z7FP3xypS+lWz3xQGUsmBxoMs18pB7WhHfVNT4v6hd7fhAGVGp+2Je0Uo1zAQ=="
+        "value": "JU6ZlzitKvlNIOJ4QpneBcN+dppNY3yxSICtJyZ4RiErAC8b9wUBwk2GM1R/Ep43TSJN1JnmlDDUJnruht22Ag=="
       }
     },
     {
       "id": "zerowall-cells",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6614,14 +6614,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wi34vyf7eJToNZoZQ/6PYNzw5vJzSv1YQ9l2Ghx2R6TtARP2ivvv/9YpzUCy0jIw+kH8RiNz2T0eleK7H7SzCw=="
+        "value": "p92ryyitcoZ3yAeXztvy3LgfkgFbwBVhRO1I/PDOu31nqU32LvyigvHCgGmmhUddvjHZ9NInLiU1CQssT2CMBg=="
       }
     },
     {
       "id": "zerowall-claim-audit",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6643,14 +6643,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "2cK6A/i/bAEtWqnXnsR4XD/lGoDioXVqDrcINrxDSmKZaD3jlklXpf1PmmynQIxFVJvWa3sVUycA73hzCLWHCw=="
+        "value": "Z584pvFhYN9+2S1BDeRv6juP7SFCm30ZoGoCnHrSJM1boUO9hFZaklrfdkdquTK4zvqVk9tMSrOM2evW2xA2Bw=="
       }
     },
     {
       "id": "zerowall-colocalization",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6672,14 +6672,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "JTEyn4r12rS6RLuR3ZGnUiXyzlvXbmhCPq5mTPWh182CYLKM9sffRzOrXN/Nf2rWxesLnA9SdIy+qG1FRWZoAA=="
+        "value": "04aw7zYtS7Q4pYEioDIDGozJZnAiapOSYAADS1GICaz4lbp9Gjem614MnAIc5TP4max/UalWRjnDEQ1N0XVaCg=="
       }
     },
     {
       "id": "zerowall-data-contract",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6701,14 +6701,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "M/wUPkaSth6QpZlf9g9m28rcxJCl+vkAwuwnwK6RqP+df/6ngOKpe7PzoJoMIjDo5sbxorOv5eDwLy3R4jOfCA=="
+        "value": "9ezWQzY1TfdldOH+mUNY61VmxCcPhyR2aUz/Aa7iserbTh/kJvUvECT0I46jia6fSfpQYouKv6GyOBTl47CkAw=="
       }
     },
     {
       "id": "zerowall-fiji",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6730,14 +6730,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "r7iNLBqDzRInIwxDfj+/n7mHTj7Zx0hIZkDtJkoqMFFuoE2KOeqAM74jYUzGbVtHoxRBFB2CndDVwpIUYWi5Cg=="
+        "value": "65GxCxxm8Gp1s6j/WTZg+RWA/Ub1u/Gjyo4IZA1kBtEbpwnOMsLInjcbRSfbDjtiweOKyndG2cvlrPQLZvwgDA=="
       }
     },
     {
       "id": "zerowall-fiji-bacterial-cfu",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6759,14 +6759,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "mM3LZRJ7fTksUvfWaZ6LlFD62jKTtMXJ/E/a5A5dNngsademf0DULOPV3JaVcGNTkfBbDm2dN6xuAKYExGW1Ag=="
+        "value": "eJBeJoH1a5wGSqsTHDeUzTunxx83S8uH2RWh3ihBwMDrTMFWWpN0cwCdssY4nZdtONRbMHJozCPE1muhfSfGDw=="
       }
     },
     {
       "id": "zerowall-fiji-colony-formation",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6788,14 +6788,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "BQLXK5bbA0nJtHFg3/4Xqk1R0paEwqMnGbh1IoLa5j5rqLUan+RpGBPl8Dg1sMaSC4HiyRRES8Y9Ub63acC0Dg=="
+        "value": "qpWKAkxQNBPlRab78zOBZ52+HuPr/RN+pAzYM6SjsTUhRURkfmI/7Mh/XKBIaoJ7hMVA4XYVNmZt/60M/G8uCg=="
       }
     },
     {
       "id": "zerowall-fiji-scratch-wound",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6817,14 +6817,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "v9xVs8npHfwumeqAw2xvgIjvvq2/M15gu580uS+h4qrToyyWOTfqGYJYome/oSYB6z3yxzPCrHx8tmTSWuxuAg=="
+        "value": "IrW+m2k1/vUSPRUM68+h2Uh31Q3HAkLQiWmPvc4PRsD72S5GHYPAQKJFS+eoNscTBskbZXEDWuDZw4ZvmWoUDA=="
       }
     },
     {
       "id": "zerowall-fiji-tube-formation",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6846,14 +6846,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "H8qm6y+EiCcRcZaXz1Mh1JsMa5TSWRORIo+CyVTHNlC5XJzP85akUYGDZipmKKGJzhx1cHqRhbVtbzZ41mALAQ=="
+        "value": "4Si19j/Sh/Xv2qQhHtV7+pGz622ncpktfoXWJQ0mDiJ21AbysRO2rYKnfCznBNskAsza3gVnX0WCg0KrO1VhDg=="
       }
     },
     {
       "id": "zerowall-fiji-western-blot",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6875,14 +6875,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qoLnJTlkWC5Aqju3WvWlKPaj53DkM4LLVW/Do03zSlsX8hgujsd7na0LRfSF4rwGKVqgqmhWk74nj/6izZbiDA=="
+        "value": "fbQNKp7mmPnSURxKUVKWbupipxbTWmeGqg/YifulsEDzhkCxx/nhY7NmkhkPCs3Pm45PlgVgEUwwg2Aa+gQ1BQ=="
       }
     },
     {
       "id": "zerowall-flow",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6904,14 +6904,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "YbmAcBNDQXnPPeo9LiBreBQ61o/axjk5fFMdtz0M+S68XvJNI8kkWzacdiZFJ7wXiWgd8Q0Kzih+wTXyxb1TDA=="
+        "value": "rCi7asq4nf9XmTAz7qFXGzxDctpFk5IBkL6y7CTE/Cgb9QFhTwksUVhhIuLct8YSteeVw5oJ6HcVnZ9s9GmJAQ=="
       }
     },
     {
       "id": "zerowall-geo",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6933,14 +6933,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Z3Y7GZquYBpYRAQmK40/U1vDq7HVmn6nKxed63GF8RliRc7OuLTUNzgsG0nceSHm1t/kGf0XReQQMv11DJC+Dg=="
+        "value": "eOmHo0p+Py4Cud8gATrRCi3Ar8B8qOo4lBE9J1fSag4/jcFqy/T20+e0y+O3+THfkdNfTPscHGWbRVZQgScYDg=="
       }
     },
     {
       "id": "zerowall-he",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6962,14 +6962,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "AXXGN7nAHtJYmNsUudc8/ljjHtbewjg622MmxRzSErnEhKJAKGOJW528UTtWSwgwAOaGGiqIvbTdsMpiaU6DBA=="
+        "value": "2kaH1d2dQ8LDI57v31aciv40ja8CwrZHIIKaPcrVxSmsJ4kTeeZl+48Klk/1JUwdMVQLrpP1o4K0unGqsni+Bg=="
       }
     },
     {
       "id": "zerowall-image-dup",
       "version": "0.1.4",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -6991,14 +6991,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "TnO+lR+08mthOYJ/3DQKw7WV7uA4yFWJ+2kkapBX4/IvPtwdwpbD2qqMDER4qJbs7qt9guWwwonXrPDUPsFlAw=="
+        "value": "2v9O2dKQeVarKFicAJ7qwMh/zrASCDzLhzYTGnTSQxjoruXjplzR8PUxkJUUxtEFRBNgukTTUFs06ZctSDZYCQ=="
       }
     },
     {
       "id": "zerowall-image-intensity",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7020,14 +7020,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "doOhjTUJ30oUbo1RsJRyCJ83GJGm/uKTc5226VjiZ0JVkjM7cB4rfQnXtnE7hK73aQdqcNZhVD1L5F4j3+OHBg=="
+        "value": "dTd7fBgcN2Ns5+292H4N6IAmQYgRc/ixZmyuApZUvYecTMZdSmFw8jDa+DeTlQ/CG21F2f6N4MM61lGfKR5SCg=="
       }
     },
     {
       "id": "zerowall-image-mask",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7049,14 +7049,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "/VgQUG98Dlvv6viISJ+L5v15c27J0WXFtzo7yuIZrB4hB0VlEGhiPt/9Qt6ES34Z13APOzvmx1DHUL9ankNmBg=="
+        "value": "3wyLKQIFh8c/cMCoktDV8Ss+njp+y8WcwjDYgC6fEj9w2d/0xov24zDWA5MdtjnghUYAvmIvgpmcbJ2FK4p2Aw=="
       }
     },
     {
       "id": "zerowall-integrity-report",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7078,14 +7078,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "JRMewd6xWVJzNc4qbnbv+h/TRr5qXku5O3qVuzQOdTRqL2UM+N/YhDUDnKXpRkpAxCh+TSh6oAb0XAWgIO8sCA=="
+        "value": "3YJY6Lc9H91PI+f7gSqzZT+KTOMQxXvvMrBPgcNOJTXFW1DmZwIJhmNJbr9C/pJrktmEeTbRv2qfE1/Y7o8sCQ=="
       }
     },
     {
       "id": "zerowall-intervention-response",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7107,14 +7107,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Ur6BsnbmqDOq/fXS0H8GFO/Q2NsWKlpKcfAYUmMuQZ0XPpSzqoqXxJSnAcbIDoE5rPd3U3aao76kl3OU6uNiAw=="
+        "value": "oJOEK7A5wxyDTJ6mZ5YXh3BntAXz/n1ixwboAYc50jQKMGLyg2DqyYRVOJJQThmE1sH63dZhFF7U0wMB4hGcDQ=="
       }
     },
     {
       "id": "zerowall-ketcher",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7136,14 +7136,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "3GEN3IxqIzEnxH8jwI1TMV3DBB1x3uQCzA0swgoS1SXCahp8m4YRrmj8/qrEIGmTcYHsHdVxB5Den9HzhfnACA=="
+        "value": "vFEuPpdCWNHP8PJHyzGQkj0QKSHxrZDL4WowUkWmSRj75vna0MbjQaJRBnKrCr47+zgLjOkhv2Mgjsksitr0Aw=="
       }
     },
     {
       "id": "zerowall-mcp-guide",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7165,14 +7165,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "RQpcfa8WkiGQ5UYUsPf/q7haowf/TCi+LazJwOLeRtkYQguIfeYlMNVvjZFineg1o3pisilUmFVDKjq+KBqLDw=="
+        "value": "CTTU13Fo7zk06CtREa3c2Z78iFxs1aCIiNZlAh3r+SEZd8QIOdjERfH/37PbUgUo+qSLbnx6KsN9n53eiVfcAQ=="
       }
     },
     {
       "id": "zerowall-molecule-docking",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7194,14 +7194,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "TlGn7biXUY6zBzR/R3IQxqZnWFWN2h/gjgKd8CLgNwq5trpn65+Z6affVJ0FDetJ+PmTlwDH1Jhh2yvZrogvAw=="
+        "value": "Gca0/wQ9QuDCsUO2ySbnBADp2JK0FKpgGadC54mfUrQtNlP+iWugGvfhNYba495dmovg+04orvVZ2Xe5mM9cDA=="
       }
     },
     {
       "id": "zerowall-molecule-viewer",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7223,14 +7223,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ngnFp0jXbVLZjsqqEhwWvmSthg1tZ1qX0WWRT1Aeo+ZiRfaPJgTYa+cMMjY9tsLIVGwx3b4F4GkSGwGQpYvCDg=="
+        "value": "rlIcsxUzvSK/uCoXKj5ND7w0XrcHGFQnBVL6w46LUfRyyCcii89DrzdXiknvNV5/UaI++3/gPZmb6UmVep3ODg=="
       }
     },
     {
       "id": "zerowall-mr",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7252,14 +7252,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Cm5Dd1Vp8J2h44cJDQA1emBIPyZbSjtRsE8Zh6+89XdMEA41tjHxTL8GFGrrhLXwYAZzCVhF81ebziJsshDwAA=="
+        "value": "ta3YWSRxTwD7gS0M3x14ysW0kJbkD9lGpXlVwaH5efYAvMs/eD91VqhzZ4IXiwRbWWyZaWTEJIih7dwycFUFCg=="
       }
     },
     {
       "id": "zerowall-napari",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7281,14 +7281,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ebQXc8JK9pv70DfywMqLYkTwfuX1YyF0g4UVzG2GZmIW+fbZMGPWPW3/vjw84B5NOLeimXOKqFDOHtuwUvgcCQ=="
+        "value": "0M4wSP5e4ZufKEmAmeTRvFG9DBZaVvVJ+tyv4btPARlPCiPLSy1mGhm4yGUm2/s2F8qPi1Vs4nGS1xKqG4s6DQ=="
       }
     },
     {
       "id": "zerowall-nhanes",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7310,14 +7310,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Z97MTQxadHewussYlEQT9SSwTE9RZ7XK68UT4vJAY3ndJUOFltKi5/hcODxSAJendM+0bUJoXD8s2L9jAWeSBA=="
+        "value": "SS2VHVMYZMm2ruR23mNQie4smEbAU/OHMAHh+MQlvNGcX3i9RlMJe/RfF3ddc870LrvbAvVp2tc0qqXb1nGgDw=="
       }
     },
     {
       "id": "zerowall-obesity-alopecia",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7339,14 +7339,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "X9CbWYu39LxpwcWwmciGkWNb7ZOQR/lKyj9wJWwujnKvCsfV0pW4+13VAogTA3RC1bZjRbx6GC92tj7A3PSECg=="
+        "value": "pc94SkQfTXLukAbUy8rBPtA+H+1j5xr/oblBomwojyIpz+7ADvrugAbym2ds4fNZZWyOhL/WIWkGtXIPm4eqBg=="
       }
     },
     {
       "id": "zerowall-omicverse",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7368,14 +7368,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "IfPgblIsCFtDDEruIJfbbYw55mex+S+lM9auzVIE4CRGXDTgQLvDvJCxZVmdqqxm3S1+hJPicu0h79bzIjGOBw=="
+        "value": "gGmrRxVsvFsA3zmD975XWI5suFbVBVTIyFgzEVYqscw7on4OE29zhvEBZ2FF1QkKW504qmZorTXsoCbtc+CVCg=="
       }
     },
     {
       "id": "zerowall-omicverse-agent",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7397,14 +7397,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "/WsOpalrF64Jgf4O/L4RaEI2BwavVFoszEvEdTiExZhdij8QfIpO8s9O5PyOqojHlFmBFdeJB5uCgRhsjkoIBA=="
+        "value": "m4bbF73nGu14pti0P6RxOGjjLVYGC2pjGYpl8O3Ca1t6WBjfPFJEVoCmXS66gnKhL1/sDxm2zKOk0/uQgGSHDw=="
       }
     },
     {
       "id": "zerowall-omicverse-bulk",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7426,14 +7426,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "P2y9J7CYPWldJ8w/XLPbK7I3Va2ot0L9u0wPAMwrKKZ3BohpQ5U30gFIwyAAOcmPTH/tHEuF9mtkpqYwE70kCg=="
+        "value": "2A9gJJhkOmKNMPrsKOEH8vokP3hyJNgPgt52WVKNEAgj1ZSwnV1L3HfNvMwiSZf6SbpmbOhjtrEg/mIboFj3Dw=="
       }
     },
     {
       "id": "zerowall-omicverse-multiomics",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7455,14 +7455,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "OFb//saGAqivhc2CEiQRVR3f2G4wP+r8rFCEVX3imAYzioya+nxVkqPgfcrhJXnvBArxvsIoY/v4/5ZNvPRLBg=="
+        "value": "x6mmbQOXKs6tN1MBROzlywm29B98My+AhD4/zmZ4X8nA7JS8zFxCeLjgKdXnMGBIW8WhR1RAB1DRsqHJSnQYCQ=="
       }
     },
     {
       "id": "zerowall-omicverse-singlecell",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7484,14 +7484,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "1CDf2/6LiCsnudja0CIr7m13mSGCn33Cr6y6kiQH+UspTFjQV6S20pKUww59SN9hqT2k5o1G5MmdabfaPNwjBA=="
+        "value": "kzXnIdjGS56XvS2sfGgHUJN+F6j+3Pry2+O6W9K1dygWjPfQyzq37JwaVuhaZPD1RID55Equkgcy76HoO0WtCw=="
       }
     },
     {
       "id": "zerowall-omicverse-spatial",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7513,14 +7513,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "LpSF3Wuc7XdTRfZB/80OhM1EjV6oVKirttZWVkEhLEHckpvKGk72izDDvA6XnsqN36NNtONIofhicjY3VViLAg=="
+        "value": "mHQ0iDddnyu5pcmILtDkCIrk/0UnQqSUmBwj1WluLMekoeA29YUrlpMw/0KXkeoyhcrhulBEv+K1PLboSeW9CQ=="
       }
     },
     {
       "id": "zerowall-paper-analysis",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7542,14 +7542,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "rPCen2q+hCgQFCAck8ZnhzXxjS2ehOCEOmujnlygMFx1t9G2FnmhhNwFzaoiuAlrVtkzXqC22e2GubXMQHo4Ag=="
+        "value": "8+Pobxe0ME3uHtQ0/j+BFSJv9HbQusMVYzvgYZEFxXXGpY/j8T3f7vqLTHnrNCcFLm2M/NtVi3mHilgG61c3Dg=="
       }
     },
     {
       "id": "zerowall-paper-compare",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7571,14 +7571,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "kjNlhYsQmo1aKEcShCaspWOLI5LV6DGhhdsoneWtdHi488YWh1WMyj6no+FBueUUBrGu6TtBvqf2T1+670XmAQ=="
+        "value": "eXiBlh5ZNpm1db9zCob1vpEA5nxPkovsdttqJExDAiZa4Ny0ocmzAMdfJcCawZhW9F5WrUw6E6eCf6UwZGSDCw=="
       }
     },
     {
       "id": "zerowall-presentation",
       "version": "0.2.6",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7600,14 +7600,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "k23InDqqaReVjKA30hrMa4aFlmgtFmmCleCxXsGfE3lyk2jlG8H4AG1o32xybkBe8z0HeLR9PKdRT39aSCGEAQ=="
+        "value": "z7iGMtpV6kp5uWEYafHUZLjwOqDstePPAYIMJVPU08aHizoT9WduzyF0kB62KHi8e2Nw3aULRLTHcxV3P1NUAg=="
       }
     },
     {
       "id": "zerowall-python-packages",
       "version": "0.1.5",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7629,14 +7629,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "lU4Nc9F7P1v9CSi1evdOFTAo8Fx1kRCJ/u4T6rzkaqIXsmHv4eYTGuVRVOEvoTQVgKJQe1WnJKdKHSuMCQ+OAg=="
+        "value": "zRV50V40+600jrx077pWmhzvr2qNRj29j3EdLE6UhJ/+dinxFZtRaxG0zIrhkqFltXJjnATXxzg+aMXazpozCQ=="
       }
     },
     {
       "id": "zerowall-r-files",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7658,14 +7658,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qBSNIswI/ulAH/UwL9h9ny2S6P+vHYxs+uoB5VzPciz69CDoU1V4vlV67SIRTqaywEgaSbpFcbJv4gj/1SpJAQ=="
+        "value": "f99hP75Fbj5kVU6IdNwhB+OqrY5yQAMiEhetD0v4HJSv/cd4DzwAMUYGxQGIo/9j7xB83cAoTAg1ztRZCOEvCg=="
       }
     },
     {
       "id": "zerowall-r-packages",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7687,14 +7687,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "T7v+CoPitOolo2s3j/X+rczl+p+QEVSvem/OLrxd4wI0hoiwQrjyb6MNTwh4tvnWMB0Ng/wwAhIxnjGEUjJFDg=="
+        "value": "VpN1v9KgzxRjupj+YL/EAN4PbTauVG033eVImdY5NrZg3Uy0pDjBfM2hl9TuG93zSpYkw9ziAy0MGJl0EskuDw=="
       }
     },
     {
       "id": "zerowall-rbioagent",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7716,14 +7716,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "dFCstyWBm4LC2F/D7+/jJ3dWsXx7th6AuCpxiL/KzVULPLTOellUR46j4OiyxrI8nb22Mu5yD6Ry3yXLsd0sBg=="
+        "value": "L5BRKymR130tcOoZFkKkSYCzr1T+rLY4DMG6EzW3k+nXDEZtly+ikSfHsZC0WiqqaO2Fi1nxcqqQbQU/WWXqCw=="
       }
     },
     {
       "id": "zerowall-research-evidence",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7745,14 +7745,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "XRQn2JYqXdLEVb+32p0ycClDSdnHNJskIYY0tOBKS8YDyKIDeyBRbbtLiNF2XS+9RJyZWlQ4rOjTt9+u/9VdDw=="
+        "value": "PRIMP6lUkrAyRC6c+2u/NKbwYz5mW6dalnD20Rh2qpybQ8wRIKO58PjHbiT97mLDKjf062wpaBnmfQHjl21BCQ=="
       }
     },
     {
       "id": "zerowall-research-orchestrator",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7774,14 +7774,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "cxryWkdQNPkxUd0nN03LOmwOTaBjM9XQ+tK/jOQnM28R8/xwJ4vJOTUVejrcPeYfEkPTEjMR1jyYSq8i27ZYAA=="
+        "value": "scrtZWqmx5aIgOXxeHx2Dcak2UMfipmR2xUReywdfakkS+Yu0kA2iFlQsX9sn732cfp7cviqQ0Fp63xPX356Bw=="
       }
     },
     {
       "id": "zerowall-rmcp",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7803,14 +7803,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4vjRb6fE9mQTCg+ZE5JXOFKudjE2awi8qIyVNpNqRigdayd6w8r88lRhOEpsjbI/O1eqO35AZiPlR5DmsF55Aw=="
+        "value": "dA4h3N6FISGwhn2Rt+PhAMyyugz9SPm9grfpSQb0s4piVlrRk1E3MEHBJgmZYw41G9abEL0OKEXCzF6FE9gGBQ=="
       }
     },
     {
       "id": "zerowall-rplatform",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7832,14 +7832,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ByugvcBKls2U0LdCKfNZaxSRjoyPliAewSYZ/ilc7QXv5PbqiiXfs7vT+kyW8REOSpF8PdvMZtqIgA85e0beBw=="
+        "value": "/KYqaOj97lMUs2a/gcmEAvD7ilkzCxxQmcrohvfE57GQhERKomGXd8x1DXI4ku/FFjionE1VBNFFTloC7iE9BQ=="
       }
     },
     {
       "id": "zerowall-rplotfigure",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7861,14 +7861,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "+vUKVdk9I7MrtUaf0lZch/9kwMHU3fHl0S6E5q0sfqQSLILHdD1ZgNcLRa8x32K16cH0YNVGLeuF1dOAAVGYBg=="
+        "value": "bF452rjcqfhm8iIBzUMRAuc+DGU6v+9pVE645sY9OZWVlMF+J650LZS/bxRQ4kuuV3vz5EzwNFnrxB6OYyFuBg=="
       }
     },
     {
       "id": "zerowall-sanger",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7890,14 +7890,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "V3tdBXUwBrPunjNYl8AXJsicjsmV9KPAPCDbup+JfdhyCJe7jvPzqIf6tIrzaf2T38ws6Ah7L2x1xsZ3KJBCDw=="
+        "value": "0OvN4Z5+3ld4xQUUpEWtAsASryaA0gtGctLX0ElleRgva1f/ZVCvsEVfd+qO3HI21YH73gGEhYrA0bKOI4JHBQ=="
       }
     },
     {
       "id": "zerowall-science-agent-router",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7919,14 +7919,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "kdSJhDp16HJPVpClMV0AM9LocOltHBDLviCLn1lZTU7LWP9O5v9pewnp4Z1bZIdDl3VF4/JxggfgRbvmcCRMDA=="
+        "value": "q0H2kFAAxUP9yhPeYm2x2Z170WiW6QlMamFq5yJ8bh3rx086zCCS5va1gpCnTGXOzP93RDn2qqiCf5OAjBbVAA=="
       }
     },
     {
       "id": "zerowall-science-canvas",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7948,14 +7948,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "HSiEuwip3qHxeNeci+Ukb0g9EEL8hloj8I4eM6XHVeUdp2crg+BdUQ+GspDSaMp4qaiRcXxocyRMn7TY/vuWAg=="
+        "value": "DtN2OAkPPbeb88Xr0VA9eTBKhvp/Vzze5GzYkA8v/6AldJxvGmDYlIgnPMvwnVGyKqlvupMJYUwBK7qmSyV/AQ=="
       }
     },
     {
       "id": "zerowall-science-workbench",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -7977,14 +7977,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "nc/nKr9DEMGHgwCw/CZmDGQOXfYuNt8hHkgqrfrTvwjo5idO5o19WR5svbjF49Q7kJZSC3mxOGMD55TA7uR/DA=="
+        "value": "csGa2u5g5vSIctKiEBN7WwPACBYL2AxXjb7WGBZA4H/Nz4B0fJ1OMy/AbEMSpbHmHKecIHmzJM3GlZKZpEVpAA=="
       }
     },
     {
       "id": "zerowall-scientific-engine-center",
       "version": "0.1.2",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -8006,14 +8006,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Hb5mB4iPHWG5H/3oi3TyFBvxzMeW8X9i4ZVW6dEQ9bkI/lN5krLFmKU3Ic3wTHIe21XXPpYj5MwdvpEjmSZ2Ag=="
+        "value": "fuH/klc5zSdfSZva9WoVyHhcvd097IAcEQGwYTFIYLcJCMtrsbgTzaL5LBTasv+72nSB7IKs+K+RVfOUh8dGBw=="
       }
     },
     {
       "id": "zerowall-scimaster",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -8035,14 +8035,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "SfbV+iu8aXLS+fZ2/de8ozPUCHBl4EBaJ3TAI5DKh3K40nFxwpXn6QMms6TCAQCLCndByQu6kMkFQf6vdZ4RAQ=="
+        "value": "BAYzEzhEknHdRqZE2P8ITEPfQVYgrPEVs7oEPe8iEfhocqXenVAIHQjqkZ3NL/CEBcWxjotKzaA8SHu7WWmBCw=="
       }
     },
     {
       "id": "zerowall-sequence",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -8064,14 +8064,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "weRLYmqFN1EQrXT35NIHS6dtVUX+IUmoP4Evtj8cTAjHmvM3R4Rpw9WavmAWCR5YOUF4JJnbuWRfEyEvr/56Ag=="
+        "value": "kipW8asDJJduuk1SUAP5+tPY61ngQH88xs0Srf8Jas/dxtL1swCXMB61UxULdJmQ8EeF8BFWPlsbE81erwZ8BQ=="
       }
     },
     {
       "id": "zerowall-spreadsheet",
       "version": "0.1.1",
       "kind": "skill",
-      "applicationVersion": "8.4.0",
+      "applicationVersion": "8.4.4",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -8093,13 +8093,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "AL4+2iI23tIuCN5Af5LeGsB6JAukT6fnXqtxirwi0Na/z07E4Kyc6D7RqkBcjcbCAheHVOuApMsu+yWQ6DkACw=="
+        "value": "geh2GnTnoHhciugP996wMqXTuxTPcAAjHfK0kJhFpZvBSU/TPxRiBKmBdVMeDobaETtV/sXBIPrhKcm8H5RqBw=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "So6nT1Gh1SDjf8YfGuZtTpOaDVYMr8qm1AzPc4fVGYmllcID7gnq+e5h5nj2udGuPgWYAGD2kGn42Gb2iEKxBw=="
+    "value": "cZBefMOquawWqlzbajU5MiSoyU4Y6x789/fL3ERooD0LktakTgVoG7+WZdGn02i1txPO94TBVt34+37g19tFAA=="
   }
 }
