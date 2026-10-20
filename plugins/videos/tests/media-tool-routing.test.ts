@@ -12,13 +12,14 @@ vi.mock('../src/media-studio.js', () => ({
   defaultMediaProjectId: (sessionId: string) => 'session-' + sessionId,
   MediaStudioService: class { constructor() { return studio } },
 }))
-import { apply } from '../src/index.js'
+import { installMediaStudio as apply } from '../src/index.js'
 
 async function fixture() {
   vi.clearAllMocks()
   const tools = new Map<string, any>(), prompts: any[] = []
   const jobs = { list: vi.fn(async () => [{ id: 'actual-job-0001', projectId: 'session-s1' }]), refresh: vi.fn(async (_scope: unknown, id: string) => ({ id, state: 'queued' })), pause: vi.fn(async (_scope: unknown,id:string)=>({id,state:'completed',collection:'paused'})) }
   const context: any = { skills: { registerProvider: vi.fn() }, effect: vi.fn(), inject: (_keys: unknown, install: any) => install({ systemPrompt: { context: (value: any) => prompts.push(value) } }), tools: { register: (tool: any) => tools.set(tool.name, tool) }, zerowallMediaJobs: jobs }
+  context.get = (key: string) => context[key]
   await apply(context)
   const exec: any = { agent: { session: { id: 's1' } }, callId: 'call-1' }
   return { tools, jobs, prompts, exec, context }

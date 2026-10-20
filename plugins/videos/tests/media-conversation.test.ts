@@ -22,6 +22,34 @@ async function fixture(saved: any = {}) {
   const studio = new MediaStudioService(ctx)
   return {cwd,ctx,media,environment,ledger,studio,model}
 }
+
+it('persists a manifest through failed estimates, restart and new-call retries, and requires explicit clearing',async()=>{
+  const f=await fixture(),projectId=defaultMediaProjectId('s1')
+  const refs=[{url:'https://zerowall.chengxunkeji.cn/webfiles/zerowallsciencevideo.mp4',media_type:'video/mp4',role:'reference'},...['zerowall-icon.png','01-medical-research-workspace.png','02-singlecell-virtual-knockout.png','03-genetics-brand-finale.png'].map(name=>({url:'https://zerowall.chengxunkeji.cn/webfiles/'+name,media_type:'image/png',role:'reference',weight:0.5}))]
+  await writeFile(join(f.cwd,'references.json'),JSON.stringify(refs))
+  f.media.estimate.mockRejectedValueOnce(new Error('upstream rejects optional field'))
+  try {
+    const failed=await f.studio.generate('s1',{kind:'video',prompt:'animate with all materials',references_file:'references.json',parameters:{duration:5}})
+    expect(failed.state).toBe('validation-failed');expect(failed.references).toHaveLength(5);expect(f.media.submit).not.toHaveBeenCalled()
+    await expect(f.studio.generate('s1',{kind:'video',prompt:'retry',references_json:'[]'})).rejects.toThrow('CLEAR_REQUIRED')
+    await expect(f.studio.generate('s1',{kind:'video',prompt:'retry with missing video',parameters:{images:refs.slice(1)}})).rejects.toThrow('INTENT_MISMATCH')
+    const restartContext=new Context()
+    for(const key of ['typert','zerowallEnvironment','zerowallMedia'])restartContext.provide(key,f.ctx.get(key) as never)
+    restartContext.provide('zerowallMediaJobs',new MediaJobLedger(f.media as any,async()=> 'account',join(f.cwd,'ledger'),{autoCollect:false}) as never)
+    const restarted=new MediaStudioService(restartContext)
+    const retried=await restarted.generate('s1',{kind:'video',prompt:'retry',parameters:{duration:5}})
+    await vi.waitFor(()=>expect(f.media.submit).toHaveBeenCalledOnce())
+    expect(f.media.submit.mock.calls[0]![0].references).toHaveLength(5)
+    expect(f.media.submit.mock.calls[0]![0].references[1]).toMatchObject({properties:{weight:0.5}})
+    const draft=JSON.parse(await restarted.call('s1','prepare',JSON.stringify({projectId,kind:'video',prompt:'new draft'})))
+    await restarted.call('s1','prepare',JSON.stringify({projectId,id:draft.id,kind:'video',prompt:'explicit text-only',clearReferences:true}))
+    expect(JSON.parse(await readFile(join(f.cwd,`media-projects/${projectId}/reference-intent.json`),'utf8')).references).toEqual([])
+    expect(retried.references).toHaveLength(5)
+    await expect(restarted.call('s1','prepare',JSON.stringify({projectId,kind:'video',prompt:'bad',references_file:'../outside.json'}))).rejects.toThrow('OUTSIDE_WORKSPACE')
+    await expect(restarted.call('s1','prepare',JSON.stringify({projectId,kind:'video',prompt:'bad',references_file:'references.json',references_json:'[]'}))).rejects.toThrow('INPUT_CONFLICT')
+    await restartContext.fiber.dispose()
+  }finally{await f.ctx.fiber.dispose()}
+})
 it('rejects ordinary image generation at direct and workspace entry points before any paid request',async()=>{
   const f=await fixture(),input={kind:'image',prompt:'生成一张测试图片'}
   try{
@@ -69,7 +97,7 @@ it('preserves explicit saved model parameters and refuses to replace an invalid 
   await f.ctx.fiber.dispose()
   const g=await fixture({video:{selection:{...saved.video.selection,modelId:'retired'},parameters:{quality:'high'}}})
   g.media.estimate.mockRejectedValueOnce(new Error('MEDIA_SELECTION_INVALID'))
-  await expect(g.studio.generate('s1',{id:'chat-retired-0001',kind:'video',prompt:'test'})).rejects.toThrow('SELECTION_INVALID')
+  expect(await g.studio.generate('s1',{id:'chat-retired-0001',kind:'video',prompt:'test'})).toMatchObject({id:'chat-retired-0001',state:'validation-failed',error:'MEDIA_SELECTION_INVALID'})
   expect(g.media.submit).not.toHaveBeenCalled();expect(g.environment.setMediaModelSelections).not.toHaveBeenCalled();await g.ctx.fiber.dispose()
 })
 it('retains image references while changing a video draft and submitting through the conversation', async () => {
@@ -106,4 +134,40 @@ it('imports dialogue file paths with actual type validation and rejects out-of-w
   await expect(f.studio.importSource('s1',{path:'../fixture.wav'})).rejects.toThrow('OUTSIDE_WORKSPACE')
   await expect(f.studio.importSource('s1',{attachmentId:'foreign'})).rejects.toThrow('NOT_IN_SESSION')
   await f.ctx.fiber.dispose()
+})
+
+it('accepts ordered URL references, reuses their hidden source, and rejects mixed input contracts',async()=>{
+ const f=await fixture();const projectId=defaultMediaProjectId('s1');
+ try{
+ const input={projectId,kind:'video',prompt:'reference scene',selection:{groupId:'99',modelId:'chosen',profileId:'p',operation:'video'},references_json:JSON.stringify([{url:'https://media.example.com/ref.mp4?signature=private',media_type:'video/mp4'},{url:'https://media.example.com/music.wav',media_type:'audio/wav'}])}
+ const job=JSON.parse(await f.studio.call('s1','prepare',JSON.stringify(input)))
+ expect(job.references.map((r:any)=>r.mediaType)).toEqual(['video/mp4','audio/wav']);expect(JSON.stringify(job)).not.toContain('private');
+ const next=JSON.parse(await f.studio.call('s1','prepare',JSON.stringify({...input,id:job.id,references_json:JSON.stringify(job.references.map((r:any)=>({reference_id:r.sha256})))})))
+ expect((await f.ledger.references({cwd:f.cwd,sessionId:'s1',projectId},next.id))[0]?.url).toBe('https://media.example.com/ref.mp4?signature=private')
+ await expect(f.studio.call('s1','prepare',JSON.stringify({...input,reference_paths:[]}))).rejects.toThrow('MEDIA_REFERENCE_INPUT_CONFLICT')
+ await expect(f.studio.call('s1','prepare',JSON.stringify({...input,references_json:[{url:'https://media.example.com/ref.mp4',path:'x',media_type:'video/mp4'}]}))).rejects.toThrow('ONE_SOURCE')
+ expect(f.media.submit).not.toHaveBeenCalled()
+ }finally{await f.ctx.fiber.dispose()}
+})
+
+it('reuses an imported identical asset and reimports when its stored bytes changed',async()=>{
+ const f=await fixture();try{
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=','base64');await writeFile(join(f.cwd,'fixture.png'),png)
+ vi.spyOn(f.studio as any,'probe').mockResolvedValue({streams:[{codec_type:'video',codec_name:'png'}],format:{format_name:'png_pipe'}})
+ const first=await f.studio.importSource('s1',{path:'fixture.png'}),second=await f.studio.importSource('s1',{path:'fixture.png'})
+ expect(second.path).toBe(first.path)
+ await writeFile(join(f.cwd,first.path),'changed')
+ const third=await f.studio.importSource('s1',{path:'fixture.png'});expect(third.path).not.toBe(first.path)
+ }finally{await f.ctx.fiber.dispose()}
+})
+
+it('preserves configured options and explicit seconds without adding a conflicting catalog duration',async()=>{
+ const selection={groupId:'99',modelId:'chosen',profileId:'p',operation:'video'}
+ const f=await fixture({video:{selection,parameters:{quality:'chosen-quality',future_option:true}}})
+ try{
+  Object.assign(f.model,{duration:{required:true,mode:'enum',values:[8],default:8}})
+  await f.studio.generate('s1',{kind:'video',prompt:'explicit seconds',parameters:{seconds:5}})
+  await vi.waitFor(()=>expect(f.media.submit).toHaveBeenCalledOnce())
+  expect(f.media.submit.mock.calls[0]![0].parameters).toEqual({quality:'chosen-quality',future_option:true,seconds:5})
+ }finally{await f.ctx.fiber.dispose()}
 })

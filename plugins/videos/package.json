@@ -1,6 +1,6 @@
 {
-  "name": "@oh-story/dsh",
-  "version": "0.1.17-zws.4",
+  "name": "@zerowallscience/plugin-videos",
+  "version": "0.2.2",
   "private": true,
   "description": "通过对话创作视频、音乐和宣传片，图片仅作为视频参考素材",
   "license": "MIT",
@@ -32,7 +32,7 @@
   },
   "dsh": {
     "bundle": {
-      "patch": "./cordis.patch.yml"
+      "patch": "dsh.bundle.patch.yml"
     },
     "client": {
       "inject": [
@@ -48,7 +48,6 @@
     }
   },
   "files": [
-    "cordis.patch.yml",
     "lib/**/*",
     "LICENSE",
     "README.md",
@@ -57,13 +56,15 @@
     "lib/typert.host.d.ts",
     "lib/typert.remote-client.js",
     "lib/typert.remote-client.d.ts",
-    "lib/typert.remote-client.d.ts.map"
+    "lib/typert.remote-client.d.ts.map",
+    "zerowall.plugin.json",
+    "dsh.bundle.patch.yml"
   ],
   "scripts": {
     "build": "tsx scripts/build.ts",
     "bundle": "tsx scripts/build.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run --config ../../vitest.oh-story.config.ts",
+    "test": "vitest run --config ../../vitest.videos.config.ts",
     "prepack": "node ../../tools/plugins/prepare-pack.mjs"
   },
   "peerDependencies": {
@@ -137,7 +138,7 @@
     "@deepseek-ai/dsh-system-prompt": "workspace:*"
   },
   "dependencies": {
-    "@zerowallscience/plugin-ai-cloud": "^0.1.27",
+    "@zerowallscience/plugin-ai-cloud": "^0.1.30",
     "@zerowallscience/plugin-python": "^0.1.10",
     "@zerowallscience/plugin-secrets": "workspace:^",
     "@zerowallscience/plugin-environment": "workspace:^"
@@ -176,6 +177,16 @@
     ],
     "restartRequired": true,
     "rollbackSupported": true,
-    "upstreamVersion": "0.1.16"
+    "upstreamVersion": "0.1.16",
+    "profiles": [
+      "development",
+      "preview",
+      "stable"
+    ],
+    "migrationVersion": 1
+  },
+  "publishConfig": {
+    "directory": "../../artifacts/dev/publish/plugin-videos",
+    "linkDirectory": false
   }
 }

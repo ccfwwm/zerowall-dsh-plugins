@@ -206,3 +206,22 @@ it.each(['workspace','conversation'])('shows automatic waiting, keeps partial fi
  expect(call.mock.calls.some(([,action])=>['submit','generate','prepare','estimate'].includes(action))).toBe(false)
  expect(call.mock.calls.filter(([,action])=>['pause','refresh'].includes(action)).every(([, ,input])=>input.id==='waiting-job-0001')).toBe(true)
 })
+
+it('saves classified reference URLs and image frame roles without submitting',async()=>{
+ const job={id:'fixture-job',sessionId:'fixture-session',projectId:'default',revision:1,kind:'video',prompt:'video',selection,parameters:{},references:[],state:'prepared',assets:[]}
+ const call=vi.fn(async(_:string,action:string)=>action==='list'?{projects:[],jobs:[job]}:action==='catalog'?{models:[model],status:'succeeded'}:{})
+ render(<MediaWorkspace sessionId="fixture-session" call={call} send={vi.fn()}/>)
+ await screen.findByText('调整参考素材')
+ fireEvent.click(screen.getByText('调整参考素材'))
+ fireEvent.change(screen.getByLabelText('公网素材格式'),{target:{value:'image/png'}})
+ fireEvent.change(screen.getByLabelText('公网素材地址'),{target:{value:'https://example.com/first.png'}})
+ fireEvent.change(screen.getByLabelText('公网图片用途'),{target:{value:'first_frame'}})
+ fireEvent.click(screen.getByText('添加公网地址'))
+ fireEvent.change(screen.getByLabelText('公网素材格式'),{target:{value:'video/mp4'}})
+ fireEvent.change(screen.getByLabelText('公网素材地址'),{target:{value:'https://example.com/ref.mp4'}})
+ fireEvent.click(screen.getByText('添加公网地址'));fireEvent.click(screen.getByText('保存修改'))
+ await waitFor(()=>expect(call.mock.calls.some(c=>c[1]==='prepare')).toBe(true))
+ const prepared=(call.mock.calls as any[]).find(c=>c[1]==='prepare')![2]
+ expect(JSON.parse(prepared.references_json)).toEqual([{url:'https://example.com/first.png',media_type:'image/png',role:'first_frame'},{url:'https://example.com/ref.mp4',media_type:'video/mp4',role:'reference'}])
+ expect(call.mock.calls.some(c=>c[1]==='generate')).toBe(false)
+})

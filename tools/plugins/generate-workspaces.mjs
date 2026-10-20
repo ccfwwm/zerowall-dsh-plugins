@@ -30,6 +30,12 @@ for (const source of Object.values(upstream)) {
   const manifest = JSON.parse(await readFile(packageFile, 'utf8'))
   manifest.packageManager = rootPackage.packageManager
   await writeFile(packageFile, JSON.stringify(manifest, null, 2) + '\n')
+  if (manifest.name === '@zerowallscience/plugin-videos') {
+    const pluginFile = resolve(root, source.source, 'zerowall.plugin.json')
+    const previousPlugin = await readFile(pluginFile, 'utf8').then(JSON.parse, error => { if (error.code !== 'ENOENT') throw error; return {} })
+    // Desktop releases consume independently versioned, immutable plugin bytes.
+    await writeFile(pluginFile, JSON.stringify({ name: manifest.name, version: manifest.version, applicationVersion: previousPlugin.applicationVersion ?? applicationVersion, ...manifest.zerowall, host: './lib/index.js', client: './lib/client.js', remote: './lib/typert.remote-client.js' }, null, 2) + '\n')
+  }
   const file = resolve(root, source.source, 'dsh.plugin.json')
   const text = await readFile(file, 'utf8').catch(error => { if (error.code !== 'ENOENT') throw error })
   if (text === undefined) continue

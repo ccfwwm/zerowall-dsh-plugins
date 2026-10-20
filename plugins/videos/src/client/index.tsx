@@ -11,7 +11,7 @@ import { MediaWorkspace } from './workspace.js'
 import { MediaToolRow } from './media-tool.js'
 import { mediaTurnDefinition, MediaTurnResults } from './media-turn.js'
 export { MediaWorkspace } from './workspace.js'
-export const name='oh-story'
+export const name='videos'
 export const inject=['betterSidebar','slots','sessions','conversation','uiConversation','remote','remote.zerowallMediaStudio']
 declare module '@deepseek-ai/dsh-client-ui-slots' { interface SlotMap { 'oh-story.workspace':{kind:'single';scope:'session'} } }
 import type { Call } from './components.js'

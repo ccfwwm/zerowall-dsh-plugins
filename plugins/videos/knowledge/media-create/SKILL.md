@@ -30,3 +30,18 @@ description: 通过对话创作用户明确要求的独立视频、音乐与宣�
 任务异步返回后报告“已提交”及进度，不声称已完成，然后结束本轮回复，让用户继续对话。status 查询状态并尊重 paused/failed，不恢复已停止或失败的收集；用户明确要求继续、重试收集或重新获取时才用 collect，恢复同一任务的后台查询和下载并立即返回。不重复请求、不循环调用、不用脚本持续等待。生成 completed 但 assets 为空表示上游生成完成、本地作品尚未收集，不能说文件已交付；collection=querying/downloading 表示后台查询/下载；waiting 表示原任务作品尚未可取或网络暂时受阻，Host 会持续跟踪同一原任务并自动恢复查询和下载，没有整体时长或轮数上限，可随时手动停止。failed 只表示本地收集已暂停，不代表上游生成失败；使用 collect 恢复同一原任务，未经用户明确要求新生成，禁止再次 generate、重新估价或更换模型。paused 表示本地收集已停止。用户要求停止等待时调用 media_job pause；只停止本地查询/下载，不声称上游生成已取消或退款。submission-uncertain、manual_review 表示需人工核查；unknown 或未识别的临时状态若有原 taskId 且未返回错误，仍由 Host 持续按原 ID 查询，不提交替代任务。完成收集后在对话直接展示图片或音视频文件，并说明实际结果；用户不需要去工作台寻找文件。右侧“多媒体创作”提供模型设置、进度、作品预览及恢复/停止本地收集入口。不要读取、打印或写入账号凭据。原始素材和历史项目始终保留。
 
 历史任务恢复沿用原 requestId、taskId 与账号凭据，不重新生成。工作台“恢复原任务”会将可信账号历史任务转入“任务与结果”，立即开始后台收集；同一任务重复点击仍复用同一条记录。可以“停止本地收集”或稍后“重新获取”，也可以继续对话、新建会话。停止后不自动恢复下载，用户重新获取时才恢复原任务。
+
+## 多媒体参考与请求恢复
+
+本地图片、视频、音频参考默认由 Host 编码为 Base64；使用 references_json 有序描述素材，URL 填 media_type，角色为 reference/first_frame/last_frame，首尾帧不可混普通图片。音乐参考仅影响视频，不自动额外生成音乐。能力要求公网 URL 或服务端明确拒绝 Base64 时，只询问缺失素材的 HTTPS 直链，不上传七牛或其他图床。已有 URL 或原任务 reference_id 直接复用，不重复导入或上传。明确未受理的 rejected 任务修正后生成新请求，保留旧记录；超时、断网、5xx 或已受理任务只恢复原任务，不自动重提。鉴权、余额、内容拒绝、限流不能一概要求改 URL。
+
+`references_json` 示例：`[{"path":"media-projects/<真实项目>/assets/ref.mp4","role":"reference"},{"url":"https://example.com/ref.jpg","media_type":"image/jpeg","role":"first_frame"}]`。每项仅一个来源：项目 path、会话 attachment_id、公网 url，或当前任务摘要返回的 reference_id（sha256）。使用新参数时不能再传 reference_paths/input_attachment_ids；不要输出 Base64、凭据或签名 URL。
+
+
+### 参考素材完整性
+
+通过 `media_job.references_file` 读取工作区 JSON 清单（与 `references_json`、旧参考输入互斥），例如 `source/reference-inputs.json`。清单每项包含 `url`、`media_type`，可带 `role` 与供应商附加属性。不能仅把目录路径写进 prompt。
+
+URL 模式保持公网直链原值；V6K 使用 `images/videos/audios`，云飞使用 `reference_images/reference_videos/reference_audios`。能力目录仅作提示，可选供应商参数由上游校验。相同语义字段冲突时明确报错，不覆盖素材。
+
+估价失败返回 `validation-failed` 草稿及原 ID，素材仍保存。修正参数时复用原任务，省略参考输入会继承项目意图；`[]` 不会清空已有素材，只有用户明确要求无参考创作时才使用 `clear_references`。不得因报错去掉图片或视频、更换模型或重建空参考任务。提交前核对返回的参考数量；准备参数、尝试发送和上游受理是不同状态，历史未记录时不得推断素材已经发送。

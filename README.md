@@ -1,8 +1,8 @@
-# ZeroWall DSH Plugins — 8.4.2
+# ZeroWall DSH Plugins — 8.4.3
 
-ZeroWall Science 8.4.2 的插件与资源源码总仓库。各插件、Skills、MCP、Python 内容分别使用独立版本；桌面版本变化不会自动提升所有资源版本。
+ZeroWall Science 8.4.3 的插件与资源源码总仓库。各插件、Skills、MCP、Python 内容分别使用独立版本；桌面版本变化不会自动提升所有资源版本。
 
-本次导出模式：**source-only，仅源码快照**。源码导出或验证通过不代表 8.4.2 已在线发布；七牛/GitHub 发布状态、资源签名与下载校验以独立发布收据为准。
+本次导出模式：**source-only，仅源码快照**。源码导出或验证通过不代表 8.4.3 已在线发布；七牛/GitHub 发布状态、资源签名与下载校验以独立发布收据为准。
 
 ## 当前源码目录
 
@@ -18,7 +18,7 @@ ZeroWall Science 8.4.2 的插件与资源源码总仓库。各插件、Skills、
 | `desktop/src/shared/` | 插件所需的桌面共享接口 |
 | `deepseek-harness/` | 固定 DSH 接口与构建依赖（Git 子模块） |
 
-当前源码以以上 canonical 路径为准，不从旧 `packages/`、`store/` 布局读取。顶层 `catalogs/`、`skills/`、`mcp/` 保留既有历史发布/导出快照，包括独立发布收据；它们不代表当前源码或 8.4.2 的线上状态。source-only 导出不会刷新或删除这些历史目录。
+当前源码以以上 canonical 路径为准，不从旧 `packages/`、`store/` 布局读取。顶层 `catalogs/`、`skills/`、`mcp/` 保留既有历史发布/导出快照，包括独立发布收据；它们不代表当前源码或 8.4.3 的线上状态。source-only 导出不会刷新或删除这些历史目录。
 
 Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://github.com/ccfwwm/zerowallscience)；本源码仓库不打包 Electron。桌面交付壳与已验证的 DSH 离线运行时闭包，插件/Skills/MCP/Python 资源仍独立版本化。
 
@@ -41,7 +41,7 @@ Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://
 | sessionNotification | 0.2.7-zws.1 | [上游](https://github.com/dingyi222666/dsh-session-notification.git) | 64055baed0d7cb10ad6d40e24187bdfa39e818fe |
 | openFileViewer | 0.1.49 | [上游](https://github.com/wenhongquan/dsh-open-file-viewer) | 20aecc32cc597f6de094d2c7febddfb60f3ae1ef |
 | @michengai/dsh-archive-manager | 1.1.2-zws.1 | [上游](https://github.com/MichengAI/dsh-archive-manager.git) | 4b8cd2f364f2dcf78011b74bd5d9bbfeec093a50 |
-| @oh-story/dsh | 0.1.17-zws.4 | [上游](https://github.com/zenstory-ai/oh-story-dsh.git) | d4fca12fa8a71c9d91944bd25a9d8c6b519084f5 |
+| @zerowallscience/plugin-videos | 0.2.1 | [上游](https://github.com/zenstory-ai/oh-story-dsh.git) | d4fca12fa8a71c9d91944bd25a9d8c6b519084f5 |
 | dsh-ppt-maker | 1.0.0 | [上游](https://github.com/OMSociety/dsh-ppt-maker.git) | a9fcf037a02742573b2bca673012ae57375ba4ef |
 | @deepseek-ai/libreoffice-kit | 0.1.5 | [上游](https://github.com/deepseek-ai/dsh-libreoffice-kit) | — |
 | officeTools | 1.0.6 | [上游](https://github.com/kw78/dsh-office-tools.git) | 6c9faa36409961226623480c0ba6ef8fd6313beb |
@@ -66,10 +66,10 @@ pnpm plugins:test
 
 安装、单独更新和回滚见 [扩展更新指南](docs/extensions-update-guide.md)。插件、Skills、MCP 的启动及日常 catalog 检查只读，安装或变更由用户明确触发，并保留禁用、移除、固定版本和自定义配置。
 
-8.4.2 桌面在可用后后台按完整签名清单逐包安装/同步 Python core 与 science 依赖，保留文件和签名完整性验证，不以导入检查或全环境 pip check 阻断安装；自动任务可恢复，失败还原同一路径中的文件。capability 可选依赖仍由用户手动选择。Python 始终使用真实安装目录下的固定根或用户明确选择的固定根，不激活旧 slots，也不迁移/删除旧环境。后台安装不阻塞界面。
+8.4.3 桌面在可用后后台按完整签名清单逐包安装/同步 Python core 与 science 依赖，保留文件和签名完整性验证，不以导入检查或全环境 pip check 阻断安装；自动任务可恢复，失败还原同一路径中的文件。capability 可选依赖仍由用户手动选择。Python 始终使用真实安装目录下的固定根或用户明确选择的固定根，不激活旧 slots，也不迁移/删除旧环境。后台安装不阻塞界面。
 
 ## 验证与发布边界
 
-`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `0a322333e1300b0c2d7c6172458c82a7af430fa9`，DSH 为 `683cb0318b9a0fa09362794588d01acb0366850f`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
+`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `8c93f0e748d91ca4ab749f4c1166d1439b14dda1`，DSH 为 `683cb0318b9a0fa09362794588d01acb0366850f`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
 
 当 `sourceOnly: true` 时，`pnpm source:verify` 仅检查插件源码路径/链接与必要源码文件，不验证历史 catalog 的签名、线上资源版本、构建包或发布状态。完整导出模式会核对其资源快照的签名和版本，但仍不能代替类型检查、插件测试、真实安装/运行与公网下载验证。发布另需明确授权和独立收据。

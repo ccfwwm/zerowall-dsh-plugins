@@ -12,7 +12,7 @@ const packageRoot = root;
 // Typert generation writes into this package's source lib directory.  The
 // bundle candidate is the only output that is later promoted to artifacts/dev.
 const generatedRoot = resolve(packageRoot, "lib");
-const finalRoot = resolve(root, "../../artifacts/dev/@oh-story__dsh/lib");
+const finalRoot = resolve(root, "../../artifacts/dev/@zerowallscience__plugin-videos/lib");
 const outputRoot = `${finalRoot}.candidate-${randomUUID()}`;
 const inlineCss: Plugin = {
   name: "inline-css",
@@ -28,7 +28,7 @@ const inlineCss: Plugin = {
   }
 };
 
-execFileSync(process.execPath, [resolve(root, '../../tools/plugins/generate-typert.mjs'), '--plugin', '@oh-story/dsh'], { cwd: resolve(root, '../..'), stdio: 'inherit' });
+execFileSync(process.execPath, [resolve(root, '../../tools/plugins/generate-typert.mjs'), '--plugin', '@zerowallscience/plugin-videos'], { cwd: resolve(root, '../..'), stdio: 'inherit' });
 await mkdir(outputRoot, { recursive: true });
 for (const file of ['typert.host.js','typert.host.d.ts','typert.remote-client.js','typert.remote-client.d.ts','typert.remote-client.d.ts.map']) await cp(resolve(generatedRoot,file), resolve(outputRoot,file));
 
@@ -55,12 +55,16 @@ await build({
   stdin: {
     contents: `import * as feature from './src/client/index.tsx';
 import contribution from './lib/typert.remote-client.js';
+import { ownMediaRuntime } from './src/shared-runtime.ts';
 export * from './src/client/index.tsx';
 export const inject = ['remote'];
-export async function apply(ctx, config) {
+const runtime = { name:'videos-client-runtime', inject, async apply(ctx, config) {
   const dispose = await ctx.remote.$mount(contribution);
   try { ctx.plugin(feature, config); } catch (error) { await dispose(); throw error; }
   return dispose;
+}};
+export async function apply(ctx, config) {
+  await ownMediaRuntime(ctx, 'client', runtime, config);
 }`,
     resolveDir: packageRoot,
     sourcefile: 'media-client-entry.js',
@@ -90,7 +94,7 @@ export async function apply(ctx, config) {
       });
     },
   }],
-  banner: { js: "window.__ModuleLoader__.load({id:\"@oh-story/dsh\",factory:(require)=>{var module={exports:{}};var exports=module.exports;" },
+  banner: { js: "window.__ModuleLoader__.load({id:\"@zerowallscience/plugin-videos\",factory:(require)=>{var module={exports:{}};var exports=module.exports;" },
   footer: { js: ";return module.exports;}});" }
 });
 
