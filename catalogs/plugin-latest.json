@@ -4,13 +4,13 @@
   "resourceKind": "plugin",
   "localOnly": false,
   "catalog": {
-    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/plugin/8.4.4/1792509828323-a9375cf0-1792512891564/catalog.json",
-    "sha256": "2fca977b718d03f526f26a5a9570d002310759eb08f666539c476e516a1c1f17",
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/plugin/8.4.6/1792579181471-33328cd6-1792599391004/catalog.json",
+    "sha256": "1cb2a7b919911a5eda12147df3e6874b3b6f619338fb0f7d111aab1fe111270c",
     "size": 71574
   },
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "BqHSjc/V9AEBVPjNpZx5do0nAbF7As4JWFln2o7JgbLncU1fiTpIQ9QZKY9B+m1Rf6bKmx+2QY/ntSulFTFKBg=="
+    "value": "vVtysvy0mYcVORvzloCKVvN/S36s7Ws8TCpQoHSGFZ7gSTKJmR7OVdAIn3eOLDzEdaOATAgR/HVOfG/b8bgVDA=="
   }
 }
