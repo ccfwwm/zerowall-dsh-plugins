@@ -2,7 +2,7 @@
 
 ZeroWall Science 8.4.4 的插件与资源源码总仓库。各插件、Skills、MCP、Python 内容分别使用独立版本；桌面版本变化不会自动提升所有资源版本。
 
-本次导出模式：**源码与资源快照**。源码导出或验证通过不代表 8.4.4 已在线发布；七牛/GitHub 发布状态、资源签名与下载校验以独立发布收据为准。
+本次导出模式：**source-only，仅源码快照**。源码导出或验证通过不代表 8.4.4 已在线发布；七牛/GitHub 发布状态、资源签名与下载校验以独立发布收据为准。
 
 ## 当前源码目录
 
@@ -41,7 +41,7 @@ Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://
 | sessionNotification | 0.2.7-zws.1 | [上游](https://github.com/dingyi222666/dsh-session-notification.git) | 64055baed0d7cb10ad6d40e24187bdfa39e818fe |
 | openFileViewer | 0.1.49 | [上游](https://github.com/wenhongquan/dsh-open-file-viewer) | 20aecc32cc597f6de094d2c7febddfb60f3ae1ef |
 | @michengai/dsh-archive-manager | 1.1.2-zws.1 | [上游](https://github.com/MichengAI/dsh-archive-manager.git) | 4b8cd2f364f2dcf78011b74bd5d9bbfeec093a50 |
-| @zerowallscience/plugin-videos | 0.2.2 | [上游](https://github.com/zenstory-ai/oh-story-dsh.git) | d4fca12fa8a71c9d91944bd25a9d8c6b519084f5 |
+| @zerowallscience/plugin-videos | 0.2.3 | [上游](https://github.com/zenstory-ai/oh-story-dsh.git) | d4fca12fa8a71c9d91944bd25a9d8c6b519084f5 |
 | dsh-ppt-maker | 1.0.0 | [上游](https://github.com/OMSociety/dsh-ppt-maker.git) | a9fcf037a02742573b2bca673012ae57375ba4ef |
 | @deepseek-ai/libreoffice-kit | 0.1.5 | [上游](https://github.com/deepseek-ai/dsh-libreoffice-kit) | — |
 | officeTools | 1.0.6 | [上游](https://github.com/kw78/dsh-office-tools.git) | 6c9faa36409961226623480c0ba6ef8fd6313beb |
@@ -70,6 +70,6 @@ pnpm plugins:test
 
 ## 验证与发布边界
 
-`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `cf4837a9b19eaaf7112cfe13c3b987635b900374`，DSH 为 `683cb0318b9a0fa09362794588d01acb0366850f`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
+`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `1426c1e4add489189685dae07a8e29fabef190b1`，DSH 为 `683cb0318b9a0fa09362794588d01acb0366850f`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
 
 当 `sourceOnly: true` 时，`pnpm source:verify` 仅检查插件源码路径/链接与必要源码文件，不验证历史 catalog 的签名、线上资源版本、构建包或发布状态。完整导出模式会核对其资源快照的签名和版本，但仍不能代替类型检查、插件测试、真实安装/运行与公网下载验证。发布另需明确授权和独立收据。
