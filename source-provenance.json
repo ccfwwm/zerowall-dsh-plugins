@@ -1,16 +1,11 @@
 {
   "applicationVersion": "8.4.6",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "ab8f8b17f92e5211085f7449ee23f120a08dd414",
+  "sourceCommit": "04823299799463bb8b86bb543f1405ff38d5aa30",
   "sourceOnly": false,
   "buildCommit": "e568fb30bff1293e9502714c4a43cf3e747fa83a",
   "dshCommit": "683cb0318b9a0fa09362794588d01acb0366850f",
   "packages": [
-    {
-      "id": "@zerowallscience/plugin-ai-cloud",
-      "version": "0.1.32",
-      "kind": "plugin"
-    },
     {
       "id": "@zerowallscience/plugin-base",
       "version": "0.1.23",
@@ -167,11 +162,6 @@
       "kind": "plugin"
     },
     {
-      "id": "@zerowallscience/plugin-videos",
-      "version": "0.2.3",
-      "kind": "plugin"
-    },
-    {
       "id": "@dsh-external/zotero-harvest",
       "version": "0.2.2-zws.1",
       "kind": "plugin"
@@ -199,6 +189,16 @@
     {
       "id": "@zerowallscience/plugin-account",
       "version": "0.1.15",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-ai-cloud",
+      "version": "0.1.34",
+      "kind": "plugin"
+    },
+    {
+      "id": "@zerowallscience/plugin-videos",
+      "version": "0.2.6",
       "kind": "plugin"
     }
   ],

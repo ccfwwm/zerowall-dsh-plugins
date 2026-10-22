@@ -3,7 +3,7 @@
   "kind": "plugin",
   "applicationVersion": "8.4.6",
   "localOnly": false,
-  "generatedAt": "2026-10-21T16:16:31.682Z",
+  "generatedAt": "2026-10-22T01:39:16.844Z",
   "resources": [
     {
       "id": "@zerowallscience/plugin-biogenie",
@@ -2253,153 +2253,6 @@
       }
     },
     {
-      "id": "@zerowallscience/plugin-ai-cloud",
-      "version": "0.1.32",
-      "kind": "plugin",
-      "applicationVersion": "8.4.4",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-ai-cloud/0.1.32/zerowallscience-plugin-ai-cloud-0.1.32.tgz",
-      "sha256": "6150d98ba97d75f40531986766f0f48655373d9a7db631d24ac4e587c1365156",
-      "size": 1682983,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "llm",
-        "zerowallAccount"
-      ],
-      "optionalServices": [],
-      "capabilities": [
-        "llm.cloud",
-        "media.cloud"
-      ],
-      "permissions": [
-        "credentials",
-        "network",
-        "files"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "dsh-better-sidebar": "^0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-account": "^0.1.14",
-        "@zerowallscience/plugin-secrets": "^0.1.1"
-      },
-      "packageDependencies": {
-        "dsh-better-sidebar": "0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-account": "0.1.14",
-        "@zerowallscience/plugin-secrets": "0.1.1"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "by2rVsuyCjWYcYGT2xrpqvpU9y23KnufROf4uBFNUSyU4cuFU70zldwGkF4uXBPZ8S6AV9KYyFxxFzqedqVHAQ=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-videos",
-      "version": "0.2.3",
-      "kind": "plugin",
-      "applicationVersion": "8.4.4",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-videos/0.2.3/zerowallscience-plugin-videos-0.2.3.tgz",
-      "sha256": "ac3d213f3ee78a0a83d8a1ed0f3763dd7b15bb6bdb9ea933ae74c4509a3e022c",
-      "size": 331728,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "skills",
-        "tools",
-        "typert",
-        "webServer",
-        "zerowallMedia",
-        "zerowallMediaJobs",
-        "zerowallPython",
-        "zerowallEnvironment",
-        "attachments",
-        "connection"
-      ],
-      "capabilities": [
-        "media.create",
-        "media.edit",
-        "media.compose"
-      ],
-      "permissions": [
-        "files",
-        "network",
-        "processes",
-        "credentials",
-        "approvals"
-      ],
-      "upstreamVersion": "0.1.16",
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "@zerowallscience/plugin-ai-cloud": "^0.1.30",
-        "@zerowallscience/plugin-python": "^0.1.10",
-        "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/plugin-environment": "^0.1.16"
-      },
-      "packageDependencies": {
-        "@zerowallscience/plugin-ai-cloud": "^0.1.30",
-        "@zerowallscience/plugin-python": "^0.1.10",
-        "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/plugin-environment": "0.1.16"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "9gMNthER8iq92XGsL1zxRTAkmULFx3taEEL7xqnDeTP1esJ3GBVFF4tSEySyP5Mv2sFlR4IL+/NHHD3tt8nWCQ=="
-      }
-    },
-    {
       "id": "@zerowallscience/plugin-account",
       "version": "0.1.15",
       "kind": "plugin",
@@ -2471,11 +2324,158 @@
         "keyId": "stable-4",
         "value": "8gcnAcmF9PzpVUGSGDAYa3ETOaKzIJCC8AOiVicE4YW/9mOW88qL03Ho+x7FaPxG6CEJnpp8dw+d6zh9D/fbBw=="
       }
+    },
+    {
+      "id": "@zerowallscience/plugin-ai-cloud",
+      "version": "0.1.34",
+      "kind": "plugin",
+      "applicationVersion": "8.4.6",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-ai-cloud/0.1.34/zerowallscience-plugin-ai-cloud-0.1.34.tgz",
+      "sha256": "eaf14e85e6ec8e683f77f1e8c1eeaf4c176850e8697b875c31a824e0d09a89bb",
+      "size": 1683255,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "llm",
+        "zerowallAccount"
+      ],
+      "optionalServices": [],
+      "capabilities": [
+        "llm.cloud",
+        "media.cloud"
+      ],
+      "permissions": [
+        "credentials",
+        "network",
+        "files"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "dsh-better-sidebar": "^0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.1-zws.3",
+        "@zerowallscience/plugin-account": "^0.1.15",
+        "@zerowallscience/plugin-secrets": "^0.1.1"
+      },
+      "packageDependencies": {
+        "dsh-better-sidebar": "0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.0",
+        "@zerowallscience/plugin-account": "0.1.15",
+        "@zerowallscience/plugin-secrets": "0.1.1"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "IuB84D7Tle9LaDHm9+snK+kAiGqGhKRs1jjuBbfhx3K++ij5EdKSjTrewbzU/polAsApb0u0SpGdcTSWzFaDBg=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-videos",
+      "version": "0.2.6",
+      "kind": "plugin",
+      "applicationVersion": "8.4.6",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-videos/0.2.6/zerowallscience-plugin-videos-0.2.6.tgz",
+      "sha256": "d717f200bdcc07ecc17edd79fedf96eeca8c82eb9ea15e6149e63fc593b509a2",
+      "size": 332619,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "skills",
+        "tools",
+        "typert",
+        "webServer",
+        "zerowallMedia",
+        "zerowallMediaJobs",
+        "zerowallPython",
+        "zerowallEnvironment",
+        "attachments",
+        "connection"
+      ],
+      "capabilities": [
+        "media.create",
+        "media.edit",
+        "media.compose"
+      ],
+      "permissions": [
+        "files",
+        "network",
+        "processes",
+        "credentials",
+        "approvals"
+      ],
+      "upstreamVersion": "0.1.16",
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "@zerowallscience/plugin-ai-cloud": "^0.1.34",
+        "@zerowallscience/plugin-python": "^0.1.10",
+        "@zerowallscience/plugin-secrets": "^0.1.1",
+        "@zerowallscience/plugin-environment": "^0.1.16"
+      },
+      "packageDependencies": {
+        "@zerowallscience/plugin-ai-cloud": "^0.1.34",
+        "@zerowallscience/plugin-python": "^0.1.10",
+        "@zerowallscience/plugin-secrets": "0.1.1",
+        "@zerowallscience/plugin-environment": "0.1.16"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "CJA+RNjVxQAy2p2YBoHUXSiMKN0LASrhtsk1WG6NJkqodZzITMqPLSwfLJFi5ScEkYwfZR/7XrohMiRLN5ARCw=="
+      }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "k3KKTHlgLg7O4bOSVjD74GYNhzlucoACg2BQNjqQ61SwwJt5PKqh+ZgbhNF9c1PPPVmDkjHS9WrWYZzTzd36Cw=="
+    "value": "MJ7SSFApXk5q59HixMUGWsEb5ZhWw8O+zoiwmkgrtUV0iVtR38yWmappDQWTDOLqzIkqOasasZ6Sn5D3OHZ0Bw=="
   }
 }
