@@ -198,9 +198,20 @@
     },
     {
       "id": "@zerowallscience/plugin-videos",
-      "version": "0.2.6",
+      "version": "0.2.7",
       "kind": "plugin"
     }
   ],
-  "exportedSourceFiles": 5127
+  "exportedSourceFiles": 5127,
+  "independentResourceUpdates": [
+    {
+      "id": "@zerowallscience/plugin-videos",
+      "version": "0.2.7",
+      "size": 335631,
+      "sha256": "3eff5f9186dca9f30edbf212d12f9c06e83829c5086206093c3b304f5ef4e18d",
+      "catalogPath": "catalogs/independent/videos-0.2.7/plugin-catalog.json",
+      "pointerPath": "catalogs/independent/videos-0.2.7/plugin-latest.json",
+      "sourceCommit": "9d98f46ae25399f42a3c3108b0cc9c37ec5d0654"
+    }
+  ]
 }
