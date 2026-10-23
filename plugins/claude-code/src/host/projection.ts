@@ -7,6 +7,7 @@
  * into temporary process variables, never persisted as plaintext.
  */
 import { createHash } from 'node:crypto'
+import { basename, extname, isAbsolute, resolve } from 'node:path'
 
 export interface SkillSummaryProjectionInput {
   name: string
@@ -124,10 +125,18 @@ export interface McpServerProjectionInput {
   enabled: boolean
   command: string
   args: readonly string[]
-  cwd: string
+  cwd?: string
   url?: string
   envRefs: Readonly<Record<string, string>>
   headerRefs: Readonly<Record<string, string>>
+}
+
+export interface McpLauncherSpec {
+  cwd: string
+  command: string
+  args: string[]
+  useBundledNode: boolean
+  resolveFromPath?: boolean
 }
 
 export type ProjectedClaudeMcpServer = {
@@ -135,8 +144,8 @@ export type ProjectedClaudeMcpServer = {
   type: 'stdio'
   command: string
   args: string[]
-  cwd?: string
   envRefs: Record<string, string>
+  launcher?: McpLauncherSpec
 } | {
   serverName: string
   type: 'http'
@@ -147,6 +156,8 @@ export type ProjectedClaudeMcpServer = {
 export type McpSkipReason =
   | 'disabled'
   | 'unsupported-transport'
+  | 'unsupported-working-directory'
+  | 'unsupported-launch'
   | 'managed-server'
   | 'credential-reference'
   | 'invalid-credential-reference'
@@ -172,11 +183,36 @@ function normalizedMcpUrl(value: unknown): string | undefined {
   } catch { return undefined }
 }
 
+function normalizedWorkingDirectory(value: unknown): string | undefined {
+  if (typeof value !== 'string' || value.includes('\0') || !isAbsolute(value)) return undefined
+  const absolute = resolve(value)
+  return process.platform === 'win32' ? absolute.toLowerCase() : absolute
+}
+
+function independentLaunch(record: McpServerProjectionInput, cwd: string, allowPath: boolean): McpLauncherSpec | undefined {
+  const command = record.command
+  const commandName = basename(command).toLowerCase()
+  if (commandName === 'node' || commandName === 'node.exe') {
+    return { cwd, command, args: [...record.args], useBundledNode: true }
+  }
+  // Every stdio service uses the relay to isolate credentials. Arbitrary command
+  // strings may depend on a shell, so a different cwd requires an absolute native
+  // executable; inherited/same-cwd commands may resolve from absolute PATH entries.
+  if (/\.(?:cmd|bat|ps1|sh|cjs|mjs|js)$/iu.test(command)) return undefined
+  if (!isAbsolute(command)) {
+    if (!allowPath || /[\\/:]/u.test(command) || command !== command.trim()) return undefined
+    return { cwd, command, args: [...record.args], useBundledNode: false, resolveFromPath: true }
+  }
+  if (process.platform === 'win32' && extname(command).toLowerCase() !== '.exe') return undefined
+  return { cwd, command, args: [...record.args], useBundledNode: false }
+}
+
 /**
  * Project independently launchable stdio or reachable HTTP MCP records. This function
  * retains only reference names; the Host resolves values for one child process.
  */
-export function projectMcpForClaude(records: readonly McpServerProjectionInput[]): McpProjectionResult {
+export function projectMcpForClaude(records: readonly McpServerProjectionInput[], cwd: string): McpProjectionResult {
+  const sessionCwd = normalizedWorkingDirectory(cwd)
   const counts = new Map<string, number>()
   for (const record of records) counts.set(record.serverName, (counts.get(record.serverName) ?? 0) + 1)
 
@@ -233,10 +269,26 @@ export function projectMcpForClaude(records: readonly McpServerProjectionInput[]
       || record.command.trim() === ''
       || record.command.includes('\0')
       || !Array.isArray(record.args)
-      || record.args.some(argument => typeof argument !== 'string' || argument.includes('\0'))
-      || typeof record.cwd !== 'string'
-      || record.cwd.includes('\0')) {
+      || record.args.some(argument => typeof argument !== 'string' || argument.includes('\0'))) {
       skipped.push({ serverName, reason: 'invalid-launch' })
+      continue
+    }
+    if (process.platform === 'win32' && /\.(?:cmd|bat)$/iu.test(record.command)) {
+      skipped.push({ serverName, reason: 'unsupported-launch' })
+      continue
+    }
+    if (!sessionCwd || record.cwd !== undefined
+      && (typeof record.cwd !== 'string' || record.cwd.trim() !== '' && !normalizedWorkingDirectory(record.cwd))) {
+      skipped.push({ serverName, reason: 'unsupported-working-directory' })
+      continue
+    }
+
+    const requestedCwd = typeof record.cwd === 'string' && record.cwd.trim() !== '' ? resolve(record.cwd) : cwd
+    const differentCwd = record.cwd !== undefined && record.cwd.trim() !== ''
+      && normalizedWorkingDirectory(record.cwd) !== sessionCwd
+    const launcher = independentLaunch(record, requestedCwd, !differentCwd)
+    if (!launcher) {
+      skipped.push({ serverName, reason: 'unsupported-launch' })
       continue
     }
 
@@ -245,8 +297,8 @@ export function projectMcpForClaude(records: readonly McpServerProjectionInput[]
       type: 'stdio',
       command: record.command,
       args: [...record.args],
-      ...(record.cwd.trim() !== '' ? { cwd: record.cwd } : {}),
       envRefs: { ...record.envRefs },
+      launcher,
     })
   }
   return { servers, skipped }
@@ -254,7 +306,7 @@ export function projectMcpForClaude(records: readonly McpServerProjectionInput[]
 
 export interface ClaudeMcpRuntimeProjection {
   servers: Array<
-    { serverName: string; type: 'stdio'; command: string; args: string[]; cwd?: string; env?: Record<string, string> }
+    { serverName: string; type: 'stdio'; command: string; args: string[]; env?: Record<string, string>; launcher?: McpLauncherSpec }
     | { serverName: string; type: 'http'; url: string; headers?: Record<string, string> }
   >
   environment: Record<string, string>
@@ -299,8 +351,8 @@ export async function prepareClaudeMcpRuntime(
       type: 'stdio',
       command: server.command,
       args: server.args,
-      ...(server.cwd ? { cwd: server.cwd } : {}),
       ...(Object.keys(placeholders).length ? { env: placeholders } : {}),
+      ...('launcher' in server && server.launcher ? { launcher: server.launcher } : {}),
     })
   }
   return { servers, environment, skipped }

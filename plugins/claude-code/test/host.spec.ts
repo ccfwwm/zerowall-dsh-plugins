@@ -300,6 +300,39 @@ describe('Claude Code Host session boundary', () => {
     ])
   })
 
+  it('wraps independent MCP directories within each turn projection and cleans them after completion', async () => {
+    const f = await fixture(), agent = await f.agent('mcp-working-directory')
+    const cwd = f.workspaces.get(agent.id)!
+    for (const [serverName, workingDirectory] of [['same', cwd], ['inherited', ''], ['different', join(cwd, 'other')], ['relative', '.']] as const) {
+      f.servers.push({ name: serverName, serverName, transport: 'stdio', enabled: true,
+        command: 'node', args: ['server.mjs'], cwd: workingDirectory, envRefs: {}, headerRefs: {} })
+    }
+    const turn = await f.host.start(agent, 'inspect project')
+    expect(turn.mcp).toBe(3)
+    expect(turn.skipped).toEqual([
+      'MCP relative: 工作目录无效：MCP 目录必须为空白或绝对目录。',
+    ])
+    const launch = f.launches[0]!
+    expect(launch.cwd).toBe(cwd)
+    expect(launch.argv).toContain('mcp__same__*')
+    expect(launch.argv).toContain('mcp__inherited__*')
+    expect(launch.argv).toContain('mcp__different__*')
+    expect(launch.argv).not.toContain('mcp__relative__*')
+    const config = JSON.parse(await readFile(launch.argv[launch.argv.indexOf('--mcp-config') + 1]!, 'utf8')) as { mcpServers: Record<string, unknown> }
+    const launchers = Object.fromEntries(await Promise.all(['same', 'inherited', 'different'].map(async serverName => {
+      const server = config.mcpServers[serverName] as { command: string; args: string[] }
+      expect(server.command).toBe(process.execPath)
+      expect(server.args[0]).toContain('mcp-launchers')
+      return [serverName, JSON.parse(await readFile(server.args[1]!, 'utf8')) as Record<string, unknown>]
+    })))
+    expect(launchers.same).toEqual({ command: process.execPath, args: ['server.mjs'], cwd, env: {}, electron: false })
+    expect(launchers.inherited).toEqual({ command: process.execPath, args: ['server.mjs'], cwd, env: {}, electron: false })
+    expect(launchers.different).toEqual({ command: process.execPath, args: ['server.mjs'], cwd: join(cwd, 'other'), env: {}, electron: false })
+    expect(f.servers.map(server => server.cwd)).toEqual([cwd, '', join(cwd, 'other'), '.'])
+    await f.finish(agent, 0)
+    await vi.waitFor(async () => expect(await fileContents(f.configDir)).toEqual([]))
+  })
+
   it('rejects incompatible protocols, missing installs and relative workspaces before spawning', async () => {
     const f = await fixture(), agent = await f.agent('invalid')
     f.profile.api = 'openai-completions'

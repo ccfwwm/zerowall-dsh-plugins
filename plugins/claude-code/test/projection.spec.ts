@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
+import { join, resolve } from 'node:path'
 import {
   projectMcpForClaude,
   prepareClaudeMcpRuntime,
@@ -137,15 +138,15 @@ describe('Claude Code resource projections', () => {
       mcpServer({ serverName: 'secret', envRefs: { API_TOKEN: 'vault://mcp/api-token/sentinel' } }),
       mcpServer({ serverName: 'header-secret', headerRefs: { Authorization: 'vault://mcp/auth/sentinel' } }),
       mcpServer({ serverName: 'bad/name' }),
-    ])
+    ], '/workspace')
 
     expect(result.servers).toEqual([{
       serverName: 'local-tools',
       type: 'stdio',
       command: 'node',
       args: ['server.js'],
-      cwd: '/workspace',
       envRefs: {},
+      launcher: { cwd: resolve('/workspace'), command: 'node', args: ['server.js'], useBundledNode: true },
     }])
     expect(result.skipped.map(item => [item.serverName, item.reason])).toEqual([
       ['disabled', 'disabled'],
@@ -164,7 +165,7 @@ describe('Claude Code resource projections', () => {
       mcpServer({ name: 'duplicate', command: 'other' }),
       mcpServer({ serverName: 'nul-arg', args: ['--token\0secret'] }),
       mcpServer({ serverName: 'nul-command', command: 'bad\0command' }),
-    ])
+    ], '/workspace')
     expect(result.servers).toEqual([])
     expect(result.skipped.map(item => item.reason)).toEqual([
       'duplicate-server-name',
@@ -172,6 +173,90 @@ describe('Claude Code resource projections', () => {
       'invalid-launch',
       'invalid-launch',
     ])
+  })
+
+  it('projects omitted or blank stdio directories through the relay using the session directory', async () => {
+    const workspace = resolve('/workspace')
+    const omitted = mcpServer({ serverName: 'omitted' })
+    delete omitted.cwd
+    const records = [omitted, mcpServer({ serverName: 'empty', cwd: '' }), mcpServer({ serverName: 'blank', cwd: ' \t ' }),
+      mcpServer({ serverName: 'same', cwd: join(workspace, 'nested', '..') })]
+    const projection = projectMcpForClaude(records, workspace)
+    expect(projection.skipped).toEqual([])
+    expect(projection.servers.map(server => server.serverName)).toEqual(['omitted', 'empty', 'blank', 'same'])
+    const runtime = await prepareClaudeMcpRuntime(projection, vi.fn())
+    for (const server of projection.servers) {
+      expect(server).toHaveProperty('launcher.cwd', workspace)
+    }
+    for (const server of runtime.servers) {
+      expect(server).not.toHaveProperty('cwd')
+      expect(server).toHaveProperty('launcher.cwd', workspace)
+    }
+    expect(records[3]?.cwd).toBe(join(workspace, 'nested', '..'))
+  })
+
+  it.each(['relative-directory', '.', '..', '/workspace\0invalid'])('rejects unsupported stdio working directory %j', cwd => {
+    const projection = projectMcpForClaude([mcpServer({ cwd })], resolve('/workspace'))
+    expect(projection.servers).toEqual([])
+    expect(projection.skipped).toEqual([{ serverName: 'local-tools', reason: 'unsupported-working-directory' }])
+  })
+
+  it('wraps Node services in another absolute directory without mutating their source record', () => {
+    const workspace = resolve('/workspace'), record = mcpServer({ cwd: resolve('/other-workspace') })
+    const projection = projectMcpForClaude([record], workspace)
+    expect(projection.skipped).toEqual([])
+    expect(projection.servers[0]).toMatchObject({ type: 'stdio', launcher: {
+      cwd: resolve('/other-workspace'), command: 'node', args: ['server.js'], useBundledNode: true,
+    } })
+    expect(record.cwd).toBe(resolve('/other-workspace'))
+  })
+
+  it('wraps absolute native executables but skips commands that require shell resolution for another directory', () => {
+    const projection = projectMcpForClaude([
+      mcpServer({ serverName: 'native', command: process.execPath, cwd: resolve('/other-workspace') }),
+      mcpServer({ serverName: 'bare-command', command: 'custom-mcp', cwd: resolve('/other-workspace') }),
+      mcpServer({ serverName: 'shell-script', command: resolve('/tools/server.cmd'), cwd: resolve('/other-workspace') }),
+    ], resolve('/workspace'))
+    expect(projection.servers).toHaveLength(1)
+    expect(projection.servers[0]).toMatchObject({ serverName: 'native', launcher: { cwd: resolve('/other-workspace') } })
+    expect(projection.skipped).toEqual([
+      { serverName: 'bare-command', reason: 'unsupported-launch' },
+      { serverName: 'shell-script', reason: 'unsupported-launch' },
+    ])
+  })
+
+  it.runIf(process.platform === 'win32')('skips Windows batch commands even when they inherit the project directory', () => {
+    const projection = projectMcpForClaude([
+      mcpServer({ serverName: 'cmd', command: 'mcp.CMD', cwd: '' }),
+      mcpServer({ serverName: 'bat', command: resolve('/tools/mcp.bat'), cwd: '' }),
+    ], resolve('/workspace'))
+    expect(projection.servers).toEqual([])
+    expect(projection.skipped.map(item => item.reason)).toEqual(['unsupported-launch', 'unsupported-launch'])
+  })
+
+  it.runIf(process.platform === 'win32')('uses Windows case, separator and trailing-separator rules for directory equality', () => {
+    const projection = projectMcpForClaude([mcpServer({ cwd: 'c:/projects/workspace/' })], 'C:\\Projects\\Workspace')
+    expect(projection.skipped).toEqual([])
+    expect(projection.servers).toHaveLength(1)
+    expect(projection.servers[0]).not.toHaveProperty('cwd')
+  })
+
+  it.runIf(process.platform !== 'win32')('does not apply Windows case folding or separators on POSIX', () => {
+    const projection = projectMcpForClaude([
+      mcpServer({ serverName: 'case', cwd: '/Workspace' }),
+      mcpServer({ serverName: 'windows', cwd: 'C:\\workspace' }),
+    ], '/workspace')
+    expect(projection.servers).toHaveLength(1)
+    expect(projection.servers[0]).toMatchObject({ serverName: 'case', launcher: { cwd: '/Workspace' } })
+    expect(projection.skipped).toEqual([
+      { serverName: 'windows', reason: 'unsupported-working-directory' },
+    ])
+  })
+
+  it('does not restrict HTTP services by their source working directory', () => {
+    const projection = projectMcpForClaude([mcpServer({ transport: 'streamable-http', url: 'https://mcp.example', cwd: '../independent' })], resolve('/workspace'))
+    expect(projection.skipped).toEqual([])
+    expect(projection.servers).toEqual([{ serverName: 'local-tools', type: 'http', url: 'https://mcp.example/', headerRefs: {} }])
   })
 
   it('retains the resource base from the same loaded Skill definition', async () => {
@@ -188,7 +273,7 @@ describe('Claude Code resource projections', () => {
     const projection = projectMcpForClaude([
       mcpServer({ serverName: 'remote', transport: 'streamable-http', url: 'HTTPS://MCP.EXAMPLE:443/tools', headerRefs: { Authorization: 'REMOTE_AUTH' } }),
       mcpServer({ serverName: 'public', transport: 'streamable-http', url: 'http://localhost:3210/mcp' }),
-    ])
+    ], '/workspace')
     expect(projection.skipped).toEqual([])
     expect(projection.servers).toEqual([
       { serverName: 'remote', type: 'http', url: 'https://mcp.example/tools', headerRefs: { Authorization: 'REMOTE_AUTH' } },
@@ -209,7 +294,7 @@ describe('Claude Code resource projections', () => {
     'https://mcp.example/api?token=secret', 'https://mcp.example/api#fragment', 'https://mcp.example/api?',
     'https://mcp.example/api#', 'https://mcp.example/\0api', ' https://mcp.example/api', 'https://mcp.example/\napi',
   ])('rejects an HTTP MCP endpoint with unsafe or invalid URL %s', url => {
-    const projection = projectMcpForClaude([mcpServer({ serverName: 'remote', transport: 'streamable-http', ...(url === undefined ? {} : { url }) })])
+    const projection = projectMcpForClaude([mcpServer({ serverName: 'remote', transport: 'streamable-http', ...(url === undefined ? {} : { url }) })], '/workspace')
     expect(projection.servers).toEqual([])
     expect(projection.skipped).toEqual([{ serverName: 'remote', reason: 'invalid-launch' }])
   })
@@ -219,7 +304,7 @@ describe('Claude Code resource projections', () => {
       mcpServer({ serverName: 'disabled-http', transport: 'streamable-http', url: 'https://mcp.example', enabled: false, headerRefs: { Authorization: 'AUTH' } }),
       mcpServer({ serverName: 'zerowall_managed_remote', transport: 'streamable-http', url: 'https://mcp.example' }),
       mcpServer({ serverName: 'managed-command', transport: 'streamable-http', url: 'https://mcp.example', command: 'zerowall-managed:remote' }),
-    ])
+    ], '/workspace')
     const resolve = vi.fn()
     const runtime = await prepareClaudeMcpRuntime(projection, resolve)
     expect(runtime.servers).toEqual([])
@@ -233,13 +318,13 @@ describe('Claude Code resource projections', () => {
     { 'Authorization\r\nX-Injected': 'AUTH' },
     { Authorization: 'AUTH', authorization: 'OTHER_AUTH' },
   ])('rejects invalid HTTP header names or credential references %j', headerRefs => {
-    const projection = projectMcpForClaude([mcpServer({ serverName: 'remote', transport: 'streamable-http', url: 'https://mcp.example', headerRefs })])
+    const projection = projectMcpForClaude([mcpServer({ serverName: 'remote', transport: 'streamable-http', url: 'https://mcp.example', headerRefs })], '/workspace')
     expect(projection.servers).toEqual([])
     expect(projection.skipped).toEqual([{ serverName: 'remote', reason: 'invalid-credential-reference' }])
   })
 
   it.each([undefined, '', '   ', 'bad\0value', 'Bearer token\r\nX-Injected: true'])('omits HTTP services with unavailable or unsafe credential values (%s)', async value => {
-    const projection = projectMcpForClaude([mcpServer({ serverName: 'remote', transport: 'streamable-http', url: 'https://mcp.example', headerRefs: { 'X-First': 'FIRST_AUTH', Authorization: 'MISSING_AUTH' } })])
+    const projection = projectMcpForClaude([mcpServer({ serverName: 'remote', transport: 'streamable-http', url: 'https://mcp.example', headerRefs: { 'X-First': 'FIRST_AUTH', Authorization: 'MISSING_AUTH' } })], '/workspace')
     const resolve = vi.fn(async name => name === 'FIRST_AUTH' ? 'first-private-value' : value)
     const runtime = await prepareClaudeMcpRuntime(projection, resolve)
     expect(runtime.servers).toEqual([])
@@ -249,7 +334,7 @@ describe('Claude Code resource projections', () => {
   })
 
   it('omits a service when the credential resolver throws without disclosing the error or partial secrets', async () => {
-    const projection = projectMcpForClaude([mcpServer({ envRefs: { API_TOKEN: 'MCP_TOKEN' } })])
+    const projection = projectMcpForClaude([mcpServer({ envRefs: { API_TOKEN: 'MCP_TOKEN' } })], '/workspace')
     const runtime = await prepareClaudeMcpRuntime(projection, async () => { throw new Error('private resolver details') })
     expect(runtime).toEqual({ servers: [], environment: {}, skipped: [{ serverName: 'local-tools', reason: 'credential-unavailable' }] })
   })
@@ -260,7 +345,7 @@ describe('Claude Code resource projections', () => {
       mcpServer({ serverName: 'remote-b', transport: 'streamable-http', url: 'https://b.example/mcp', headerRefs: { Authorization: 'AUTH_B' } }),
       mcpServer({ serverName: 'local-a', envRefs: { API_TOKEN: 'TOKEN_A' } }),
       mcpServer({ serverName: 'local-b', envRefs: { API_TOKEN: 'TOKEN_B' } }),
-    ])
+    ], '/workspace')
     const secrets: Record<string, string> = { AUTH_A: 'Bearer key-a', AUTH_B: 'Bearer key-b', TOKEN_A: 'local-secret-a', TOKEN_B: 'local-secret-b' }
     const runtime = await prepareClaudeMcpRuntime(projection, async name => secrets[name])
     expect(runtime.servers).toHaveLength(4)

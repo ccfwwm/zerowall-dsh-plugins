@@ -18,9 +18,13 @@ The session action starts Claude Code in the current project with `acceptEdits`,
 
 Eligible enabled Skills and independently launchable MCP servers are projected into the isolated Claude Code environment. The plugin does not rewrite the source Skills or MCP definitions. Managed MCP services that cannot be launched independently are reported as unsupported. MCP credential references are resolved through the host's controlled credential service and are never copied as plaintext into Claude configuration.
 
+Claude Code `2.1.309` does not support a `cwd` field for stdio MCP servers. An omitted or blank MCP directory inherits the current project; a matching absolute directory is supported directly (case-insensitive on Windows). For a different absolute directory, the plugin generates a temporary protocol relay under that turn's private projection. It runs Node services with ZeroWall's bundled Node/Electron executable, or launches an absolute native executable, using argument arrays and `shell: false`. The relay forwards stdin/stdout/stderr without adding output to the MCP protocol. Launch data contains no resolved credentials; controlled references remain temporary process environment variables. Turn cleanup removes the relay and launch descriptions.
+
+Relative or invalid directories, shell-dependent launches in a separate directory, and Windows `.cmd`/`.bat` commands are skipped with an explicit compatibility reason. Use the service's absolute native executable or a Node entry point instead. The unsupported `cwd` field is never written into Claude's MCP configuration, and the source MCP records are preserved. HTTP MCP services are unaffected by this directory restriction.
+
 ## Version and source
 
-- ZeroWall plugin: `0.1.0`
+- ZeroWall plugin: `0.1.1`
 - Claude Code CLI: `2.1.309`
 - Upstream adapter reference: [`Norman-else/dsh-claude`](https://github.com/Norman-else/dsh-claude/tree/fe00e3af0b1ad03acc977b13b4d4ab805086f6da), tag `v0.1.65`, commit `fe00e3af0b1ad03acc977b13b4d4ab805086f6da`
 - License: MIT; see [`LICENSE`](./LICENSE)

@@ -180,8 +180,8 @@
     "upstreamVersion": "0.1.65",
     "package": "@zerowallscience/plugin-claude-code",
     "source": "plugins/claude-code",
-    "version": "0.1.0",
-    "resourceVersion": "0.1.0",
+    "version": "0.1.1",
+    "resourceVersion": "0.1.1",
     "license": "MIT",
     "catalogOptional": true,
     "localAdaptation": "Fresh ZeroWall Claude Code CLI integration; independently installs a pinned CLI in private plugin data, bridges the active model route and safely projects eligible Skills and MCP. Does not embed the upstream Claude Agent SDK adapter or reuse the user's Claude configuration."

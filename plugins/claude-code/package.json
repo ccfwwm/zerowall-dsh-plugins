@@ -1,6 +1,6 @@
 {
   "name": "@zerowallscience/plugin-claude-code",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Run an isolated Claude Code CLI from ZeroWall conversations.",
   "type": "module",
   "main": "./lib/index.js",

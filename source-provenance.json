@@ -23,17 +23,17 @@
   "pluginSourceUpdates": [
     {
       "id": "@zerowallscience/plugin-claude-code",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "sourceCommit": "8d9565b89303d5c557c4bd5f7571a2929e082f93",
       "dshCommit": "683cb0318b9a0fa09362794588d01acb0366850f",
-      "sourceRepositoryParent": "de401deb3b117e005153dc5e261ee091692afa93",
+      "sourceRepositoryParent": "2c5ab4c1e37b9a27a44b40a2bfe19b8830a9436e",
       "retainedOtherSources": true,
       "publicationAsserted": false,
       "files": [
         {
           "path": "config/integrations/upstream-sources.json",
           "size": 7512,
-          "sha256": "94e2b29ee224559f847448c94020ef36dd4f13cb5f8c3635edfb584cbe677a11"
+          "sha256": "dbe6274efc653d90d877133c7aedc40659c4f917aabcfab95972b7a143c274bf"
         },
         {
           "path": "plugins/claude-code/LICENSE",
@@ -42,8 +42,8 @@
         },
         {
           "path": "plugins/claude-code/README.md",
-          "size": 2808,
-          "sha256": "99aa9bfb29cc9dc825ce21c54bca478b387250c4273e01d78bd0784957e177e6"
+          "size": 3995,
+          "sha256": "2b543f2574f6b011e932ec4181bcd1ddd0e362ef488cc56d126b21ac44d5fffe"
         },
         {
           "path": "plugins/claude-code/dsh.bundle.patch.yml",
@@ -53,7 +53,7 @@
         {
           "path": "plugins/claude-code/package.json",
           "size": 7440,
-          "sha256": "f89a288c5a66c15c91eb1d671881a90436a223bc18f5ede06cadf7e1186859f9"
+          "sha256": "02f10ef0c49cf75c0dd71849237402995b52f9cb193277cf394502afd0b03a25"
         },
         {
           "path": "plugins/claude-code/src/client/ClaudeCodeAction.module.css",
@@ -87,13 +87,18 @@
         },
         {
           "path": "plugins/claude-code/src/host/index.ts",
-          "size": 18237,
-          "sha256": "a1d5945aabbbb8080a75b32a414fda04f45c9286d5a61aa7b3d1b7e2dd57c325"
+          "size": 19048,
+          "sha256": "db8fc543ece7189f76e74a4a78e1e474ea354617c8fd279807114128dbdaf457"
+        },
+        {
+          "path": "plugins/claude-code/src/host/mcp-launcher.ts",
+          "size": 6888,
+          "sha256": "738c8fcae7f3e18efe90352005a486dda319693493f3ec15883cb38dfd1771e8"
         },
         {
           "path": "plugins/claude-code/src/host/projection.ts",
-          "size": 11832,
-          "sha256": "619d041b8b5016cdcfb32d5f9bfe9436fab34a2fabbdb1ba6349ccbc60eb9b8d"
+          "size": 14337,
+          "sha256": "ca72a37ae3f201988447f3e871b543c99c336ebf236bcf6db8f4442f7e76c591"
         },
         {
           "path": "plugins/claude-code/src/host/route.ts",
@@ -122,13 +127,18 @@
         },
         {
           "path": "plugins/claude-code/test/host.spec.ts",
-          "size": 22307,
-          "sha256": "5583bfa3ca9775ac8cca5eb658b691f87af8020b911418570e6ceb0171f285e6"
+          "size": 24582,
+          "sha256": "16bb9716d23355c4c397cf2f184e6edcab5ae0141bd6937c70574a283674fe9b"
+        },
+        {
+          "path": "plugins/claude-code/test/mcp-launcher.spec.ts",
+          "size": 9661,
+          "sha256": "d2fedd59d12de657a30ab80f6d5dcbf7e8cbd2cddbb7862035f49ff0e4a0af76"
         },
         {
           "path": "plugins/claude-code/test/projection.spec.ts",
-          "size": 14424,
-          "sha256": "97a9b2dab2358635c79a4502caa9607dbe6d0b4c25f19eae80dc8d1ae7b37a93"
+          "size": 19505,
+          "sha256": "31df2d4991409f74e08e45ff445f49e000b842a3ec81a913716d70f0531243b5"
         },
         {
           "path": "plugins/claude-code/test/route.spec.ts",
@@ -163,7 +173,7 @@
         {
           "path": "plugins/claude-code/zerowall.plugin.json",
           "size": 981,
-          "sha256": "5b240151a2d62a328be8e889733f921313c7a2bd39ca46ec6a253197d0b47f49"
+          "sha256": "8f3eb6eabeab9bbadb1d02ca3c0af556c1916eafd94746aaceb106ee7e3cf736"
         },
         {
           "path": "pnpm-lock.yaml",
@@ -199,10 +209,15 @@
           "path": "tools/plugins/typert-workspace.test.mjs",
           "size": 2332,
           "sha256": "2f93d0f77a7edb75e5e63e0142b2b5fc6b5186c0ad2896bc319fde15f0e19d7a"
+        },
+        {
+          "path": "tsconfig.host.json",
+          "size": 87619,
+          "sha256": "42f89d9b529a90d68a12a17c709412aace5c6e2ba3018a4b72a2824d11fd2f28"
         }
       ],
       "removed": [],
-      "manifestSha256": "f050c3794e381c2ca0cfc62ae491a740f21815ed55620d51b0eb8c1e080a2389"
+      "manifestSha256": "a98a2e1235e9d07edf244e2f15ab50dfadf4780a0d3801ce81d5a6e3942c36e4"
     }
   ]
 }

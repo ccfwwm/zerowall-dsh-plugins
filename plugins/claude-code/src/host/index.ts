@@ -11,6 +11,7 @@ import { stripVTControlCharacters } from 'node:util'
 import { SecretBrokerClient } from '@zerowallscience/plugin-secrets'
 import { ClaudeRuntimeManager, resolveBundledPnpmRuntime, type ProcessRunner } from './runtime.js'
 import { claudeEnvironmentOverlay } from './environment.js'
+import { writeClaudeMcpLaunchers } from './mcp-launcher.js'
 import { prepareClaudeMcpRuntime, projectMcpForClaude, projectSkillsForClaude, type McpServerProjectionInput, type SkillsProjectionApi } from './projection.js'
 import { ClaudeSafeOutput, resolveClaudeRoute, selectedClaudeModel, type ClaudeRouteServices, type ClaudeSelection } from './route.js'
 import type { ClaudeCodeStatus, ClaudeCodeTurn } from '../shared/types.js'
@@ -161,7 +162,7 @@ export class ClaudeCodeService extends TypertRemoteService {
       const projects = this.ctx.get('zerowallProjects') as { listMcpServers(): McpServerProjectionInput[] }
       const skills = await projectSkillsForClaude(skillsRegistry, cwd, agent)
       const credentials = this.ctx.get('credentials') as { resolve(ref: ReturnType<typeof credentialRef>): Promise<{ value: string } | undefined> }
-      const mcp = await prepareClaudeMcpRuntime(projectMcpForClaude(projects.listMcpServers()), async reference => {
+      const mcp = await prepareClaudeMcpRuntime(projectMcpForClaude(projects.listMcpServers(), cwd), async reference => {
         const specialKey = reference === 'R_PLATFORM_MCP_AUTHORIZATION' ? 'zerowall.mcp.rdatalinux_authorization'
           : reference === 'HUAGONGSHE_MCP_AUTHORIZATION' ? 'zerowall.mcp.huagongshe_token' : undefined
         if (specialKey) {
@@ -185,7 +186,11 @@ export class ClaudeCodeService extends TypertRemoteService {
         await writeFile(join(dir, 'SKILL.md'), `---\nname: ${skill.name}\ndescription: ${JSON.stringify(skill.description)}\n---\n${hint}\n\n${skill.content}`, { mode: 0o600 })
       }
       const mcpPath = join(projectionRoot, 'mcp.json')
-      await writeFile(mcpPath, JSON.stringify({ mcpServers: Object.fromEntries(mcp.servers.map(({ serverName, ...config }) => [serverName, config])) }), { mode: 0o600 })
+      const searchPath = Object.entries(process.env).find(([key]) => key.toUpperCase() === 'PATH')?.[1]
+      const { servers: mcpServers, skipped: launchSkipped } = await writeClaudeMcpLaunchers(mcp, { root: projectionRoot,
+        executable: process.execPath, electron: Boolean(process.versions.electron),
+        ...(searchPath ? { searchPath } : {}) })
+      await writeFile(mcpPath, JSON.stringify({ mcpServers: Object.fromEntries(mcpServers.map(({ serverName, ...config }) => [serverName, config])) }), { mode: 0o600 })
       // A plugin directory is the CLI's supported way to load projected Skills
       // from a per-session folder without changing the project's .claude tree.
       const pluginMeta = join(projectionRoot, '.claude-plugin')
@@ -196,8 +201,12 @@ export class ClaudeCodeService extends TypertRemoteService {
         ANTHROPIC_DEFAULT_SONNET_MODEL: route.model, ANTHROPIC_DEFAULT_OPUS_MODEL: route.model }, undefined, mcp.environment)
       const turn: OwnedTurn = {
         view: { id: randomUUID(), provider: route.provider, model: route.model, running: true, output: '',
-          skills: skills.skills.length, mcp: mcp.servers.length,
-          skipped: [...skills.skipped.map(item => `Skill ${item.name}: ${item.reason}`), ...mcp.skipped.map(item => `MCP ${item.serverName}: ${item.reason}`)] },
+          skills: skills.skills.length, mcp: mcpServers.length,
+          skipped: [...skills.skipped.map(item => `Skill ${item.name}: ${item.reason}`), ...[...mcp.skipped, ...launchSkipped].map(item => `MCP ${item.serverName}: ${item.reason === 'unsupported-working-directory'
+            ? '工作目录无效：MCP 目录必须为空白或绝对目录。'
+            : item.reason === 'unsupported-launch'
+              ? '启动方式不兼容：独立目录仅支持 Node 或绝对原生可执行文件；Windows 不支持 .cmd/.bat，请使用服务的绝对可执行入口。'
+            : item.reason}`)] },
         safe: new ClaudeSafeOutput([route.apiKey, ...Object.values(mcp.environment)]), cancel,
       }
       owner.turn = turn
@@ -205,7 +214,7 @@ export class ClaudeCodeService extends TypertRemoteService {
       const argv = [executable, '--print', '--output-format', 'text', '--permission-mode', 'acceptEdits', '--no-session-persistence',
         '--setting-sources', 'user', '--strict-mcp-config', '--mcp-config', mcpPath, '--plugin-dir', projectionRoot, '--model', route.model,
         ...(route.reasoningEffort ? ['--effort', route.reasoningEffort] : []),
-        ...(mcp.servers.length ? ['--allowedTools', ...mcp.servers.map(server => `mcp__${server.serverName}__*`)] : []), '--', context]
+        ...(mcpServers.length ? ['--allowedTools', ...mcpServers.map(server => `mcp__${server.serverName}__*`)] : []), '--', context]
       if (/\.[cm]?js$/u.test(executable)) { argv.unshift(process.execPath); if (process.versions.electron) environment.ELECTRON_RUN_AS_NODE = '1' }
       const subprocess = this.ctx.get('subprocess') as SubprocessRuntime
       cancel.signal.throwIfAborted()
