@@ -172,5 +172,18 @@
     "tag": "v1.0.6",
     "version": "1.0.6",
     "commit": "6c9faa36409961226623480c0ba6ef8fd6313beb"
+  },
+  "claudeCode": {
+    "repository": "https://github.com/Norman-else/dsh-claude",
+    "tag": "v0.1.65",
+    "commit": "fe00e3af0b1ad03acc977b13b4d4ab805086f6da",
+    "upstreamVersion": "0.1.65",
+    "package": "@zerowallscience/plugin-claude-code",
+    "source": "plugins/claude-code",
+    "version": "0.1.0",
+    "resourceVersion": "0.1.0",
+    "license": "MIT",
+    "catalogOptional": true,
+    "localAdaptation": "Fresh ZeroWall Claude Code CLI integration; independently installs a pinned CLI in private plugin data, bridges the active model route and safely projects eligible Skills and MCP. Does not embed the upstream Claude Agent SDK adapter or reuse the user's Claude configuration."
   }
 }

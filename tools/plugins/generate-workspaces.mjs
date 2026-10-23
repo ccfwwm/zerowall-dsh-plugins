@@ -3,6 +3,11 @@ import { randomUUID } from 'node:crypto'
 import { resolve } from 'node:path'
 
 const root = resolve(import.meta.dirname, '../..')
+const selectedPlugin = process.argv.includes('--plugin') ? process.argv[process.argv.indexOf('--plugin') + 1] : undefined
+if (process.argv.includes('--plugin') && !selectedPlugin) throw new Error('Usage: node tools/plugins/generate-workspaces.mjs --plugin <plugin-id>')
+const selectedPluginId = selectedPlugin?.startsWith('@zerowallscience/plugin-')
+  ? selectedPlugin.slice('@zerowallscience/plugin-'.length)
+  : selectedPlugin
 // Avoid rewriting unchanged manifests while editors and compilers read them.
 async function writeFile(path, content) {
   const previous = await readFile(path, 'utf8').catch(error => { if (error.code !== 'ENOENT') throw error; return undefined })
@@ -14,18 +19,26 @@ async function writeFile(path, content) {
 const rootPackage = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
 const applicationVersion = String(rootPackage.version)
 const upstream = JSON.parse(await readFile(resolve(root, 'config/integrations/upstream-sources.json'), 'utf8'))
+if (selectedPluginId && !Object.values(upstream).some(source =>
+  source?.source === `plugins/${selectedPluginId}`
+  && (source.package === selectedPlugin || source.package === `@zerowallscience/plugin-${selectedPluginId}` || source.package === selectedPluginId))) {
+  throw new Error(`Unknown plugin for targeted workspace generation: ${selectedPlugin}`)
+}
 const dshPin = JSON.parse(await readFile(resolve(root, 'config/deepseek-harness/upstream.json'), 'utf8'))
 const runtimeDependencies = JSON.parse(await readFile(resolve(root, 'config/build/runtime-dependencies.json'), 'utf8'))
-const integrityFile = resolve(root, 'plugins/integrity-runtime/package.json')
-const integrityManifest = JSON.parse(await readFile(integrityFile, 'utf8'))
-integrityManifest.dependencies.sharp = runtimeDependencies.sharp
-await writeFile(integrityFile, JSON.stringify(integrityManifest, null, 2) + '\n')
+if (!selectedPluginId) {
+  const integrityFile = resolve(root, 'plugins/integrity-runtime/package.json')
+  const integrityManifest = JSON.parse(await readFile(integrityFile, 'utf8'))
+  integrityManifest.dependencies.sharp = runtimeDependencies.sharp
+  await writeFile(integrityFile, JSON.stringify(integrityManifest, null, 2) + '\n')
+}
 const cordisVersion = JSON.parse(await readFile(resolve(root, 'deepseek-harness/vendor/cordis/package.json'), 'utf8')).version
 const schemaVersion = JSON.parse(await readFile(resolve(root, 'deepseek-harness/vendor/schemastery/package.json'), 'utf8')).version
 const mcpClientDependencies = JSON.parse(await readFile(resolve(root, 'deepseek-harness/packages/mcp/mcp-client/package.json'), 'utf8')).dependencies
 const officeSource = 'github:kw78/dsh-office-tools#' + upstream.officeTools.commit
 for (const source of Object.values(upstream)) {
   if (!source?.source?.startsWith('plugins/')) continue
+  if (selectedPluginId && source.source !== `plugins/${selectedPluginId}` && source.package !== selectedPlugin) continue
   const packageFile = resolve(root, source.source, 'package.json')
   const manifest = JSON.parse(await readFile(packageFile, 'utf8'))
   manifest.packageManager = rootPackage.packageManager
@@ -134,6 +147,9 @@ const dshDependencies = {
 }
 
 const npmDependencies = {
+  // Independent Claude releases must remain installable with the base shipped
+  // in 8.4.7, even while an unrelated base update is present in the workspace.
+  'claude-code': { '@zerowallscience/plugin-base': '^0.1.24', '@deepseek-ai/dsh-credentials': 'workspace:^', '@deepseek-ai/dsh-session-projection': 'workspace:^', '@deepseek-ai/dsh-subprocess': 'workspace:^', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
   python: { '@zerowallscience/integrity-runtime': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', yauzl: '3.4.0', pend: '1.2.0', react: '^18.2.0', 'react-dom': '^18.2.0' },
   biogenie: { '@zerowallscience/research-store': 'workspace:^' },
   pubmed: { compromise: '14.16.0', undici: '^7.16.0', '@zerowallscience/research-store': 'workspace:^', zod: '^4.4.3' },
@@ -157,6 +173,7 @@ const npmDependencies = {
 }
 
 const plugins = [
+  { id: 'claude-code', client: true, remote: true, clientInject: ['slots', '@deepseek-ai/dsh-api-remotes', '@deepseek-ai/dsh-client-ui-slots', '@deepseek-ai/dsh-client-ui-conversation'], capabilities: ['claude-code'], permissions: ['processes', 'files', 'network', 'credentials'], dependencies: ['base', 'projects', 'secrets'], requiredServices: ['agentDefaultModel', 'subprocess', 'workingDirectory', 'skills', 'zerowallProjects', 'credentials', 'settings', 'llm', 'sessionProjections'], optionalServices: ['zerowallAiCloudCredentialResolver', 'zerowallMcpRouteResolver'] },
   { id: 'pubmed', remote: true, capabilities: ['literature', 'evidence-graph'], permissions: ['files', 'network', 'credentials', 'approvals'], dependencies: ['secrets', 'research'], requiredServices: ['settings', 'tools', 'sessions', 'zerowallResearch'] },
   // These services are accessed directly by plugin-base during activation.
   // Keep the generated manifest in sync so Loader injects them before apply.
@@ -193,6 +210,7 @@ const plugins = [
 // Every installed plugin owns its remote Client contribution.
 
 for (const plugin of plugins) {
+  if (selectedPluginId && plugin.id !== selectedPluginId) continue
   plugin.client ||= plugin.remote === true
   const dir = resolve(root, 'plugins', plugin.id)
   const name = `@zerowallscience/plugin-${plugin.id}`
@@ -234,7 +252,7 @@ for (const plugin of plugins) {
       bundle: { patch: 'dsh.bundle.patch.yml' },
       ...(plugin.client ? {
         client: {
-          inject: plugin.id === 'account' ? [...clientInject, '@deepseek-ai/dsh-client-ui-model-selection'] : plugin.id === 'files' ? [...clientInject, 'remote.workspaceFiles', 'sidebarRightTabs', '@deepseek-ai/dsh-client-ui-sidebar-right', '@deepseek-ai/dsh-api-workspace-files'] : ['base', 'environment', 'extension-center'].includes(plugin.id) ? clientInject.filter(name => name !== 'betterSidebar') : clientInject,
+          inject: plugin.clientInject ?? (plugin.id === 'account' ? [...clientInject, '@deepseek-ai/dsh-client-ui-model-selection'] : plugin.id === 'files' ? [...clientInject, 'remote.workspaceFiles', 'sidebarRightTabs', '@deepseek-ai/dsh-client-ui-sidebar-right', '@deepseek-ai/dsh-api-workspace-files'] : ['base', 'environment', 'extension-center'].includes(plugin.id) ? clientInject.filter(name => name !== 'betterSidebar') : clientInject),
           ...(plugin.clientExternal === undefined ? {} : { external: plugin.clientExternal }),
           platform: 'web',
         },
@@ -262,9 +280,10 @@ for (const plugin of plugins) {
       test: `vitest run --config ../../vitest.plugins.config.ts${['skills', 'research'].includes(plugin.id) ? ' --no-file-parallelism' : ''}`,
     },
     publishConfig: { directory: `../../artifacts/dev/publish/plugin-${plugin.id}`, linkDirectory: false },
-    license: 'AGPL-3.0-only',
+    license: plugin.id === 'claude-code' ? 'MIT' : 'AGPL-3.0-only',
     files: [
       'lib', 'src',
+      ...(plugin.id === 'claude-code' ? ['LICENSE'] : []),
       ...(plugin.id === 'biogenie' ? ['payload'] : []),
       ...(plugin.remote ? [
         'lib/typert.host.js',
@@ -281,7 +300,7 @@ for (const plugin of plugins) {
     ...dshDependencies,
     ...(plugin.id === 'account' ? { '@deepseek-ai/dsh-client-ui-model-selection': 'workspace:^', '@deepseek-ai/dsh-client-ui-settings-models': 'workspace:^' } : {}),
     ...(plugin.id === 'files' ? { '@deepseek-ai/dsh-fs': 'workspace:^', 'dsh-office-tools': officeSource } : {}),
-      ...(plugin.client && !['base', 'environment', 'extension-center'].includes(plugin.id) ? externalClientDependencies : {}),
+      ...(plugin.client && !['base', 'environment', 'extension-center', 'claude-code'].includes(plugin.id) ? externalClientDependencies : {}),
       ...Object.fromEntries((plugin.dependencies ?? []).map(id => [`@zerowallscience/plugin-${id}`, 'workspace:^'])),
       ...(plugin.id === 'images' ? { '@zerowallscience/plugin-ai-cloud': '^0.1.20' } : {}),
       ...(npmDependencies[plugin.id] ?? {}),

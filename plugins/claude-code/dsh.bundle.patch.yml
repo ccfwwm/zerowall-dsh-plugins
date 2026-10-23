@@ -1,0 +1,3 @@
+- insert:
+    - id: zerowall-claude-code
+      name: '@zerowallscience/plugin-claude-code'
