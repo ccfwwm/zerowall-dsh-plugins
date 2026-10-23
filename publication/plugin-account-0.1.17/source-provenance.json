@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "scope": [
+    "@zerowallscience/plugin-account"
+  ],
+  "version": "0.1.17",
+  "exportTool": "tools/plugins/export-source-repository.mjs --source-only",
+  "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
+  "sourceParentCommit": "7e46cbcf8f66cddcec722b0923a78f027aed2f39",
+  "sourceWorktree": true,
+  "dshCommit": "683cb0318b9a0fa09362794588d01acb0366850f",
+  "exportedAt": "2026-10-22T16:20:56.503Z",
+  "files": [
+    {
+      "path": "plugins/account/dsh.bundle.patch.yml",
+      "exportedSha256": "519b37cad0528d8febd196be90849a4946facb3f9e9cb4df17d050e08c40512a",
+      "repositorySha256": "519b37cad0528d8febd196be90849a4946facb3f9e9cb4df17d050e08c40512a"
+    },
+    {
+      "path": "plugins/account/package.json",
+      "exportedSha256": "bfe80cb4878d836a1941f36e0fccae17accb0e59c0572b8ed62222dbaa0d2228",
+      "repositorySha256": "bfe80cb4878d836a1941f36e0fccae17accb0e59c0572b8ed62222dbaa0d2228"
+    },
+    {
+      "path": "plugins/account/src/client/AiCloudAccountButton.module.css",
+      "exportedSha256": "36381c5d05b4edc2fef365dc94b1b43d00a2e9c4d43dd10a61f737319c6c43fb",
+      "repositorySha256": "36381c5d05b4edc2fef365dc94b1b43d00a2e9c4d43dd10a61f737319c6c43fb"
+    },
+    {
+      "path": "plugins/account/src/client/AiCloudAccountButton.tsx",
+      "exportedSha256": "075708d0f9885a136fb872a843fa2cf5f37fdf19138d4eae9a4a88a0b23016d0",
+      "repositorySha256": "9c8abcf85f097f524635df2666ee48b931998449ea1bb53ed4fc02f78894a9ab"
+    },
+    {
+      "path": "plugins/account/src/client/GroupInfo.tsx",
+      "exportedSha256": "8501362ebc09059ef451293216aa2a98a2106ee2cdf9a6efe70bb39dad217fe9",
+      "repositorySha256": "8501362ebc09059ef451293216aa2a98a2106ee2cdf9a6efe70bb39dad217fe9"
+    },
+    {
+      "path": "plugins/account/src/client/GroupedModelSelect.module.css",
+      "exportedSha256": "e912f032abeda1b2ae8d34eb62dc551b1e41eda2da76bccebbe8bf04461024fd",
+      "repositorySha256": "e912f032abeda1b2ae8d34eb62dc551b1e41eda2da76bccebbe8bf04461024fd"
+    },
+    {
+      "path": "plugins/account/src/client/GroupedModelSelect.tsx",
+      "exportedSha256": "c2c8484cde20c60b0ddb0f4b5e0531d0e552c0954b85589b1cfd7c49627cf3e0",
+      "repositorySha256": "c2c8484cde20c60b0ddb0f4b5e0531d0e552c0954b85589b1cfd7c49627cf3e0"
+    },
+    {
+      "path": "plugins/account/src/client/ManagedProviderCard.tsx",
+      "exportedSha256": "7e65df5fce908688c37d018d6c45c902b3bf379d5da8e205de965240b219160e",
+      "repositorySha256": "7e65df5fce908688c37d018d6c45c902b3bf379d5da8e205de965240b219160e"
+    },
+    {
+      "path": "plugins/account/src/client/account-surface.tsx",
+      "exportedSha256": "6f455bfb73302563a3d3a5fd5ee1a594aa7b03106037285bc9a284b90ef756d8",
+      "repositorySha256": "6f455bfb73302563a3d3a5fd5ee1a594aa7b03106037285bc9a284b90ef756d8"
+    },
+    {
+      "path": "plugins/account/src/client/css-modules.d.ts",
+      "exportedSha256": "78f2c9d100da3ac6935319540dafc72498fe2bae19a635b0dafcccfdff5b4c2d",
+      "repositorySha256": "78f2c9d100da3ac6935319540dafc72498fe2bae19a635b0dafcccfdff5b4c2d"
+    },
+    {
+      "path": "plugins/account/src/client/group-catalog.ts",
+      "exportedSha256": "07594bd9f679638745eb968455c6aa51b2fd120920a19728f3894194d6b5fc02",
+      "repositorySha256": "07594bd9f679638745eb968455c6aa51b2fd120920a19728f3894194d6b5fc02"
+    },
+    {
+      "path": "plugins/account/src/client/index.ts",
+      "exportedSha256": "a32cc29fc799a052e4159a4ef2f9738812a33409efabdadbda93a8644e9fb875",
+      "repositorySha256": "a32cc29fc799a052e4159a4ef2f9738812a33409efabdadbda93a8644e9fb875"
+    },
+    {
+      "path": "plugins/account/src/client/model-locales.ts",
+      "exportedSha256": "becba612c411ba471852a215cf9a5311deb1debec810cb18d04e7cb04dbad8c5",
+      "repositorySha256": "becba612c411ba471852a215cf9a5311deb1debec810cb18d04e7cb04dbad8c5"
+    },
+    {
+      "path": "plugins/account/src/client/platform.ts",
+      "exportedSha256": "32f2f5ad493fd1f0deb29146cfb2b4ad3ec68004e2cc0dc0562832d387676049",
+      "repositorySha256": "32f2f5ad493fd1f0deb29146cfb2b4ad3ec68004e2cc0dc0562832d387676049"
+    },
+    {
+      "path": "plugins/account/src/client/qrcode.d.ts",
+      "exportedSha256": "442931c3cc8027193ca3a107a4fe39b929de335de63b11d5ad6aeeedcb887c7b",
+      "repositorySha256": "442931c3cc8027193ca3a107a4fe39b929de335de63b11d5ad6aeeedcb887c7b"
+    },
+    {
+      "path": "plugins/account/src/client/use-floating-panel.ts",
+      "exportedSha256": "1425fc39eed6207eab9174b006252a0e6e3df774b22bb9abecea91822d09dc32",
+      "repositorySha256": "1425fc39eed6207eab9174b006252a0e6e3df774b22bb9abecea91822d09dc32"
+    },
+    {
+      "path": "plugins/account/src/host/index.ts",
+      "exportedSha256": "3df6d2d5d01c0b9a6bc6c35189bb85d0fb8c9e8777b3672139fdb4270c74d99b",
+      "repositorySha256": "b781b81e25a94bf5732f788559f5fb80f6682016a86fcb26b373e48faab4da66"
+    },
+    {
+      "path": "plugins/account/src/shared/types.ts",
+      "exportedSha256": "8d8ef71e7e039db13ca426cd851097cf664661a031eb70a595958eca76d2e015",
+      "repositorySha256": "8d8ef71e7e039db13ca426cd851097cf664661a031eb70a595958eca76d2e015"
+    },
+    {
+      "path": "plugins/account/test/client.spec.tsx",
+      "exportedSha256": "18e8ac549f932340171a4c4d169d76770073d7798f347b1db057b209714cbda6",
+      "repositorySha256": "f68a21d83477b845acf50318fdc706dca556b70ebcd42d050ac93267a7f7ee81"
+    },
+    {
+      "path": "plugins/account/test/grouped-model-select.spec.tsx",
+      "exportedSha256": "1ab8411fc80d38f1327862aa020a59a5867802a04de8d75adb81d6e8071a0652",
+      "repositorySha256": "1ab8411fc80d38f1327862aa020a59a5867802a04de8d75adb81d6e8071a0652"
+    },
+    {
+      "path": "plugins/account/test/host.spec.ts",
+      "exportedSha256": "50019944b933255186c142a71c44eccf88825f60321152af2fb6f73c125c8e35",
+      "repositorySha256": "50019944b933255186c142a71c44eccf88825f60321152af2fb6f73c125c8e35"
+    },
+    {
+      "path": "plugins/account/test/locale-integration.spec.tsx",
+      "exportedSha256": "1335c888ea0fde59afef5b2a1b106cfe75a19c3df4436061af55401e6909bd6e",
+      "repositorySha256": "1335c888ea0fde59afef5b2a1b106cfe75a19c3df4436061af55401e6909bd6e"
+    },
+    {
+      "path": "plugins/account/test/media.spec.ts",
+      "exportedSha256": "82163bf92ad8aa9455153fd8dbc8e01d62db155714aab5150cc899c224975edf",
+      "repositorySha256": "82163bf92ad8aa9455153fd8dbc8e01d62db155714aab5150cc899c224975edf"
+    },
+    {
+      "path": "plugins/account/tsconfig.client.json",
+      "exportedSha256": "fdcc145d975e93424f4f85facc080688d164cbcfe1beca679b65abd16e7e030d",
+      "repositorySha256": "fdcc145d975e93424f4f85facc080688d164cbcfe1beca679b65abd16e7e030d"
+    },
+    {
+      "path": "plugins/account/tsconfig.host.json",
+      "exportedSha256": "ad102a7d79b2fd6ceea3e4e664ecf9410cd30d5d2d343043984786b7aa1f8770",
+      "repositorySha256": "ad102a7d79b2fd6ceea3e4e664ecf9410cd30d5d2d343043984786b7aa1f8770"
+    },
+    {
+      "path": "plugins/account/tsconfig.json",
+      "exportedSha256": "ad1b25d36ea100440140e543e2a2af188178934da74eadce1b27ef14e91b335e",
+      "repositorySha256": "ad1b25d36ea100440140e543e2a2af188178934da74eadce1b27ef14e91b335e"
+    },
+    {
+      "path": "plugins/account/tsdown.config.ts",
+      "exportedSha256": "53dc381d199457d8a19e9e2be93abde79f6b4b0bfdccb2521704eb4c5bd257f9",
+      "repositorySha256": "53dc381d199457d8a19e9e2be93abde79f6b4b0bfdccb2521704eb4c5bd257f9"
+    },
+    {
+      "path": "plugins/account/zerowall.plugin.json",
+      "exportedSha256": "33932bac4111d4e7bd3752371165449a0b6794a866eb438fd35fec60237662bb",
+      "repositorySha256": "33932bac4111d4e7bd3752371165449a0b6794a866eb438fd35fec60237662bb"
+    },
+    {
+      "path": "tools/plugins/generate-workspaces.mjs",
+      "exportedSha256": "7bf1b47cbd8f9d97d8d0891f52417f0d248e96c335436027596f74472e8c50b6",
+      "repositorySha256": "7bf1b47cbd8f9d97d8d0891f52417f0d248e96c335436027596f74472e8c50b6"
+    }
+  ],
+  "artifact": {
+    "version": "0.1.17",
+    "size": 298550,
+    "sha256": "8274d56407a228597c14284f8c2cbc5416f596e0daba20952cf30cf65970bb03",
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-account/0.1.17/zerowallscience-plugin-account-0.1.17.tgz",
+    "buildId": "account-0.1.17-20261023"
+  },
+  "validation": {
+    "accountTests": {
+      "passed": 76,
+      "failed": 0,
+      "skipped": 0,
+      "packedClientFactories": true
+    },
+    "releaseTests": {
+      "passed": 34,
+      "failed": 0
+    },
+    "fullWorkspaceTypecheck": true,
+    "strictClientTypecheck": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "kind": "pointer",
+  "resourceKind": "plugin",
+  "localOnly": false,
+  "catalog": {
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/plugin/8.4.7/account-0.1.17-20261023-1792686087486/catalog.json",
+    "sha256": "29c9cc004fc43867a520c2e5a3428b341106899b66c69740742ccfd10fe58018",
+    "size": 71574
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-4",
+    "value": "CSxFCCcTHm1d6zERvfDdb/ls4rMDYZhH8hDvrUjsWZhsSJm4zculv3BlOo2ZRLt1+/sftsLpXCK/+nySgj8xAw=="
+  }
+}
