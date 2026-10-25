@@ -16,6 +16,6 @@
     "keepOfflineCarriers": 1,
     "keepResourceTrees": 1,
     "objectDays": 1,
-    "afterPackage": false
+    "afterPackage": true
   }
 }

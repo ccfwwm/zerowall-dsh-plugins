@@ -1,6 +1,6 @@
 {
   "name": "@zerowallscience/plugin-claude-code",
-  "version": "0.1.1",
+  "version": "0.1.8",
   "description": "Run an isolated Claude Code CLI from ZeroWall conversations.",
   "type": "module",
   "main": "./lib/index.js",
@@ -33,9 +33,11 @@
     "client": {
       "inject": [
         "slots",
+        "locale",
         "@deepseek-ai/dsh-api-remotes",
         "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-client-ui-conversation"
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-settings"
       ],
       "platform": "web"
     }
@@ -54,6 +56,7 @@
       "workingDirectory",
       "skills",
       "zerowallProjects",
+      "zerowallEnvironment",
       "credentials",
       "settings",
       "llm",
@@ -108,6 +111,7 @@
     "@zerowallscience/plugin-base": "^0.1.24",
     "@zerowallscience/plugin-projects": "workspace:^",
     "@zerowallscience/plugin-secrets": "workspace:^",
+    "@zerowallscience/plugin-environment": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zod": "^4.4.3"

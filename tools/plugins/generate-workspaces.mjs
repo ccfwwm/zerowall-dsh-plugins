@@ -1,6 +1,7 @@
 import { access, mkdir, readFile, rename, writeFile as writeRaw } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { resolve } from 'node:path'
+import { syncClaudeModePatch } from '../profiles/claude-mode.mjs'
 
 const root = resolve(import.meta.dirname, '../..')
 const selectedPlugin = process.argv.includes('--plugin') ? process.argv[process.argv.indexOf('--plugin') + 1] : undefined
@@ -19,7 +20,9 @@ async function writeFile(path, content) {
 const rootPackage = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
 const applicationVersion = String(rootPackage.version)
 const upstream = JSON.parse(await readFile(resolve(root, 'config/integrations/upstream-sources.json'), 'utf8'))
-if (selectedPluginId && !Object.values(upstream).some(source =>
+const selectedDomain = selectedPluginId ? await readFile(resolve(root, 'plugins', selectedPluginId, 'package.json'), 'utf8')
+  .then(JSON.parse, error => { if (error.code !== 'ENOENT') throw error; return undefined }) : undefined
+if (selectedPluginId && selectedDomain?.name !== `@zerowallscience/plugin-${selectedPluginId}` && !Object.values(upstream).some(source =>
   source?.source === `plugins/${selectedPluginId}`
   && (source.package === selectedPlugin || source.package === `@zerowallscience/plugin-${selectedPluginId}` || source.package === selectedPluginId))) {
   throw new Error(`Unknown plugin for targeted workspace generation: ${selectedPlugin}`)
@@ -173,7 +176,7 @@ const npmDependencies = {
 }
 
 const plugins = [
-  { id: 'claude-code', client: true, remote: true, clientInject: ['slots', '@deepseek-ai/dsh-api-remotes', '@deepseek-ai/dsh-client-ui-slots', '@deepseek-ai/dsh-client-ui-conversation'], capabilities: ['claude-code'], permissions: ['processes', 'files', 'network', 'credentials'], dependencies: ['base', 'projects', 'secrets'], requiredServices: ['agentDefaultModel', 'subprocess', 'workingDirectory', 'skills', 'zerowallProjects', 'credentials', 'settings', 'llm', 'sessionProjections'], optionalServices: ['zerowallAiCloudCredentialResolver', 'zerowallMcpRouteResolver'] },
+  { id: 'claude-code', client: true, remote: true, clientInject: ['slots', 'locale', '@deepseek-ai/dsh-api-remotes', '@deepseek-ai/dsh-client-ui-slots', '@deepseek-ai/dsh-client-ui-conversation', '@deepseek-ai/dsh-client-ui-settings'], capabilities: ['claude-code'], permissions: ['processes', 'files', 'network', 'credentials'], dependencies: ['base', 'projects', 'secrets', 'environment'], requiredServices: ['agentDefaultModel', 'subprocess', 'workingDirectory', 'skills', 'zerowallProjects', 'zerowallEnvironment', 'credentials', 'settings', 'llm', 'sessionProjections'], optionalServices: ['zerowallAiCloudCredentialResolver', 'zerowallMcpRouteResolver'] },
   { id: 'pubmed', remote: true, capabilities: ['literature', 'evidence-graph'], permissions: ['files', 'network', 'credentials', 'approvals'], dependencies: ['secrets', 'research'], requiredServices: ['settings', 'tools', 'sessions', 'zerowallResearch'] },
   // These services are accessed directly by plugin-base during activation.
   // Keep the generated manifest in sync so Loader injects them before apply.
@@ -398,6 +401,8 @@ for (const plugin of plugins) {
     await writeFile(resolve(dir, 'src/shared/types.ts'), 'export type ZeroWallPluginTypes = Record<string, never>\n')
   }
 }
+
+await syncClaudeModePatch(root)
 
 async function exists(path) {
   try { await access(path); return true } catch { return false }

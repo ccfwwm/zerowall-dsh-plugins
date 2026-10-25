@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { PassThrough } from 'node:stream'
 import type { Context } from '@deepseek-ai/cordis'
 import type { Agent } from '@deepseek-ai/dsh-agent'
+import { isAgentLoopRequest, markAgentLoopRequest, type GenerateOptions } from '@deepseek-ai/dsh-llm'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { SkillsProjectionApi, McpServerProjectionInput } from '../src/host/projection.js'
 import type { ClaudeSelection, ClaudeRequestHeader } from '../src/host/route.js'
@@ -12,7 +13,9 @@ const broker = vi.hoisted(() => ({ get: vi.fn() }))
 // Transport registration is outside this unit boundary. Run the real Host,
 // route resolver and projectors against explicit session-scoped Host services.
 vi.mock('@deepseek-ai/dsh-typert-protocol', () => ({
-  Remote: (method: unknown) => method,
+  // Support both `@Remote` and `@Remote('wireName')` without bringing the
+  // transport registration into this Host unit boundary.
+  Remote: (method: unknown) => typeof method === 'string' ? () => {} : method,
   TypertRemoteService: class {
     constructor(readonly ctx: Context) {}
   },
@@ -32,11 +35,27 @@ function deferred<T>() {
 
 type Launch = { argv: string[]; cwd: string; env: Record<string, string>; signal: AbortSignal }
 type FakeTerminal = ReturnType<typeof terminal>
+type FakeProcess = ReturnType<typeof cliProcess>
 function terminal() {
   const completion = deferred<{ exitCode: number }>()
   const output = new PassThrough()
   const terminate = vi.fn(async () => { completion.resolve({ exitCode: 143 }) })
   return { output, done: completion.promise, terminate, finish: (exitCode = 0) => completion.resolve({ exitCode }) }
+}
+function cliProcess() {
+  const completion = deferred<{ exitCode: number | null; signal: NodeJS.Signals | null }>()
+  const stdin = new PassThrough(), stdout = new PassThrough(), stderr = new PassThrough()
+  let input = ''
+  stdin.on('data', chunk => { input += chunk.toString('utf8') })
+  const terminate = vi.fn(() => { stdout.end(); stderr.end(); completion.resolve({ exitCode: 143, signal: 'SIGTERM' }) })
+  return {
+    stdin, stdout, stderr, done: completion.promise, terminate,
+    finish: (frames: unknown[], exitCode = 0) => {
+      for (const frame of frames) stdout.write(`${JSON.stringify(frame)}\n`)
+      stdout.end(); stderr.end(); completion.resolve({ exitCode, signal: null })
+    },
+    input: () => input,
+  }
 }
 
 let directory: string
@@ -59,19 +78,21 @@ async function fixture() {
   const cli = join(directory, 'private-runtime', 'versions', 'current', 'claude.js')
   const runtime = {
     configDir,
-    status: vi.fn(async () => ({ installed: true, version: '2.1.309', previousVersion: '2.1.309' })),
+    status: vi.fn(async () => ({ installed: true, version: '2.1.309', executablePath: cli, previousVersion: '2.1.309' })),
     getExecutablePath: vi.fn(async (): Promise<string | undefined> => cli),
     installOrUpdate: vi.fn(async () => undefined),
     rollback: vi.fn(async () => undefined),
     uninstall: vi.fn(async () => undefined),
-    getCliEnvironment: vi.fn((turn: Record<string, string>, _unused: unknown, mcp: Record<string, string>) => ({
-      CLAUDE_CONFIG_DIR: configDir, HOME: join(directory, 'private-runtime', 'home'), ...turn, ...mcp,
+    getCliEnvironment: vi.fn((turn: Record<string, string>, _unused: unknown, mcp: Record<string, string>, configured: Record<string, string>) => ({
+      CLAUDE_CONFIG_DIR: configDir, HOME: join(directory, 'private-runtime', 'home'), ...configured, ...turn, ...mcp,
     })),
   }
   const selected = new Map<string, ClaudeSelection>()
+  const presets = new Map<string, string>()
   const loggedHeaders = new Map<string, ClaudeRequestHeader>()
   const workspaces = new Map<string, string>()
   const terminals: FakeTerminal[] = []
+  const processes: FakeProcess[] = []
   const launches: Launch[] = []
   const servers: McpServerProjectionInput[] = []
   const credentials = vi.fn(async () => ({ value: 'host-only-route-secret-1234567890' }))
@@ -84,13 +105,19 @@ async function fixture() {
   const managedCredential = vi.fn(async (_provider: string, model: string) => `host-only-key-for-${model}-1234567890`)
   const services: Record<string, unknown> = {
     agentDefaultModel: { currentSelection: vi.fn(() => ({ provider: 'custom-anthropic', model: 'fallback' })) },
-    sessionProjections: { stateOf: vi.fn((session: { id: string }) => ({ pending: selected.get(session.id) })) },
+    sessionProjections: { stateOf: vi.fn((session: { id: string }, key: string) => key === 'agentPreset'
+      ? presets.get(session.id) ?? null : { pending: selected.get(session.id) }) },
     workingDirectory: { get: vi.fn((session: { id: string }) => workspaces.get(session.id)) },
     llm: { listConfigurableProviders: vi.fn(() => [{ provider: 'custom-anthropic', settingsNs: 'provider-settings', settingsPath: ['profile'] }]) },
     settings: { describe: vi.fn(() => [{ ns: 'provider-settings', value: { profile } }]) },
+    agentPresets: {},
     credentials: { resolve: credentials },
     skills: { snapshot, get: getSkill },
     zerowallProjects: { listMcpServers: vi.fn(() => servers) },
+    zerowallEnvironment: {
+      listVariables: vi.fn(async () => [{ name: 'CUSTOM_BUILD_TOKEN' }]),
+      readVariable: vi.fn(async () => 'host-only-configured-env-secret-1234567890'),
+    },
     zerowallMcpRouteResolver: { resolve: managedRoute },
     zerowallAiCloudCredentialResolver: { resolve: managedCredential },
     subprocess: { spawnTerminal: vi.fn(async (launch: Launch) => {
@@ -98,11 +125,18 @@ async function fixture() {
       const handle = terminal()
       terminals.push(handle)
       return handle
+    }), spawn: vi.fn((spec: Launch) => {
+      launches.push(spec)
+      const handle = cliProcess()
+      processes.push(handle)
+      return handle
     }) },
   }
   const effects: Array<() => unknown> = []
+  const handlers = new Map<string, (...args: unknown[]) => unknown>()
   const context = {
     get: (key: string) => services[key],
+    on: (event: string, callback: (...args: unknown[]) => unknown) => { handlers.set(event, callback); return () => handlers.delete(event) },
     inject: (keys: string[], callback: (scope: unknown) => unknown) => {
       if (keys.every(key => key in services)) callback(context)
     },
@@ -112,10 +146,11 @@ async function fixture() {
   // The runtime manager has its own filesystem/install contract tests. Inject
   // its process-free double here without launching pnpm or a real Claude CLI.
   Object.defineProperty(host, 'manager', { value: runtime })
-  const agent = async (id: string) => {
+  const agent = async (id: string, preset = 'standard') => {
     const cwd = join(directory, 'projects', id)
     workspaces.set(id, cwd)
     selected.set(id, { provider: 'custom-anthropic', model: `model-${id}` })
+    presets.set(id, preset)
     await mkdir(cwd, { recursive: true })
     return { id, session: { id, requestHeader: () => loggedHeaders.get(id) }, ctx: context } as unknown as Agent
   }
@@ -125,13 +160,14 @@ async function fixture() {
   }
   cleanup.push(async () => {
     for (const handle of terminals) handle.finish(143)
+    for (const handle of processes) handle.finish([], 143)
     for (const effect of effects) {
       const dispose = effect()
       if (typeof dispose === 'function') await dispose()
     }
     await new Promise<void>(resolve => setImmediate(resolve))
   })
-  return { host, runtime, agent, selected, loggedHeaders, workspaces, launches, terminals, servers, credentials,
+  return { host, runtime, agent, selected, presets, loggedHeaders, workspaces, launches, terminals, processes, handlers, servers, credentials,
     snapshot, getSkill, profile, services, managedRoute, managedCredential, configDir, cli, finish }
 }
 
@@ -146,9 +182,84 @@ async function fileContents(root: string): Promise<string[]> {
 }
 
 describe('Claude Code Host session boundary', () => {
+  it('routes Claude preset requests through the managed CLI and projects the selected model resources', async () => {
+    const f = await fixture(), agent = await f.agent('chat', 'claude')
+    f.snapshot.mockResolvedValue({ complete: true, skills: [{ name: 'review-plan', description: 'Review a plan', invocation: { modelInvocable: true } }] })
+    f.getSkill.mockResolvedValue({ name: 'review-plan', description: 'Review a plan', invocation: { modelInvocable: true }, content: 'Use the project review checklist.' })
+    broker.get.mockImplementation(async (key: string) => key === 'zerowall.environment.var.mcp_token' ? 'host-only-mcp-secret-1234567890' : undefined)
+    f.servers.push({ name: 'Tools', serverName: 'tools', transport: 'stdio', enabled: true,
+      command: 'node', args: ['server.mjs'], cwd: '', envRefs: { API_TOKEN: 'MCP_TOKEN' }, headerRefs: {} })
+    const requestHook = f.handlers.get('agent/request') as (payload: { agent: Agent }, next: () => Promise<{ provider: string; model: string }>) => Promise<unknown>
+    await requestHook({ agent }, async () => ({ provider: 'custom-anthropic', model: 'selected-claude' }))
+    expect((f.host as unknown as { chatAgents: Map<string, unknown> }).chatAgents.has(agent.id)).toBe(true)
+    const llmHook = f.handlers.get('llm/stream') as (options: GenerateOptions, next: () => AsyncIterable<unknown>) => AsyncIterable<unknown>
+    const request = markAgentLoopRequest({
+      provider: 'custom-anthropic', model: 'selected-claude', sessionId: agent.id,
+      messages: [{ role: 'user', content: [{ type: 'text', text: 'Use my configured Claude environment.' }] }],
+    } as GenerateOptions)
+    expect(isAgentLoopRequest(request)).toBe(true)
+    let fallbackCalled = false
+    const stream = llmHook(request, () => { fallbackCalled = true; return (async function* () {})() })
+    const iterator = stream[Symbol.asyncIterator]()
+    const first = iterator.next()
+    await vi.waitFor(() => expect(f.processes).toHaveLength(1))
+    const launched = f.launches[0]!
+    expect(launched.argv).toContain('--input-format')
+    expect(launched.argv).toContain('stream-json')
+    expect(launched.argv).toContain('--model')
+    expect(launched.argv[launched.argv.indexOf('--model') + 1]).toBe('selected-claude')
+    expect(launched.env.ANTHROPIC_API_KEY).toBe('host-only-route-secret-1234567890')
+    expect(launched.env.CUSTOM_BUILD_TOKEN).toBe('host-only-configured-env-secret-1234567890')
+    expect(Object.values(launched.env)).toContain('host-only-mcp-secret-1234567890')
+    expect(launched.argv).toContain('mcp__tools__*')
+    const pluginDir = launched.argv[launched.argv.indexOf('--plugin-dir') + 1]!
+    expect((await fileContents(pluginDir)).join('\n')).toContain('Use the project review checklist.')
+    expect(JSON.parse(f.processes[0]!.input().trim())).toMatchObject({
+      type: 'user', message: { role: 'user', content: expect.stringContaining('Use my configured Claude environment.') },
+    })
+    f.processes[0]!.finish([
+      { type: 'stream_event', event: { type: 'content_block_delta', delta: { type: 'text_delta', text: 'Claude response' } } },
+      { type: 'result', is_error: false, result: 'Claude response' },
+    ])
+    const chunks = [await first]
+    while (true) {
+      const next = await iterator.next()
+      if (next.done) break
+      chunks.push(next)
+    }
+    expect(fallbackCalled).toBe(false)
+    expect(chunks.map(chunk => chunk.value)).toContainEqual({ type: 'text-delta', index: 0, text: 'Claude response' })
+    expect(chunks.map(chunk => chunk.value)).toContainEqual({ type: 'finish', reason: { kind: 'stop' } })
+    expect(f.host.read(agent)?.running).toBe(false)
+  })
+
+  it('keeps the ordinary DSH request path for Standard preset sessions', async () => {
+    const f = await fixture(), agent = await f.agent('standard-chat', 'standard')
+    const requestHook = f.handlers.get('agent/request') as (payload: { agent: Agent }, next: () => Promise<{ provider: string; model: string }>) => Promise<unknown>
+    await requestHook({ agent }, async () => ({ provider: 'custom-anthropic', model: 'standard-model' }))
+    const llmHook = f.handlers.get('llm/stream') as (options: GenerateOptions, next: () => AsyncIterable<string>) => AsyncIterable<string>
+    const request = markAgentLoopRequest({ provider: 'custom-anthropic', model: 'standard-model', sessionId: agent.id, messages: [] } as GenerateOptions)
+    const fallback = async function* () { yield 'standard' }
+    const chunks: string[] = []
+    for await (const chunk of llmHook(request, fallback)) chunks.push(chunk)
+    expect(chunks).toEqual(['standard'])
+    expect(f.processes).toHaveLength(0)
+  })
+
+  it('exposes application-level settings management without requiring a conversation Agent', async () => {
+    const f = await fixture()
+    expect(await f.host.settingsStatus()).toMatchObject({ desktop: true, installed: true, executablePath: f.cli, running: false })
+    await f.host.settingsInstall()
+    await f.host.settingsRollback()
+    await f.host.settingsUninstall()
+    expect(f.runtime.installOrUpdate).toHaveBeenCalledOnce()
+    expect(f.runtime.rollback).toHaveBeenCalledOnce()
+    expect(f.runtime.uninstall).toHaveBeenCalledOnce()
+  })
+
   it('keeps status/read passive and only installs, rolls back or removes on explicit calls', async () => {
     const f = await fixture(), agent = await f.agent('install')
-    expect(await f.host.status(agent)).toEqual({ desktop: true, installed: true, version: '2.1.309', rollbackAvailable: true, running: false })
+    expect(await f.host.status(agent)).toEqual({ desktop: true, installed: true, version: '2.1.309', executablePath: f.cli, rollbackAvailable: true, running: false })
     expect(f.host.read(agent)).toBeNull()
     expect(f.runtime.installOrUpdate).not.toHaveBeenCalled()
     expect(f.runtime.rollback).not.toHaveBeenCalled()
@@ -190,6 +301,24 @@ describe('Claude Code Host session boundary', () => {
     expect(effortIndex).toBeGreaterThan(0)
     expect(f.launches[1]!.argv[effortIndex + 1]).toBe('xhigh')
     expect(JSON.stringify(f.host.read(agent))).not.toContain('host-only-key')
+  })
+
+  it('launches the exact managed native binary and retains that turn path after the installed runtime changes', async () => {
+    const f = await fixture(), agent = await f.agent('native-path')
+    const native = join(directory, 'private-runtime', 'versions', 'native', 'bin', 'claude.exe')
+    f.runtime.getExecutablePath.mockResolvedValue(native)
+    vi.stubEnv('PATH', join(directory, 'user-claude-bin'))
+    f.selected.set(agent.id, { provider: 'custom-anthropic', model: 'chosen-model', reasoningEffort: 'max' })
+    const turn = await f.host.start(agent, 'preserve my route')
+    expect(turn.executablePath).toBe(native)
+    expect(f.launches[0]?.argv[0]).toBe(native)
+    expect(f.launches[0]?.argv).not.toContain(process.execPath)
+    expect(f.launches[0]?.argv.slice(-5)).toEqual(['chosen-model', '--effort', 'max', '--', 'preserve my route'])
+    f.runtime.getExecutablePath.mockResolvedValue(join(directory, 'different-runtime', 'claude.exe'))
+    f.runtime.status.mockResolvedValue({ installed: true, version: '2.1.309', executablePath: 'changed-runtime', previousVersion: '2.1.309' })
+    expect((await f.host.status(agent)).executablePath).toBe('changed-runtime')
+    expect(f.host.read(agent)?.executablePath).toBe(native)
+    expect(JSON.stringify(f.host.read(agent))).not.toContain('host-only-route-secret')
   })
 
   it('restores the logged model without forwarding adapter-default effort and applies an explicit effort next turn', async () => {

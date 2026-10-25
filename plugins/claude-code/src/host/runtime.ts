@@ -317,6 +317,7 @@ export class ClaudeRuntimeManager {
     turnEnvironment: Record<string, string | undefined> = {},
     inherited: NodeJS.ProcessEnv = this.#env,
     ephemeralMcpEnvironment: Record<string, string> = {},
+    configuredEnvironment: Record<string, string> = {},
   ): NodeJS.ProcessEnv {
     const env: NodeJS.ProcessEnv = {}
     const inheritedByKey = new Map<string, string>()
@@ -325,6 +326,21 @@ export class ClaudeRuntimeManager {
       if (value !== undefined && SAFE_INHERITED_ENV.has(normalized)) inheritedByKey.set(normalized, value)
     }
     for (const [key, value] of inheritedByKey) env[key] = value
+    const configuredKeys = new Set<string>()
+    for (const [key, value] of Object.entries(configuredEnvironment)) {
+      const normalized = normalizedEnvKey(key, this.#platform)
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/u.test(key)
+        || RESERVED_EPHEMERAL_ENV.test(key)
+        || RESERVED_EPHEMERAL_NAMES.has(normalized)
+        || SAFE_INHERITED_ENV.has(normalized)
+        || configuredKeys.has(normalized)
+        || typeof value !== 'string'
+        || value.includes('\0')) {
+        throw new Error('Claude Code configured environment contains a reserved or invalid variable.')
+      }
+      configuredKeys.add(normalized)
+      env[key] = value
+    }
     for (const [key, value] of Object.entries(turnEnvironment)) {
       if (!ANTHROPIC_TURN_ENV.has(normalizedEnvKey(key, this.#platform))) {
         throw new Error(`Claude Code route supplied an unsupported environment variable: ${key}`)
@@ -334,7 +350,7 @@ export class ClaudeRuntimeManager {
       if (value === undefined) delete env[canonicalKey]
       else env[canonicalKey] = value
     }
-    const seenMcpKeys = new Set<string>()
+    const seenMcpKeys = new Set(configuredKeys)
     for (const [key, value] of Object.entries(ephemeralMcpEnvironment)) {
       const normalized = normalizedEnvKey(key, this.#platform)
       if (!/^[A-Za-z_][A-Za-z0-9_]*$/u.test(key)
@@ -624,4 +640,3 @@ export class ClaudeRuntimeManager {
 export function createClaudeRuntimeManager(options: ClaudeRuntimeManagerOptions): ClaudeRuntimeManager {
   return new ClaudeRuntimeManager(options)
 }
-

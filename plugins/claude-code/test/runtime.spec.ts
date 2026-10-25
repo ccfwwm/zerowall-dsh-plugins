@@ -459,8 +459,12 @@ describe('Claude Code private runtime manager', () => {
     const withMcp = manager.getCliEnvironment({}, { PATH: 'safe-path' }, { CUSTOM_MCP_TOKEN: 'ephemeral-mcp-token' })
     expect(withMcp.CUSTOM_MCP_TOKEN).toBe('ephemeral-mcp-token')
     expect(withMcp.CLAUDE_CONFIG_DIR).toBe(join(dataDir, 'isolated', 'config'))
+    const withConfigured = manager.getCliEnvironment({}, { PATH: 'safe-path' }, {}, { MY_BUILD_TOKEN: 'configured-secret' })
+    expect(withConfigured.MY_BUILD_TOKEN).toBe('configured-secret')
     expect(() => manager.getCliEnvironment({}, {}, { ANTHROPIC_API_KEY: 'override' })).toThrow(/reserved/u)
+    expect(() => manager.getCliEnvironment({}, {}, {}, { ANTHROPIC_API_KEY: 'ambient-route' })).toThrow(/reserved/u)
     expect(() => manager.getCliEnvironment({}, {}, { HOME: join(dataDir, 'outside-home') })).toThrow(/reserved/u)
+    expect(() => manager.getCliEnvironment({}, {}, { MY_BUILD_TOKEN: 'mcp-override' }, { MY_BUILD_TOKEN: 'configured-secret' })).toThrow(/reserved or invalid/u)
     expect(() => manager.getCliEnvironment({}, {}, { BAD: 'nul\0value' })).toThrow(/invalid value/u)
   })
 

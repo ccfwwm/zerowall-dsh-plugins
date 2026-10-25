@@ -108,6 +108,11 @@ export function ClaudeCodeAction(props: ClaudeCodeActionProps) {
             {turn && !turn.running && <button type="button" disabled={pending} onClick={() => void run(async () => { await props.clear(); setTurn(null) })}>清空</button>}
           </div>
           {turn && <div className={css.route} aria-live="polite">{turn.provider} · {turn.model}{turn.running ? ' · 运行中' : turn.exitCode === 0 ? ' · 已完成' : ''}</div>}
+          {(turn?.executablePath || status?.executablePath) && <details className={css.skipped}>
+            <summary>运行诊断</summary>
+            <p>应用独立 CLI 路径：<code>{turn?.executablePath || status?.executablePath}</code></p>
+            <p>此路径来自应用内“安装 CLI”创建的独立运行时。</p>
+          </details>}
           {turn?.skipped.length ? <details className={css.skipped}><summary>未同步资源（{turn.skipped.length}）</summary><ul>{turn.skipped.map((item, index) => <li key={`${index}-${item}`}>{item}</li>)}</ul></details> : null}
           <pre className={css.output} aria-live="polite">{turn?.output || (turn?.running ? '等待 Claude Code 输出…' : '运行结果会显示在这里。')}</pre>
           {error && <p className={css.error} role="alert">{error}</p>}

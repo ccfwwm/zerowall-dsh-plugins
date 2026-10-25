@@ -5,6 +5,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import { ClaudeCodeAction, type ClaudeCodeActionInjected } from '../src/client/ClaudeCodeAction.js'
 import { bindClaudeCodeRemote } from '../src/client/view.js'
+import { apply, inject } from '../src/client/view.js'
+import { ClaudeCodeSettingsSection } from '../src/client/ClaudeCodeSettingsSection.js'
 import type { ClaudeCodeStatus, ClaudeCodeTurn } from '../src/shared/types.js'
 
 afterEach(() => cleanup())
@@ -55,6 +57,16 @@ describe('Claude Code conversation panel', () => {
     await waitFor(() => expect(api.clear).toHaveBeenCalledOnce())
   })
 
+  it('shows the actual turn executable instead of a subsequently changed installed path', async () => {
+    const api = actions({ getStatus: vi.fn(async () => ({ ...installed, executablePath: 'C:\\ZeroWall data\\new\\claude.exe' })),
+      read: vi.fn(async () => ({ ...finished, executablePath: 'C:\\ZeroWall data\\active\\claude.exe' })) })
+    openPanel(api)
+    await screen.findByText('运行诊断')
+    expect(screen.getByText('C:\\ZeroWall data\\active\\claude.exe')).toBeTruthy()
+    expect(screen.queryByText('C:\\ZeroWall data\\new\\claude.exe')).toBeNull()
+    expect(api.install).not.toHaveBeenCalled()
+  })
+
   it('does not install CLI in non-Desktop environments', async () => {
     const api = actions({ getStatus: vi.fn(async () => ({ ...installed, desktop: false, installed: false, rollbackAvailable: false })) })
     openPanel(api)
@@ -100,12 +112,36 @@ describe('Claude Code conversation panel', () => {
     const ok = <T,>(value: T) => Promise.resolve({ ok: true as const, value })
     const remote = {
       status: vi.fn(() => ok(installed)), start: vi.fn(() => ok(finished)), read: vi.fn(() => ok(finished)), stop: vi.fn(() => ok(undefined)),
-      install: vi.fn(() => ok(installed)), rollback: vi.fn(() => ok(installed)), uninstall: vi.fn(() => ok(installed)), clear: vi.fn(() => ok(undefined)),
+      installCli: vi.fn(() => ok(installed)), rollback: vi.fn(() => ok(installed)), uninstall: vi.fn(() => ok(installed)), clear: vi.fn(() => ok(undefined)),
     }
     const api = bindClaudeCodeRemote(remote, 'session-A' as SessionId)
     await api.getStatus(); await api.start('Task'); await api.read(); await api.stop()
     await api.install(); await api.rollback(); await api.uninstall(); await api.clear()
     expect(remote.start).toHaveBeenCalledWith('session-A', 'Task')
-    for (const method of ['status', 'read', 'stop', 'install', 'rollback', 'uninstall', 'clear'] as const) expect(remote[method]).toHaveBeenCalledWith('session-A')
+    for (const method of ['status', 'read', 'stop', 'installCli', 'rollback', 'uninstall', 'clear'] as const) expect(remote[method]).toHaveBeenCalledWith('session-A')
+  })
+})
+
+describe('Claude Code client entry points', () => {
+  it('registers the Claude Code settings page and the existing session action', () => {
+    const calls: Array<{ name: string; options: Record<string, unknown>; component: unknown }> = []
+    const remote = {
+      settingsStatus: vi.fn(), settingsInstall: vi.fn(), settingsRollback: vi.fn(), settingsUninstall: vi.fn(),
+    }
+    const slots = {
+      inject: vi.fn((_name: string, callback: () => void) => callback()),
+      register: vi.fn((options: Record<string, unknown>, component: unknown) => { calls.push({ name: String(options.name), options, component }) }),
+    }
+    const ctx = {
+      locale: { register: vi.fn(), bind: vi.fn(() => (key: string) => key) },
+      effect: vi.fn(effect => effect()), slots,
+      get: vi.fn(() => remote),
+    }
+    expect(inject).toContain('locale')
+    apply(ctx as never)
+    expect(calls.map(call => call.name)).toEqual(['conversation.session.header.actions', 'settings.section'])
+    expect(calls[1]?.options).toMatchObject({ id: 'zerowall-claude-code', order: 35, locale: 'zerowall.claude-code' })
+    expect(calls[1]?.component).toBe(ClaudeCodeSettingsSection)
+    expect(remote.settingsStatus).not.toHaveBeenCalled()
   })
 })
