@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "kind": "pointer",
+  "resourceKind": "plugin",
+  "localOnly": false,
+  "catalog": {
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/plugin/8.4.10/claude-metrics-20261026-1730-1793007580373/catalog.json",
+    "sha256": "81ae310dd276b0f6f340a0069c54f0ef1e27b2ce28549746de71281aa3c88734",
+    "size": 74092
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-4",
+    "value": "sF91dr5of0QnCxvnIq3v9ODflxQ+DmR9KFWWiCiMI2Ql5NChR7jaXmy4M91OGFE25Ln+OVxPftf1c4wUwzUGAg=="
+  }
+}
