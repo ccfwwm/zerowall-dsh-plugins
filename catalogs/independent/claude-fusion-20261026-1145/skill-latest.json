@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "kind": "pointer",
+  "resourceKind": "skill",
+  "localOnly": false,
+  "catalog": {
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/skill/8.4.9/claude-ui-20261026-1145-1792986845608/catalog.json",
+    "sha256": "fa6e4391296d62a1d4945fb87e272b38997bb18338e7a82b8444409eab46a834",
+    "size": 235662
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-4",
+    "value": "YFV5EMTCGkE7GJHhU3G4znIl56aobYMHEUpx8DROS+BsE7incuHnPE8GLFBlpQI7di2/q0TzHrB1ogEpCdnlAA=="
+  }
+}

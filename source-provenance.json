@@ -28,7 +28,7 @@
     },
     {
       "id": "@zerowallscience/plugin-claude-code",
-      "version": "0.1.8",
+      "version": "0.2.6",
       "kind": "plugin"
     },
     {
@@ -53,7 +53,7 @@
     },
     {
       "id": "@zerowallscience/dsh-bundle-science",
-      "version": "0.1.20",
+      "version": "0.1.21",
       "kind": "plugin"
     },
     {
@@ -83,7 +83,7 @@
     },
     {
       "id": "@zerowallscience/plugin-environment",
-      "version": "0.1.16",
+      "version": "0.1.17",
       "kind": "plugin"
     },
     {
@@ -113,7 +113,7 @@
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.17",
+      "version": "0.2.18",
       "kind": "plugin"
     },
     {
@@ -153,7 +153,7 @@
     },
     {
       "id": "@zerowallscience/plugin-reviewer",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "kind": "plugin"
     },
     {
@@ -421,6 +421,443 @@
       ],
       "removed": [],
       "manifestSha256": "9f6430b7f5ccca9b245c68eb9a0198fc135c372110ad4619107858d66d915aa3"
+    },
+    {
+      "id": "@zerowallscience/plugin-claude-code",
+      "version": "0.2.6",
+      "sourceCommit": "987c9c2318bb3b682cc08c8e810f837f58cc1f0a",
+      "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
+      "sourceRepositoryParent": "3f13439dfe6d13760587df23d27552be157bdb8e",
+      "retainedOtherSources": true,
+      "publicationAsserted": false,
+      "files": [
+        {
+          "path": "config/integrations/upstream-sources.json",
+          "size": 8074,
+          "sha256": "fb6dbb0d58c75884c3f93c64604b4b5f22b30d2d5abd32014c478e5219ed39dc"
+        },
+        {
+          "path": "plugins/claude-code/LICENSE",
+          "size": 1080,
+          "sha256": "9873335076b93fd6acbe0d03c9ecc755f772237129a5c61259ad1682be49d96e"
+        },
+        {
+          "path": "plugins/claude-code/README.md",
+          "size": 8036,
+          "sha256": "689528f8d6b0d25786686f135b6f493fa26951bead4255ffe523cfe94138d6c1"
+        },
+        {
+          "path": "plugins/claude-code/dsh.bundle.patch.yml",
+          "size": 991,
+          "sha256": "d67e4d4c337dffa40d3e552d599b011917add61d537cac008a523c20a46e00b4"
+        },
+        {
+          "path": "plugins/claude-code/package.json",
+          "size": 8426,
+          "sha256": "bdda4657b5c898553cb51bc636f5f8279275277f65a07e678091bc4ae81d6bd4"
+        },
+        {
+          "path": "plugins/claude-code/src/client/ClaudeCodeAction.module.css",
+          "size": 2317,
+          "sha256": "ba3c72133b957aff177bbd14ee6ce467df90a73df20332d6e17dc970b72cfaee"
+        },
+        {
+          "path": "plugins/claude-code/src/client/ClaudeCodeAction.tsx",
+          "size": 7719,
+          "sha256": "ae6c604e66ab46bd3708ea716a1d9117aa0d12cb83559dcfafb37c9f9735bf98"
+        },
+        {
+          "path": "plugins/claude-code/src/client/ClaudeCodeSettingsSection.module.css",
+          "size": 3155,
+          "sha256": "5c1bd62c3cd53e3e4392c6dcab64b16ae2e5aa0c5fac1f382aa81785d7233da1"
+        },
+        {
+          "path": "plugins/claude-code/src/client/ClaudeCodeSettingsSection.tsx",
+          "size": 12010,
+          "sha256": "ddc3dd93a3368bb8c557815f198a978a6a6da53bd329a8ff3f597b45503cf248"
+        },
+        {
+          "path": "plugins/claude-code/src/client/ClaudePermissionSelect.module.css",
+          "size": 1233,
+          "sha256": "b4a459acbb2d4e8a891af05d4d6d787bebbe3f94b58c7923ceff60be40d660e0"
+        },
+        {
+          "path": "plugins/claude-code/src/client/ClaudePermissionSelect.tsx",
+          "size": 5247,
+          "sha256": "64274592592e02dacf588990342d1ba436674affe8f547012f65316cbbcd808c"
+        },
+        {
+          "path": "plugins/claude-code/src/client/ClaudeTranscript.tsx",
+          "size": 4126,
+          "sha256": "7f7f84ac1280576abb4682265433a9cb60a0f252daf4f65b57f0287f64c79bff"
+        },
+        {
+          "path": "plugins/claude-code/src/client/css-modules.d.ts",
+          "size": 96,
+          "sha256": "78f2c9d100da3ac6935319540dafc72498fe2bae19a635b0dafcccfdff5b4c2d"
+        },
+        {
+          "path": "plugins/claude-code/src/client/index.ts",
+          "size": 26,
+          "sha256": "d4eab2e1ac05ce25e50c53a3ea34409bae754f5571009995ab4abf36f9040ea1"
+        },
+        {
+          "path": "plugins/claude-code/src/client/locales.ts",
+          "size": 11300,
+          "sha256": "b16883fc1501391a1e2a64f8395aaafdbfd0264088ff4fcd5bf4a504a4a6c305"
+        },
+        {
+          "path": "plugins/claude-code/src/client/upstream/GlobalSettingControls.tsx",
+          "size": 7448,
+          "sha256": "d34bc28fbb634b1091f5bea0a3356dec712dfabc1a13a5cff6eab41ecf7dec09"
+        },
+        {
+          "path": "plugins/claude-code/src/client/upstream/markdown-theme.ts",
+          "size": 15526,
+          "sha256": "d9c95e47c11507fcc692bb2f216a05ea578bc8bb65d621ad37dbaacfa9498324"
+        },
+        {
+          "path": "plugins/claude-code/src/client/upstream/settings-styles.ts",
+          "size": 7194,
+          "sha256": "0f4af397c9f2425edbd2effecde8dcfd40f1db139f897b9a123270ce4416ad94"
+        },
+        {
+          "path": "plugins/claude-code/src/client/upstream/upstream-LICENSE",
+          "size": 1101,
+          "sha256": "4714f9aaee0ddcf406377e25afc98a66cd47b3d4c1e5e77b0c524ebbe41f33ab"
+        },
+        {
+          "path": "plugins/claude-code/src/client/view.tsx",
+          "size": 6097,
+          "sha256": "741e650397925df4a993a287da4248e94758ce89700c8b52d74a4302faba1946"
+        },
+        {
+          "path": "plugins/claude-code/src/host/cli.ts",
+          "size": 6894,
+          "sha256": "618ce00ec18cd316586cb810e284c10bdc467744b4e43429df859bac8350ecbf"
+        },
+        {
+          "path": "plugins/claude-code/src/host/diagnostic.ts",
+          "size": 667,
+          "sha256": "a7aff584a180a996b6b39a1779eb257610d2cd0bb71dc7622d2ca207af4d62f0"
+        },
+        {
+          "path": "plugins/claude-code/src/host/environment.ts",
+          "size": 582,
+          "sha256": "aab8c507200da3eba9db6733b4650a44ed12a19dc41c73fad7c7ea9265786b88"
+        },
+        {
+          "path": "plugins/claude-code/src/host/index.ts",
+          "size": 75797,
+          "sha256": "0ee07eeff10aa44f0bfe280354eda8a14d549045d26a7fe1039488608148d261"
+        },
+        {
+          "path": "plugins/claude-code/src/host/mcp-launcher.ts",
+          "size": 6888,
+          "sha256": "738c8fcae7f3e18efe90352005a486dda319693493f3ec15883cb38dfd1771e8"
+        },
+        {
+          "path": "plugins/claude-code/src/host/permission-mode.ts",
+          "size": 5348,
+          "sha256": "1c84e87c845bea1bed6833b88978f624634a4d56971ca729f46f4a4e2dd7c941"
+        },
+        {
+          "path": "plugins/claude-code/src/host/projection.ts",
+          "size": 14574,
+          "sha256": "a80cb128a3eb96182d0ceb7347b1b91bfbd1b8add4b66a5f83f2c9216ced722f"
+        },
+        {
+          "path": "plugins/claude-code/src/host/resource-status.ts",
+          "size": 1668,
+          "sha256": "e249291d04c4c74e88111d671663ef81df6559c7560bfbe9ea888d7fd87ac9d3"
+        },
+        {
+          "path": "plugins/claude-code/src/host/route.ts",
+          "size": 6321,
+          "sha256": "a2a662dd2509eb196e28244afb497d62d451cb1d7d3e1d10270cb02416bb6229"
+        },
+        {
+          "path": "plugins/claude-code/src/host/runtime.ts",
+          "size": 30192,
+          "sha256": "8613b778e9d8ed62bd28dfbe68a33f1245e0f7e77ccdd5fe215ec7bea3f6138c"
+        },
+        {
+          "path": "plugins/claude-code/src/host/sdk-driver.ts",
+          "size": 12346,
+          "sha256": "7ffbf4f49f55dac1c68bb4cd413d487d37da23b093220086711ed2eb5b80b8ab"
+        },
+        {
+          "path": "plugins/claude-code/src/host/session-binding.ts",
+          "size": 4874,
+          "sha256": "3399abbe2abda0fc66491ef4dfb394ec9c4733fedf10a66977167041b2b92f37"
+        },
+        {
+          "path": "plugins/claude-code/src/host/subagent-tool.ts",
+          "size": 2573,
+          "sha256": "4e3e9a42c694c265d7a5f4c7fd51bfbefbbb7236009aea5b06944e27fc448d8c"
+        },
+        {
+          "path": "plugins/claude-code/src/host/tool-journal.ts",
+          "size": 1866,
+          "sha256": "7d3532e5afe6c5134a9dd0db950517fc13427eace9e03cddba51f3ebc25622df"
+        },
+        {
+          "path": "plugins/claude-code/src/shared/types.ts",
+          "size": 3832,
+          "sha256": "12bd9fca394c4450b4f715c69cb872fc00fe884d830cf2f60359a54a583d7a92"
+        },
+        {
+          "path": "plugins/claude-code/test/cli.spec.ts",
+          "size": 3492,
+          "sha256": "7743bb192430e4c9a387775104d838fc53bbaed8813e11bfe1c7bdb65a1a2000"
+        },
+        {
+          "path": "plugins/claude-code/test/client.spec.tsx",
+          "size": 13499,
+          "sha256": "f7b42b2c761b5fc85003ff2d84821290c1ec7ab2ed22a899f3c59bbb92a2065e"
+        },
+        {
+          "path": "plugins/claude-code/test/diagnostic.spec.ts",
+          "size": 630,
+          "sha256": "25d442c0476144917620c52d96ac9a78c9f08f192e6f1f031d6ce797f860b46f"
+        },
+        {
+          "path": "plugins/claude-code/test/environment.spec.ts",
+          "size": 1590,
+          "sha256": "489cbcfa39b966b991d53de8401999d25cfeb727e02a25cdbd0b867373aeaf16"
+        },
+        {
+          "path": "plugins/claude-code/test/host.spec.ts",
+          "size": 53509,
+          "sha256": "4be70a7f396e31ac8c08df218c6781a203feffc15a6c2c50ba7940b89feb1b0a"
+        },
+        {
+          "path": "plugins/claude-code/test/mcp-launcher.spec.ts",
+          "size": 9661,
+          "sha256": "d2fedd59d12de657a30ab80f6d5dcbf7e8cbd2cddbb7862035f49ff0e4a0af76"
+        },
+        {
+          "path": "plugins/claude-code/test/projection.spec.ts",
+          "size": 19912,
+          "sha256": "5539f77de0532ff0c2de12dd1a1664e3e6627f73b19bab00bf619603773a8c16"
+        },
+        {
+          "path": "plugins/claude-code/test/route.spec.ts",
+          "size": 12895,
+          "sha256": "ce9bb743bdd4829c61bd7a7a824e5f787576a442b90245f0280932dd092f5897"
+        },
+        {
+          "path": "plugins/claude-code/test/runtime.spec.ts",
+          "size": 26467,
+          "sha256": "d78943196ed43fcd1a29e9df3cb555ab372294c9a3a90f62c22ac40ea5a129e3"
+        },
+        {
+          "path": "plugins/claude-code/test/sdk-driver.spec.ts",
+          "size": 15095,
+          "sha256": "6e1001f0f6a574d615226ce3b2f303d8a6a977fbacfdf007ab4a031a98ceb82a"
+        },
+        {
+          "path": "plugins/claude-code/test/settings-section.spec.tsx",
+          "size": 10995,
+          "sha256": "23c0bc942ad15013b22fc5f2942e5659a4bc62c694d6fcefdf7c55b4a8e7675d"
+        },
+        {
+          "path": "plugins/claude-code/test/subagent-tool.spec.ts",
+          "size": 6241,
+          "sha256": "a00f2563fd82faa00aaf890cceb66792e3e79d4da8352630c3757e513a04e97e"
+        },
+        {
+          "path": "plugins/claude-code/test/tool-journal.spec.ts",
+          "size": 2484,
+          "sha256": "25d91c1cb546ef9d94feb2ba7b54717baf9ff85fd2415e5e1fc6f7eeecf3a089"
+        },
+        {
+          "path": "plugins/claude-code/test/transcript-persistence.spec.ts",
+          "size": 2730,
+          "sha256": "ddd1003e3cf6c495e4c1009df7ba45095b36c7ff14d5127739e093699ec15cf4"
+        },
+        {
+          "path": "plugins/claude-code/test/transcript.spec.tsx",
+          "size": 3338,
+          "sha256": "46d665a34cba1dca533c46ac098afd56c4fdbb49d197f9da9ae43f703fa84756"
+        },
+        {
+          "path": "plugins/claude-code/tsconfig.client.json",
+          "size": 108,
+          "sha256": "fdcc145d975e93424f4f85facc080688d164cbcfe1beca679b65abd16e7e030d"
+        },
+        {
+          "path": "plugins/claude-code/tsconfig.host.json",
+          "size": 104,
+          "sha256": "ad102a7d79b2fd6ceea3e4e664ecf9410cd30d5d2d343043984786b7aa1f8770"
+        },
+        {
+          "path": "plugins/claude-code/tsconfig.json",
+          "size": 142,
+          "sha256": "ad1b25d36ea100440140e543e2a2af188178934da74eadce1b27ef14e91b335e"
+        },
+        {
+          "path": "plugins/claude-code/tsdown.config.ts",
+          "size": 228,
+          "sha256": "874a32f812404333a0c74d7d31adc11e2dc78d371d9707bddc6a14df525a9195"
+        },
+        {
+          "path": "plugins/claude-code/zerowall.plugin.json",
+          "size": 1264,
+          "sha256": "a0a631750ca7e393b6445c120220c787f424286321b937583c3b8ed1d175d3c8"
+        },
+        {
+          "path": "plugins/dsh-bundle-science/dsh.bundle.patch.yml",
+          "size": 2451,
+          "sha256": "9ef1a730f0b845d73eefe4855bded5d2b0eed3e80534d3b3770b9106e54b17ba"
+        },
+        {
+          "path": "plugins/dsh-bundle-science/package.json",
+          "size": 2699,
+          "sha256": "e9f0fb64f392b3388a077eac4efe81908bb46940db13b7c59eec2e2a2fb012ee"
+        },
+        {
+          "path": "plugins/environment/package.json",
+          "size": 7541,
+          "sha256": "e4aadded119e628dbe32def548c147bd440609980b3cde88042e8a0f893a1e8e"
+        },
+        {
+          "path": "plugins/environment/src/client/index.ts",
+          "size": 3465,
+          "sha256": "0c250430aaefaf8e4d19a499fa9d8e0e01b2aaa8c3bd40573f7d9155f8fce15d"
+        },
+        {
+          "path": "plugins/environment/src/client/section.tsx",
+          "size": 28715,
+          "sha256": "a6accf1daa2d150e61b3aa3c1f14a68da553a2948e209cd675fd31ed168f47b5"
+        },
+        {
+          "path": "plugins/environment/test/client.spec.tsx",
+          "size": 13074,
+          "sha256": "00ddcaf70c411cd10dd1e6bc94bf02a8bf7b1e0050679a8839dfd0dbebe67381"
+        },
+        {
+          "path": "plugins/environment/zerowall.plugin.json",
+          "size": 727,
+          "sha256": "833960ddcd0a83e3701e5e40f63260bf560f1d7fc54c357f07847d35a7c79408"
+        },
+        {
+          "path": "plugins/reviewer/package.json",
+          "size": 7366,
+          "sha256": "17c3395965fe24a7a4a52407b1d9b022f0bbb7d38d2e05d78f554c128f8da4b5"
+        },
+        {
+          "path": "plugins/reviewer/src/client/view.tsx",
+          "size": 853,
+          "sha256": "b91285f1a8faf539448c5b288e8355eecfd25a84ed1d5969f79933b51414a784"
+        },
+        {
+          "path": "plugins/reviewer/src/host/index.ts",
+          "size": 23923,
+          "sha256": "0239f5017b326b85b122eddc7e9355543b102ec237bda0fd9ad2a1dc898018de"
+        },
+        {
+          "path": "plugins/reviewer/zerowall.plugin.json",
+          "size": 621,
+          "sha256": "40177cb7c5dfb776bf9de1044ecac92db9558ae2a157e741de5b9f2b5b566bb2"
+        },
+        {
+          "path": "pnpm-lock.yaml",
+          "size": 1626354,
+          "sha256": "760713c3510dc455138ef840eadc6ab50ec19a58fb1c631cd80712f178399b2b"
+        },
+        {
+          "path": "resources/extensions/skills/gpt-image-generator/SKILL.md",
+          "size": 9502,
+          "sha256": "7a5e8c9bdf3da9a833e4ba5daa3336d5eaf4609674c1fe3086652ed5b2498df1"
+        },
+        {
+          "path": "tools/dsh/inventory.mjs",
+          "size": 9596,
+          "sha256": "36dd91450a44fd87b441f3b1d4a727ed363493ac6226caeb8c87de720ac56d8d"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.mjs",
+          "size": 9131,
+          "sha256": "28f7288be9d4ec8c3518f78356167594ea6573b1325014b2e3382b8e6e489b33"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.test.mjs",
+          "size": 12774,
+          "sha256": "ab791e0fe69df5aaf0c617e234d81eb62fef3172d1b0adf089178c849f337df3"
+        },
+        {
+          "path": "tools/plugins/export-source-repository.mjs",
+          "size": 7887,
+          "sha256": "04c6813261bd6fe30a0cfd6e4f7e193b512477fe06e7b0d6631364b15fb2072d"
+        },
+        {
+          "path": "tools/plugins/generate-workspaces.mjs",
+          "size": 29408,
+          "sha256": "73027e324de86260ff70b8cddc8e5ced865c3b50c93d0769a8734da46fd21223"
+        }
+      ],
+      "removed": [],
+      "manifestSha256": "ccf8865a290cae1bf042ef5bbaa9e2a426d3b83b19aaea067f6d7235f72fab4b",
+      "sourceWhitespaceNormalization": [
+        {
+          "path": "plugins/claude-code/src/client/upstream/GlobalSettingControls.tsx",
+          "change": "Remove one inherited blank line at EOF for the source repository whitespace contract; executable content unchanged."
+        }
+      ]
+    }
+  ],
+  "independentResourceUpdates": [
+    {
+      "id": "@zerowallscience/plugin-claude-code",
+      "version": "0.2.6",
+      "sha256": "c647c9301f5b9f7ee4ee24273ee508525846298295a1feaeda55488c0baf0c32",
+      "size": 672017,
+      "catalogPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-catalog.json",
+      "pointerPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-latest.json"
+    },
+    {
+      "id": "@zerowallscience/plugin-environment",
+      "version": "0.1.17",
+      "sha256": "7e0776acfbf54c7423bcb8a59605a92d1381815a77393657b9a87f83c2246d8d",
+      "size": 238576,
+      "catalogPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-catalog.json",
+      "pointerPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-latest.json"
+    },
+    {
+      "id": "@zerowallscience/plugin-reviewer",
+      "version": "0.1.8",
+      "sha256": "48a4bb6409fa0b20a009f36ee3aea2c006c39d5222ea263e0407e7b70062e570",
+      "size": 42900,
+      "catalogPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-catalog.json",
+      "pointerPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-latest.json"
+    },
+    {
+      "id": "@zerowallscience/dsh-bundle-science",
+      "version": "0.1.21",
+      "sha256": "929af1a88f6204957940430f58b95e3cf0e77d403d171078d04d06ec9b290525",
+      "size": 1215,
+      "catalogPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-catalog.json",
+      "pointerPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-latest.json"
+    },
+    {
+      "id": "@zerowallscience/plugin-mcp",
+      "version": "0.2.18",
+      "sha256": "63d7667aae988c308c70f50bda7211483c6240083f50afc1168b140adca843fe",
+      "size": 371775,
+      "catalogPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-catalog.json",
+      "pointerPath": "catalogs/independent/claude-fusion-20261026-1145/plugin-latest.json"
+    }
+  ],
+  "relatedSkillSourceUpdates": [
+    {
+      "id": "gpt-image-generator",
+      "version": "0.1.9",
+      "sha256": "2997bea8f7144169571f3aba3c34106f10792e1f962138343c4a86b7b23c443c",
+      "size": 5272,
+      "sourceCommit": "987c9c2318bb3b682cc08c8e810f837f58cc1f0a",
+      "catalogPath": "catalogs/independent/claude-fusion-20261026-1145/skill-catalog.json",
+      "pointerPath": "catalogs/independent/claude-fusion-20261026-1145/skill-latest.json"
     }
   ]
 }

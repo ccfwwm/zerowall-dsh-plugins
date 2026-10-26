@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "kind": "pointer",
+  "resourceKind": "plugin",
+  "localOnly": false,
+  "catalog": {
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/plugin/8.4.9/claude-ui-20261026-1145-1792986196712/catalog.json",
+    "sha256": "c9fdc1fcd0494c94238312270cbaf573add12e61dfaf0f5b6747fb09207e94e0",
+    "size": 74090
+  },
+  "signature": {
+    "algorithm": "ed25519",
+    "keyId": "stable-4",
+    "value": "9HRNf88acnhzAnOHOn1WNGZmzJrexL3ntnpIyIKh/rGrN6Fc4Nmv7A0HJNg/x9xZ6yp0GGL+vaBnEsKpP6xGDw=="
+  }
+}
