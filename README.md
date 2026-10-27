@@ -72,6 +72,6 @@ pnpm plugins:test
 
 ## 验证与发布边界
 
-`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `368af01087d5e04ecf36c4b64bc8a15b43509e20`，DSH 为 `cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
+`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `dacf1a08fa81d37841d4acfc9b7ae1b31d506d81`，DSH 为 `cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
 
 当 `sourceOnly: true` 时，`pnpm source:verify` 仅检查插件源码路径/链接与必要源码文件，不验证历史 catalog 的签名、线上资源版本、构建包或发布状态。完整导出模式会核对其资源快照的签名和版本，但仍不能代替类型检查、插件测试、真实安装/运行与公网下载验证。发布另需明确授权和独立收据。
