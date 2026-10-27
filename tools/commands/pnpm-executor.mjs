@@ -40,10 +40,12 @@ if (mutating && (fixedRoots || activeProfile)) {
     const outcome = await runProfilePnpmTransaction({ profile: process.cwd(), args, run, signal: cancellation.signal,
       lifecycleId: process.env.ZEROWALL_PROFILE_TRANSACTION_ID,
       ownerPid: process.env.ZEROWALL_PROFILE_TRANSACTION_OWNER ? Number(process.env.ZEROWALL_PROFILE_TRANSACTION_OWNER) : undefined,
+      resourceCandidateId: process.env.ZEROWALL_RESOURCE_CANDIDATE_ID,
+      report: process.env.ZEROWALL_RESOURCE_CANDIDATE_ID ? progress => process.stdout.write('ZEROWALL_RESOURCE_PROGRESS ' + JSON.stringify(progress) + '\n') : undefined,
       ownerToken: process.env.ZEROWALL_PROFILE_TRANSACTION_OWNER_TOKEN })
     process.exitCode = outcome.code
   } catch (error) {
-    if (targetLocked(error) && basename(process.cwd()) === 'web') {
+    if (targetLocked(error) && basename(process.cwd()) === 'web' && !process.env.ZEROWALL_RESOURCE_CANDIDATE_ID) {
       const pending = await enqueuePendingPlugin(resolve(process.cwd(), '../..'), { method: 'mutate', args: [args] })
       process.stderr.write(`ZeroWall: PLUGIN_RESTART_REQUIRED ${pending.pendingId}: ${pending.reason}\n`)
     } else process.stderr.write(`ZeroWall: ${error.message}\n`)

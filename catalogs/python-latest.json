@@ -4,13 +4,13 @@
   "resourceKind": "python",
   "localOnly": false,
   "catalog": {
-    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/python/8.4.8/1792906351287-27a36119-1792912355880/catalog.json",
-    "sha256": "b2d5eac014599068c707f47f703b197c5e10d2086c1fdf03bf27861a53a02cda",
-    "size": 6229
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/python/8.4.12/1793117311822-be27ab35-1793119647444/catalog.json",
+    "sha256": "474e9dbcbaa959dfa6e70311fc21af2908d876c024a7d9ac47e84894bb12f1b7",
+    "size": 6236
   },
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "j5a5DDH2P9P44jYJaw60C/dsSAkxU7/085YyAwWoN3ELtweTOohwPYSJbJNV9ZFKssQFXsp+YdJS0yYjwshpBg=="
+    "value": "KkK4pTdtJZT2pMwUFqITK7hBjjC09hlMwez+rbLFRILA3JmWxOWkQit6mP6YU4ah0pMM12O9O8GlkAGvrMz9Cg=="
   }
 }

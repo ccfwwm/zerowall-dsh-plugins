@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "kind": "python",
-  "applicationVersion": "8.4.8",
+  "applicationVersion": "8.4.12",
   "localOnly": false,
-  "generatedAt": "2026-10-25T07:12:35.940Z",
+  "generatedAt": "2026-10-27T16:47:34.471Z",
   "resources": [
     {
       "id": "science-dependencies",
       "version": "8.3.0",
       "kind": "python",
-      "applicationVersion": "8.4.8",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -36,14 +36,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "6CoEeS3HKH1fQbAqQ97i8NBYynCC58CV+5dSYzsR+skEMaUnIpo6+kkGFqLMawHeK7MHjI7aB/P1q3Cu7hNNDA=="
+        "value": "nXzvKNZ23MFoBxiyBBcLZdzaMTkrfUXj44GSTm7py015HExltwQHxtVGrfksPW+XutwSgrjwRHJuKgmF/UWODg=="
       }
     },
     {
       "id": "fallback-wheel-flowio",
       "version": "1.4.0",
       "kind": "python",
-      "applicationVersion": "8.4.8",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -70,14 +70,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Heg3QYWdCCTa5zRfQDsVrevTNx6Owc46cIKC1vCcFc2HC7ZugtYCJiBRgqywg21g8XXq484cdSgS86KatYApAw=="
+        "value": "L2/VJmzOAkJAyrt2T3Xeo4Jdg2oYYWHGJkuf77+ndoMzUIY7KbhAqg4v2faPhLdKCb33uqtdxtWwJZLF+ckFAA=="
       }
     },
     {
       "id": "fallback-wheel-bibtexparser",
       "version": "1.4.4",
       "kind": "python",
-      "applicationVersion": "8.4.8",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -104,14 +104,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qsAlIcRNFPAe1muu+yqtkIXKML1Li5n7sPz8G4npDMZfg721em0TqPFUfVQuF70AMbbAx6y6SKJ42gddLjoJAw=="
+        "value": "kumKUb34Daql7MBHQvRnPmeVKh2D00P5BlOxACMt+NAV3tSJBlZtusAGY4bcriW3yFzGnVrs8jxgzEeNnLHKCA=="
       }
     },
     {
       "id": "fallback-wheel-autograd-gamma",
       "version": "0.5.0",
       "kind": "python",
-      "applicationVersion": "8.4.8",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -138,14 +138,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "pYaxf6fSgBegvbhUPL9knJT2OMT81ySbDX14hx/Q4yrFlSh6a0h/uEHoyCUM2MJ9LX9R7ihVtkWxyKsNToenBQ=="
+        "value": "cN8aa0iF9+3cPXdnd07rxDqtfbkUSUenw9UM2VbQSapNOK1SA+feKRtI3W13UMerXNiItyoek+KTBpFzvuZHBQ=="
       }
     },
     {
       "id": "fallback-wheel-docopt",
       "version": "0.6.2",
       "kind": "python",
-      "applicationVersion": "8.4.8",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -172,14 +172,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "oikSLHxG1+o6zSd0S77RP6YdwUk2qbGoYla5uAh0X6q8IrMKLCs8nHPJ+ApyuDJD9AapYKK8d1joKYlJCjskBg=="
+        "value": "TwR0KZbOEZ3zyq51Jyp0+PTFgbj8A/nDVq+7hl4EnW09ax4BJw07dWrtEFXGEJPQwPPXWzgmQ4eZwGrg4eF3CA=="
       }
     },
     {
       "id": "fallback-wheel-nglview",
       "version": "4.0.1",
       "kind": "python",
-      "applicationVersion": "8.4.8",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -206,13 +206,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "qrTzfNepIP9rVJf7fAIreF0MDFi9icudtspegK9DqbgfF4wX7w9VH031oS/Y52GZlT8Glsif+8E4Ce/xV1Q/BQ=="
+        "value": "efeuvfIbe+0uNQ4Pcu4hGa4kcyJfeTukyK6mmigw8sXgBIMdEil2xhJpnY8HbOg/oBQPGEj3K8SxMMwviFf1Cg=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "GGTOO+HnAbIjpiWRDnIb1jFNkP1ZBSjY6jowTcKnzpvBU7jVv4wiNUQJm6uVwViwVGvvn/5KvT9ZfXaah7ZvDg=="
+    "value": "/ENiAOlLg5D2nFFKoGBO9Wj2VfPre4poFFwuqlXQePh8yQYJInu3x8rgg830e35gghgFkywNotTDFsJCTIeFAw=="
   }
 }

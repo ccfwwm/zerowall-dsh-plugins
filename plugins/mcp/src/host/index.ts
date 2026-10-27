@@ -1,6 +1,8 @@
 import { configuredPythonRuntimeRoot } from '../../../python/src/shared/runtime-path.js'
 import { ManagedGenerations } from './managed-generations.js'
-import { registerResearchWorkflow } from './research-workflow.js'
+import { normalizeJsonArguments, registerResearchWorkflow } from './research-workflow.js'
+import { isBuiltInMcpConnection } from '../shared/connections.js'
+import { callToolUniverse, resolveToolUniverseCredentials } from './tooluniverse-transport.js'
 import type { Context, Fiber } from '@deepseek-ai/cordis'
 import * as McpClient from '@deepseek-ai/dsh-mcp-client'
 import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
@@ -283,7 +285,7 @@ export class ZeroWallMcpService extends TypertRemoteService {
         const record = service.projects().listMcpServers().find(item => item.serverName === server)
         const output: Record<string, string> = {}
         for (const [name, ref] of Object.entries(record?.envRefs ?? {})) {
-          if (!/^[A-Z][A-Z0-9_]{0,99}$/u.test(name) || /^(?:BIOMNI_|R_PLATFORM_|LD_|PYTHON|ZERO|XDG_|LC_)/u.test(name)
+          if (!/^[A-Z][A-Z0-9_]{0,99}$/u.test(name) || /^(?:BIOMNI_|OMICVERSE_|TOOLUNIVERSE_|R_PLATFORM_|LD_|PYTHON|ZERO|XDG_|LC_)/u.test(name)
             || ['PATH', 'HOME', 'TMPDIR', 'TMP', 'TEMP', 'BASH_ENV', 'ENV', 'SHELLOPTS', 'NODE_OPTIONS', 'LLM_SOURCE'].includes(name)) throw new Error(`INVALID_RUNTIME_ENV: ${name}`)
           const key = `${ENVIRONMENT_SECRET_PREFIX}${ref.toLowerCase()}`
           const value = await service.secrets.get(key) ?? process.env[ref]
@@ -871,7 +873,7 @@ export class ZeroWallMcpService extends TypertRemoteService {
   async workflowRequest(action: string, args: unknown, exec: any): Promise<unknown> {
     await this.ensureConnected('rmcp')
     const target = 'mcp__rmcp__r_runtime'
-    const result = await this.ctx.tools.execute({ callId: ToolCallId(`${exec.callId}:${action}`), name: target, arguments: { action, arguments: args }, agent: exec.agent, parent: exec.token, rootCallId: exec.rootCallId ?? exec.callId, signal: exec.signal })
+    const result = await this.ctx.tools.execute({ callId: ToolCallId(`${exec.callId}:${action}`), name: target, arguments: { action, arguments: normalizeJsonArguments(args) }, agent: exec.agent, parent: exec.token, rootCallId: exec.rootCallId ?? exec.callId, signal: exec.signal })
     if (result.isError) throw new Error(result.content.filter(block => block.type === 'text').map(block => block.text).join('\n'))
     return this.compactPayload(result, target)
   }
@@ -925,14 +927,26 @@ export class ZeroWallMcpService extends TypertRemoteService {
   }
 
   async executeCompactCapability(id: string, args: unknown, exec: any): Promise<{ target: string; content: ContentBlock[]; value: unknown }> {
+    const safeArgs = normalizeJsonArguments(args ?? {})
     const [record] = await this.searchCompactCapabilities('', id, 1, exec)
     if (record === undefined) throw new Error(`UNKNOWN_CAPABILITY: ${id}`)
+    if (record.backend === 'rmcp' && (id === 'tooluniverse.run.tool' || id.startsWith('tooluniverse.tool.'))) {
+      const connection = this.projects().listMcpServers().find(item => item.serverName === 'rmcp')
+      if (!connection) throw new Error('RMCP_CONNECTION_MISSING')
+      const credentials = await resolveToolUniverseCredentials(connection, async ref => await this.secrets.get(`${ENVIRONMENT_SECRET_PREFIX}${ref.toLowerCase()}`) ?? process.env[ref])
+      const authorization = await this.secrets.get(RDATALINUX_R_MCP_AUTHORIZATION_CREDENTIAL) ?? process.env[RDATALINUX_R_MCP_AUTHORIZATION_ENV]
+      if (!authorization?.trim()) throw new Error('RMCP_AUTHORIZATION_MISSING')
+      const result = await callToolUniverse({ url: connection.url!, authorization, operation: id, arguments: safeArgs, credentials, signal: exec.signal })
+      const content: ContentBlock[] = result.content.filter(item => item.type === 'text').map(item => ({ type: 'text', text: item.text }))
+      if (result.isError) throw new Error(content.map(item => item.type === 'text' ? item.text : '').join('\n') || 'ToolUniverse submission failed')
+      return { target: 'mcp__rmcp__tooluniverse_execute', content, value: result }
+    }
     const target = record.backend === 'bio'
       ? `mcp__zerowall_managed_bio_tools__${record.publicTool}`
       : `mcp__rmcp__${record.publicTool}`
     const argumentsValue = record.backend === 'bio'
-      ? { capability_id: id, arguments: args ?? {} }
-      : { action: id, arguments: args ?? {} }
+      ? { capability_id: id, arguments: safeArgs }
+      : { action: id, arguments: safeArgs }
     const result = await this.ctx.tools.execute({
       callId: ToolCallId(`${exec.callId}:compact:${id}`),
       name: target,
@@ -956,7 +970,7 @@ export class ZeroWallMcpService extends TypertRemoteService {
   @Remote('create')
   create(input: CreateMcpServerRequest): Promise<McpServerDto> {
     return this.exclusive(async () => {
-      if (isManagedMcpName(input.serverName)) throw new Error('This connection is managed in Environment settings.')
+      if (isBuiltInMcpConnection(input.serverName)) throw new Error('This connection is managed in Environment settings.')
       const record = this.projects().createMcpServer(input as CreateMcpServerInput)
       await this.reconcile(record)
       return this.dto(record)
@@ -967,10 +981,11 @@ export class ZeroWallMcpService extends TypertRemoteService {
   update(input: UpdateMcpServerRequest): Promise<McpServerDto> {
     return this.exclusive(async () => {
       const existing = this.projects().listMcpServers().find(record => record.id === input.id)
-      if (existing !== undefined && isManagedMcpName(existing.serverName)) {
+      if (existing !== undefined && isBuiltInMcpConnection(existing.serverName)) {
         const allowed = new Set(['enabled', 'name', 'toolCallTimeoutMs', 'reconnect', 'failOnStartupError'])
+        if (existing.serverName === 'rmcp') allowed.add('envRefs')
         if (Object.keys(input.changes).some(key => !allowed.has(key))) throw new Error('Managed connection fields are read-only. Use Environment settings.')
-      } else if (input.changes.serverName !== undefined && isManagedMcpName(input.changes.serverName)) {
+      } else if (input.changes.serverName !== undefined && isBuiltInMcpConnection(input.changes.serverName)) {
         throw new Error('Managed connection names are reserved.')
       }
       const record = this.projects().updateMcpServer(input.id, input.changes as UpdateMcpServerInput)
@@ -982,6 +997,10 @@ export class ZeroWallMcpService extends TypertRemoteService {
   @Remote('deleteConnection')
   deleteConnection(id: string): Promise<void> {
     return this.exclusive(async () => {
+      const record = this.projects().getMcpServer(id)
+      if (record !== undefined && isBuiltInMcpConnection(record.serverName)) {
+        throw new Error('Built-in MCP connections cannot be deleted. Disable the connection instead.')
+      }
       await this.disposeOne(id)
       this.projects().deleteMcpServer(id)
       this.statuses.delete(id)
@@ -1219,17 +1238,15 @@ export class ZeroWallMcpService extends TypertRemoteService {
         if (server.serverName === 'zerowall_filesystem') projects.deleteMcpServer(server.id)
       }
     }
-    if (markerVersion < 4) {
-      // Older builds persisted the managed RMCP record with an HTTP/IP URL.
-      // Match the reserved record and credential reference instead of keeping
-      // the retired address in source or rewriting arbitrary user servers.
-      for (const server of projects.listMcpServers()) {
-        if (server.serverName === RDATALINUX_SERVER_NAME
-          && server.transport === 'streamable-http'
-          && server.headerRefs?.Authorization === RDATALINUX_R_MCP_AUTHORIZATION_ENV
-          && server.url !== RDATALINUX_R_MCP_URL) {
-          projects.updateMcpServer(server.id, { url: RDATALINUX_R_MCP_URL })
-        }
+    // RMCP is product-owned. Normalize its endpoint on every boot so an
+    // existing profile that already passed the old migration marker cannot
+    // continue calling the retired IP address. User-created MCP records keep
+    // their chosen endpoints because only the reserved rmcp name is managed.
+    for (const server of projects.listMcpServers()) {
+      if (server.serverName === RDATALINUX_SERVER_NAME
+        && server.transport === 'streamable-http'
+        && server.url !== RDATALINUX_R_MCP_URL) {
+        projects.updateMcpServer(server.id, { url: RDATALINUX_R_MCP_URL })
       }
     }
     if (deferDefaultConnections && markerVersion < 6 && process.env.ZEROWALL_REENABLE_DEFAULT_MCP_MIGRATION === '1') {
@@ -2035,9 +2052,3 @@ export function apply(ctx: Context): void {
 }
 
 export default { apply }
-
-
-
-function isManagedMcpName(name: string): boolean {
-  return ['gpsadb', 'rmcp', 'huagongshe', 'zerowall_managed_scimaster', 'zerowall_managed_bio_tools', 'zerowall_managed_ketcher'].includes(name)
-}

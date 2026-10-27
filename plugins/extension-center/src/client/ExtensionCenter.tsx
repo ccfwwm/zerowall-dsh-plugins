@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Boxes, CheckCircle2, CircleHelp, Download, Pin, PinOff, Power, RefreshCw, RotateCcw, Search, Trash2, Upload, Wrench } from 'lucide-react'
+import { Boxes, CheckCircle2, CircleHelp, Download, Pin, PinOff, Power, RefreshCw, Search, Trash2, Upload, Wrench } from 'lucide-react'
 import type { PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import type { PythonLayer, PythonLayerCheck } from '@zerowallscience/plugin-base/client'
 import { NS } from './locales.js'
@@ -14,7 +14,7 @@ type ResourceKindOnly = Exclude<Kind, 'python'>
 type Resource = ResourceCheckItem & { pythonLayer?: PythonLayer; capabilityId?: string; pythonInstalled?: boolean; pythonNeedsInstall?: boolean; packageCount?: number; installedPackageCount?: number; pendingPackageCount?: number; pythonAvailable?: boolean }
 type CheckResult = ResourceCheckResult
 type ResourceFilter = 'all' | 'updates' | 'installed' | 'disabled' | 'missing'
-type Job = { taskId: string; kind: ResourceKindOnly; id?: string; action: string; status: 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelled' | 'pending-restart'; phase?: string; progress?: number; retries?: number; error?: string; createdAt?: string; updatedAt?: string; oldVersion?: string; newVersion?: string }
+type Job = { taskId: string; kind: ResourceKindOnly; id?: string; action: string; status: 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelled' | 'pending-restart'; phase?: string; progress?: number; retries?: number; canCancel?: boolean; cancelRequested?: boolean; currentResource?: string; completed?: number; total?: number; lastActivityAt?: string; logLines?: string[]; error?: string; createdAt?: string; updatedAt?: string; oldVersion?: string; newVersion?: string }
 type PythonJob = { taskId: string; layer: PythonLayer; state: 'queued' | 'running' | 'succeeded' | 'partial' | 'failed' | 'interrupted' | 'cancelled'; progress?: number; currentPackage?: string; error?: string; message?: string }
 type DesktopResources = NonNullable<NonNullable<Window['zerowallDesktop']>['resources']>
 type DesktopPythonLayers = NonNullable<NonNullable<Window['zerowallDesktop']>['pythonLayers']>
@@ -313,7 +313,9 @@ export function ExtensionCenter({ t }: Props): JSX.Element {
       rememberOperation()
       // The Extension Center itself can be in this batch. Finish hot-refresh
       // resources first so its single Host activation cannot interrupt them.
-      for (const update of planned.filter(update => update.kind !== 'plugin')) {
+      const skillIds = planned.filter(update => update.kind === 'skill').map(update => update.item.id)
+      if (skillIds.length && api.updateSkills) { const started = await api.updateSkills(skillIds); await waitForJob(started.taskId) }
+      for (const update of planned.filter(update => update.kind !== 'plugin' && !(update.kind === 'skill' && api.updateSkills))) {
         if (!alive()) return
         if (update.kind === 'python') { await updatePythonLayer(update.item); continue }
         const started = await api.startJob(update.kind, 'update', update.item.id)
@@ -386,7 +388,6 @@ export function ExtensionCenter({ t }: Props): JSX.Element {
             {item.pythonNeedsInstall && <button type="button" disabled={operationBusy || item.pythonAvailable === false} onClick={() => void run('install', item)} title={t('install')}><Download size={14} aria-hidden="true" />{t('install')}</button>}
             {selectable && !item.pythonNeedsInstall && <button className={css.updateButton} type="button" disabled={operationBusy || checking} onClick={() => void run('update', item)} title={t('update')}><Download size={14} aria-hidden="true" />{t('update')}</button>}
             {kind === 'plugin' && item.managed !== false && isInstalled(item) && <button className={css.iconButton} type="button" disabled={operationBusy} onClick={() => void run(item.pinnedVersion ? 'unpin' : 'pin', item)} title={item.pinnedVersion ? t('unpin') : t('pin')} aria-label={item.pinnedVersion ? t('unpin') : t('pin')}>{item.pinnedVersion ? <PinOff size={14} aria-hidden="true" /> : <Pin size={14} aria-hidden="true" />}</button>}
-            {item.rollbackSupported && item.installedVersion && <button className={css.iconButton} type="button" disabled={operationBusy} onClick={() => void run('rollback', item)} title={t('rollback')} aria-label={t('rollback')}><RotateCcw size={14} aria-hidden="true" /></button>}
             {!item.pythonLayer && item.managed !== false && isInstalled(item) && ['profile', 'bundled', 'disabled'].includes(item.source ?? '') && <button type="button" disabled={operationBusy} onClick={() => void run(item.enabled === false ? 'enable' : 'disable', item)} title={item.enabled === false ? t('enable') : t('disable')} aria-label={item.enabled === false ? t('enable') : t('disable')}><Power size={14} aria-hidden="true" />{item.enabled === false ? t('enable') : t('disable')}</button>}
             {!item.pythonLayer && item.managed !== false && item.source === 'profile' && <button className={css.iconButton} type="button" disabled={operationBusy} onClick={() => void run('remove', item)} title={t('remove')} aria-label={t('remove')}><Trash2 size={14} aria-hidden="true" /></button>}
             {kind === 'mcp' && item.enabled !== false && item.source === 'profile' && <button type="button" disabled={operationBusy} onClick={() => void run('restart', item)} title={t('restartServer')}><RefreshCw size={14} aria-hidden="true" />{t('restartServer')}</button>}
@@ -402,12 +403,13 @@ export function ExtensionCenter({ t }: Props): JSX.Element {
       <h3>{t('tasks')}</h3>
       {jobs.slice(0, 8).map(job => <div className={css.job} key={job.taskId}>
         <div className={css.jobInfo}><strong title={job.id}>{jobName(job)}</strong><div className={css.jobMeta}>{job.oldVersion && <span>{job.oldVersion}{job.newVersion ? ` → ${job.newVersion}` : ''}</span>}{jobTime(job) && <time dateTime={job.updatedAt ?? job.createdAt}>{jobTime(job)}</time>}</div>
+          {job.logLines?.length ? <details className={css.jobError}><summary>{t('taskLogs')}</summary><pre>{job.logLines.join('\n')}</pre></details> : null}
           {job.error && <details className={css.jobError}><summary>{rollbackConflict(job) ? t('rollbackConflict') : t('errorDetails')}</summary><p>{job.error}</p></details>}
         </div>
-        <span>{job.status === 'failed' ? `${jobAction(job)} · ${t('job_failed')}` : t(`job_${job.status}` as 'job_running')}{['queued', 'running'].includes(job.status) ? ` · ${job.progress ?? 0}%` : ''}</span>
+        <span>{job.status === 'failed' ? `${jobAction(job)} · ${t('job_failed')}` : t(`job_${job.status}` as 'job_running')}{['queued', 'running'].includes(job.status) ? ` · ${job.progress ?? 0}%` : ''}{job.phase && ['queued', 'running'].includes(job.status) && <small>{t(({ preparing: 'phase_preparing', downloading: 'phase_downloading', scanning: 'phase_scanning', extracting: 'phase_extracting', copying: 'phase_copying', installing: 'phase_installing', 'verifying-dependencies': 'phase_verifying', snapshot: 'phase_snapshot', applying: 'phase_applying', activating: 'phase_activating', 'health-check': 'phase_health', 'cancellation-requested': 'phase_cancelling' } as const)[job.phase as 'preparing'] ?? 'phase_preparing')}{job.currentResource ? ` · ${job.currentResource}` : ''}{job.total ? ` · ${job.completed ?? 0}/${job.total}` : job.phase === 'scanning' ? ` · ${t('scanCount', { count: job.completed ?? 0 })}` : ''}</small>}</span>
         {(job.status === 'failed' || job.status === 'cancelled') && job.phase !== 'resumed' && job.action !== 'resume-pending' && api?.retryJob && <button type="button" disabled={operationBusy || rollbackConflict(job)} title={rollbackConflict(job) ? t('rollbackConflict') : undefined} aria-label={`${t('retry')} · ${jobName(job)}`} onClick={() => { rememberOperation(); void api.retryJob(job.taskId).then(refreshJobs).catch(error => { setOperationFailed(true); setMessage(String(error)) }) }}>{t('retry')} {jobAction(job)}</button>}
         {job.status === 'pending-restart' && api?.resumeJob && <button type="button" disabled={operationBusy} onClick={() => void resumeJob(job)}>{t('restartAndContinue')}</button>}
-        {(job.status === 'queued' || job.status === 'running' || job.status === 'pending-restart') && api?.cancelJob && <button type="button" disabled={operationBusy} onClick={() => void api.cancelJob(job.taskId).then(refreshJobs).catch(error => { setOperationFailed(true); setMessage(String(error)) })}>{t('cancel')}</button>}
+        {(job.status === 'queued' || job.status === 'running' || job.status === 'pending-restart') && api?.cancelJob && <button type="button" disabled={job.canCancel === false || job.cancelRequested === true} onClick={() => void api.cancelJob(job.taskId).then(refreshJobs).catch(error => { setOperationFailed(true); setMessage(String(error)) })}>{t('cancel')}</button>}
       </div>)}
       {pythonJob && <div className={css.job} key={pythonJob.taskId}><span title={pythonJob.taskId}>{pythonJob.layer}{pythonJob.currentPackage ? ` · ${pythonJob.currentPackage}` : ''}{pythonJob.error && <small>{pythonJob.error}</small>}</span><span>{t(`pythonJob_${pythonJob.state}` as 'pythonJob_running')} · {pythonJob.progress ?? 0}%</span></div>}
       {jobs.length === 0 && !pythonJob && <p className={css.empty}>{t('noTasks')}</p>}

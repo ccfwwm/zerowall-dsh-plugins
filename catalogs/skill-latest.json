@@ -4,13 +4,13 @@
   "resourceKind": "skill",
   "localOnly": false,
   "catalog": {
-    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/skill/8.4.8/1792906351287-27a36119-1792912242623/catalog.json",
-    "sha256": "750850775a50c3d842b6a1e9cc8d18977e92c5500e02e624a993590403c8a6e1",
-    "size": 235662
+    "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/catalogs/skill/8.4.12/1793117311822-be27ab35-1793119647444/catalog.json",
+    "sha256": "39c52cdf8591b50d0ba4dbea5d64265712a12fe0afcd83a275825e56786140a5",
+    "size": 236808
   },
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "6degjGINJn21hVKz80PiC7CXZ5kMXmISX9fIzBPP6pURX3oIAhCpW32k0lMr2exRq4Q4YOJxaMm2LzAspOZ4DQ=="
+    "value": "ZKDRGfYUHrqitnnmR1HjsPvEglWSaigvx0X2qpXFnoy0i6OXd+kgZx+5+Y9iYxvGN+jpGeoxQf6+8y1WPcRRAg=="
   }
 }

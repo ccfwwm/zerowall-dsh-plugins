@@ -7,7 +7,7 @@ export interface McpSkillCapability { name: string; path: string; status: McpSki
 export interface McpSkillAudit { summary: Record<McpSkillDependencyStatus, number>; skills: McpSkillCapability[] }
 export interface PythonEnvironmentIdentity { snapshotId: string; environmentVersion: string; contentRevision: number; pythonVersion: string; localRevision?: number }
 export interface PythonUpdateJob { packageNames?: string[]; taskId: string; kind: string; stage: string; canPause: boolean; targetVersion?: string; receivedBytes?: number; totalBytes?: number; bytesPerSecond?: number; completedFiles?: number; totalFiles?: number; logLines?: string[] }
-export interface PythonDependencyTask { taskId: string; underlyingTaskId?: string; requestId: string; action: 'check_manifest' | 'preview_sync' | 'apply_sync' | 'sync' | 'install_package' | 'install_runtime'; layer: 'core' | 'science' | 'capability'; state: 'queued' | 'running' | 'succeeded' | 'partial' | 'failed' | 'interrupted' | 'cancelled'; stage: string; progress?: number; completedPackages?: number; totalPackages?: number; currentPackage?: string; message?: string; error?: string; logLines: string[]; createdAt: string; updatedAt: string; completedAt?: string; result?: Record<string, any> }
+export interface PythonDependencyTask { taskId: string; underlyingTaskId?: string; requestId: string; action: 'check_manifest' | 'preview_sync' | 'apply_sync' | 'sync' | 'install_package' | 'uninstall_package' | 'install_runtime'; layer: 'core' | 'science' | 'capability'; state: 'queued' | 'running' | 'succeeded' | 'partial' | 'failed' | 'interrupted' | 'cancelled'; stage: string; progress?: number; completedPackages?: number; totalPackages?: number; currentPackage?: string; packageName?: string; message?: string; error?: string; logLines: string[]; createdAt: string; updatedAt: string; completedAt?: string; result?: Record<string, any> }
 export interface PythonPackagePlan { planId: string; snapshotId: string; requested: string[]; changes: Array<{ name: string; from?: string; to: string }>; error?: string }
 export interface McpEnvironmentStatus {
   activeEnvironment?: PythonEnvironmentIdentity
@@ -97,6 +97,7 @@ export interface PythonEnvironmentResponse {
   queued?: boolean
   status?: McpEnvironmentStatus
   inventory?: McpPythonInfo
+  packageCatalog?: { name: string; summary: string; latestVersion: string; versions: string[] }
   /** `sync` only: the changes it is applying, and whether it found anything to do. */
   changes?: Array<{ name: string; from?: string; to: string }>
   upToDate?: boolean
@@ -137,7 +138,7 @@ export interface ResourceCheckItem {
   updateBlocked?: string
 }
 export interface ResourceCheckResult { kind: ResourceKind; checkedAt: string; resources: ResourceCheckItem[]; catalogStatus?: 'checked' | 'unavailable' | 'local' | 'unpublished'; domainAvailable?: boolean; error?: string }
-export interface ResourceJob { taskId: string; kind: ResourceKind; id?: string; action: string; source?: string; status: 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelled' | 'pending-restart'; phase?: string; progress?: number; oldVersion?: string; newVersion?: string; retries?: number; retryOf?: string; cancelRequested?: boolean; error?: string; result?: unknown; createdAt: string; updatedAt: string }
+export interface ResourceJob { taskId: string; kind: ResourceKind; id?: string; action: string; source?: string; status: 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelled' | 'pending-restart'; phase?: string; progress?: number; oldVersion?: string; newVersion?: string; retries?: number; retryOf?: string; cancelRequested?: boolean; canCancel?: boolean; currentResource?: string; completed?: number; total?: number; lastActivityAt?: string; logLines?: string[]; error?: string; result?: unknown; createdAt: string; updatedAt: string }
 export type PythonLayer = 'core' | 'science' | 'capability'
 export interface PythonLayerChange { name: string; from?: string; to: string; required: boolean; capabilities: string[] }
 export interface PythonLayerCheck {
@@ -185,7 +186,7 @@ export interface ZeroWallDesktopApi {
   installMcpPythonPackage?(spec: string): Promise<{ taskId: string }>
   checkMcpPythonPackageUpdates?(names?: string[]): Promise<McpPythonInfo>
   updateMcpPythonPackages?(names?: string[]): Promise<{ taskId: string }>
-  pythonEnvironment?(request: { action: 'status' | 'scan_local' | 'install_runtime' | 'task_status' | 'cancel' | 'check_manifest' | 'preview_sync' | 'apply_sync' | 'sync' | 'install_package' | 'install_runtime' | 'list_packages' | 'configure' | 'diagnose' | 'rollback'; requestId: string; taskId?: string; layer?: 'core' | 'science' | 'capability'; packageSpec?: string; capabilityId?: string; planId?: string; manifestRevision?: string; mirrorUrl?: string; runtimeRoot?: string; expectedRevision?: number; confirm?: boolean }): Promise<PythonEnvironmentResponse>
+  pythonEnvironment?(request: { action: 'status' | 'scan_local' | 'install_runtime' | 'task_status' | 'cancel' | 'check_manifest' | 'preview_sync' | 'apply_sync' | 'sync' | 'install_package' | 'uninstall_package' | 'search_package' | 'check_package_updates' | 'install_runtime' | 'list_packages' | 'configure' | 'diagnose' | 'rollback'; requestId: string; taskId?: string; layer?: 'core' | 'science' | 'capability'; packageSpec?: string; packageName?: string; packageNames?: string[]; query?: string; capabilityId?: string; planId?: string; manifestRevision?: string; mirrorUrl?: string; runtimeRoot?: string; expectedRevision?: number; confirm?: boolean }): Promise<PythonEnvironmentResponse>
   pythonLayers?: {
     listLocal(layer: PythonLayer): Promise<PythonLayerCheck>
     check(layer: PythonLayer): Promise<PythonLayerCheck>
@@ -203,6 +204,7 @@ export interface ZeroWallDesktopApi {
   onResourceUpdateStatus?(listener: (status: ResourceUpdateStatus) => void): () => void
   resources?: {
     updatePlugins?(ids: string[]): Promise<{ taskId: string }>
+    updateSkills?(ids: string[]): Promise<{ taskId: string }>
     list(kind: ResourceKind): Promise<ResourceCheckResult>
     dependents?(id: string): Promise<string[]>
     check(kind: ResourceKind, localOnly?: boolean): Promise<ResourceCheckResult>

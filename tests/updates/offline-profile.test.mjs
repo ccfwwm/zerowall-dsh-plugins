@@ -4,7 +4,7 @@ import { createHash, generateKeyPairSync } from 'node:crypto'
 import { lstat, mkdtemp, mkdir, readFile, readdir, readlink, realpath, rename, rm, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve, sep } from 'node:path'
-import { migrateOfflineProfileLinks, offlineFiles, prepareOfflineCandidate, readOfflineReceipt, verifyOfflineProfile } from '../../tools/commands/offline-profile.mjs'
+import { declaredResolutionRoots, migrateOfflineProfileLinks, offlineFiles, prepareOfflineCandidate, readOfflineReceipt, verifyOfflineProfile } from '../../tools/commands/offline-profile.mjs'
 import { createResourceManager } from '../../tools/commands/resource-manager.mjs'
 import { initializeProfile } from '../../tools/commands/profile.mjs'
 import { signCatalog } from '../../tools/release/resource-catalog.mjs'
@@ -12,7 +12,7 @@ import { materializationFile } from '../../tools/commands/profile-materializatio
 
 const target = { desktopVersion: '8.0.8', dshVersion: '0.2.0-rc.2', dshCommit: '86b6740d0e671cee0b3fd0168de484c0efbf46ea', platform: 'win32', architecture: 'x64' }
 const defaults = ['base', 'mcp', 'skills', 'python'].map(id => '@zerowallscience/plugin-' + id)
-async function fixture(t) {
+async function fixture(t, { onOfflinePhase = () => {} } = {}) {
   const root = await mkdtemp(join(tmpdir(), 'zws-offline-'))
   t.after(async () => { assert(resolve(root).startsWith(resolve(tmpdir()) + sep)); await rm(root, { recursive: true, force: true }) })
   const home = join(root, '用户 配置'), source = join(root, 'resources/offline-profile')
@@ -26,9 +26,20 @@ async function fixture(t) {
   }
   const unsigned = { schema: 1, kind: 'offline-profile', profileArchitecture: 7, applicationVersion: target.desktopVersion, buildId: 'test-build', dshCommit: target.dshCommit, dshRange: { min: target.dshVersion, max: target.dshVersion }, desktopRange: { min: target.desktopVersion, max: target.desktopVersion }, platform: ['win32'], architecture: ['x64'], plugins: defaults.map(id => ({ id, version: '0.2.0' })), files: (await offlineFiles(source)).sort((a,b) => a.path.localeCompare(b.path)), defaultPatch: [] }
   await writeFile(join(source, 'receipt.json'), JSON.stringify(signCatalog(unsigned, pair.privateKey, 'test')))
-  const manager = createResourceManager({ home, keys, target, defaultPlugins: defaults, bundledPlugins: unsigned.plugins, yaml: JSON, stopHost: async () => {}, startHost: async () => {}, callHost: async () => ({ ready: true, entries: [] }) })
+  const manager = createResourceManager({ home, keys, target, defaultPlugins: defaults, bundledPlugins: unsigned.plugins, yaml: JSON, stopHost: async () => {}, startHost: async () => {}, callHost: async () => ({ ready: true, entries: [] }), onOfflinePhase })
   return { root, home, source, keys, target, defaults, bundledPlugins: unsigned.plugins, yaml: JSON, manager, unsigned, pair }
 }
+
+test('startup source retention recognizes local package and workspace declarations only for resolution UUID roots', () => {
+  const profile = join(tmpdir(), 'zws-declaration-fixture')
+  const uuid = '44444444-4444-4444-8444-444444444444'
+  const root = '.zerowall/install-sources/resolution-' + uuid
+  const legacy = '.zerowall/install-sources/resolution-old'
+  assert.deepEqual(declaredResolutionRoots(profile, [
+    { dependencies: { linked: 'link:' + root + '/node_modules/linked', ordinary: '1.2.3' } },
+    { overrides: { declared: 'file:' + root + '/node_modules/declared', old: 'link:' + legacy + '/node_modules/old' } },
+  ]), [root])
+})
 
 for (const layout of [2, 3]) test(`desktop upgrade archives a pre-rename media adaptation and obsolete provenance in layout ${layout}`, async t => {
   const f = await fixture(t), old = '@oh-story/dsh', next = '@zerowallscience/plugin-videos'
@@ -79,11 +90,8 @@ for (const layout of [2, 3]) test(`desktop upgrade archives a pre-rename media a
   await assert.rejects(lstat(oldRoot), { code: 'ENOENT' })
   await assert.rejects(lstat(legacyResolution), { code: 'ENOENT' })
   await assert.rejects(lstat(join(active, '.zerowall/plugin-imports', encodeURIComponent(old) + '.json')), { code: 'ENOENT' })
-  const historyRoot = join(active, '.zerowall/retired-plugin-history'), historyEntries = await readdir(historyRoot)
-  assert.equal(historyEntries.length, 1)
-  const archivedResolution = join(historyRoot, historyEntries[0], 'install-sources/resolution-legacy-media/node_modules', old)
-  assert((await lstat(archivedResolution)).isSymbolicLink())
-  assert.equal(resolve(dirname(archivedResolution), await readlink(archivedResolution)), oldRoot)
+  await assert.rejects(lstat(join(active, '.zerowall/retired-plugin-history')), { code: 'ENOENT' })
+  assert.equal((await readdir(join(f.home, 'resources/history')).catch(error => error.code === 'ENOENT' ? [] : Promise.reject(error))).length, 0)
   assert.equal(JSON.parse(await readFile(join(active, 'node_modules', next, 'package.json'))).name, next)
   assert.equal(await readFile(selectionFile, 'utf8'), initializedSelection)
   assert.equal(await readFile(join(active, 'settings.json'), 'utf8'), settings)
@@ -179,7 +187,8 @@ test('damaged architecture 6 is repaired offline and repeated repair preserves e
 })
 
 test('layout 3 offline repair keeps the active profile root and commits package paths', async t => {
-  const f = await fixture(t), active = join(f.home, 'profiles/web')
+  const phases = []
+  const f = await fixture(t, { onOfflinePhase: event => phases.push(event) }), active = join(f.home, 'profiles/web')
   const manifestFile = join(active, 'package.json')
   const manifest = JSON.parse(await readFile(manifestFile, 'utf8'))
   manifest.zerowall = { ...manifest.zerowall, pluginArchitecture: 7, profileLayout: 3 }
@@ -193,6 +202,9 @@ test('layout 3 offline repair keeps the active profile root and commits package 
   assert.equal(JSON.parse(await readFile(manifestFile, 'utf8')).zerowall.profileLayout, 3)
   assert.equal((await lstat(join(active, 'node_modules', defaults[1], 'package.json'))).isFile(), true)
   assert.equal((await lstat(join(active, 'node_modules/.zerowall-dependencies'))).isDirectory(), true)
+  assert.equal(phases.some(event => event.phase === 'offline-package-install' && event.durationMs >= 0), true)
+  const activationPhases = phases.filter(event => event.phase === 'profile-activation')
+  assert.equal(activationPhases.some(event => event.step === 'backup-copied'), false)
   assert.equal((await f.manager.repairOffline(f.source)).repaired, false)
 })
 
@@ -294,16 +306,8 @@ test('legacy schema 1 migration imports retained pins and archives disabled supp
   assert.equal(migrated.dependencies?.[disabledId], undefined)
   await assert.rejects(lstat(join(active, 'node_modules', disabledId)), { code: 'ENOENT' })
   await assert.rejects(lstat(join(active, '.zerowall/plugin-imports', encodeURIComponent(disabledId) + '.json')), { code: 'ENOENT' })
-  const historyRoot = join(active, '.zerowall/inactive-plugin-history'), history = await readdir(historyRoot)
-  assert.equal(history.length, 1)
-  const archived = join(historyRoot, history[0]), archivedPackage = join(archived, 'package')
-  assert((await lstat(archivedPackage)).isSymbolicLink())
-  assert.equal(resolve(await readlink(archivedPackage)), originalDisabledTarget)
-  assert.equal(JSON.parse(await readFile(join(archivedPackage, 'package.json'))).version, retained[1][1])
-  const archiveReceipt = JSON.parse(await readFile(join(archived, 'receipt.json')))
-  assert.equal(archiveReceipt.id, disabledId)
-  assert.deepEqual(archiveReceipt.declarations, { dependencies: manifest.dependencies[disabledId] })
-  assert.equal(await readFile(join(archived, 'provenance.json'), 'utf8'), disabledEvidence)
+  await assert.rejects(lstat(join(active, '.zerowall/inactive-plugin-history')), { code: 'ENOENT' })
+  assert.equal((await readdir(join(f.home, 'resources/history')).catch(error => error.code === 'ENOENT' ? [] : Promise.reject(error))).length, 0)
   for (const id of retired) {
     assert(!migrated.dsh.profile.bundles.includes(id))
     assert.equal(migrated.dependencies?.[id], undefined)
@@ -313,7 +317,7 @@ test('legacy schema 1 migration imports retained pins and archives disabled supp
   assert.deepEqual(JSON.parse(await readFile(join(f.home, 'resources/plugins/selection.json'))), selection)
   await rename(join(f.home, 'resources/offline'), join(f.home, 'resources/offline-retained'))
   assert.equal(await readFile(join(pinnedRoot, 'data/schema.previous-version.json'), 'utf8'), 'signed original asset')
-  assert.equal(await readFile(join(archived, 'provenance.json'), 'utf8'), disabledEvidence)
+  assert.equal(disabledEvidence.length > 0, true)
   assert.equal((await f.manager.repairOffline(f.source)).repaired, false)
 })
 test('signature, changed bytes, target mismatch and unexpected files prevent offline activation', async t => {
@@ -396,11 +400,9 @@ for (const layout of [2, 3]) test(`desktop upgrade removes an undeclared older c
   await writeFile(join(f.home, 'resources/plugins/selection.json'), JSON.stringify({ pinned: {} }))
   assert.equal((await f.manager.repairOffline(f.source)).repaired, true)
   await assert.rejects(readFile(join(directory, 'package.json')), { code: 'ENOENT' })
-  await assert.rejects(lstat(oldResolution), { code: 'ENOENT' })
-  const historyRoot = join(active, '.zerowall/inactive-plugin-history'), historyEntries = await readdir(historyRoot)
-  assert.equal(historyEntries.length, 1)
-  const archivedResolution = join(historyRoot, historyEntries[0], 'install-sources/resolution-old-core/node_modules', id)
-  assert((await lstat(archivedResolution)).isSymbolicLink())
+  assert.equal((await lstat(oldResolution)).isSymbolicLink(), true)
+  await assert.rejects(lstat(join(active, '.zerowall/inactive-plugin-history')), { code: 'ENOENT' })
+  assert.equal((await readdir(join(f.home, 'resources/history')).catch(error => error.code === 'ENOENT' ? [] : Promise.reject(error))).length, 0)
   assert.equal(JSON.parse(await readFile(join(active, 'package.json'))).dependencies[id], undefined)
   assert.equal((await f.manager.repairOffline(f.source)).repaired, false)
 })

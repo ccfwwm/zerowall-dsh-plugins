@@ -1,5 +1,6 @@
 import { lstat, mkdir, readdir, readFile, readlink, rename, symlink, unlink, writeFile, stat } from 'node:fs/promises'
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
+import { bounded } from './profile-copy.mjs'
 
 const exists = path => lstat(path).then(() => true, error => { if (error.code !== 'ENOENT') throw error; return false })
 const inside = (root, path) => { const child = relative(root, path); return child === '' || !isAbsolute(child) && child !== '..' && !child.startsWith('..' + sep) }
@@ -13,6 +14,7 @@ const validName = name => typeof name === 'string' && (packageCommitFiles.includ
   || /^node_modules\/(?:@[A-Za-z0-9._-]+\/)?[A-Za-z0-9._-]+$/u.test(name) && validId(name.slice(13))
   || /^\.zerowall\/(?:install-sources|dependency-history)\/[A-Za-z0-9][A-Za-z0-9._-]*$/u.test(name)
   || validHistoryPath(name)
+  || /^\.zerowall\/dependency-generations\/[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/u.test(name)
   || /^\.zerowall\/plugin-imports\/[A-Za-z0-9@%._-]+\.json$/u.test(name))
 
 export async function writePackageJournal(directory, state) {
@@ -24,15 +26,26 @@ export async function writePackageJournal(directory, state) {
 // Only traverse physical directories owned by this publication. In particular
 // never traverse a package Junction into another plugin or the running profile.
 async function relocateTree(path, candidate, profile, links) {
-  const info = await lstat(path)
-  if (info.isSymbolicLink()) {
-    const target = await readlink(path), absolute = resolve(dirname(path), target)
-    const next = inside(candidate, absolute) ? join(profile, relative(candidate, absolute)) : absolute
-    const type = (await stat(path)).isDirectory() ? (process.platform === 'win32' ? 'junction' : 'dir') : 'file'
-    links.push({ path, target, next, type })
-    return
+  let level = [path]
+  while (level.length) {
+    const nextLevel = []
+    await bounded(level, async path => {
+      // Recheck directories before opening them. Dirents let ordinary files
+      // bypass a serial lstat for every asset in the installed plugin closure.
+      const info = await lstat(path)
+      if (info.isSymbolicLink()) {
+        const target = await readlink(path), absolute = resolve(dirname(path), target)
+        const next = inside(candidate, absolute) ? join(profile, relative(candidate, absolute)) : absolute
+        const type = (await stat(path)).isDirectory() ? (process.platform === 'win32' ? 'junction' : 'dir') : 'file'
+        links.push({ path, target, next, type })
+      } else if (info.isDirectory()) {
+        for (const entry of await readdir(path, { withFileTypes: true })) {
+          if (entry.isDirectory() || entry.isSymbolicLink()) nextLevel.push(join(path, entry.name))
+        }
+      }
+    })
+    level = nextLevel
   }
-  if (info.isDirectory()) for (const entry of await readdir(path)) await relocateTree(join(path, entry), candidate, profile, links)
 }
 
 async function physicalParents(profile, name) {
@@ -56,7 +69,7 @@ export async function commitPackagePaths({ profile, candidate, directory, state,
   ids = [...new Set(ids)]
   if (ids.some(id => !validId(id))) throw new Error('Invalid package publication identity')
   const names = []
-  for (const namespace of ['install-sources', 'dependency-history']) {
+  for (const namespace of ['install-sources', 'dependency-history', 'dependency-generations']) {
     const source = join(candidate, '.zerowall', namespace)
     for (const name of await readdir(source).catch(error => { if (error.code !== 'ENOENT') throw error; return [] })) {
       if (!validName('.zerowall/' + namespace + '/' + name) || (await lstat(join(source, name))).isSymbolicLink()) throw new Error('Invalid package namespace')
@@ -67,7 +80,10 @@ export async function commitPackagePaths({ profile, candidate, directory, state,
   for (const name of sourceNames) {
     if (typeof name !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/u.test(name)) throw new Error('Invalid package source publication path')
     const local = '.zerowall/install-sources/' + name
-    if (!await exists(join(candidate, local))) throw new Error('Missing package source publication path: ' + local)
+    // A removed legacy source is intentionally absent from the candidate. The
+    // publication journal still includes it so the active path is moved to the
+    // short-lived `before` tree and the stale link disappears atomically.
+    if (!await exists(join(candidate, local)) && !await exists(join(profile, local))) throw new Error('Missing package source publication path: ' + local)
     if (!names.includes(local)) names.push(local)
   }
   for (const local of [...new Set(historyPaths)]) {

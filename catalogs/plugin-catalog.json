@@ -1,15 +1,221 @@
 {
   "schema": 1,
   "kind": "plugin",
-  "applicationVersion": "8.4.8",
+  "applicationVersion": "8.4.12",
   "localOnly": false,
-  "generatedAt": "2026-10-25T07:09:57.602Z",
+  "generatedAt": "2026-10-27T16:47:34.362Z",
   "resources": [
+    {
+      "id": "@zerowallscience/plugin-account",
+      "version": "0.1.21",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-account/0.1.21/zerowallscience-plugin-account-0.1.21.tgz",
+      "sha256": "3ab355f1b9c3def9a924afcfda2343cb82162173949606f7e9abc847748a3185",
+      "size": 302924,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [],
+      "optionalServices": [],
+      "capabilities": [
+        "account"
+      ],
+      "permissions": [
+        "credentials",
+        "network"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "dsh-better-sidebar": "^0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.1-zws.3",
+        "@zerowallscience/plugin-secrets": "^0.1.1",
+        "@zerowallscience/plugin-base": "^0.1.27",
+        "qrcode": "^1.5.4",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "zod": "^4.4.3"
+      },
+      "packageDependencies": {
+        "dsh-better-sidebar": "0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.0",
+        "@zerowallscience/plugin-secrets": "0.1.1",
+        "@zerowallscience/plugin-base": "0.1.27",
+        "qrcode": "^1.5.4",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "zod": "^4.4.3"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "KVLCKsY0CZmhqgFnBLCJ2vlwyNxGS6keLFrplkZnOlKXhGOMIZkxgYnKFYS2bSOiOwKzH/RuRQPIzSyZEMiNDg=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-ai-cloud",
+      "version": "0.1.35",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-ai-cloud/0.1.35/zerowallscience-plugin-ai-cloud-0.1.35.tgz",
+      "sha256": "746d2756028590d795eb95e8f3de84c8b0936a550f17ae466d156fdafee130e2",
+      "size": 2271426,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "llm",
+        "zerowallAccount"
+      ],
+      "optionalServices": [],
+      "capabilities": [
+        "llm.cloud",
+        "media.cloud"
+      ],
+      "permissions": [
+        "credentials",
+        "network",
+        "files"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "dsh-better-sidebar": "^0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.1-zws.3",
+        "@zerowallscience/plugin-account": "^0.1.19",
+        "@zerowallscience/plugin-secrets": "^0.1.1"
+      },
+      "packageDependencies": {
+        "dsh-better-sidebar": "0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.0",
+        "@zerowallscience/plugin-account": "0.1.19",
+        "@zerowallscience/plugin-secrets": "0.1.1"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "obCuYxvtcRwVinuu8hXbz7gJo3YH4wwBNfhAF0fAdeP0jbZiW5LQbkp/j6L5EqUuYoIFRNvEgaYFq2ep37xUAg=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-base",
+      "version": "0.1.29",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-base/0.1.29/zerowallscience-plugin-base-0.1.29.tgz",
+      "sha256": "73cf798b1002b17ad0a8566f7aab84e42d709fee1dcad097e189d2e27c30fc20",
+      "size": 194924,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "webServer",
+        "systemPrompt",
+        "workspaceRegistry"
+      ],
+      "optionalServices": [
+        "updater"
+      ],
+      "capabilities": [
+        "ui.locale",
+        "ui.update"
+      ],
+      "permissions": [],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "packageDependencies": {
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "W2IwZWoSEeqWvE5Q2BxTMUCdyi0Jq2R3/rKK9ysmXA1149jmkF7Qy36xRdlr89IjdwIGWxX06Tng4S3S798dDQ=="
+      }
+    },
     {
       "id": "@zerowallscience/plugin-biogenie",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -65,14 +271,168 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "e8C4G1y1iJvAD4jyyWK1pq7sbRrBQMKZ5PypbE13+x0Qo3eTzt5i2wcMXod0+YfEtyHEOwpXK/y/5NFBH6ZjDg=="
+        "value": "kHtdvrvyX3uHoqkiCEE3vvlqq7rd7W3tzOIn6FEjA9ZRkBSAzZc3l3n0a0CRxuAqC3PAottPn65lmd4/kTZNBQ=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-claude-code",
+      "version": "0.2.14",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.7"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-claude-code/0.2.14/zerowallscience-plugin-claude-code-0.2.14.tgz",
+      "sha256": "c9ee4011dd121eca7c4351e54441c19c925f7ef3e34cb6bb0217ab2fc5b766d1",
+      "size": 717020,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.7"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "agentDefaultModel",
+        "subprocess",
+        "subagents",
+        "workingDirectory",
+        "skills",
+        "zerowallProjects",
+        "zerowallEnvironment",
+        "credentials",
+        "settings",
+        "llm",
+        "sessionProjections",
+        "agentPresets",
+        "tools",
+        "systemPrompt",
+        "permissionPresets",
+        "approval",
+        "attachments"
+      ],
+      "optionalServices": [
+        "zerowallAiCloudCredentialResolver",
+        "zerowallMcpRouteResolver",
+        "zerowallMcp",
+        "zerowallCapabilities",
+        "agents",
+        "subagentModelSelection"
+      ],
+      "capabilities": [
+        "claude-code"
+      ],
+      "permissions": [
+        "processes",
+        "files",
+        "network",
+        "credentials",
+        "approvals",
+        "attachments"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "@zerowallscience/plugin-base": "^0.1.24",
+        "@zerowallscience/plugin-projects": "^0.1.6",
+        "@zerowallscience/plugin-secrets": "^0.1.1",
+        "@zerowallscience/plugin-environment": "^0.1.17",
+        "@modelcontextprotocol/sdk": "^1.29.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "zod": "^4.4.3"
+      },
+      "packageDependencies": {
+        "@zerowallscience/plugin-base": "^0.1.24",
+        "@zerowallscience/plugin-projects": "0.1.6",
+        "@zerowallscience/plugin-secrets": "0.1.1",
+        "@zerowallscience/plugin-environment": "0.1.17",
+        "@modelcontextprotocol/sdk": "^1.29.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "zod": "^4.4.3"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "66ePdFJHZH5rAiz0g4KgMecOplnJe9xnmwELnTOlI9zSXoQKUcenhzlqFQETJwdUYP9i0uF+ZYh/B1UOltwaCw=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-desktop-compat",
+      "version": "0.1.9",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-desktop-compat/0.1.9/zerowallscience-plugin-desktop-compat-0.1.9.tgz",
+      "sha256": "acbcf83330d081da80d0c9f72cb47969602812ef6ce741447a10cfe4c0eebb42",
+      "size": 7375,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [],
+      "optionalServices": [
+        "desktopProfiles",
+        "desktopPnpm"
+      ],
+      "capabilities": [
+        "desktop.profiles",
+        "desktop.plugins"
+      ],
+      "permissions": [],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {},
+      "packageDependencies": {},
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "5rY5eZ/cw/qXV/xqs4V4kRLxa5LhevH9HCf2Gw234NnMtWO6aDs4/TOrbJHjlhMdnu4RXqyBNuwgH2CpD7fhBw=="
       }
     },
     {
       "id": "@michengai/dsh-archive-manager",
       "version": "1.1.2-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -113,14 +473,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "SBzhS6DpQbAg8+X5AOSB7/7AV0YyqZOB479KRlzStjblnLkLYV41oxI8O/aZYK10hcvZjQK1V5mnOerR3YiyCw=="
+        "value": "NCot0dTzCoCFOKOQ4BHKeIH5+5U9MwDdXoydbZRqToENlXJmdra7pnFi2QkGzs01lFHk/54bfmQugygJ6SljDQ=="
       }
     },
     {
       "id": "dsh-better-sidebar",
       "version": "0.28.1-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -218,14 +578,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "27EJFI9utjuTvYroXCdiHtFeBOV8GEWQMDhg31d00z5PBHeX3aP0uEVuYqDY2WAGsMNPNmIhqL3o9YAW3VPLBw=="
+        "value": "5WA2RYt+TJ7wwzXMfZhqcJErrMzapHZ0LGB299MUfo/7Ajiei21i3DsEQ8Sx0r4MXrCz1DqK8pOrAMI+F1BuAg=="
       }
     },
     {
       "id": "@zerowallscience/dsh-bundle-core",
       "version": "0.1.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -262,14 +622,125 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "zfTLLHOFIKOonAwjWru1g1KRTXnOrLi2oI0lzJ+TnGqLwOxWzunKkcnluhoZRtW6itETP5Nhmu3vCXl8uH3aBA=="
+        "value": "cRDbmEw9v27hMAgAB7jO63LcKzBRzTrYTkVSqMFq9B2k2mKVVCU5H1fzb1LTkX0C9YDR5fNJVGcA6DQvup76CA=="
+      }
+    },
+    {
+      "id": "@zerowallscience/dsh-bundle-science",
+      "version": "0.1.21",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-bundle-science/0.1.21/zerowallscience-dsh-bundle-science-0.1.21.tgz",
+      "sha256": "929af1a88f6204957940430f58b95e3cf0e77d403d171078d04d06ec9b290525",
+      "size": 1215,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "composition": [
+        "@zerowallscience/plugin-account",
+        "@zerowallscience/plugin-ai-cloud",
+        "@zerowallscience/plugin-base",
+        "@zerowallscience/plugin-desktop-compat",
+        "@zerowallscience/plugin-environment",
+        "@zerowallscience/plugin-extension-center",
+        "@zerowallscience/plugin-execution",
+        "@zerowallscience/plugin-files",
+        "@zerowallscience/plugin-images",
+        "@zerowallscience/plugin-mcp",
+        "@zerowallscience/plugin-mineru",
+        "@zerowallscience/plugin-projects",
+        "@zerowallscience/plugin-publications",
+        "@zerowallscience/plugin-pubmed",
+        "@zerowallscience/plugin-python",
+        "@zerowallscience/plugin-biogenie",
+        "@zerowallscience/plugin-research",
+        "@zerowallscience/plugin-runs",
+        "@zerowallscience/plugin-secrets",
+        "@zerowallscience/plugin-singlecell",
+        "@zerowallscience/plugin-skills",
+        "dsh-wechat",
+        "@dingyi222666/dsh-session-notification"
+      ],
+      "dependencies": {
+        "@zerowallscience/plugin-account": "^0.1.21",
+        "@zerowallscience/plugin-ai-cloud": "^0.1.35",
+        "@zerowallscience/plugin-base": "^0.1.27",
+        "@zerowallscience/plugin-desktop-compat": "^0.1.9",
+        "@zerowallscience/plugin-environment": "^0.1.17",
+        "@zerowallscience/plugin-extension-center": "^0.1.16",
+        "@zerowallscience/plugin-execution": "^0.1.6",
+        "@zerowallscience/plugin-files": "^0.2.14",
+        "@zerowallscience/plugin-images": "^0.2.30",
+        "@zerowallscience/plugin-mcp": "^0.2.18",
+        "@zerowallscience/plugin-mineru": "^0.1.10",
+        "@zerowallscience/plugin-projects": "^0.1.6",
+        "@zerowallscience/plugin-publications": "^0.1.6",
+        "@zerowallscience/plugin-pubmed": "^0.1.8",
+        "@zerowallscience/plugin-python": "^0.1.26",
+        "@zerowallscience/plugin-biogenie": "^0.1.6",
+        "@zerowallscience/plugin-research": "^0.1.23",
+        "@zerowallscience/plugin-runs": "^0.1.6",
+        "@zerowallscience/plugin-secrets": "^0.1.1",
+        "@zerowallscience/plugin-singlecell": "^0.1.7",
+        "@zerowallscience/plugin-skills": "^0.2.8",
+        "dsh-wechat": "0.11.1-zws.2",
+        "@dingyi222666/dsh-session-notification": "0.2.7-zws.1"
+      },
+      "packageDependencies": {
+        "@zerowallscience/plugin-account": "0.1.21",
+        "@zerowallscience/plugin-ai-cloud": "0.1.35",
+        "@zerowallscience/plugin-base": "0.1.27",
+        "@zerowallscience/plugin-desktop-compat": "0.1.9",
+        "@zerowallscience/plugin-environment": "0.1.17",
+        "@zerowallscience/plugin-extension-center": "0.1.16",
+        "@zerowallscience/plugin-execution": "0.1.6",
+        "@zerowallscience/plugin-files": "0.2.14",
+        "@zerowallscience/plugin-images": "0.2.30",
+        "@zerowallscience/plugin-mcp": "0.2.18",
+        "@zerowallscience/plugin-mineru": "0.1.10",
+        "@zerowallscience/plugin-projects": "0.1.6",
+        "@zerowallscience/plugin-publications": "0.1.6",
+        "@zerowallscience/plugin-pubmed": "0.1.8",
+        "@zerowallscience/plugin-python": "0.1.26",
+        "@zerowallscience/plugin-biogenie": "0.1.6",
+        "@zerowallscience/plugin-research": "0.1.23",
+        "@zerowallscience/plugin-runs": "0.1.6",
+        "@zerowallscience/plugin-secrets": "0.1.1",
+        "@zerowallscience/plugin-singlecell": "0.1.7",
+        "@zerowallscience/plugin-skills": "0.2.8",
+        "dsh-wechat": "0.11.1-zws.2",
+        "@dingyi222666/dsh-session-notification": "0.2.7-zws.1"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "ASGjtkZ9b3zoT4Gxfjef4J+SkbZ3hG7GeRd9/bgOi6BlgOLVBlrZAGxEnwqpmZTIB0rQl/KlAnL/9Yad7H9zDQ=="
       }
     },
     {
       "id": "dsh-file-review",
       "version": "0.8.11-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -307,14 +778,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "veajKWn0Lt5dKAk8M6Dp1RmuARSoUuNg0If5jCsRmAn1XOxiskUwfIfh0rzNGBQ+lJXEMKvlOBb9ojun7lXbCA=="
+        "value": "RQQjw6rxORYzxhl/jTyITqR+W+xKsLI9JB+VHqvYRS+O6r2ET7sYTaMktez+BT27gbZTbmk5BoxVNgSgKft3Dg=="
       }
     },
     {
       "id": "dsh-ppt-maker",
       "version": "1.0.1-zws.9",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -367,14 +838,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "10lvmJNQGabe4sqyTWDnjH4d93VQEKiZv19Qsqj0j8SkoVeHFVelWEtY6CPxtzlwZv5C2Hkv5lHcrfFfBl0WDA=="
+        "value": "94eadVDwj6PpV/zP1UmhY4zjSG3JmnVStPnyDfEFIVivmqQlW9oQ2QjpfWRLY/mVAenmf4StJtqudzDXTlXTCQ=="
       }
     },
     {
       "id": "@dingyi222666/dsh-session-notification",
       "version": "0.2.7-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -405,14 +876,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "bqJbKKmHmqXOyEI+IgF4HzeU4ul9/YQ5fSyNutnGWo3XzjCH+he465oCDGyWpatYe4I5vUIbkXlE3lKvJ3X2Aw=="
+        "value": "RmcPpGa1bq2jgqWEEsFScDUJRCDQtELMHIlijXknvGWxAa+ce4WXLl9/P24v4EZAJ/Q6qiMZG5UGdmQsoUJ4AQ=="
       }
     },
     {
       "id": "dsh-ssh-ops",
       "version": "0.3.23-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -462,14 +933,119 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Xuc+t5NaQ33N5HVGdSP69KCuBh4K0za91tto4WB9pJM11zzCu3qI26aTvaqKtVH1eb/XTXAlylAlH2ZJDbSsCA=="
+        "value": "wGY5Ax+XcRyJQZNz/XHsAUkP+wNEbG+sppLM3bNfs75ME2KXnbdJCbBvMklGBWB4FjrZ7kgmLIniSxVI1VCJAQ=="
+      }
+    },
+    {
+      "id": "dsh-wechat",
+      "version": "0.11.1-zws.2",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-wechat/0.11.1-zws.2/dsh-wechat-0.11.1-zws.2.tgz",
+      "sha256": "d25e0749d74261af3be7dcba0524a94f0eaf89abad38374b75428748c706fc0e",
+      "size": 1336357,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "upstreamVersion": "0.11.0",
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "dependencies": {},
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "STiLk4rQ3lqdH8W9oLkvrt1DUEvlrhMiOd8aoPAFlfFAb18b00cLv4jB6BCMabDY3ZVVcO/1nq4C/UIsyojADg=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-environment",
+      "version": "0.1.17",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-environment/0.1.17/zerowallscience-plugin-environment-0.1.17.tgz",
+      "sha256": "7e0776acfbf54c7423bcb8a59605a92d1381815a77393657b9a87f83c2246d8d",
+      "size": 238576,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "settings"
+      ],
+      "optionalServices": [],
+      "capabilities": [
+        "environment-config"
+      ],
+      "permissions": [
+        "credentials",
+        "processes"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "@zerowallscience/plugin-secrets": "^0.1.1",
+        "@zerowallscience/plugin-base": "^0.1.27",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "zod": "^4.4.3"
+      },
+      "packageDependencies": {
+        "@zerowallscience/plugin-secrets": "0.1.1",
+        "@zerowallscience/plugin-base": "0.1.27",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "zod": "^4.4.3"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "Fyzp2YrF8/r9SZvYusB/KEc2yEuskrry4tfpasnJtrpeFH65ktQ7VO3UxZ3gEkYrcCnyAfujs91A63GaBnftCg=="
       }
     },
     {
       "id": "@zerowallscience/plugin-execution",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -525,14 +1101,78 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "3iBO9tkJ4/7MyvjtcbvM/rIp9/PZGP0fPycImCu4zXN1SEL3VuvYpqw3aWJTGwuFkALCSIUSMWUa3BQX2P2xAQ=="
+        "value": "1pfrYlqQourq6qhqJS4yUFBBxg5XeWxmYqD2n8HMUvPQoWhWMzxOeX5fMDZBj/StFcAl0exkGUjhWN5bSzoLDw=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-extension-center",
+      "version": "0.1.17",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-extension-center/0.1.17/zerowallscience-plugin-extension-center-0.1.17.tgz",
+      "sha256": "3cc676923d00e25610b339dd56694c36d6859961187a7ec5f67a916b1879cc60",
+      "size": 140873,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [],
+      "optionalServices": [],
+      "capabilities": [
+        "resource-management",
+        "plugin-updates",
+        "skill-updates",
+        "mcp-updates"
+      ],
+      "permissions": [
+        "files",
+        "network"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "@zerowallscience/plugin-base": "^0.1.29",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0"
+      },
+      "packageDependencies": {
+        "@zerowallscience/plugin-base": "0.1.29",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "ZjK5KcTtvFMFibf7cHgPJW5DIyKv1pOpvB4LEAOoh2vxi5co3K2nt+pTClFqs1eZDnBwLhHftHZx58+mbpWWDQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-files",
       "version": "0.2.14",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -617,14 +1257,102 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "fmUuYiI4QEy9aL0wbKhexO9LV0R9xcejBxjPnSWEvj7Vyyj1xzJaW3kMOaoqxqQp3j86F5pkuX70eCZoWMnYBw=="
+        "value": "+bXLZx0EqUOb8MqXaseNSi5HuVQ+tb/ezMB6fjuNi5yVlMxZueMzzD/YlU5IedUbChMG/zn6kUAZ/dZgIXM1DA=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-images",
+      "version": "0.2.30",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-images/0.2.30/zerowallscience-plugin-images-0.2.30.tgz",
+      "sha256": "07b34aa816f3381d7d0ffa48db5814539b98b6d277b6c43dfb19c34fb7a81cf6",
+      "size": 178115,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "tools",
+        "zerowallEnvironment",
+        "attachments",
+        "llm",
+        "zerowallMedia"
+      ],
+      "optionalServices": [],
+      "capabilities": [
+        "images",
+        "image-generation"
+      ],
+      "permissions": [
+        "files",
+        "network"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "dsh-better-sidebar": "^0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.1-zws.3",
+        "@zerowallscience/plugin-account": "^0.1.13",
+        "@zerowallscience/plugin-ai-cloud": "^0.1.20",
+        "@zerowallscience/plugin-secrets": "^0.1.1",
+        "@zerowallscience/plugin-base": "^0.1.23",
+        "@zerowallscience/plugin-environment": "^0.1.15",
+        "sharp": "^0.35.5",
+        "@xmldom/xmldom": "0.9.12",
+        "fflate": "0.8.3",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "yaml": "2.8.1"
+      },
+      "packageDependencies": {
+        "dsh-better-sidebar": "0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.0",
+        "@zerowallscience/plugin-account": "0.1.13",
+        "@zerowallscience/plugin-ai-cloud": "^0.1.20",
+        "@zerowallscience/plugin-secrets": "0.1.1",
+        "@zerowallscience/plugin-base": "0.1.23",
+        "@zerowallscience/plugin-environment": "0.1.15",
+        "sharp": "^0.35.5",
+        "@xmldom/xmldom": "0.9.12",
+        "fflate": "0.8.3",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "yaml": "2.8.1"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "afv7q94rI3HvOtLsp74SYMCFN5R5z+FQ9maih37/Ddt0QJlb+lMDPs5caTZEDklTBBH+fAFKZ8SlIfOz/XADAQ=="
       }
     },
     {
       "id": "@zerowallscience/integrity-runtime",
       "version": "6.2.2",
       "kind": "support",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -656,14 +1384,95 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "I3XSNtEa/YUg7GhvSsha5YBV3/MzB0n5W2+mxVcHVPteHON/414a9mIeUF4nDXqS4M9v/LNiH3z3ecnFFa4eDQ=="
+        "value": "zO1JRdNe8fdTCQVxca43VSdVrZ75I61FfdiGzVcbY0jWKL6dV8oSNN0+1Pcmq1Wb+tjyE7OijuQvi9s4VEdfCw=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-mcp",
+      "version": "0.2.25",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-mcp/0.2.25/zerowallscience-plugin-mcp-0.2.25.tgz",
+      "sha256": "744056c1c9180084261e3d9371ea5393dfc10d525c2a1293f8c1b311bf9c8e69",
+      "size": 382546,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "zerowallProjects",
+        "tools"
+      ],
+      "optionalServices": [],
+      "capabilities": [
+        "mcp"
+      ],
+      "permissions": [
+        "files",
+        "network",
+        "credentials"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "dsh-better-sidebar": "^0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.1-zws.3",
+        "@zerowallscience/plugin-projects": "^0.1.6",
+        "@zerowallscience/plugin-base": "^0.1.27",
+        "@zerowallscience/plugin-secrets": "^0.1.1",
+        "@zerowallscience/research-store": "^4.1.4",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "zod": "^4.4.3",
+        "@modelcontextprotocol/client": "2.2.0"
+      },
+      "packageDependencies": {
+        "dsh-better-sidebar": "0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.0",
+        "@zerowallscience/plugin-projects": "0.1.6",
+        "@zerowallscience/plugin-base": "^0.1.27",
+        "@zerowallscience/plugin-secrets": "0.1.1",
+        "@zerowallscience/research-store": "4.1.4",
+        "lucide-react": "^0.468.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "zod": "^4.4.3",
+        "@modelcontextprotocol/client": "2.2.0"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "oH9z9MCmENb0KwowvpweutL51g40UamlK/BukhHXS0zU4EwlVBz9QchHc90tDKpoqJj3mB0yy/qJ3141hLn3Cg=="
       }
     },
     {
       "id": "@zerowallscience/plugin-mineru",
       "version": "0.1.10",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -744,14 +1553,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "bX57CVx3rR/ONCk/VhAjo/7mJyj1fSjC5ku3et1S1/DlkhGkhI1RR8+oJhP+KGggBWpP0vCj27Dp6JLWlBamDQ=="
+        "value": "+z+tvLvzpWtCnV77FXsHzXPASBfiWzhvly+kgBo/hYQ9UZtltMv+biKqeA/nghujTeyhYRpakUFpwMR181MDCw=="
       }
     },
     {
       "id": "@zerowallscience/plugin-projects",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -813,14 +1622,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "YIjQPR5GcIMLFxMVav+ni8R+Kb9zGrRV3DUWsdI3xQVT1/ZUDtOrKke7JSBcSNOGAvjgLd/RRWluwwHQTeLICQ=="
+        "value": "mLyvJM1ixOjEzfrwfNRmUSdgCFFwwv7C1tynu+HLy1XzUmzHcKQuQcm4tRxx8GjJ1Mkr+CLQyLsXWnRpoxtQBA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-publications",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -880,14 +1689,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "9nBggmjKyz8BMvILq8mc9YIITBO5hO8TM4uB6djq026OaL95ngIURPuDxSZX1iUZF/AIyW5KiwBNL2fqIpg6BA=="
+        "value": "c0K2YZ+47Myl2SSyWHEu3M+NEJzAl9HjG+T/RVuS4m1MEfX31Gr8z1eHZJYbZDAStFUlfDrpqw/fp4AY8ml6Bw=="
       }
     },
     {
       "id": "@zerowallscience/plugin-pubmed",
       "version": "0.1.8",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -959,14 +1768,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "s5PA9ByEriMngVQi2ss+HcSQneTF4YQt3oixDiF28EuMAAgYRSKTUc2B//gQv6vNY20SWj/omWVSUbi2s1LjAA=="
+        "value": "axIp2kywCaSEnT+YGEIZiEX9FbPm8irVnq2r3hvABjiw+zlxktRYxtpUz37JervVFzBPIbzlfp3vLf9hEGhnDg=="
       }
     },
     {
-      "id": "@zerowallscience/plugin-reviewer",
-      "version": "0.1.7",
+      "id": "@zerowallscience/plugin-python",
+      "version": "0.1.35",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -980,9 +1789,9 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-reviewer/0.1.7/zerowallscience-plugin-reviewer-0.1.7.tgz",
-      "sha256": "08845ffc40bf288242f43d46d498544bb7a43ae761f64f1bd99933facf8bc0a0",
-      "size": 49267,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-python/0.1.35/zerowallscience-plugin-python-0.1.35.tgz",
+      "sha256": "a32e9e57e5ae3da0344ee48510c59b9a39087607c3f80d0ab5a9735ae1bcb176",
+      "size": 273262,
       "restartRequired": true,
       "rollbackSupported": true,
       "desktop": {
@@ -993,19 +1802,15 @@
         "max": "0.2.1-rc.2"
       },
       "requiredServices": [
-        "settings",
-        "subagents",
-        "commands",
-        "llm",
-        "agentPresets",
         "tools"
       ],
       "optionalServices": [],
       "capabilities": [
-        "reviewer"
+        "python"
       ],
       "permissions": [
-        "approvals"
+        "processes",
+        "files"
       ],
       "profiles": [
         "development",
@@ -1016,7 +1821,202 @@
       "dependencies": {
         "dsh-better-sidebar": "^0.28.1-zws.1",
         "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-base": "^0.1.20",
+        "@zerowallscience/plugin-base": "^0.1.29",
+        "@zerowallscience/integrity-runtime": "^6.2.2",
+        "@zerowallscience/research-store": "^4.1.4",
+        "yauzl": "3.4.0",
+        "pend": "1.2.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "packageDependencies": {
+        "dsh-better-sidebar": "0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.0",
+        "@zerowallscience/plugin-base": "0.1.29",
+        "@zerowallscience/integrity-runtime": "6.2.2",
+        "@zerowallscience/research-store": "4.1.4",
+        "yauzl": "3.4.0",
+        "pend": "1.2.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "iqcYJCRQvoIUmfPN02tMm2ywHHY0fhdkzOEnN3m6gnFLZ4+1iXYaynF4zgG+p1Hb7L3F2ZZOSPcgrKne4zKjBQ=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-research",
+      "version": "0.1.25",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-research/0.1.25/zerowallscience-plugin-research-0.1.25.tgz",
+      "sha256": "47a80408af7695958233f8fd5368fa1b98ffd56405fa0e24c0dc6d352ad0c58e",
+      "size": 9982891,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [
+        "tools"
+      ],
+      "optionalServices": [
+        "webServer"
+      ],
+      "capabilities": [
+        "research",
+        "data-assets",
+        "artifacts"
+      ],
+      "permissions": [
+        "files"
+      ],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "runtimeFiles": [
+        "lib/research-assets/brainglobe.png",
+        "lib/research-assets/canvas.png",
+        "lib/research-assets/cells.png",
+        "lib/research-assets/flow.png",
+        "lib/research-assets/he.png",
+        "lib/research-assets/imagej.png",
+        "lib/research-assets/molecule.png",
+        "lib/research-assets/sanger.png",
+        "lib/research-assets/sequence.png"
+      ],
+      "dependencies": {
+        "dsh-better-sidebar": "^0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.1-zws.3",
+        "@zerowallscience/plugin-projects": "^0.1.6",
+        "@zerowallscience/plugin-base": "^0.1.29",
+        "@zerowallscience/research-store": "^4.1.4",
+        "fast-xml-parser": "^5.11.0",
+        "lucide-react": "^0.468.0",
+        "molstar": "5.11.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "sharp": "^0.35.5",
+        "zod": "^4.4.3"
+      },
+      "packageDependencies": {
+        "dsh-better-sidebar": "0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.0",
+        "@zerowallscience/plugin-projects": "0.1.6",
+        "@zerowallscience/plugin-base": "0.1.29",
+        "@zerowallscience/research-store": "4.1.4",
+        "fast-xml-parser": "^5.11.0",
+        "lucide-react": "^0.468.0",
+        "molstar": "5.11.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "sharp": "^0.35.5",
+        "zod": "^4.4.3"
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "gk5qk3++BAwHwB3XXbLNJwIBSr2xYu+WixJB0QvPiI63hJnLXpCyFwvEeWo++mdrY+NW/AeF+e5Ru5btPrHMBg=="
+      }
+    },
+    {
+      "id": "@zerowallscience/research-store",
+      "version": "4.1.4",
+      "kind": "support",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/research-store/4.1.4/zerowallscience-research-store-4.1.4.tgz",
+      "sha256": "1240e457b7c0bfbd508bd83da4dd3eb34436249fafc14f93a00688737a486199",
+      "size": 56213,
+      "restartRequired": false,
+      "rollbackSupported": true,
+      "dependencies": {},
+      "signature": {
+        "algorithm": "ed25519",
+        "keyId": "stable-4",
+        "value": "hSksJvw8sjW7M+8l7TNuybCVkieFTOy1ml6oPiyOZkLg4odRLsRtvgNaKbeb0RXEdCbWDEe/zhUZ4Zdp92gyCA=="
+      }
+    },
+    {
+      "id": "@zerowallscience/plugin-reviewer",
+      "version": "0.1.8",
+      "kind": "plugin",
+      "applicationVersion": "8.4.12",
+      "dshRange": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "desktopRange": {
+        "min": "8.4.0"
+      },
+      "platform": [
+        "win32"
+      ],
+      "architecture": [
+        "x64"
+      ],
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-reviewer/0.1.8/zerowallscience-plugin-reviewer-0.1.8.tgz",
+      "sha256": "48a4bb6409fa0b20a009f36ee3aea2c006c39d5222ea263e0407e7b70062e570",
+      "size": 42900,
+      "restartRequired": true,
+      "rollbackSupported": true,
+      "desktop": {
+        "min": "8.4.0"
+      },
+      "dsh": {
+        "min": "0.2.1-rc.2",
+        "max": "0.2.1-rc.2"
+      },
+      "requiredServices": [],
+      "optionalServices": [],
+      "capabilities": [
+        "reviewer-history"
+      ],
+      "permissions": [],
+      "profiles": [
+        "development",
+        "preview",
+        "stable"
+      ],
+      "migrationVersion": 1,
+      "dependencies": {
+        "dsh-better-sidebar": "^0.28.1-zws.1",
+        "dsh-dream-skin": "10.16.1-zws.3",
+        "@zerowallscience/plugin-base": "^0.1.27",
         "lucide-react": "^0.468.0",
         "react": "^18.2.0",
         "zod": "^4.4.3"
@@ -1024,7 +2024,7 @@
       "packageDependencies": {
         "dsh-better-sidebar": "0.28.1-zws.1",
         "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-base": "0.1.20",
+        "@zerowallscience/plugin-base": "0.1.27",
         "lucide-react": "^0.468.0",
         "react": "^18.2.0",
         "zod": "^4.4.3"
@@ -1032,14 +2032,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "YiszUxcUeRaKqOXRHV+6HHnvRw0FIF9japjBfGKoiK7J5sztRd+dq/1f9/szsQnbqoU0/54Uz/TBoD9SOFh2Aw=="
+        "value": "3ngzK8kFFRtHbpcy78vKL0XDgPBhZ9v28ggXBUA0AIRjcvnai2LJ611i0SAx/PtX1eoluPwfBp4pXHcl9hnVDQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-runs",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1097,14 +2097,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "euZhdBlXixbTaYNTvKYxuU0wOuME7oDa9z2a9htqIgWcL0UcqNDz32n9HV6TIpguQgZMbyI0rQlXLBmyPyXQCg=="
+        "value": "wjjxojk/JApcdIlS7bcoGusjhMYiEGaS7J1AZEg7+e+1L5zn0NFF02GLXJ5dadwHttIP0Mc6Hpe4k67CkKPyDg=="
       }
     },
     {
       "id": "@zerowallscience/plugin-secrets",
       "version": "0.1.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1152,14 +2152,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "TyTBWWzPBiSSQqGtTn/3G2Tj0QzgWT6bIfMCQOHfUUQPQZH/9YyhpL8Iv4dPm+kYoUghrLC/18A7r5f+J+cjBA=="
+        "value": "k7bWq9o+hH2oZxnUM7VxURA6KdHsFtv6zQDFChhxQ1Lv3Y9J8njCYOA/JCEuSuJTQZ35rAALtlZDLMXf7+wuBA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-singlecell",
       "version": "0.1.7",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1242,14 +2242,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "L8g9mpKDBSvahfJVUunmzOcqjD9p+aXafwGIHmelUy6ealdsOPIq9CnKSIq6TEKLXGNG1vTmoEwgf82mW9vMCA=="
+        "value": "Gm5T0WSdjupMFBHXlXm6aWHYcpSnBg0q/NhQLrbwvGN2lrpj+xh9h9uD3aNihQqqCim7ay9GjBxpGHD8PIIIAQ=="
       }
     },
     {
-      "id": "@dsh-external/zotero-harvest",
-      "version": "0.2.2-zws.1",
+      "id": "@zerowallscience/plugin-skills",
+      "version": "0.2.8",
       "kind": "plugin",
-      "applicationVersion": "8.4.2",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1263,174 +2263,9 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/zotero-harvest/0.2.2-zws.1/dsh-external-zotero-harvest-0.2.2-zws.1.tgz",
-      "sha256": "1352a40de904456bd878b48d2ee645f5251f6e1d245fcb3e410724603441a573",
-      "size": 28295,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "dependencies": {},
-      "packageDependencies": {},
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "+RihTOjhZC+h/CEv5puN9hfW60fLc1YZRx6hzZ8p9H215kngtOfXa4EcOy77cp203rPcMTzsCMspiczSDxKLAg=="
-      }
-    },
-    {
-      "id": "dsh-office-tools",
-      "version": "1.0.6",
-      "kind": "support",
-      "applicationVersion": "8.4.2",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-office-tools/1.0.6/dsh-office-tools-1.0.6.tgz",
-      "sha256": "820075635cd0ba7020fb42114efe8c1edc6f9e92d10090618f3d8e60f9534286",
-      "size": 42631,
-      "restartRequired": false,
-      "rollbackSupported": true,
-      "dependencies": {},
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "RVqwZkEwbUE+2rQm8Mkh3wB7/N+lfcY8byqHvBC0n8AnPTd/hl+HMwTBpKYM4JU5HZnHVC9jsHCjg1EsF/MnBg=="
-      }
-    },
-    {
-      "id": "dsh-dream-skin",
-      "version": "10.16.1-zws.3",
-      "kind": "plugin",
-      "applicationVersion": "8.4.2",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-dream-skin/10.16.1-zws.3/dsh-dream-skin-10.16.1-zws.3.tgz",
-      "sha256": "4ca5fabcef815cc01cd218ea07bcd099c5d545cf092439bbaffef0d8fc974873",
-      "size": 148373,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "upstreamVersion": "10.16.0",
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "dependencies": {},
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "o9fHTWZc0eu22HQLNIgR/KucQ95+AFLml/wEfVR/2On/i0gQVlXAAiij5kM7KvIE037TqkBjEJbmptlT+ZmFDA=="
-      }
-    },
-    {
-      "id": "dsh-zotero",
-      "version": "0.12.2-zws.1",
-      "kind": "plugin",
-      "applicationVersion": "8.4.2",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-zotero/0.12.2-zws.1/dsh-zotero-0.12.2-zws.1.tgz",
-      "sha256": "b7d57241537ed62deadf63fb635c040fdc6ba3ea6326e42bdb263f1a995aac21",
-      "size": 325874,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "dependencies": {
-        "zod": "^4.4.3"
-      },
-      "packageDependencies": {
-        "zod": "^4.4.3"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "rumqu53/oQ0MbldeiZkayIIWKKILOr/kQhyezgA5Xs1rIU/b8mDSxEmR/K3JzB6B6GbJU88DBeLPLalAcbj+Bg=="
-      }
-    },
-    {
-      "id": "dsh-free-search",
-      "version": "0.9.4",
-      "kind": "plugin",
-      "applicationVersion": "8.4.2",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-free-search/0.9.4/dsh-free-search-0.9.4.tgz",
-      "sha256": "1e2ed382961fbf36e93db150116b3432f2c70a9944faa29018a3d965a49581f9",
-      "size": 154443,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "dependencies": {},
-      "packageDependencies": {},
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "skshq1BgJ/tPqPwiZ//cEoN8IasDYpG5TGPzHOSmgKAg3SOftEXlR1o67NJHqYVnlAcrVZ5iM/peevXGj6KcAg=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-images",
-      "version": "0.2.30",
-      "kind": "plugin",
-      "applicationVersion": "8.4.4",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-images/0.2.30/zerowallscience-plugin-images-0.2.30.tgz",
-      "sha256": "07b34aa816f3381d7d0ffa48db5814539b98b6d277b6c43dfb19c34fb7a81cf6",
-      "size": 178115,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-skills/0.2.8/zerowallscience-plugin-skills-0.2.8.tgz",
+      "sha256": "73eca8496571f96c3e9992fee11b360e60d9b1cb29b46d7a0a832136e654e563",
+      "size": 218714,
       "restartRequired": true,
       "rollbackSupported": true,
       "desktop": {
@@ -1441,20 +2276,15 @@
         "max": "0.2.1-rc.2"
       },
       "requiredServices": [
-        "tools",
-        "zerowallEnvironment",
-        "attachments",
-        "llm",
-        "zerowallMedia"
+        "skills",
+        "systemPrompt"
       ],
       "optionalServices": [],
       "capabilities": [
-        "images",
-        "image-generation"
+        "skills"
       ],
       "permissions": [
-        "files",
-        "network"
+        "files"
       ],
       "profiles": [
         "development",
@@ -1465,175 +2295,32 @@
       "dependencies": {
         "dsh-better-sidebar": "^0.28.1-zws.1",
         "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-account": "^0.1.13",
-        "@zerowallscience/plugin-ai-cloud": "^0.1.20",
-        "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/plugin-base": "^0.1.23",
-        "@zerowallscience/plugin-environment": "^0.1.15",
-        "sharp": "^0.35.5",
-        "@xmldom/xmldom": "0.9.12",
-        "fflate": "0.8.3",
+        "@zerowallscience/plugin-base": "^0.1.25",
         "lucide-react": "^0.468.0",
         "react": "^18.2.0",
-        "yaml": "2.8.1"
+        "react-dom": "^18.2.0",
+        "zod": "^4.4.3"
       },
       "packageDependencies": {
         "dsh-better-sidebar": "0.28.1-zws.1",
         "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-account": "0.1.13",
-        "@zerowallscience/plugin-ai-cloud": "^0.1.20",
-        "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/plugin-base": "0.1.23",
-        "@zerowallscience/plugin-environment": "0.1.15",
-        "sharp": "^0.35.5",
-        "@xmldom/xmldom": "0.9.12",
-        "fflate": "0.8.3",
+        "@zerowallscience/plugin-base": "0.1.25",
         "lucide-react": "^0.468.0",
         "react": "^18.2.0",
-        "yaml": "2.8.1"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "giCvOiLH4AjixTDC9JekSuuKvtB1yGsehvWOcr3/8iJ2z3vlFXzbvJiH4G1DOgG0ZuD7UrmaJErwDPOnfKgiCQ=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-environment",
-      "version": "0.1.16",
-      "kind": "plugin",
-      "applicationVersion": "8.4.4",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-environment/0.1.16/zerowallscience-plugin-environment-0.1.16.tgz",
-      "sha256": "b829ef7f5f1eb503f821370e5efa05309f224dd33aa235452b659b81dd7f30e4",
-      "size": 240679,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "settings"
-      ],
-      "optionalServices": [],
-      "capabilities": [
-        "environment-config"
-      ],
-      "permissions": [
-        "credentials",
-        "processes"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/plugin-base": "^0.1.23",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "zod": "^4.4.3"
-      },
-      "packageDependencies": {
-        "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/plugin-base": "0.1.23",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "zod": "^4.4.3"
       },
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "OYIYb9er18yx6AijMLFBBhmeNfk2dRPUW+HbPI5HOOBoAxo31Uex35Skh46lqaK3Dwd7wT4veLYIMlG61c7zCA=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-extension-center",
-      "version": "0.1.16",
-      "kind": "plugin",
-      "applicationVersion": "8.4.7",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-extension-center/0.1.16/zerowallscience-plugin-extension-center-0.1.16.tgz",
-      "sha256": "18bb4fbb8e5f07dcd1d59f752957c3f6c708a5ff4fac893be4abd0b766b8f68f",
-      "size": 139821,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [],
-      "optionalServices": [],
-      "capabilities": [
-        "resource-management",
-        "plugin-updates",
-        "skill-updates",
-        "mcp-updates"
-      ],
-      "permissions": [
-        "files",
-        "network"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "@zerowallscience/plugin-base": "^0.1.24",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0"
-      },
-      "packageDependencies": {
-        "@zerowallscience/plugin-base": "0.1.24",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "niaCn1xcYO9vKV1SCpbCUNiQAhqK81vnwk5oaE65DqKrZsJPiilqMQGqV3QvpukjfpIVdAwZU6vnugS/Ei+XCg=="
+        "value": "USo0DAZ4zWyHcBHcpPvsa6PZm57ALaQE+2xy6rPHgcoLCm4rVZZ5t4WpSNdaZabq5Aw116Qz40f+ZuZ6+gLUBQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-videos",
       "version": "0.2.8",
       "kind": "plugin",
-      "applicationVersion": "8.4.7",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1706,14 +2393,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ADz2zhAcOzTbRoLj4H+bGvJa5Sy/SxidwUXUIc4ThWrsgrs6ZkxbINExIvDk+5Li3OAm/gvSBaT5Ob3ufip5Aw=="
+        "value": "u8OiKtzV0jvT/At0JGTraoHdSOXqJhGYBW54Jfj5Oz4TlFUm6Rm+4PeHW352xJ9XSYvJw8dN8YrCjBkv0TvDAA=="
       }
     },
     {
-      "id": "@zerowallscience/plugin-research",
-      "version": "0.1.22",
+      "id": "@dsh-external/zotero-harvest",
+      "version": "0.2.2-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.7",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1727,88 +2414,24 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-research/0.1.22/zerowallscience-plugin-research-0.1.22.tgz",
-      "sha256": "cdcae31e0e252e21db779345b366233e804f93629bee5dd78b6b634682a6940b",
-      "size": 9973283,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/zotero-harvest/0.2.2-zws.1/dsh-external-zotero-harvest-0.2.2-zws.1.tgz",
+      "sha256": "1352a40de904456bd878b48d2ee645f5251f6e1d245fcb3e410724603441a573",
+      "size": 28295,
       "restartRequired": true,
       "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "tools"
-      ],
-      "optionalServices": [
-        "webServer"
-      ],
-      "capabilities": [
-        "research",
-        "data-assets",
-        "artifacts"
-      ],
-      "permissions": [
-        "files"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "runtimeFiles": [
-        "lib/research-assets/brainglobe.png",
-        "lib/research-assets/canvas.png",
-        "lib/research-assets/cells.png",
-        "lib/research-assets/flow.png",
-        "lib/research-assets/he.png",
-        "lib/research-assets/imagej.png",
-        "lib/research-assets/molecule.png",
-        "lib/research-assets/sanger.png",
-        "lib/research-assets/sequence.png"
-      ],
-      "dependencies": {
-        "dsh-better-sidebar": "^0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-projects": "^0.1.6",
-        "@zerowallscience/plugin-base": "^0.1.25",
-        "@zerowallscience/research-store": "^4.1.4",
-        "fast-xml-parser": "^5.11.0",
-        "lucide-react": "^0.468.0",
-        "molstar": "5.11.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "sharp": "^0.35.5",
-        "zod": "^4.4.3"
-      },
-      "packageDependencies": {
-        "dsh-better-sidebar": "0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-projects": "0.1.6",
-        "@zerowallscience/plugin-base": "0.1.25",
-        "@zerowallscience/research-store": "4.1.4",
-        "fast-xml-parser": "^5.11.0",
-        "lucide-react": "^0.468.0",
-        "molstar": "5.11.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "sharp": "^0.35.5",
-        "zod": "^4.4.3"
-      },
+      "dependencies": {},
+      "packageDependencies": {},
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "LiLxBJjc9TVw0+wBVjrMQ6cd4VGLYIAEX26AJ/cnURxdAVeaB2S5sUxKBV0OJUtx8VsB9hAkBPA+EOXUf0GYAw=="
+        "value": "6Nn6cn069UPkcx+IqqU9+nIG73rbOSespPIsVxw4zcelGPnUUIuD6vCVJivGYrUNzU1/Ltt1k4blQFjSKYHgAQ=="
       }
     },
     {
-      "id": "@zerowallscience/research-store",
-      "version": "4.1.4",
+      "id": "dsh-office-tools",
+      "version": "1.0.6",
       "kind": "support",
-      "applicationVersion": "8.4.7",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1822,23 +2445,23 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/research-store/4.1.4/zerowallscience-research-store-4.1.4.tgz",
-      "sha256": "1240e457b7c0bfbd508bd83da4dd3eb34436249fafc14f93a00688737a486199",
-      "size": 56213,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-office-tools/1.0.6/dsh-office-tools-1.0.6.tgz",
+      "sha256": "820075635cd0ba7020fb42114efe8c1edc6f9e92d10090618f3d8e60f9534286",
+      "size": 42631,
       "restartRequired": false,
       "rollbackSupported": true,
       "dependencies": {},
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "d89LxE1QmTNfpuGqEEQTopPYSfntgbcDDE9+ZTClbyMjbZKu+Nbg5ygiE2t99DgMOrH8ayMncRFQp1PlVYTzAA=="
+        "value": "PcVzh0TiDUbZyvG24U5V+jo5GxfUSEtmZyKmAC7ugaVmPqEdM/pqdkdzELrxeWfu8zdPRJ1mfQN0+zvg1iwlAA=="
       }
     },
     {
-      "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.17",
+      "id": "dsh-dream-skin",
+      "version": "10.16.1-zws.3",
       "kind": "plugin",
-      "applicationVersion": "8.4.7",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1852,11 +2475,12 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-mcp/0.2.17/zerowallscience-plugin-mcp-0.2.17.tgz",
-      "sha256": "17e12a154b652c61017ceb4562e9c74f0ca0dd242926e708e886445528146174",
-      "size": 366791,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-dream-skin/10.16.1-zws.3/dsh-dream-skin-10.16.1-zws.3.tgz",
+      "sha256": "4ca5fabcef815cc01cd218ea07bcd099c5d545cf092439bbaffef0d8fc974873",
+      "size": 148373,
       "restartRequired": true,
       "rollbackSupported": true,
+      "upstreamVersion": "10.16.0",
       "desktop": {
         "min": "8.4.0"
       },
@@ -1864,62 +2488,18 @@
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
       },
-      "requiredServices": [
-        "zerowallProjects",
-        "tools"
-      ],
-      "optionalServices": [],
-      "capabilities": [
-        "mcp"
-      ],
-      "permissions": [
-        "files",
-        "network",
-        "credentials"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "dsh-better-sidebar": "^0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-projects": "^0.1.6",
-        "@zerowallscience/plugin-base": "^0.1.25",
-        "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/research-store": "^4.1.4",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "zod": "^4.4.3",
-        "@modelcontextprotocol/client": "2.2.0"
-      },
-      "packageDependencies": {
-        "dsh-better-sidebar": "0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-projects": "0.1.6",
-        "@zerowallscience/plugin-base": "0.1.25",
-        "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/research-store": "4.1.4",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "zod": "^4.4.3",
-        "@modelcontextprotocol/client": "2.2.0"
-      },
+      "dependencies": {},
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "7TKgY5hKmf7DfxzfNqvv4/bGNBmJyA/AArGNFVcLV/eJuJoDKJAbtjHx+pZIgaNiYxZXmgfmX/IGu7mABOCkDA=="
+        "value": "N1WQdH4C7O6ErKwdv1/NeWbnwaDtUqZxLEpGB3boOA6y4ljho+rPN+HFLG0yV7GOHDde4fVQs4dfQwrUwxIgCw=="
       }
     },
     {
-      "id": "@zerowallscience/plugin-skills",
-      "version": "0.2.8",
+      "id": "dsh-zotero",
+      "version": "0.12.2-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.7",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1933,64 +2513,28 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-skills/0.2.8/zerowallscience-plugin-skills-0.2.8.tgz",
-      "sha256": "73eca8496571f96c3e9992fee11b360e60d9b1cb29b46d7a0a832136e654e563",
-      "size": 218714,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-zotero/0.12.2-zws.1/dsh-zotero-0.12.2-zws.1.tgz",
+      "sha256": "b7d57241537ed62deadf63fb635c040fdc6ba3ea6326e42bdb263f1a995aac21",
+      "size": 325874,
       "restartRequired": true,
       "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "skills",
-        "systemPrompt"
-      ],
-      "optionalServices": [],
-      "capabilities": [
-        "skills"
-      ],
-      "permissions": [
-        "files"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
       "dependencies": {
-        "dsh-better-sidebar": "^0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-base": "^0.1.25",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
         "zod": "^4.4.3"
       },
       "packageDependencies": {
-        "dsh-better-sidebar": "0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-base": "0.1.25",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
         "zod": "^4.4.3"
       },
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "1G/bS2OvcEt0a/6Aq2hInkuy/ZD2fJGFzKt+nYUGQcrTWx6IkFnROadSSvyFoyb6/JQjP3mT7CyNIK7PSO6iAQ=="
+        "value": "y5OapavYn0UdA7WdkTnyJOdqFUcS1+v3kD0Qew4pk+vBAwrBXIe3OPvNNSGA59c2UWjd0v6wFPUj4ADOhm/cBg=="
       }
     },
     {
-      "id": "@zerowallscience/plugin-account",
-      "version": "0.1.19",
+      "id": "dsh-free-search",
+      "version": "0.9.4",
       "kind": "plugin",
-      "applicationVersion": "8.4.8",
+      "applicationVersion": "8.4.12",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2004,564 +2548,23 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-account/0.1.19/zerowallscience-plugin-account-0.1.19.tgz",
-      "sha256": "9667ffa56ea8b1c93141010b07ea0f7cd35585874dc3c02a8b59b18de6c15ae8",
-      "size": 299761,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-free-search/0.9.4/dsh-free-search-0.9.4.tgz",
+      "sha256": "1e2ed382961fbf36e93db150116b3432f2c70a9944faa29018a3d965a49581f9",
+      "size": 154443,
       "restartRequired": true,
       "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [],
-      "optionalServices": [],
-      "capabilities": [
-        "account"
-      ],
-      "permissions": [
-        "credentials",
-        "network"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "dsh-better-sidebar": "^0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/plugin-base": "^0.1.25",
-        "qrcode": "^1.5.4",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "zod": "^4.4.3"
-      },
-      "packageDependencies": {
-        "dsh-better-sidebar": "0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/plugin-base": "0.1.25",
-        "qrcode": "^1.5.4",
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "zod": "^4.4.3"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "hXMpsiDwNAcc5KBWf6y17tKhUA3snqMcCeGswFYhlhN9CfrTFBS2fgOTNqtK1cZGo5WM0WaO21E+FyehTW4xDA=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-ai-cloud",
-      "version": "0.1.35",
-      "kind": "plugin",
-      "applicationVersion": "8.4.8",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-ai-cloud/0.1.35/zerowallscience-plugin-ai-cloud-0.1.35.tgz",
-      "sha256": "746d2756028590d795eb95e8f3de84c8b0936a550f17ae466d156fdafee130e2",
-      "size": 2271426,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "llm",
-        "zerowallAccount"
-      ],
-      "optionalServices": [],
-      "capabilities": [
-        "llm.cloud",
-        "media.cloud"
-      ],
-      "permissions": [
-        "credentials",
-        "network",
-        "files"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "dsh-better-sidebar": "^0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-account": "^0.1.19",
-        "@zerowallscience/plugin-secrets": "^0.1.1"
-      },
-      "packageDependencies": {
-        "dsh-better-sidebar": "0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-account": "0.1.19",
-        "@zerowallscience/plugin-secrets": "0.1.1"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "qxtG80LUZcz/7huRNIvGHjAecpLxxNTdJs2VPt/3WUiazn+E5jE6vhxqi7Qnt90P8Dah/s0Wt4c8K5WNUQnZCg=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-base",
-      "version": "0.1.26",
-      "kind": "plugin",
-      "applicationVersion": "8.4.8",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-base/0.1.26/zerowallscience-plugin-base-0.1.26.tgz",
-      "sha256": "530b6a18e920b1cad01abdd853520f4e63733a7a49a6c6e5e6c1d5bb88d4fa19",
-      "size": 194089,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "webServer",
-        "systemPrompt",
-        "workspaceRegistry"
-      ],
-      "optionalServices": [
-        "updater"
-      ],
-      "capabilities": [
-        "ui.locale",
-        "ui.update"
-      ],
-      "permissions": [],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
-      },
-      "packageDependencies": {
-        "lucide-react": "^0.468.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "/I5q/jfUQc6cE/4VQuHj8oRcA+t3jqdWb0ulHe3WgYUlKaCzi4KBhxRRy1ZNz9GhPqCq4cZguLYgZQlxnB4OBQ=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-claude-code",
-      "version": "0.1.8",
-      "kind": "plugin",
-      "applicationVersion": "8.4.8",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.7"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-claude-code/0.1.8/zerowallscience-plugin-claude-code-0.1.8.tgz",
-      "sha256": "ba7b3f5fc6db22d42a1542fed8e41f8be9f40a43b258902a76e68cf36870eb22",
-      "size": 159094,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.7"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "agentDefaultModel",
-        "subprocess",
-        "workingDirectory",
-        "skills",
-        "zerowallProjects",
-        "zerowallEnvironment",
-        "credentials",
-        "settings",
-        "llm",
-        "sessionProjections"
-      ],
-      "optionalServices": [
-        "zerowallAiCloudCredentialResolver",
-        "zerowallMcpRouteResolver"
-      ],
-      "capabilities": [
-        "claude-code"
-      ],
-      "permissions": [
-        "processes",
-        "files",
-        "network",
-        "credentials"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "@zerowallscience/plugin-base": "^0.1.24",
-        "@zerowallscience/plugin-projects": "^0.1.6",
-        "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/plugin-environment": "^0.1.16",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "zod": "^4.4.3"
-      },
-      "packageDependencies": {
-        "@zerowallscience/plugin-base": "^0.1.24",
-        "@zerowallscience/plugin-projects": "0.1.6",
-        "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/plugin-environment": "0.1.16",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "zod": "^4.4.3"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "77/gBOT7XX6swqxGVvwqv3Xtd3DThzq8szTQu2hDBhlHiwrosTpDA0+muHoN5oBHM1IRHf+V9rzi/oF7uHbuDg=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-desktop-compat",
-      "version": "0.1.9",
-      "kind": "plugin",
-      "applicationVersion": "8.4.8",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-desktop-compat/0.1.9/zerowallscience-plugin-desktop-compat-0.1.9.tgz",
-      "sha256": "acbcf83330d081da80d0c9f72cb47969602812ef6ce741447a10cfe4c0eebb42",
-      "size": 7375,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [],
-      "optionalServices": [
-        "desktopProfiles",
-        "desktopPnpm"
-      ],
-      "capabilities": [
-        "desktop.profiles",
-        "desktop.plugins"
-      ],
-      "permissions": [],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
       "dependencies": {},
       "packageDependencies": {},
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0+gtxJRg1y0lW8swckMiuBpBifSavfpjJ26XYctcwDkGF58cWt4uBSjx7EJFT4d6hxjqyKXOdzeGJEREoldTDQ=="
-      }
-    },
-    {
-      "id": "@zerowallscience/dsh-bundle-science",
-      "version": "0.1.20",
-      "kind": "plugin",
-      "applicationVersion": "8.4.8",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-bundle-science/0.1.20/zerowallscience-dsh-bundle-science-0.1.20.tgz",
-      "sha256": "482d2ca2a819f02fc8915f81558a2529494454832fd879a1232c0fa336076b5a",
-      "size": 1233,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "composition": [
-        "@zerowallscience/plugin-account",
-        "@zerowallscience/plugin-ai-cloud",
-        "@zerowallscience/plugin-base",
-        "@zerowallscience/plugin-desktop-compat",
-        "@zerowallscience/plugin-environment",
-        "@zerowallscience/plugin-extension-center",
-        "@zerowallscience/plugin-execution",
-        "@zerowallscience/plugin-files",
-        "@zerowallscience/plugin-images",
-        "@zerowallscience/plugin-mcp",
-        "@zerowallscience/plugin-mineru",
-        "@zerowallscience/plugin-projects",
-        "@zerowallscience/plugin-publications",
-        "@zerowallscience/plugin-pubmed",
-        "@zerowallscience/plugin-python",
-        "@zerowallscience/plugin-biogenie",
-        "@zerowallscience/plugin-research",
-        "@zerowallscience/plugin-reviewer",
-        "@zerowallscience/plugin-runs",
-        "@zerowallscience/plugin-secrets",
-        "@zerowallscience/plugin-singlecell",
-        "@zerowallscience/plugin-skills",
-        "dsh-wechat",
-        "@dingyi222666/dsh-session-notification"
-      ],
-      "dependencies": {
-        "@zerowallscience/plugin-account": "^0.1.19",
-        "@zerowallscience/plugin-ai-cloud": "^0.1.34",
-        "@zerowallscience/plugin-base": "^0.1.25",
-        "@zerowallscience/plugin-desktop-compat": "^0.1.8",
-        "@zerowallscience/plugin-environment": "^0.1.16",
-        "@zerowallscience/plugin-extension-center": "^0.1.16",
-        "@zerowallscience/plugin-execution": "^0.1.6",
-        "@zerowallscience/plugin-files": "^0.2.14",
-        "@zerowallscience/plugin-images": "^0.2.30",
-        "@zerowallscience/plugin-mcp": "^0.2.17",
-        "@zerowallscience/plugin-mineru": "^0.1.10",
-        "@zerowallscience/plugin-projects": "^0.1.6",
-        "@zerowallscience/plugin-publications": "^0.1.6",
-        "@zerowallscience/plugin-pubmed": "^0.1.8",
-        "@zerowallscience/plugin-python": "^0.1.24",
-        "@zerowallscience/plugin-biogenie": "^0.1.6",
-        "@zerowallscience/plugin-research": "^0.1.22",
-        "@zerowallscience/plugin-reviewer": "^0.1.7",
-        "@zerowallscience/plugin-runs": "^0.1.6",
-        "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/plugin-singlecell": "^0.1.7",
-        "@zerowallscience/plugin-skills": "^0.2.8",
-        "dsh-wechat": "0.11.1-zws.2",
-        "@dingyi222666/dsh-session-notification": "0.2.7-zws.1"
-      },
-      "packageDependencies": {
-        "@zerowallscience/plugin-account": "0.1.19",
-        "@zerowallscience/plugin-ai-cloud": "0.1.34",
-        "@zerowallscience/plugin-base": "0.1.25",
-        "@zerowallscience/plugin-desktop-compat": "0.1.8",
-        "@zerowallscience/plugin-environment": "0.1.16",
-        "@zerowallscience/plugin-extension-center": "0.1.16",
-        "@zerowallscience/plugin-execution": "0.1.6",
-        "@zerowallscience/plugin-files": "0.2.14",
-        "@zerowallscience/plugin-images": "0.2.30",
-        "@zerowallscience/plugin-mcp": "0.2.17",
-        "@zerowallscience/plugin-mineru": "0.1.10",
-        "@zerowallscience/plugin-projects": "0.1.6",
-        "@zerowallscience/plugin-publications": "0.1.6",
-        "@zerowallscience/plugin-pubmed": "0.1.8",
-        "@zerowallscience/plugin-python": "0.1.24",
-        "@zerowallscience/plugin-biogenie": "0.1.6",
-        "@zerowallscience/plugin-research": "0.1.22",
-        "@zerowallscience/plugin-reviewer": "0.1.7",
-        "@zerowallscience/plugin-runs": "0.1.6",
-        "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/plugin-singlecell": "0.1.7",
-        "@zerowallscience/plugin-skills": "0.2.8",
-        "dsh-wechat": "0.11.1-zws.2",
-        "@dingyi222666/dsh-session-notification": "0.2.7-zws.1"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "UWq/tu9HBFlGAbLlMX0/lg70kw15R67q9GdoMtxF4Tl5ZKXFXmLFAasGvXpLkEWOXr9g/334c8pqF79uasiIDQ=="
-      }
-    },
-    {
-      "id": "dsh-wechat",
-      "version": "0.11.1-zws.2",
-      "kind": "plugin",
-      "applicationVersion": "8.4.8",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-wechat/0.11.1-zws.2/dsh-wechat-0.11.1-zws.2.tgz",
-      "sha256": "d25e0749d74261af3be7dcba0524a94f0eaf89abad38374b75428748c706fc0e",
-      "size": 1336357,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "upstreamVersion": "0.11.0",
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "dependencies": {},
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "/DbDx0/Zt45w5Bnr4qz0rFVxLS3+dckkEqFEBcvOwZ0VcqSnqkoLcDH7uevIhP6qkBHpoz2WNemrVdZplUssBw=="
-      }
-    },
-    {
-      "id": "@zerowallscience/plugin-python",
-      "version": "0.1.26",
-      "kind": "plugin",
-      "applicationVersion": "8.4.8",
-      "dshRange": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "desktopRange": {
-        "min": "8.4.0"
-      },
-      "platform": [
-        "win32"
-      ],
-      "architecture": [
-        "x64"
-      ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-python/0.1.26/zerowallscience-plugin-python-0.1.26.tgz",
-      "sha256": "647edf724a723a5ed7a4e9f7f478ead8b82e0a201321444a1e3f00b11d57556c",
-      "size": 268754,
-      "restartRequired": true,
-      "rollbackSupported": true,
-      "desktop": {
-        "min": "8.4.0"
-      },
-      "dsh": {
-        "min": "0.2.1-rc.2",
-        "max": "0.2.1-rc.2"
-      },
-      "requiredServices": [
-        "tools"
-      ],
-      "optionalServices": [],
-      "capabilities": [
-        "python"
-      ],
-      "permissions": [
-        "processes",
-        "files"
-      ],
-      "profiles": [
-        "development",
-        "preview",
-        "stable"
-      ],
-      "migrationVersion": 1,
-      "dependencies": {
-        "dsh-better-sidebar": "^0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.1-zws.3",
-        "@zerowallscience/plugin-base": "^0.1.25",
-        "@zerowallscience/integrity-runtime": "^6.2.2",
-        "@zerowallscience/research-store": "^4.1.4",
-        "yauzl": "3.4.0",
-        "pend": "1.2.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
-      },
-      "packageDependencies": {
-        "dsh-better-sidebar": "0.28.1-zws.1",
-        "dsh-dream-skin": "10.16.0",
-        "@zerowallscience/plugin-base": "0.1.25",
-        "@zerowallscience/integrity-runtime": "6.2.2",
-        "@zerowallscience/research-store": "4.1.4",
-        "yauzl": "3.4.0",
-        "pend": "1.2.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0"
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "keyId": "stable-4",
-        "value": "ojBE8wym6iJa3rabv8aIYQ6ipCZUtTTuizKmbw6f10RsOUuMRRDPaYsrVdaW6Bsft4/lCV2D7q3LLNxZA9nhAg=="
+        "value": "IV/e7HUXbuw1g4K4HSI4KXVOkuUBsg5okC0WkG/IQWRyNZnp0Z4keMaDPS+FhmeQOs8nkILdgdPUVuZ8V+IkBA=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "Ol1w1TrflPHf735aFlFYFfFSrz8VIbNo0sOk2EbpLDnzNkIwq9ZOfHixuzBLUA/NxZqDo0BdL/rNac43q+SWBQ=="
+    "value": "bWT446EOKLtKvOEgiDFicdnAG8rnLkeOD18SpCe8xUq90oyIueYrRkwnTvQ33q/6dK7fNja/EEuDAXe9YCVsDQ=="
   }
 }

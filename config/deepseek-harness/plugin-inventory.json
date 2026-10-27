@@ -71,7 +71,6 @@
         "@zerowallscience/plugin-runs",
         "@zerowallscience/plugin-publications",
         "@zerowallscience/plugin-skills",
-        "@zerowallscience/plugin-reviewer",
         "@zerowallscience/plugin-extension-center"
       ]
     },
@@ -112,7 +111,6 @@
         "@zerowallscience/plugin-runs",
         "@zerowallscience/plugin-publications",
         "@zerowallscience/plugin-skills",
-        "@zerowallscience/plugin-reviewer",
         "@zerowallscience/plugin-extension-center"
       ]
     },
@@ -153,7 +151,6 @@
         "@zerowallscience/plugin-runs",
         "@zerowallscience/plugin-publications",
         "@zerowallscience/plugin-skills",
-        "@zerowallscience/plugin-reviewer",
         "@zerowallscience/plugin-extension-center"
       ]
     }
@@ -272,7 +269,7 @@
     {
       "id": "base",
       "package": "@zerowallscience/plugin-base",
-      "version": "0.1.26",
+      "version": "0.1.29",
       "source": "plugins/base",
       "manifest": "plugins/base/zerowall.plugin.json",
       "client": true,
@@ -318,7 +315,7 @@
     {
       "id": "environment",
       "package": "@zerowallscience/plugin-environment",
-      "version": "0.1.16",
+      "version": "0.1.17",
       "source": "plugins/environment",
       "manifest": "plugins/environment/zerowall.plugin.json",
       "client": true,
@@ -381,7 +378,7 @@
     {
       "id": "mcp",
       "package": "@zerowallscience/plugin-mcp",
-      "version": "0.2.17",
+      "version": "0.2.25",
       "source": "plugins/mcp",
       "manifest": "plugins/mcp/zerowall.plugin.json",
       "client": true,
@@ -405,7 +402,7 @@
     {
       "id": "account",
       "package": "@zerowallscience/plugin-account",
-      "version": "0.1.19",
+      "version": "0.1.21",
       "source": "plugins/account",
       "manifest": "plugins/account/zerowall.plugin.json",
       "client": true,
@@ -425,7 +422,7 @@
     {
       "id": "claude-code",
       "package": "@zerowallscience/plugin-claude-code",
-      "version": "0.1.8",
+      "version": "0.2.14",
       "source": "plugins/claude-code",
       "manifest": "plugins/claude-code/zerowall.plugin.json",
       "client": true,
@@ -438,11 +435,14 @@
         "processes",
         "files",
         "network",
-        "credentials"
+        "credentials",
+        "approvals",
+        "attachments"
       ],
       "requiredServices": [
         "agentDefaultModel",
         "subprocess",
+        "subagents",
         "workingDirectory",
         "skills",
         "zerowallProjects",
@@ -450,11 +450,21 @@
         "credentials",
         "settings",
         "llm",
-        "sessionProjections"
+        "sessionProjections",
+        "agentPresets",
+        "tools",
+        "systemPrompt",
+        "permissionPresets",
+        "approval",
+        "attachments"
       ],
       "optionalServices": [
         "zerowallAiCloudCredentialResolver",
-        "zerowallMcpRouteResolver"
+        "zerowallMcpRouteResolver",
+        "zerowallMcp",
+        "zerowallCapabilities",
+        "agents",
+        "subagentModelSelection"
       ],
       "productionPath": "resources/offline-profile/modules/@zerowallscience/plugin-claude-code"
     },
@@ -541,7 +551,7 @@
     {
       "id": "research",
       "package": "@zerowallscience/plugin-research",
-      "version": "0.1.22",
+      "version": "0.1.25",
       "source": "plugins/research",
       "manifest": "plugins/research/zerowall.plugin.json",
       "client": true,
@@ -682,7 +692,7 @@
     {
       "id": "python",
       "package": "@zerowallscience/plugin-python",
-      "version": "0.1.26",
+      "version": "0.1.35",
       "source": "plugins/python",
       "manifest": "plugins/python/zerowall.plugin.json",
       "client": true,
@@ -788,40 +798,14 @@
       "productionPath": "resources/offline-profile/modules/@zerowallscience/plugin-skills"
     },
     {
-      "id": "reviewer",
-      "package": "@zerowallscience/plugin-reviewer",
-      "version": "0.1.7",
-      "source": "plugins/reviewer",
-      "manifest": "plugins/reviewer/zerowall.plugin.json",
-      "client": true,
-      "remote": false,
-      "loadOrder": 34,
-      "capabilities": [
-        "reviewer"
-      ],
-      "permissions": [
-        "approvals"
-      ],
-      "requiredServices": [
-        "settings",
-        "subagents",
-        "commands",
-        "llm",
-        "agentPresets",
-        "tools"
-      ],
-      "optionalServices": [],
-      "productionPath": "resources/offline-profile/modules/@zerowallscience/plugin-reviewer"
-    },
-    {
       "id": "extension-center",
       "package": "@zerowallscience/plugin-extension-center",
-      "version": "0.1.16",
+      "version": "0.1.17",
       "source": "plugins/extension-center",
       "manifest": "plugins/extension-center/zerowall.plugin.json",
       "client": true,
       "remote": false,
-      "loadOrder": 35,
+      "loadOrder": 34,
       "capabilities": [
         "resource-management",
         "plugin-updates",
