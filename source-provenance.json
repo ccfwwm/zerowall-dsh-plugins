@@ -3,7 +3,7 @@
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
   "sourceCommit": "dacf1a08fa81d37841d4acfc9b7ae1b31d506d81",
   "sourceOnly": false,
-  "buildCommit": "368af01087d5e04ecf36c4b64bc8a15b43509e20",
+  "buildCommit": "dacf1a08fa81d37841d4acfc9b7ae1b31d506d81",
   "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
   "packages": [
     {
