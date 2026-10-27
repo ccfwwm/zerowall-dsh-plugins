@@ -1,3 +1,8 @@
+# Normalize exported source text consistently with the main repository.
+* text=auto eol=lf
+*.ps1 text eol=crlf
 # Preserve trailing spaces in upstream reference snapshots exported with signed Skills.
 resources/extensions/skills/zerowall-tooluniverse/references/upstream/*.md whitespace=-blank-at-eol
 skills/zerowall-tooluniverse/references/upstream/*.md whitespace=-blank-at-eol
+# Retain exact upstream bytes already distributed in immutable plugin archives.
+plugins/claude-code/src/client/upstream/GlobalSettingControls.tsx whitespace=-blank-at-eof

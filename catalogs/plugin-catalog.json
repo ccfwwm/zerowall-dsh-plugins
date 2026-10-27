@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "kind": "plugin",
-  "applicationVersion": "8.4.12",
+  "applicationVersion": "8.4.13",
   "localOnly": false,
-  "generatedAt": "2026-10-27T16:47:34.362Z",
+  "generatedAt": "2026-10-27T18:57:48.916Z",
   "resources": [
     {
       "id": "@zerowallscience/plugin-account",
-      "version": "0.1.21",
+      "version": "0.1.22",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -23,9 +23,9 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-account/0.1.21/zerowallscience-plugin-account-0.1.21.tgz",
-      "sha256": "3ab355f1b9c3def9a924afcfda2343cb82162173949606f7e9abc847748a3185",
-      "size": 302924,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-account/0.1.22/zerowallscience-plugin-account-0.1.22.tgz",
+      "sha256": "4054b5d826d2136e2e80b85659b158232344aee6235bf8a386b02d065073aa7b",
+      "size": 302965,
       "restartRequired": true,
       "rollbackSupported": true,
       "desktop": {
@@ -54,7 +54,7 @@
         "dsh-better-sidebar": "^0.28.1-zws.1",
         "dsh-dream-skin": "10.16.1-zws.3",
         "@zerowallscience/plugin-secrets": "^0.1.1",
-        "@zerowallscience/plugin-base": "^0.1.27",
+        "@zerowallscience/plugin-base": "^0.1.29",
         "qrcode": "^1.5.4",
         "lucide-react": "^0.468.0",
         "react": "^18.2.0",
@@ -65,7 +65,7 @@
         "dsh-better-sidebar": "0.28.1-zws.1",
         "dsh-dream-skin": "10.16.0",
         "@zerowallscience/plugin-secrets": "0.1.1",
-        "@zerowallscience/plugin-base": "0.1.27",
+        "@zerowallscience/plugin-base": "0.1.29",
         "qrcode": "^1.5.4",
         "lucide-react": "^0.468.0",
         "react": "^18.2.0",
@@ -75,14 +75,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "KVLCKsY0CZmhqgFnBLCJ2vlwyNxGS6keLFrplkZnOlKXhGOMIZkxgYnKFYS2bSOiOwKzH/RuRQPIzSyZEMiNDg=="
+        "value": "royr9r9BNw0gA5ifxC/kUUPf7qqRA5g6CWpdxUg8tqiCif+cin/W0N5JPYR+J3jB9wsvsSGpwvJkcWlJ8Rj/CA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-ai-cloud",
       "version": "0.1.35",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -143,14 +143,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "obCuYxvtcRwVinuu8hXbz7gJo3YH4wwBNfhAF0fAdeP0jbZiW5LQbkp/j6L5EqUuYoIFRNvEgaYFq2ep37xUAg=="
+        "value": "eEZ5voFZOEWHTo/NT+0UKEaqwbOLGg+0JudaKMROvRtrHBi4oFJoXM9045Kwa3mkBsy0M7RwOVeabfu/mXlgCg=="
       }
     },
     {
       "id": "@zerowallscience/plugin-base",
       "version": "0.1.29",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -208,14 +208,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "W2IwZWoSEeqWvE5Q2BxTMUCdyi0Jq2R3/rKK9ysmXA1149jmkF7Qy36xRdlr89IjdwIGWxX06Tng4S3S798dDQ=="
+        "value": "odJR1Lld+iiwRY1eCjjaW09F8QQrKsWzqZpLCFhIIqHFgX3mcPVePV4DhUVh26Fr+CXDlv0tybg4fNpWvWLaAA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-biogenie",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -271,14 +271,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "kHtdvrvyX3uHoqkiCEE3vvlqq7rd7W3tzOIn6FEjA9ZRkBSAzZc3l3n0a0CRxuAqC3PAottPn65lmd4/kTZNBQ=="
+        "value": "Jod9s/dwt8LgSxLNtfwdHA4JXleGwZxPGWGL0R3/E4Zb1HDj8geuRGMCkckyuriQKpdTQmBZcAG8b2zW1f1XDw=="
       }
     },
     {
       "id": "@zerowallscience/plugin-claude-code",
       "version": "0.2.14",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -371,14 +371,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "66ePdFJHZH5rAiz0g4KgMecOplnJe9xnmwELnTOlI9zSXoQKUcenhzlqFQETJwdUYP9i0uF+ZYh/B1UOltwaCw=="
+        "value": "MfevCCrBZ2b29ufGPgckxkrD6oAfUmVPqY0bc7cwComJKCx+ya5zcbjf8nEd58stY/Ar6Q1I5pVLpIm0bWplAg=="
       }
     },
     {
       "id": "@zerowallscience/plugin-desktop-compat",
       "version": "0.1.9",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -425,14 +425,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "5rY5eZ/cw/qXV/xqs4V4kRLxa5LhevH9HCf2Gw234NnMtWO6aDs4/TOrbJHjlhMdnu4RXqyBNuwgH2CpD7fhBw=="
+        "value": "WfbcPoiKTBFwzxqqxzhE89bntNP8fHVlWzlMgYfR2obDSKQoKuYjutrXyunLLRbs10fHzMrOnen8YrolwqD/Bg=="
       }
     },
     {
       "id": "@michengai/dsh-archive-manager",
       "version": "1.1.2-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -473,14 +473,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "NCot0dTzCoCFOKOQ4BHKeIH5+5U9MwDdXoydbZRqToENlXJmdra7pnFi2QkGzs01lFHk/54bfmQugygJ6SljDQ=="
+        "value": "CkufMAjxWswo4wkpVG+RkVlbXNtTZxrEZhGIlSuieJScpS597Pk81XdfOGU3DBN0pxAhec4StwouEdowhWtIBA=="
       }
     },
     {
       "id": "dsh-better-sidebar",
       "version": "0.28.1-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -578,14 +578,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "5WA2RYt+TJ7wwzXMfZhqcJErrMzapHZ0LGB299MUfo/7Ajiei21i3DsEQ8Sx0r4MXrCz1DqK8pOrAMI+F1BuAg=="
+        "value": "drt0R+0rFafQPirKyoQbcLqkAqbJKzqU/HbDLRIzcs1IOBmpa+RwONm5k6KnN65LqeKb4L0HyqYkqLfP+PQ4Aw=="
       }
     },
     {
       "id": "@zerowallscience/dsh-bundle-core",
       "version": "0.1.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -622,14 +622,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "cRDbmEw9v27hMAgAB7jO63LcKzBRzTrYTkVSqMFq9B2k2mKVVCU5H1fzb1LTkX0C9YDR5fNJVGcA6DQvup76CA=="
+        "value": "cbf0NlIIVO2/PmJEWbzTTOhWBpOHTwVAbMnSsWYlBCry2l5I6oRAAxht9OLJH+maiiJih1mBQhB56xAHa2AKAg=="
       }
     },
     {
       "id": "@zerowallscience/dsh-bundle-science",
       "version": "0.1.21",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -733,14 +733,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ASGjtkZ9b3zoT4Gxfjef4J+SkbZ3hG7GeRd9/bgOi6BlgOLVBlrZAGxEnwqpmZTIB0rQl/KlAnL/9Yad7H9zDQ=="
+        "value": "SWZWQfcbw+uqlmarv9MEynggAKQXz+VITYhjUvYxxaNpffNaYiF03ePUQ3xUQipiSu5FGcvjwAgKbhaVmkoSDg=="
       }
     },
     {
       "id": "dsh-file-review",
       "version": "0.8.11-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -778,14 +778,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "RQQjw6rxORYzxhl/jTyITqR+W+xKsLI9JB+VHqvYRS+O6r2ET7sYTaMktez+BT27gbZTbmk5BoxVNgSgKft3Dg=="
+        "value": "wN3pJsfZtGm5yZeApT5iGkhuCz+YtAbvvZ9bKh9JfEbMiK3pTadyLv+rTeRoBqyQ6HMYhWrI9fPODRKkQfl7Cw=="
       }
     },
     {
       "id": "dsh-ppt-maker",
       "version": "1.0.1-zws.9",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -838,14 +838,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "94eadVDwj6PpV/zP1UmhY4zjSG3JmnVStPnyDfEFIVivmqQlW9oQ2QjpfWRLY/mVAenmf4StJtqudzDXTlXTCQ=="
+        "value": "ktYWQZIXkd9za7UX1aWCRyJgwfdwPQ5Imregzplpaiuz/ynPRUEQORpdkUXQ7RobwH+0pKmUfX2uSIDhNtcdAg=="
       }
     },
     {
       "id": "@dingyi222666/dsh-session-notification",
       "version": "0.2.7-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -876,14 +876,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "RmcPpGa1bq2jgqWEEsFScDUJRCDQtELMHIlijXknvGWxAa+ce4WXLl9/P24v4EZAJ/Q6qiMZG5UGdmQsoUJ4AQ=="
+        "value": "4UkSQk3S6Lgwre9vj+T/M2q+1aifKLCi8fZzYzzj83wmEd88se3VmFJ8LY6Fgm5qIt+Uxn4H8x8KkTPz6shWAQ=="
       }
     },
     {
       "id": "dsh-ssh-ops",
-      "version": "0.3.23-zws.1",
+      "version": "0.3.23-zws.3",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -897,9 +897,9 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-ssh-ops/0.3.23-zws.1/dsh-ssh-ops-0.3.23-zws.1.tgz",
-      "sha256": "f995d6deb660075fcd1d91a0dbaca9d253405524f822ed438435217549d9dbfa",
-      "size": 715906,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-ssh-ops/0.3.23-zws.3/dsh-ssh-ops-0.3.23-zws.3.tgz",
+      "sha256": "1e7f01dd78585fc75fb89e109c7aece66d04f9774ca8b7bad60563ef3409d1b1",
+      "size": 716413,
       "restartRequired": true,
       "rollbackSupported": true,
       "upstreamVersion": "0.3.22",
@@ -933,14 +933,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wGY5Ax+XcRyJQZNz/XHsAUkP+wNEbG+sppLM3bNfs75ME2KXnbdJCbBvMklGBWB4FjrZ7kgmLIniSxVI1VCJAQ=="
+        "value": "5O9xzGyUkwZy4tbQNJRBxjPuiVqfUNd5eneTgqas1Ivo6IpuveId9uaKeYxk0RkMuQ+Ch7M1G4rU7kv1mvE3DA=="
       }
     },
     {
       "id": "dsh-wechat",
       "version": "0.11.1-zws.2",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -971,14 +971,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "STiLk4rQ3lqdH8W9oLkvrt1DUEvlrhMiOd8aoPAFlfFAb18b00cLv4jB6BCMabDY3ZVVcO/1nq4C/UIsyojADg=="
+        "value": "/fd5yx/WOW1BAhhBpgv4o1d0snZd/1n42zfLnuoVLEycwH9c2YL1Nm9bL/rHubpsqmxSiGyLf3usKYIVv4QqBA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-environment",
       "version": "0.1.17",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1038,14 +1038,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Fyzp2YrF8/r9SZvYusB/KEc2yEuskrry4tfpasnJtrpeFH65ktQ7VO3UxZ3gEkYrcCnyAfujs91A63GaBnftCg=="
+        "value": "MXV8xM92V5rcbhGZCks07e6yhUzaDLFaDm96pkX62vfB+lTxMwy49O+8TACdJN+ii+xK5BlGTZscFJWb1LWzAA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-execution",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1101,14 +1101,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "1pfrYlqQourq6qhqJS4yUFBBxg5XeWxmYqD2n8HMUvPQoWhWMzxOeX5fMDZBj/StFcAl0exkGUjhWN5bSzoLDw=="
+        "value": "oIcDnOZyEbncbVPWZRveYnzRQYjT1P/NFOrL6ZNtKtu11a2zUWo5fu1Zs9SoSNgSW8vamaK/nJdbFioUaaQ+CQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-extension-center",
       "version": "0.1.17",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1165,14 +1165,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ZjK5KcTtvFMFibf7cHgPJW5DIyKv1pOpvB4LEAOoh2vxi5co3K2nt+pTClFqs1eZDnBwLhHftHZx58+mbpWWDQ=="
+        "value": "eK5Sxa+fdo1/A+PMeRwi0JEy3M2JCO/C47fbYllAVORTSkHOShUtfsNTZ7CrhmGxbKEv7HNLxHMCXo+rsEa7BA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-files",
       "version": "0.2.14",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1257,14 +1257,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "+bXLZx0EqUOb8MqXaseNSi5HuVQ+tb/ezMB6fjuNi5yVlMxZueMzzD/YlU5IedUbChMG/zn6kUAZ/dZgIXM1DA=="
+        "value": "imrSP/zQyIdy5wgsSC8iXoUy2emfur3AlFIG/LRbwyXbWnoPKGrDRssUuhAiXlAoSIDFt844yxaLgEdPFda9Aw=="
       }
     },
     {
       "id": "@zerowallscience/plugin-images",
       "version": "0.2.30",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1345,14 +1345,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "afv7q94rI3HvOtLsp74SYMCFN5R5z+FQ9maih37/Ddt0QJlb+lMDPs5caTZEDklTBBH+fAFKZ8SlIfOz/XADAQ=="
+        "value": "s3VZVq91ciFGpuTocxeBkwYDf2oj1VtMHsGHUpLezj1Qma0Wx2K7f5lhCHVNK7baCs6ld22nGtrWNl2kyluzDg=="
       }
     },
     {
       "id": "@zerowallscience/integrity-runtime",
       "version": "6.2.2",
       "kind": "support",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1384,14 +1384,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "zO1JRdNe8fdTCQVxca43VSdVrZ75I61FfdiGzVcbY0jWKL6dV8oSNN0+1Pcmq1Wb+tjyE7OijuQvi9s4VEdfCw=="
+        "value": "FnFGva6lSSGH5IbILRG/7d+93bNNcZVFQgoBfxuVuG1Eg4BYpktrUB9xOB3EtnywMKS9blN3qI4rNgDZxwLeCg=="
       }
     },
     {
       "id": "@zerowallscience/plugin-mcp",
       "version": "0.2.25",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1465,14 +1465,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "oH9z9MCmENb0KwowvpweutL51g40UamlK/BukhHXS0zU4EwlVBz9QchHc90tDKpoqJj3mB0yy/qJ3141hLn3Cg=="
+        "value": "5z+PBMDM19rHaQDCTvaghtjFSYaVKhMxvjdtUf/1vFfWS/Bz77/KHfLOdXpJjUjuPuRKwy4+YzWf1C2pZ7R/Dw=="
       }
     },
     {
       "id": "@zerowallscience/plugin-mineru",
       "version": "0.1.10",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1553,14 +1553,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "+z+tvLvzpWtCnV77FXsHzXPASBfiWzhvly+kgBo/hYQ9UZtltMv+biKqeA/nghujTeyhYRpakUFpwMR181MDCw=="
+        "value": "/ceSA6UeDsfTbTNvgoT/jaMFKeHGVR9JBDG7BSjIhBBAhCHvWofkQDoFK/89hkt7AqNu/7lNeBBLwQw6GPaAAA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-projects",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1622,14 +1622,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "mLyvJM1ixOjEzfrwfNRmUSdgCFFwwv7C1tynu+HLy1XzUmzHcKQuQcm4tRxx8GjJ1Mkr+CLQyLsXWnRpoxtQBA=="
+        "value": "u3Y5MyVAMD60Sc5ymHfQWflPtvi3cNYBVrlp89J5V6hisA+wzcpqQ4eje+dJJNNvJ7XWfU0RUCh/XSrNmnA8Dw=="
       }
     },
     {
       "id": "@zerowallscience/plugin-publications",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1689,14 +1689,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "c0K2YZ+47Myl2SSyWHEu3M+NEJzAl9HjG+T/RVuS4m1MEfX31Gr8z1eHZJYbZDAStFUlfDrpqw/fp4AY8ml6Bw=="
+        "value": "sxAQ9vacN93CdRQEWALHQuFdeovZi6rpZLquatPVw/f6Q1q3bxMckHTOV6SeFx3mxZu3tm7fxZDUfwhtWGRCAQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-pubmed",
       "version": "0.1.8",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1768,14 +1768,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "axIp2kywCaSEnT+YGEIZiEX9FbPm8irVnq2r3hvABjiw+zlxktRYxtpUz37JervVFzBPIbzlfp3vLf9hEGhnDg=="
+        "value": "tkJNxhXIFH5xp7GwYZ/VdM6su2AKvOKYKvgRWre5QJ+DbZ1zhPnpSV3PNF/OfaGNqhD6b5k6H9FsryMl1LTIBg=="
       }
     },
     {
       "id": "@zerowallscience/plugin-python",
       "version": "0.1.35",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1843,14 +1843,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "iqcYJCRQvoIUmfPN02tMm2ywHHY0fhdkzOEnN3m6gnFLZ4+1iXYaynF4zgG+p1Hb7L3F2ZZOSPcgrKne4zKjBQ=="
+        "value": "fGTm+WaVDBwAiJOaWh23UksPBX7wdeC3YizL1WQq3HeeEhLXfgR+xQG1chIUwodkALnk3VUShLLDUY1sIsaoBA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-research",
       "version": "0.1.25",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1938,14 +1938,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "gk5qk3++BAwHwB3XXbLNJwIBSr2xYu+WixJB0QvPiI63hJnLXpCyFwvEeWo++mdrY+NW/AeF+e5Ru5btPrHMBg=="
+        "value": "bdAE6VeHkObbz7v5lKY0f1NINpc/luzo7/ghHx7wwnk/JCRF9EbvlvGUWiM/TGUwGqKV3nJ3fg4PW1cZsnEnDQ=="
       }
     },
     {
       "id": "@zerowallscience/research-store",
       "version": "4.1.4",
       "kind": "support",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -1968,14 +1968,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "hSksJvw8sjW7M+8l7TNuybCVkieFTOy1ml6oPiyOZkLg4odRLsRtvgNaKbeb0RXEdCbWDEe/zhUZ4Zdp92gyCA=="
+        "value": "tomgS4jVzjt6NeUiSt6Cg2UAi6yVvPZSee6VE2vTMToaPSfjWrnX2rs+zj6t5yFEg+/gFPlpqNm5wPN9QTQSCQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-reviewer",
       "version": "0.1.8",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2032,14 +2032,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "3ngzK8kFFRtHbpcy78vKL0XDgPBhZ9v28ggXBUA0AIRjcvnai2LJ611i0SAx/PtX1eoluPwfBp4pXHcl9hnVDQ=="
+        "value": "c4fScYz2/eNt0BjET3TLFt9aRaEysPtV6rXHG1vnLvJXY/G+8J7oyVwdu8cLQIbRjBqOjK8oXMF1h/EbDzmDBA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-runs",
       "version": "0.1.6",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2097,14 +2097,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "wjjxojk/JApcdIlS7bcoGusjhMYiEGaS7J1AZEg7+e+1L5zn0NFF02GLXJ5dadwHttIP0Mc6Hpe4k67CkKPyDg=="
+        "value": "LXLz+CUwntoDQzG8dhgX8SXG9OBFr9KGVYJzt1qjXroreaf1HV+H+mioc3wInEr/HRHkv00VpkmT3gPmGhc2DA=="
       }
     },
     {
       "id": "@zerowallscience/plugin-secrets",
       "version": "0.1.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2152,14 +2152,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "k7bWq9o+hH2oZxnUM7VxURA6KdHsFtv6zQDFChhxQ1Lv3Y9J8njCYOA/JCEuSuJTQZ35rAALtlZDLMXf7+wuBA=="
+        "value": "moFdpnmW+uJH/KEmVfx2FkumQM0MJ2/S64vYQjKT+Awix/Tue5nOvRhtY9JGyQE5BKdyU0j5O5tv88qkuW9FBQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-singlecell",
       "version": "0.1.7",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2242,14 +2242,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "Gm5T0WSdjupMFBHXlXm6aWHYcpSnBg0q/NhQLrbwvGN2lrpj+xh9h9uD3aNihQqqCim7ay9GjBxpGHD8PIIIAQ=="
+        "value": "zUx3d2phazAx7OG+2PNBRKiD+ZxWFAWnH44N3OP4tWhlaKHftrU4z0WaMejcGShguzoftNof1hOvClOOEI08Ag=="
       }
     },
     {
       "id": "@zerowallscience/plugin-skills",
       "version": "0.2.8",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2313,14 +2313,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "USo0DAZ4zWyHcBHcpPvsa6PZm57ALaQE+2xy6rPHgcoLCm4rVZZ5t4WpSNdaZabq5Aw116Qz40f+ZuZ6+gLUBQ=="
+        "value": "4c12+jkip+/mtZlQCND+GOyqaa61VKCOOCK41BlrXBw5Cbqw8p4lDNnfGUmCpFtZPDno21J4UITTejTmHQGABQ=="
       }
     },
     {
       "id": "@zerowallscience/plugin-videos",
       "version": "0.2.8",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2393,14 +2393,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "u8OiKtzV0jvT/At0JGTraoHdSOXqJhGYBW54Jfj5Oz4TlFUm6Rm+4PeHW352xJ9XSYvJw8dN8YrCjBkv0TvDAA=="
+        "value": "RY2iN+C4a6/J1fZcCFey0KVwfv+0IuoXHZuRQlEOQMCGJJ9DUO84W41f/N3slYibQSnmpfYtfgquH6PerO3jDw=="
       }
     },
     {
       "id": "@dsh-external/zotero-harvest",
       "version": "0.2.2-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2424,14 +2424,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "6Nn6cn069UPkcx+IqqU9+nIG73rbOSespPIsVxw4zcelGPnUUIuD6vCVJivGYrUNzU1/Ltt1k4blQFjSKYHgAQ=="
+        "value": "vWx1veaCyHF60aKa/BMTHPDTv/04LUDTVZZMGFYtLwP1oJxJQIPt8u4uOy84d9kZ2LsDGNR5W0pc+3xhVvgxAQ=="
       }
     },
     {
       "id": "dsh-office-tools",
       "version": "1.0.6",
       "kind": "support",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2454,14 +2454,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "PcVzh0TiDUbZyvG24U5V+jo5GxfUSEtmZyKmAC7ugaVmPqEdM/pqdkdzELrxeWfu8zdPRJ1mfQN0+zvg1iwlAA=="
+        "value": "dh0J8vEfFAZY1Wd0bGTQEG75uy2pUrJcfSI8fuf3ZHj+1sS1J2V40G1dPUecSEcGtweV81lZc6Y5+UR/ZonJAQ=="
       }
     },
     {
       "id": "dsh-dream-skin",
       "version": "10.16.1-zws.3",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2492,14 +2492,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "N1WQdH4C7O6ErKwdv1/NeWbnwaDtUqZxLEpGB3boOA6y4ljho+rPN+HFLG0yV7GOHDde4fVQs4dfQwrUwxIgCw=="
+        "value": "tZq1i37SiWrLPmgPHOcWjYuIQqK6H7/2showTvYuZqq49doRcB5mo8zOR623AqaWnpCKlO6WApUK2lMInnQtDA=="
       }
     },
     {
       "id": "dsh-zotero",
       "version": "0.12.2-zws.1",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2527,14 +2527,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "y5OapavYn0UdA7WdkTnyJOdqFUcS1+v3kD0Qew4pk+vBAwrBXIe3OPvNNSGA59c2UWjd0v6wFPUj4ADOhm/cBg=="
+        "value": "5lmD1/7jmi48A9T1vKFw46ULJ9y+PiFxlFUrGJdKeVtLC0/Wv8GekX78LHTnTugSo1eZpbqL0wmBYUUiVkCLCw=="
       }
     },
     {
       "id": "dsh-free-search",
       "version": "0.9.4",
       "kind": "plugin",
-      "applicationVersion": "8.4.12",
+      "applicationVersion": "8.4.13",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -2558,13 +2558,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "IV/e7HUXbuw1g4K4HSI4KXVOkuUBsg5okC0WkG/IQWRyNZnp0Z4keMaDPS+FhmeQOs8nkILdgdPUVuZ8V+IkBA=="
+        "value": "53GW3tMC8OqwvbOJ2IqDg5vBpxSrB81lnCf86PwM66ThWA6GQwCYFR0V4JrG41oezKw2zh9JGTJmvD1ggtA8Dg=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "bWT446EOKLtKvOEgiDFicdnAG8rnLkeOD18SpCe8xUq90oyIueYrRkwnTvQ33q/6dK7fNja/EEuDAXe9YCVsDQ=="
+    "value": "fNRDSevGwKgzfMYgx0c6m91qgssmcIkIhnjbbgJQT8asUJTGSi5ZW+FhFqPuZGwDQSQhk4serdOukqOlbOoZBw=="
   }
 }

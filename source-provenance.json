@@ -1,14 +1,14 @@
 {
-  "applicationVersion": "8.4.12",
+  "applicationVersion": "8.4.13",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "d8c534301bb3a3cf72bcfcfefbeb410347dc02dd",
+  "sourceCommit": "368af01087d5e04ecf36c4b64bc8a15b43509e20",
   "sourceOnly": false,
-  "buildCommit": "e6686d8fabe1a4fa8a6bf599015c73ca5b60bc16",
+  "buildCommit": "368af01087d5e04ecf36c4b64bc8a15b43509e20",
   "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
   "packages": [
     {
       "id": "@zerowallscience/plugin-account",
-      "version": "0.1.21",
+      "version": "0.1.22",
       "kind": "plugin"
     },
     {
@@ -73,7 +73,7 @@
     },
     {
       "id": "dsh-ssh-ops",
-      "version": "0.3.23-zws.1",
+      "version": "0.3.23-zws.3",
       "kind": "plugin"
     },
     {
@@ -207,5 +207,5 @@
       "kind": "plugin"
     }
   ],
-  "exportedSourceFiles": 5414
+  "exportedSourceFiles": 5417
 }
