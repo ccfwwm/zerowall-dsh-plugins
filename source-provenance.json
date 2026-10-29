@@ -13,14 +13,14 @@
       "version": "0.2.29",
       "sourceCommit": "c972eeba8fa079910b64733ec07b17a64250a2cf",
       "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
-      "sourceRepositoryParent": "04a6b6d7ee6c78ac6df20fc776fbda111c2d810a",
+      "sourceRepositoryParent": "69f0b79625748f6fd3d9d4fd262bbad2eca1dfda",
       "retainedOtherSources": true,
       "publicationAsserted": false,
       "files": [
         {
-          "path": "config/catalogs/resource-versions.json",
-          "size": 8981,
-          "sha256": "5d064cf281cad2f5fdda581ebd8f34bc02143ffeca1c26503b271fbac05a5228"
+          "path": "config/deepseek-harness/plugin-inventory.json",
+          "size": 24410,
+          "sha256": "8a6be2b555e85705cb3dfa8882df803006a9c6b7d3a836c4adcf05a43bd61459"
         },
         {
           "path": "config/integrations/upstream-sources.json",
@@ -233,14 +233,109 @@
           "sha256": "5fcdd93e0afc09c6944e56d755ee299688ac3b7b6c5feed0b5a630e389e58758"
         },
         {
-          "path": "tools/integration/packaged-rmcp-smoke.mjs",
-          "size": 14354,
-          "sha256": "3706003ee46bf635a030b5b6170f28b1f1eb495744e326ca0cfc762b2fe1f9df"
+          "path": "resources/extensions/skills/sc-tenifold-knockout/references/operations.json",
+          "size": 9433,
+          "sha256": "8a1df216145ad32b59f76594743e484590a1636c271e64659e9403b377f1c6bc"
         },
         {
-          "path": "tools/integration/research-tool-config.mjs",
-          "size": 5428,
-          "sha256": "bb918b3da0c4c9305aed38859a3659bf9b20a3398d3d87e12b59b47363fd315c"
+          "path": "resources/extensions/skills/zerowall-faerskit/SKILL.md",
+          "size": 4172,
+          "sha256": "8283278077341cf56f0897cadb261da8473923d3da31ad87b75e17cf74cf6513"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-faerskit/references/analysis.md",
+          "size": 3809,
+          "sha256": "ffbd2acd9817128e14453a2898ff848526881b786fdc3415cf38d5733930f6b9"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-faerskit/references/data-formats.md",
+          "size": 1550,
+          "sha256": "e77dd021d674983f1c7d16df6ca8218a9da107159fb0100623039db813ef94de"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-faerskit/references/examples.json",
+          "size": 1560,
+          "sha256": "c2f4087bed850ee38c829d64d56d805b13a28c194eaf6d1362d34e4bacfc3279"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-faerskit/references/operations.json",
+          "size": 23195,
+          "sha256": "cfce7c6afbbb1be51a517487491538301319c44bdcddb317cd32a03623daffdd"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-faerskit/references/operations.md",
+          "size": 18062,
+          "sha256": "3e36ee081c365d289c762c0d64859ea23f6a05971399931c2ad77f6cb079af8a"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-faerskit/references/scenarios.md",
+          "size": 1204,
+          "sha256": "3451b3f83836db25635168a0ed5c155d0dd579527e7bdc67b387554670dbf614"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-geo/references/operations.json",
+          "size": 226948,
+          "sha256": "374d60086e94a4c1a4bf80ee80f25761d2657fd7a4e9847fe6773547a7130c55"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-mcp-guide/SKILL.md",
+          "size": 1361,
+          "sha256": "ccf902d5527a89e41ab9e30ccc2acbe2a9dfaafb167e887bbc87c25e0d77ef01"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-mr/references/operations.json",
+          "size": 55667,
+          "sha256": "f52523d8317b7e10c78ec053f7e0aa5aafcd4a9d94583d715c21a8b34911f6a6"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-mr/references/operations.md",
+          "size": 47728,
+          "sha256": "7aba95d1a99454ef8497248cf5b9960d66c2038a0c2dfbc8661c96f09dc46aa5"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-nhanes/references/operations.json",
+          "size": 142676,
+          "sha256": "3b1133ad343178ed959af4e16dca3ec7ea51df6b614abb5ef41ef71d84a1ccb3"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-omicverse/references/operations.json",
+          "size": 32046,
+          "sha256": "41a952f8bc41765318212983fb557bfa1ea7d28df16b3c54903d15200cef35b0"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-r-files/references/operations.json",
+          "size": 22652,
+          "sha256": "01ae45526e524842922122ed4920e6d0855eabb6b02c9e008d51ff405d80dbc2"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-r-packages/references/operations.json",
+          "size": 6194,
+          "sha256": "a904a910c04598edda35593941488f2c07bc066e70af224d517feeb1f90701ac"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-rbioagent/references/operations.json",
+          "size": 31431,
+          "sha256": "525ada9505b71275a25c49aad40992227d4292da82f73225f10a1319fc43dcc3"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-rmcp/SKILL.md",
+          "size": 4458,
+          "sha256": "3e52a5d3c93e956931c588e0f8e549fd8b4d35b3acb67f53fbf894bacbb881b9"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-rplatform/references/operations.json",
+          "size": 43449,
+          "sha256": "e1448f8ce4f48e57b4101d4ada919c3953c88362e2fd5e7a66c33f07576c9dc9"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-rplotfigure/references/operations.json",
+          "size": 40423,
+          "sha256": "5447536268243cf14ef89638a28c6cefca69e370ca8f32ca7fdc3f41881d5a9f"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-tooluniverse/references/operations.json",
+          "size": 12911,
+          "sha256": "66ae2c24eac5e8600233288557049e4c3585753277ca1ed62bbbdad62198ce2b"
         },
         {
           "path": "tools/plugins/export-plugin-source.mjs",
@@ -259,7 +354,7 @@
         }
       ],
       "removed": [],
-      "manifestSha256": "51a964efe130b091ec281a4ae89690de13889bde8af12c4a504df92285c2cb38"
+      "manifestSha256": "2a355dd3e0d6215330df623d3be9188b548cfe3ac82bfd71d6f285510b2d2d91"
     }
   ]
 }
