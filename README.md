@@ -1,8 +1,8 @@
-# ZeroWall DSH Plugins — 8.4.14
+# ZeroWall DSH Plugins — 8.4.15
 
-ZeroWall Science 8.4.14 的插件与资源源码总仓库。各插件、Skills、MCP、Python 内容分别使用独立版本；桌面版本变化不会自动提升所有资源版本。
+ZeroWall Science 8.4.15 的插件与资源源码总仓库。各插件、Skills、MCP、Python 内容分别使用独立版本；桌面版本变化不会自动提升所有资源版本。
 
-本次导出模式：**source-only，仅源码快照**。源码导出或验证通过不代表 8.4.14 已在线发布；七牛/GitHub 发布状态、资源签名与下载校验以独立发布收据为准。
+本次导出模式：**source-only，仅源码快照**。源码导出或验证通过不代表 8.4.15 已在线发布；七牛/GitHub 发布状态、资源签名与下载校验以独立发布收据为准。
 
 ## 当前源码目录
 
@@ -18,7 +18,7 @@ ZeroWall Science 8.4.14 的插件与资源源码总仓库。各插件、Skills�
 | `desktop/src/shared/` | 插件所需的桌面共享接口 |
 | `deepseek-harness/` | 固定 DSH 接口与构建依赖（Git 子模块） |
 
-当前源码以以上 canonical 路径为准，不从旧 `packages/`、`store/` 布局读取。顶层 `catalogs/`、`skills/`、`mcp/` 保留既有历史发布/导出快照，包括独立发布收据；它们不代表当前源码或 8.4.14 的线上状态。source-only 导出不会刷新或删除这些历史目录。
+当前源码以以上 canonical 路径为准，不从旧 `packages/`、`store/` 布局读取。顶层 `catalogs/`、`skills/`、`mcp/` 保留既有历史发布/导出快照，包括独立发布收据；它们不代表当前源码或 8.4.15 的线上状态。source-only 导出不会刷新或删除这些历史目录。
 
 Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://github.com/ccfwwm/zerowallscience)；本源码仓库不打包 Electron。桌面交付壳与已验证的 DSH 离线运行时闭包，插件/Skills/MCP/Python 资源仍独立版本化。
 
@@ -46,7 +46,7 @@ Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://
 | dsh-ppt-maker | 1.0.0 | [上游](https://github.com/OMSociety/dsh-ppt-maker.git) | a9fcf037a02742573b2bca673012ae57375ba4ef |
 | @deepseek-ai/libreoffice-kit | 0.1.5 | [上游](https://github.com/deepseek-ai/dsh-libreoffice-kit) | — |
 | officeTools | 1.0.6 | [上游](https://github.com/kw78/dsh-office-tools.git) | 6c9faa36409961226623480c0ba6ef8fd6313beb |
-| @zerowallscience/plugin-mcp | 0.2.22 | [上游](https://github.com/ccfwwm/zerowallscience.git) | 5bcab462fc259d47ba77be0addf7ac6c255d33bc |
+| @zerowallscience/plugin-mcp | 0.2.29 | [上游](https://github.com/ccfwwm/zerowallscience.git) | 5bcab462fc259d47ba77be0addf7ac6c255d33bc |
 
 完整来源（含嵌套集成、adapter commit 与本地适配说明）以机器可读配置为准。
 
@@ -68,10 +68,10 @@ pnpm plugins:test
 
 安装、单独更新和回滚见 [扩展更新指南](docs/extensions-update-guide.md)。插件、Skills、MCP 的启动及日常 catalog 检查只读，安装或变更由用户明确触发，并保留禁用、移除、固定版本和自定义配置。
 
-8.4.14 桌面在可用后后台按完整签名清单逐包安装/同步 Python core 与 science 依赖，保留文件和签名完整性验证，不以导入检查或全环境 pip check 阻断安装；自动任务可恢复，失败还原同一路径中的文件。capability 可选依赖仍由用户手动选择。Python 始终使用真实安装目录下的固定根或用户明确选择的固定根，不激活旧 slots，也不迁移/删除旧环境。后台安装不阻塞界面。
+8.4.15 桌面在可用后后台按完整签名清单逐包安装/同步 Python core 与 science 依赖，保留文件和签名完整性验证，不以导入检查或全环境 pip check 阻断安装；自动任务可恢复，失败还原同一路径中的文件。capability 可选依赖仍由用户手动选择。Python 始终使用真实安装目录下的固定根或用户明确选择的固定根，不激活旧 slots，也不迁移/删除旧环境。后台安装不阻塞界面。
 
 ## 验证与发布边界
 
-`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `c972eeba8fa079910b64733ec07b17a64250a2cf`，DSH 为 `cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
+`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `93620230b571a787426c7511b63d2357983dace2`，DSH 为 `cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
 
 当 `sourceOnly: true` 时，`pnpm source:verify` 仅检查插件源码路径/链接与必要源码文件，不验证历史 catalog 的签名、线上资源版本、构建包或发布状态。完整导出模式会核对其资源快照的签名和版本，但仍不能代替类型检查、插件测试、真实安装/运行与公网下载验证。发布另需明确授权和独立收据。
