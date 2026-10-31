@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "kind": "mcp",
-  "applicationVersion": "8.4.13",
+  "applicationVersion": "8.4.18",
   "localOnly": false,
-  "generatedAt": "2026-10-27T18:57:48.949Z",
+  "generatedAt": "2026-10-30T15:34:37.035Z",
   "resources": [
     {
       "id": "scimaster",
       "version": "0.3.15-zws.2",
       "kind": "mcp",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -42,14 +42,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ZyAZ7IvBswm8m9+he1dckIDxsk3417XFPwK7QxwLiuxdDs7WtGAQl8YAVqObG1Fy4Yv0SZ7hmgJ/X2Av1U7oBQ=="
+        "value": "nFhjFGZlBZTKrqGVcYpyL/0IabW2iY5MS3LM9cmDPMQt8rp8vN37m2vO7ZaHD0ZX6mT8aYu+H/ffz0otIcMoAA=="
       }
     },
     {
       "id": "r-platform",
       "version": "0.1.1",
       "kind": "mcp",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -71,13 +71,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "xD4YTGHmADKjiweHfd29kX8d5eqnkow4OiKS4uAw1owZBPMPCxDlPt/FuWoGfosDP/H9gv0fXCkonc/sZUQGDA=="
+        "value": "cXSDtXxphdqSRMg1hVyNHD+FI31pfBSArHkYeU8symgUFetOb7qfroHS0kCnurTX38RRV33cWKNMivPDq0fiDw=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "HIz57qrMtEK4hRPiaF+p87hZX79iCb1TBxCx4iB1osrRjkdk6z4kSsxdMl9zdIs+NWw0bMRq0qVrCbBQdfR3CQ=="
+    "value": "OSsSzR0mhU7Q25fYgjgPZXYqCj2XYZSIcgx4xNOW1Fsxfb2qsT2xkbxo7858L2DwHkphW5X5dwh6REWidKZqDw=="
   }
 }

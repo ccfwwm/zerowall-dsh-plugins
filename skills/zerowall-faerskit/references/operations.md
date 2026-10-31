@@ -1,0 +1,1133 @@
+# 生成操作目录
+
+此文件来自实际服务端注册。离线注册不等于运行时可用；精确执行前使用 describe。
+
+## r.get.sc.tenifold.run
+
+Get the asynchronous state and manifest summary for a remote scTenifoldKnk run.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.cancel.sc.tenifold.run
+
+Cancel a queued or running remote scTenifoldKnk run. Requires confirm=true.
+
+- 工具族：r_jobs；副作用：write；query：false；执行：sync。
+- 确认字段：confirm。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      },
+      "confirm": {
+        "type": "boolean",
+        "default": false,
+        "description": "Must be true for file writes, destructive actions, code execution, and package changes"
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.get.sc.tenifold.manifest
+
+List output artifacts produced by a remote scTenifoldKnk run.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.get.job
+
+Get current state, timestamps, exit code, failure reason, and result summary for an R job.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.wait.job
+
+Wait up to 30 seconds for a queued or running job to change state, then return its latest record. Call again while still queued or running.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      },
+      "timeout_ms": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 30000,
+        "default": 10000
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.list.jobs
+
+List up to 100 recent asynchronous R jobs for a project.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 20
+      }
+    },
+    "required": [
+      "project_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.get.job.log
+
+Read bounded stdout and stderr tails for an R job.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      },
+      "max_bytes": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4000000,
+        "default": 256000
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.cancel.job
+
+Request cancellation of a queued or running R job. Requires confirm=true.
+
+- 工具族：r_jobs；副作用：write；query：false；执行：sync。
+- 确认字段：confirm。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      },
+      "confirm": {
+        "type": "boolean",
+        "default": false,
+        "description": "Must be true for file writes, destructive actions, code execution, and package changes"
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.get.job.manifest
+
+List result files produced in R_PLATFORM_RESULT_DIR with MIME type, byte size, and SHA-256.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.get.job.result
+
+Read a job result by manifest path. Text is returned as text, images as native MCP images, and other binary data as bounded base64 chunks.
+
+- 工具族：r_jobs；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[A-Za-z0-9._-]+$",
+        "description": "ZeroWall project id"
+      },
+      "job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "description": "R job id returned by r_submit_script"
+      },
+      "path": {
+        "type": "string",
+        "maxLength": 1024,
+        "default": "",
+        "description": "Path relative to the project root; absolute paths and symbolic links are rejected"
+      },
+      "offset": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 0
+      },
+      "max_bytes": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 4194304,
+        "default": 1048576
+      }
+    },
+    "required": [
+      "project_id",
+      "job_id"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.faerskit.status
+
+Check whether the remote faerskit (FAERS pharmacovigilance signal detection) package is installed and its ClickHouse database is reachable. Read-only.
+
+- 工具族：r_faerskit；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.faerskit.lookup
+
+Read the selected ClickHouse database for exact and candidate FAERS drug/PT names, aggregate drug-role counts, report-period coverage, and matching report counts. Returns aggregate information only; it never returns case identifiers or credentials.
+
+- 工具族：r_faerskit；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "drug": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Drug name (DRUGNAME or prod_ai)"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        ],
+        "description": "Drug name to match against DRUGNAME or prod_ai"
+      },
+      "ptname": {
+        "$ref": "#/properties/drug",
+        "description": "MedDRA Preferred Term to match"
+      },
+      "field": {
+        "type": "string",
+        "enum": [
+          "drugname",
+          "prod_ai"
+        ],
+        "default": "drugname"
+      },
+      "role": {
+        "type": "string",
+        "enum": [
+          "PS",
+          "SS",
+          "C",
+          "I"
+        ]
+      },
+      "year": {
+        "type": "string",
+        "pattern": "^20\\d{2}Q[1-4]$",
+        "description": "Optional end period; the start defaults to the selected database coverage"
+      },
+      "database": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "default": 20
+      }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.faerskit.analyze
+
+Run a parameterized aggregate FAERS signal analysis on the remote ClickHouse database as an asynchronous job. Before submission the server checks real schema and coverage, resolves exact or unique drug/PT matches, and stores a preflight summary; no-match and partial coverage are warnings and do not stop the run. Results include the job manifest and checksums. Requires confirm=true for the submitted run.
+
+- 工具族：r_faerskit；副作用：execute；query：false；执行：async_or_cached。
+- 确认字段：confirm。
+- 输出：Submission with remote identifier; status and manifest are separate operations.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._-]{1,128}$",
+        "description": "ZeroWall project id"
+      },
+      "fun": {
+        "type": "string",
+        "enum": [
+          "faers_analyze_drug",
+          "faers_analyze_pt_cohort",
+          "faers_analyze_drugs_for_pt",
+          "faers_test_drug_pt_group",
+          "faers_analyze_drug_target_pt",
+          "faers_analyze_interaction_target_pt",
+          "faers_analyze_interaction_all_pts",
+          "faers_compare_drugs_for_pt",
+          "faers_summarize_analysis_flow",
+          "faers_analyze_concomitant_exposure",
+          "faers_rank_concomitant_drugs",
+          "faers_compare_two_drug_exposures",
+          "faers_describe_population",
+          "faers_analyze_multi_drug_exposure"
+        ],
+        "description": "Canonical FAERS workflow name"
+      },
+      "drug": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Drug name (DRUGNAME or prod_ai)"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        ],
+        "description": "Single drug name (faers_analyze_drug/faers_analyze_drug_target_pt/faers_summarize_analysis_flow/faers_rank_concomitant_drugs)"
+      },
+      "ptname": {
+        "$ref": "#/properties/drug",
+        "description": "Target PT (faers_analyze_pt_cohort/faers_analyze_drugs_for_pt/faers_test_drug_pt_group/faers_analyze_drug_target_pt/faers_compare_drugs_for_pt)"
+      },
+      "drug1": {
+        "$ref": "#/properties/drug",
+        "description": "First drug (faers_analyze_interaction_target_pt/faers_analyze_interaction_all_pts/multi-drug/candidate comparison drug1)"
+      },
+      "drug2": {
+        "$ref": "#/properties/drug",
+        "description": "Second drug (faers_analyze_interaction_target_pt/faers_analyze_interaction_all_pts/multi-drug/candidate comparison drug2)"
+      },
+      "drug3": {
+        "$ref": "#/properties/drug",
+        "description": "Third drug (multi-drug/candidate comparison drug3)"
+      },
+      "drug4": {
+        "$ref": "#/properties/drug",
+        "description": "Fourth drug (multi-drug/candidate comparison drug4)"
+      },
+      "drug5": {
+        "$ref": "#/properties/drug",
+        "description": "Fifth drug (candidate comparison only)"
+      },
+      "drug6": {
+        "$ref": "#/properties/drug",
+        "description": "Sixth drug (candidate comparison only)"
+      },
+      "drug7": {
+        "$ref": "#/properties/drug",
+        "description": "Seventh drug (candidate comparison only)"
+      },
+      "drug8": {
+        "$ref": "#/properties/drug",
+        "description": "Eighth drug (candidate comparison only)"
+      },
+      "drug9": {
+        "$ref": "#/properties/drug",
+        "description": "Ninth drug (candidate comparison only)"
+      },
+      "drug10": {
+        "$ref": "#/properties/drug",
+        "description": "Tenth drug (candidate comparison only)"
+      },
+      "edrug1": {
+        "$ref": "#/properties/drug",
+        "description": "Excluded drug (faers_analyze_interaction_target_pt/faers_analyze_interaction_all_pts only)"
+      },
+      "edrug2": {
+        "$ref": "#/properties/drug",
+        "description": "Second excluded drug (faers_analyze_interaction_target_pt/faers_analyze_interaction_all_pts only)"
+      },
+      "drug_PS": {
+        "$ref": "#/properties/drug",
+        "description": "Primary-suspect drug (faers_analyze_concomitant_exposure)"
+      },
+      "drug_concomitant": {
+        "$ref": "#/properties/drug",
+        "description": "Concomitant drug (faers_analyze_concomitant_exposure)"
+      },
+      "drug_A": {
+        "$ref": "#/properties/drug",
+        "description": "Drug A (faers_compare_two_drug_exposures)"
+      },
+      "drug_B": {
+        "$ref": "#/properties/drug",
+        "description": "Drug B (faers_compare_two_drug_exposures)"
+      },
+      "primaryid": {
+        "type": "array",
+        "items": {
+          "$ref": "#/properties/drug/anyOf/1/items"
+        },
+        "maxItems": 100,
+        "description": "Optional FAERS primaryid values (faers_analyze_drug/faers_analyze_drug_target_pt)"
+      },
+      "drug_exclusion": {
+        "$ref": "#/properties/primaryid",
+        "description": "Drug exclusion list (faers_analyze_drug only)"
+      },
+      "drug_route": {
+        "$ref": "#/properties/primaryid",
+        "description": "Route values such as \"ORAL\" (faers_analyze_pt_cohort only)"
+      },
+      "unit": {
+        "type": "string",
+        "enum": [
+          "pair",
+          "case"
+        ],
+        "description": "Counting unit for workflows whose contract includes unit; omit otherwise"
+      },
+      "role_comparisons": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "PS",
+              "SS",
+              "C",
+              "I"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "maxItems": 8,
+        "description": "Explicit separate role sensitivity analyses; main analysis roles are preserved"
+      },
+      "age": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 2,
+        "maxItems": 2,
+        "description": "Inclusive age range in years, e.g. [18, 75]"
+      },
+      "gender": {
+        "type": "string",
+        "maxLength": 20,
+        "description": "Gender filter, e.g. \"F\" or \"M\""
+      },
+      "weight": {
+        "$ref": "#/properties/age",
+        "description": "Inclusive weight range"
+      },
+      "agent": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 20
+          },
+          {
+            "$ref": "#/properties/primaryid"
+          }
+        ],
+        "description": "FAERS OCCP_COD, e.g. \"CN\" (consumer), \"MD\" (physician), \"PH\" (pharmacist)"
+      },
+      "country": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 100
+          },
+          {
+            "$ref": "#/properties/primaryid"
+          }
+        ],
+        "description": "Reporter country code, e.g. \"CN\", \"US\""
+      },
+      "drugEffect": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 20
+          },
+          {
+            "$ref": "#/properties/primaryid"
+          }
+        ],
+        "description": "Drug role code: \"PS\", \"SS\", \"C\", \"I\""
+      },
+      "year": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 41,
+                  "maximum": 994
+                },
+                {
+                  "type": "string",
+                  "pattern": "^20\\d{2}Q[1-4]$"
+                }
+              ]
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          {
+            "$ref": "#/properties/year/anyOf/0/items"
+          }
+        ],
+        "description": "Optional FAERS getdatayear range, e.g. [141, 244], [\"2014Q1\", \"2024Q4\"], or end period \"2026Q1\" (the server fills the start from the database coverage). Calendar years are not codes."
+      },
+      "illnesses": {
+        "$ref": "#/properties/primaryid",
+        "description": "Optional vector of strings"
+      },
+      "illnesses_exclusion": {
+        "$ref": "#/properties/illnesses"
+      },
+      "pregnancy": {
+        "type": "boolean"
+      },
+      "pregnancy_exclusion": {
+        "type": "boolean"
+      },
+      "drug_exclusion_from_alldata": {
+        "$ref": "#/properties/illnesses"
+      },
+      "database": {
+        "type": "string",
+        "maxLength": 100,
+        "description": "ClickHouse database name, e.g. \"druginfo\" or \"2026Q1\""
+      },
+      "timeout_ms": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 14400000,
+        "default": 3600000
+      },
+      "path": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1024,
+        "description": "Output directory relative to the job result dir; defaults to faerskit/<fun>/<timestamp>"
+      },
+      "confirm": {
+        "type": "boolean",
+        "const": true
+      }
+    },
+    "required": [
+      "project_id",
+      "fun",
+      "confirm"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": {
+    "id_fields": [
+      "job_id",
+      "id"
+    ],
+    "argument": "job_id",
+    "status": "r.get.job",
+    "cancel": "r.cancel.job",
+    "manifest": "r.get.job.manifest",
+    "log": "r.get.job.log"
+  }
+}
+```
+
+## r.faerskit.query
+
+Query filtered aggregate FAERS counts and population, drug, PT, outcome or report-period distributions. No arbitrary SQL, identifiers or credentials.
+
+- 工具族：r_faerskit；副作用：read；query：true；执行：sync。
+- 确认字段：无。
+- 输出：Immediate structured result; no background task is implied.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "string",
+        "enum": [
+          "counts",
+          "sex",
+          "age",
+          "year",
+          "quarter",
+          "outcome",
+          "country",
+          "reporter",
+          "drug",
+          "pt",
+          "route",
+          "indication",
+          "role"
+        ],
+        "default": "counts"
+      },
+      "drug": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Drug name (DRUGNAME or prod_ai)"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        ]
+      },
+      "ptname": {
+        "$ref": "#/properties/drug"
+      },
+      "age": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 2,
+        "maxItems": 2,
+        "description": "Inclusive age range in years, e.g. [18, 75]"
+      },
+      "gender": {
+        "type": "string",
+        "maxLength": 20,
+        "description": "Gender filter, e.g. \"F\" or \"M\""
+      },
+      "weight": {
+        "$ref": "#/properties/age",
+        "description": "Inclusive weight range"
+      },
+      "agent": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 20
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/properties/drug/anyOf/1/items"
+            },
+            "maxItems": 100
+          }
+        ],
+        "description": "FAERS OCCP_COD, e.g. \"CN\" (consumer), \"MD\" (physician), \"PH\" (pharmacist)"
+      },
+      "country": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 100
+          },
+          {
+            "$ref": "#/properties/agent/anyOf/1"
+          }
+        ],
+        "description": "Reporter country code, e.g. \"CN\", \"US\""
+      },
+      "drugEffect": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 20
+          },
+          {
+            "$ref": "#/properties/agent/anyOf/1"
+          }
+        ],
+        "description": "Drug role code: \"PS\", \"SS\", \"C\", \"I\""
+      },
+      "year": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 41,
+                  "maximum": 994
+                },
+                {
+                  "type": "string",
+                  "pattern": "^20\\d{2}Q[1-4]$"
+                }
+              ]
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          {
+            "$ref": "#/properties/year/anyOf/0/items"
+          }
+        ],
+        "description": "Optional FAERS getdatayear range, e.g. [141, 244], [\"2014Q1\", \"2024Q4\"], or end period \"2026Q1\" (the server fills the start from the database coverage). Calendar years are not codes."
+      },
+      "illnesses": {
+        "$ref": "#/properties/agent/anyOf/1",
+        "description": "Optional vector of strings"
+      },
+      "illnesses_exclusion": {
+        "$ref": "#/properties/illnesses"
+      },
+      "pregnancy": {
+        "type": "boolean"
+      },
+      "pregnancy_exclusion": {
+        "type": "boolean"
+      },
+      "drug_exclusion_from_alldata": {
+        "$ref": "#/properties/illnesses"
+      },
+      "database": {
+        "type": "string",
+        "maxLength": 100,
+        "description": "ClickHouse database name, e.g. \"druginfo\" or \"2026Q1\""
+      },
+      "limit": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000,
+        "default": 100
+      }
+    },
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": null
+}
+```
+
+## r.faerskit.plot
+
+Generate plot artifacts from an existing successful FAERS job without rerunning database statistics. Returns a new asynchronous job.
+
+- 工具族：r_faerskit；副作用：execute；query：false；执行：async_or_cached。
+- 确认字段：confirm。
+- 输出：Submission with remote identifier; status and manifest are separate operations.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._-]{1,128}$",
+        "description": "ZeroWall project id"
+      },
+      "source_job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "plots": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z_]+$"
+        },
+        "minItems": 1,
+        "maxItems": 50
+      },
+      "confirm": {
+        "type": "boolean",
+        "const": true
+      },
+      "timeout_ms": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 14400000,
+        "default": 3600000
+      }
+    },
+    "required": [
+      "project_id",
+      "source_job_id",
+      "confirm"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": {
+    "id_fields": [
+      "job_id",
+      "id"
+    ],
+    "argument": "job_id",
+    "status": "r.get.job",
+    "cancel": "r.cancel.job",
+    "manifest": "r.get.job.manifest",
+    "log": "r.get.job.log"
+  }
+}
+```
+
+## r.faerskit.report
+
+Generate report artifacts from an existing successful FAERS job without rerunning database statistics. Returns a new asynchronous job.
+
+- 工具族：r_faerskit；副作用：execute；query：false；执行：async_or_cached。
+- 确认字段：confirm。
+- 输出：Submission with remote identifier; status and manifest are separate operations.
+
+```json
+{
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "project_id": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._-]{1,128}$",
+        "description": "ZeroWall project id"
+      },
+      "source_job_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "plots": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z_]+$"
+        },
+        "minItems": 1,
+        "maxItems": 50
+      },
+      "confirm": {
+        "type": "boolean",
+        "const": true
+      },
+      "timeout_ms": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 14400000,
+        "default": 3600000
+      }
+    },
+    "required": [
+      "project_id",
+      "source_job_id",
+      "confirm"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  },
+  "lifecycle": {
+    "id_fields": [
+      "job_id",
+      "id"
+    ],
+    "argument": "job_id",
+    "status": "r.get.job",
+    "cancel": "r.cancel.job",
+    "manifest": "r.get.job.manifest",
+    "log": "r.get.job.log"
+  }
+}
+```

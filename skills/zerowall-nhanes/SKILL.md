@@ -14,7 +14,7 @@ allowed-tools: read
 
 ## 入口与准备
 
-NHANES 周期、变量、复杂抽样或回归请求时主动加载 zerowall-rmcp 与本 Skill，通过唯一物理连接 `rmcp` 使用 Host `research_workflow` 的实时 schema；R 统计默认远程执行。连接状态未知时先调用 `mcp_connect`。门禁前的公共目录查询和授权范围内数据获取可继续，正式 Runner 仍必须满足研究 Store 的输入与门禁约束。
+NHANES 周期、变量、复杂抽样或回归请求时主动加载 zerowall-rmcp 与本 Skill，通过唯一物理连接 `rmcp` 使用 Host `research_workflow` 的实时 schema；R 统计默认远程执行。连接状态未知时先调用 `mcp_connect`。Gate 1/2 只返回 warnings，不要求先审计、冻结或补交研究材料。收到明确运行请求即在本轮直接调用 Runner；仍须满足真实调查设计、数据契约、变量、参数、权限和运行时校验。
 
 查询 schema：`action=describe`，精确 ID 放顶层 `operation`。业务调用：`action=query/run`，精确 ID 放 `parameters.operation`，业务参数放 `parameters.arguments`。只读 query 不创建 Run、不需要 request_id；run 必须有唯一 request_id，同一提交重试复用，参数变化换新 ID。`offline=true` 的 describe 仅浏览本地快照，不能证明在线能力可用。
 
@@ -40,7 +40,7 @@ NHANES 周期、变量、复杂抽样或回归请求时主动加载 zerowall-rmc
 }
 ```
 
-确认实际输入和范围后，以下执行示例可提交至专用演示项目。
+确认实际输入和范围后，按在线 schema 运行。若操作要求 `project_id`，只能使用现有远程项目 ID；在当前 ZeroWall 项目设置中填写“R 平台已有项目 ID”后，Host 会为当前工作目录匹配的项目自动传入该 ID。未配置时停止并提示用户补充；Host 不会创建或注册项目。
 
 ```json
 {
@@ -49,7 +49,6 @@ NHANES 周期、变量、复杂抽样或回归请求时主动加载 zerowall-rmc
   "parameters": {
     "operation": "r.nhanes.ensure.available",
     "arguments": {
-      "project_id": "rmcp-demo",
       "cycle": "2017-2018",
       "domain": "Demographics",
       "dataset": "DEMO_J"
@@ -72,25 +71,9 @@ NHANES 周期、变量、复杂抽样或回归请求时主动加载 zerowall-rmc
 
 ensure.available 可启动下载，虽无 confirm 也不是 query。datasets.ensure_available=true 同样可能写缓存；此类分析使用 run。
 
-正式研究分析通过 `research_study` 的 `run_nhanes_survey` 执行。先登记 DatasetContract、研究任务和 AnalysisPlan；工作台“研究计划”页也能选择同一记录并执行。
+正式分析继续使用实时 `r.nhanes` 工作流 schema，通过 `research_workflow` 提交实际存在的分析操作。记录真实数据来源、周期、component、dataset、权重、codebook、特殊缺失码、PSU/strata、纳排、变量定义、domain 设计及多周期合并规则；把这些内容保存在本次分析脚本/工作记录中，不创建 Study、任务或 AnalysisPlan。若操作 schema 缺少必需字段或远端未提供该分析能力，停止并说明缺口，不回退到已退役接口。
 
-```json
-{
-  "action": "run_nhanes_survey",
-  "study_id": "<study-id>",
-  "contract_id": "<saved-contract-id>",
-  "plan_id": "<saved-plan-id>",
-  "task_id": "<plan-task-id>",
-  "expected_revision": 1,
-  "request_id": "<stable-request-id>"
-}
-```
-
-以上 ID 与版本必须替换为真实登记记录。计划的 `inputs` 首版仅引用本次契约，`taskIds` 包含任务 ID，`nhanesSurvey` 为 `{ "kind":"summary", "variable":"RIDAGEYR" }` 或 `{ "kind":"regression", "outcome":"…", "predictors":["…"], "family":"gaussian" }`，并保存 `method`、`stoppingConditions`、`exploratory`。任务的探索身份必须与计划一致。验证任务由 Host 在完整校验通过后自动执行 Gate 1 系统审批并冻结，计划、契约必须与冻结快照一致；缺项时仅暂停正式分析，继续可完成的检索、下载和草稿整理。
-
-契约必须记录 `applicability=usable`、`sourceStatus=supported`、真实 `source`、`fullDataset=true`、`previewTruncated=false`。`datasets` 每项含周期、component、dataset、weight、codebook；设计含明确的 key、weight、strata、psu、availableVariables、specialMissingCodes（无特殊码也显式 []）、isolatedPsuHandling、lonelyPsu。多组件说明 `componentWeightRationale`；多周期选 `cycleStrategy`，正式合并还要 `combinedWeightSource` 与逐周期 `cycleWeightMultipliers`。子人群用 `domainDesign=survey-domain`、可读 `domainExpression` 和 `{variable,operator,value}` 数组 `surveyDomain`，只支持 eq/gte/lte；不能预过滤原始样本后伪装完整调查设计。DXX_H 必须在代码本年龄范围内，并显式应用 RIDAGEYR 下限和上限。Unknown 信息不能补写成已验证。
-
-Host 将这些记录编译成 `7.0.0-nhanes-survey.1` 严格契约，通过现有 `r.nhanes` 执行。该操作同步返回统计结果，远程 job ID 可以为空，但本地 Run、manifest Artifact 和待复核 evidence 必须实存。后端未认证严格契约时保留产物、禁止登记为已完成分析。访谈变量使用访谈权重；MEC 指标和子样本实验指标必须选择相应权重。若列缺失，先用 `r.nhanes.describe.dataset` 核对周期和变量；若出现孤立 PSU 或非正权重，检查纳排和设计设置，不自动改成无权分析。同步成功不等于科学批准，允许主张仅为加权描述或观察性关联。
+访谈变量使用访谈权重；MEC 指标和子样本实验指标使用对应权重。若列缺失，先用在线 describe/query 核对周期和变量；若出现孤立 PSU 或非正权重，检查纳排和设计设置，不自动改成无权分析。同步成功不等于科学批准，结论限定为实际设计支持的加权描述或观察性关联。
 
 异步任务的 queued/running 不是成功。只有终态 succeeded 且所需产物存在才报告完成；使用结果内 Manifest 的 project_id/path/bytes/sha256 下载。连接中断先查 status/历史，不换 request_id 重算。参数错回 describe；数据错核对路径、物种和矩阵；缺依赖查环境；权限错返回明确原因；计算错查看日志。
 

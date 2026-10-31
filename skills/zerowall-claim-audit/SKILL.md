@@ -1,44 +1,20 @@
 ---
 name: zerowall-claim-audit
-description: ZeroWall Science 7.0.0 主张审计；用于研究交付前核查主张是否有同一研究内、可追溯且已复核的证据支持。
+description: 核查科研主张是否有可追溯证据支持，并在本次交付中标明已核验或未核验状态；不写入 Research 项目记录。
 allowed-tools: read
 metadata:
   zerowall:
     schema_version: 1
-    version: 7.0.0-1
+    version: 0.1.5
     source: bundled
     deterministic: true
-    side_effects: read_write_research_record
+    side_effects: none
 ---
 
 # 主张审计
 
-交付前主动加载本 Skill 并发现 `research_study` 实时 schema；Host 自动确保并关联当前工作区的研究上下文，无需用户先登记 Project 或创建 Study。读取真实的
-`documents`，找到 `kind=claim` 的实际 claim ID 和版本；用户文字、搜索摘要和
-Agent 推测都不是证据。不要猜测 ID，也不要把相似研究或不同供者的数据当作本研究证据。
+需要核验主张时，读取用户提供的文件、当前会话中已返回的产物和来源。软件不自动创建项目记录，也不提供持久化 claim/audit 服务。用户文字、搜索摘要和 Agent 推测都不是独立证据；不要猜测文件或运行 ID，也不要把相似研究或不同供者的数据当成同一队列的证据。
 
-对每个待交付主张核对：主张的 `evidenceIds` 非空且不重复；每条证据属于同一
-study、`kind=evidence`，`needsReview` 不是 `true`，并且引用真实的 Run、Artifact、
-Asset、Document 或 Source。缺少任何引用时保留失败原因，不补引用、不修改数值、
-不为了让主张通过而运行新的分析。
+对每个待交付主张核对可追溯的 Run、Artifact、原始文件或外部来源，确认来源身份、时间、版本、样本范围、方法和校验摘要。缺少引用时保留缺口，不补引用、不修改数值，也不为让主张成立而追加未经授权的分析。
 
-调用确定性 Host 操作（替换为读取到的真实 ID）：
-
-```json
-{
-  "action": "audit_claim",
-  "study_id": "实际研究ID",
-  "claim_id": "实际主张ID",
-  "expected_version": 1
-}
-```
-
-只接受 Host 返回的 `auditStatus`、`auditErrors` 和 `needsReview`。只有
-`auditStatus=passed` 且 `needsReview=false` 的主张才能被 Host 纳入 Gate 2 自动校验。
-Host 仅在所有相关 claim 都通过、证据属于当前冻结 Study 时，才可记录 Gate 2 系统
-校验通过；这不是人工评审。缺失、未经核验、与主张冲突或无法支持主张的证据会阻止
-Gate 2，须列明受影响阶段与恢复条件。经过核验的阴性或不确定结果可支持与其范围一致
-的主张，应如实保留。Skill 不得自行批准门禁，也不得为通过而改写 claim 或补造证据。
-
-交付记录应保留研究版本、Skill 的 `source`/版本、工具与 Runner 版本及证据 ID。
-如果当前 Host 尚未自动写入这些字段，明确标记为待补功能，不在报告中假装已经登记。
+只有证据与主张一致、范围匹配且关键限制已处理时才标为“本次核验通过”；否则标为“未核验”并说明原因。这是交付中的审查结论，不是软件持久化状态、Study Gate 或系统审批。阴性和不确定结果可支持与其范围一致的主张。不得通过改写事实或补造证据来通过审查。

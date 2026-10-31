@@ -1,12 +1,12 @@
 ---
 name: zerowall-rmcp
-description: 远程科研总导航：相关 R、生信、GEO、NHANES 与 OmicVerse 请求默认主动路由到远程 RMCP，并明确发现、参数、任务和结果规范。
+description: 远程科研总导航：相关 R、生信、GEO、NHANES、FAERS 药物警戒与 OmicVerse 请求默认主动路由到远程 RMCP，并明确发现、参数、任务和结果规范。
 allowed-tools: read
 ---
 
 # 远程科研入口
 
-所有模块共享一个物理连接 `rmcp`。涉及 R、统计、生信、GEO、NHANES、遗传或 OmicVerse 的请求应主动加载本导航和匹配的专项 Skill，发现 Host `research_workflow` / `r_files` 并按实时 schema 调用；R 计算默认远程运行。连接状态未知时调用 `mcp_connect`，再使用实际发现的工具 schema。`mcp__rmcp__*` 是底层转发工具，不是独立连接。远程连接失败时不得静默改成本地 R；可继续独立检索与准备，说明阻断步骤和恢复方法。
+所有模块共享一个物理连接 `rmcp`。涉及 R、统计、生信、GEO、NHANES、FAERS 药物警戒、遗传或 OmicVerse 的请求应主动加载本导航和匹配的专项 Skill，发现 Host `research_workflow` / `r_files` 并按实时 schema 调用；R 计算默认远程运行。连接状态未知时调用 `mcp_connect`，再使用实际发现的工具 schema。`mcp__rmcp__*` 是底层转发工具，不是独立连接。远程连接失败时不得静默改成本地 R；可继续独立检索与准备，说明阻断步骤和恢复方法。
 
 | 用户任务 | Skill | workflow_id |
 |---|---|---|
@@ -15,6 +15,7 @@ allowed-tools: read
 | R 包查询、管理员包变更 | zerowall-r-packages | r.packages |
 | GEO 数据、bulk、R 单细胞 | zerowall-geo | r.geo |
 | NHANES 周期、复杂抽样分析 | zerowall-nhanes | r.nhanes |
+| FAERS 药物警戒、比例失衡、联合用药 | zerowall-faerskit | r.faerskit |
 | 科学资源发现、文献、基因蛋白、药物与临床精确查询 | zerowall-tooluniverse | tooluniverse |
 | Biomni 专项工具、数据湖、Agent | zerowall-rbioagent | biomni |
 | 已安装绘图模板、计划、图表 | zerowall-rplotfigure | figureya |
@@ -22,6 +23,8 @@ allowed-tools: read
 | AnnData、单细胞、空间、多组学 | zerowall-omicverse | omicverse |
 
 ## 首次调用
+
+`research_workflow` 自动处理远程项目绑定。每个对话绑定独立项目，只在同一对话内复用，不按用户或工作区跨对话共用。调用时省略 `project_id`，由 Host 在 RMCP 后端自动获取项目；不要要求用户查找、填写或确认项目 ID。后续操作和下载沿用该对话绑定，重连不新建分析任务。
 
 Host tool registry 输入 `{"query":"research_workflow"}`。然后交给 the native tool：
 
@@ -50,7 +53,6 @@ Host tool registry 输入 `{"query":"research_workflow"}`。然后交给 the nat
   "parameters": {
     "operation": "r.submit.script",
     "arguments": {
-      "project_id": "rmcp-demo",
       "code": "writeLines(capture.output(sessionInfo()), file.path(Sys.getenv('R_PLATFORM_RESULT_DIR'), 'session-info.txt'))",
       "confirm": true
     },

@@ -1,7 +1,7 @@
 {
   "protocol_version": 2,
   "catalog_version": "2026-10-29.1",
-  "content_sha256": "53a79523097a83439c634170f87e978f635a0417a02628551f74de8a5624d333",
+  "content_sha256": "501453b19b1009a7ab16d5814320d50d2c35018ff1bd3a8d58aaf2f8515385d1",
   "id": "r.genetics",
   "skill": "zerowall-mr",
   "groups": [

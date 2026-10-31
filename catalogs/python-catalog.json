@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "kind": "python",
-  "applicationVersion": "8.4.13",
+  "applicationVersion": "8.4.18",
   "localOnly": false,
-  "generatedAt": "2026-10-27T18:57:49.016Z",
+  "generatedAt": "2026-10-30T15:34:37.110Z",
   "resources": [
     {
       "id": "science-dependencies",
       "version": "8.3.0",
       "kind": "python",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -36,14 +36,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "25HMGK+g0xveenVx8AiN/0SEI9pzuNyTIG60F8AioL1oR2Ymz5GgXIPauDm7QdMKnurZYynp7fswoCn/tgZOBQ=="
+        "value": "UdKx/UOjQQUN5sZeyUImwKSQ56JXd8frn8gWmB3z2ZR/dI8PZiRD0RCC9KNXdGQGu46GU94JIULWYpOoTVJvBg=="
       }
     },
     {
       "id": "fallback-wheel-flowio",
       "version": "1.4.0",
       "kind": "python",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -70,14 +70,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "ZWwG554CkBoHKwiN/i3Vh5o/MiVWIW8sgoj6unUDQ9/QP1MgtbAMC4b/DKCHz/4u7U1cLVAo8EAR0ZiDCQyFBg=="
+        "value": "ztRoUCzPlcdsmQuhfdMFE7YqqcEBAcDLgvmyjOxK73xiX2gIFKaxpCOV8R/4WKkFbr0+gO+R9FQNvwfQC7dwCQ=="
       }
     },
     {
       "id": "fallback-wheel-bibtexparser",
       "version": "1.4.4",
       "kind": "python",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -104,14 +104,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0QvIbYzC1PPOnmtR8Kg4OC+vjMVlOt4UYmNh6C4YYX5n+x++LWV5Bgjd1Vb4WvxrAm5gBRT6Ca5BPCZJlL8zAA=="
+        "value": "GEuMRIzNmfojMvohTuo53TCigUriud47DDAMuIggMKtVe7Qxgmtil7epGfhqaiNyBqVF53HuvyTKBqCGEwOqCQ=="
       }
     },
     {
       "id": "fallback-wheel-autograd-gamma",
       "version": "0.5.0",
       "kind": "python",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -138,14 +138,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "0jaeB2p2WtBkQw5uVsFIevieAtYgCfAR1P+ywO861ows6M+2ZzlGjFYZj5fZju5NhMyf3Yfol6lDmXsRt2EoAg=="
+        "value": "o1dtNopMKPo4iw3qgOMvgD3Le4z0Hx05T9kUgRiQYXB+QFoApieFbnO8oJS7gWlH+x0p6LZ1QuGOg8aoXGgFBQ=="
       }
     },
     {
       "id": "fallback-wheel-docopt",
       "version": "0.6.2",
       "kind": "python",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -172,14 +172,14 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "4YtjPrujPlLnjf9233W8ek5OQUr6/N4uKojtPPSxO+8FwPRSH9Rd7Vj1cVENbdRyDmtQG9OwRFclA4f/BLMkBg=="
+        "value": "cebH7wfcy9Ew9XRthPrsly0V+wNRxitvGDafWyLYDX4GmlAEZ7nVtpa9utdxhIpJuDC0xwM8fBHvoBKWBHkBCA=="
       }
     },
     {
       "id": "fallback-wheel-nglview",
       "version": "4.0.1",
       "kind": "python",
-      "applicationVersion": "8.4.13",
+      "applicationVersion": "8.4.18",
       "dshRange": {
         "min": "0.2.1-rc.2",
         "max": "0.2.1-rc.2"
@@ -206,13 +206,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "LM6oWlMBMhxeK4uWwX46PIqeYB4CRUQBhi7nQjUU6jSpLScAY8K7y1SkETCwR7sAI+qs+g2KpfxTZ5Y5B11lBA=="
+        "value": "I1TaJtorQW00cqdK/3fPlWWHH2tErFr4yCeZtBrQhHj8eUofswVg1bOSoqcLzFfZtvcxKHmsgZOhrRoIc9NQDg=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "Fpw82XDb3XVQ5IVDYpx1mBEc5f2TvMny4LeyOwgc/AjsWdxeudpznq5yX84l4h0qrLveSpB4gRaUpZ91jJKJBQ=="
+    "value": "5cltkRlb5pJNFR/Rv2kQZGwKzgBbH0yGASfth736oB6xh+1jB83+zpUMPL9z8GODs3mUrX3aW5H8nrXlStBaBg=="
   }
 }
