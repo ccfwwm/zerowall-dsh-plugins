@@ -18,7 +18,7 @@ ZeroWall Science 8.4.18 的插件与资源源码总仓库。各插件、Skills�
 | `desktop/src/shared/` | 插件所需的桌面共享接口 |
 | `deepseek-harness/` | 固定 DSH 接口与构建依赖（Git 子模块） |
 
-当前源码以以上 canonical 路径为准，不从旧 `packages/`、`store/` 布局读取。顶层 `catalogs/`、`skills/`、`mcp/` 保留既有历史发布/导出快照，包括独立发布收据；它们不代表当前源码或 8.4.18 的线上状态。source-only 导出不会刷新或删除这些历史目录。
+当前源码以以上 canonical 路径为准，不从旧 `packages/`、`store/` 布局读取。完整导出会从 `resources/extensions/skills/` 刷新顶层 `skills/` 快照；source-only 导出保留上次快照。顶层 `catalogs/` 与 `mcp/` 保留既有发布/导出快照及独立发布收据；这些快照本身不代表 8.4.18 已在线发布。
 
 Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://github.com/ccfwwm/zerowallscience)；本源码仓库不打包 Electron。桌面交付壳与已验证的 DSH 离线运行时闭包，插件/Skills/MCP/Python 资源仍独立版本化。
 
@@ -29,7 +29,7 @@ Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://
 | 集成/包 | 资源或上游版本 | 仓库 | 固定 commit |
 | --- | --- | --- | --- |
 | deepseekHarness | dsh-v0.2.1-rc.2 | [上游](https://github.com/ccfwwm/deepseek-harness.git) | cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a |
-| @zerowallscience/plugin-claude-code | 0.2.14 | [上游](https://github.com/Norman-else/dsh-claude) | fe00e3af0b1ad03acc977b13b4d4ab805086f6da |
+| @zerowallscience/plugin-claude-code | 0.2.15 | [上游](https://github.com/Norman-else/dsh-claude) | fe00e3af0b1ad03acc977b13b4d4ab805086f6da |
 | dsh-better-sidebar | 0.28.1-zws.1 | [上游](https://github.com/omdsh-dev/DSH-better-sidebar.git) | 83faf70940160e5cd4c5332f5400aa8f4dbbb6d6 |
 | fileReviewTab | 0.8.11-zws.1 | [上游](https://github.com/left0ver/dsh-file-review.git) | c13a616efe69680d4cc168edd888113e917e5fa9 |
 | zotero | 0.12.2-zws.1 | [上游](https://github.com/Vncntvx/dsh-zotero.git) | 77604ad4829dea52d0e9f498d635c9b59f1cae38 |
@@ -42,7 +42,7 @@ Electron 桌面壳与其打包实现位于 [ZeroWall Science 主仓库](https://
 | sessionNotification | 0.2.7-zws.1 | [上游](https://github.com/dingyi222666/dsh-session-notification.git) | 64055baed0d7cb10ad6d40e24187bdfa39e818fe |
 | openFileViewer | 0.1.49 | [上游](https://github.com/wenhongquan/dsh-open-file-viewer) | 20aecc32cc597f6de094d2c7febddfb60f3ae1ef |
 | @michengai/dsh-archive-manager | 1.1.2-zws.1 | [上游](https://github.com/MichengAI/dsh-archive-manager.git) | 4b8cd2f364f2dcf78011b74bd5d9bbfeec093a50 |
-| @zerowallscience/plugin-videos | 0.2.8 | [上游](https://github.com/zenstory-ai/oh-story-dsh.git) | d4fca12fa8a71c9d91944bd25a9d8c6b519084f5 |
+| @zerowallscience/plugin-videos | 0.2.9 | [上游](https://github.com/zenstory-ai/oh-story-dsh.git) | d4fca12fa8a71c9d91944bd25a9d8c6b519084f5 |
 | dsh-ppt-maker | 1.0.0 | [上游](https://github.com/OMSociety/dsh-ppt-maker.git) | a9fcf037a02742573b2bca673012ae57375ba4ef |
 | @deepseek-ai/libreoffice-kit | 0.1.5 | [上游](https://github.com/deepseek-ai/dsh-libreoffice-kit) | — |
 | officeTools | 1.0.6 | [上游](https://github.com/kw78/dsh-office-tools.git) | 6c9faa36409961226623480c0ba6ef8fd6313beb |
@@ -72,6 +72,6 @@ pnpm plugins:test
 
 ## 验证与发布边界
 
-`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `9dc5eda7a954cd2b1beac05a7cd49e7c2db78bb0`，DSH 为 `cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
+`source-provenance.json` 记录 applicationVersion、sourceCommit、dshCommit 与导出模式；本次源提交为 `a25133f4a92c6485916a5e385db87bcbe3338ef9`，DSH 为 `cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a`。工作区未提交的允许源码也会导出，因此 sourceCommit 本身不构成完整字节收据。
 
 当 `sourceOnly: true` 时，`pnpm source:verify` 仅检查插件源码路径/链接与必要源码文件，不验证历史 catalog 的签名、线上资源版本、构建包或发布状态。完整导出模式会核对其资源快照的签名和版本，但仍不能代替类型检查、插件测试、真实安装/运行与公网下载验证。发布另需明确授权和独立收据。

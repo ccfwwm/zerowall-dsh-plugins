@@ -3,7 +3,7 @@
   "kind": "plugin",
   "applicationVersion": "8.4.18",
   "localOnly": false,
-  "generatedAt": "2026-10-31T06:53:24.801Z",
+  "generatedAt": "2026-10-31T07:55:57.764Z",
   "resources": [
     {
       "id": "@zerowallscience/plugin-account",
@@ -2487,7 +2487,7 @@
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.44",
+      "version": "0.2.45",
       "kind": "plugin",
       "applicationVersion": "8.4.18",
       "dshRange": {
@@ -2503,9 +2503,9 @@
       "architecture": [
         "x64"
       ],
-      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-mcp/0.2.44/zerowallscience-plugin-mcp-0.2.44.tgz",
-      "sha256": "31d81b6dce80ec98268fe0dbb9d9f0e4c07d743a5363c8c808e41ce002aba3bb",
-      "size": 410392,
+      "downloadUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-mcp/0.2.45/zerowallscience-plugin-mcp-0.2.45.tgz",
+      "sha256": "d34aaa3acc916ccc967a36ece37222b66f2c5a4a51a3dc8136c8fbc5f07f2c25",
+      "size": 410389,
       "restartRequired": true,
       "rollbackSupported": true,
       "desktop": {
@@ -2561,13 +2561,13 @@
       "signature": {
         "algorithm": "ed25519",
         "keyId": "stable-4",
-        "value": "JptZ3vPgR7s8QwakxAx7OW8Q+D52ZCmlekVoRSbhWoujzPl5ZfpNge/YtuvhpCe7PDN8B+jJaQi+0LEbRoWPAw=="
+        "value": "k1WEIziYL9XFZ/RgPWyJaZbm3Z5G9Gv3jkstc1FnjdeWsBUcKNzaKpepO08D8Vg71FkmvX1IK7Hy6/JxnKYrDQ=="
       }
     }
   ],
   "signature": {
     "algorithm": "ed25519",
     "keyId": "stable-4",
-    "value": "/Z5/kEam6fDKkHgrwE2AujwfyhiO0ViQ6UY7ugGpsJrWMGXDn/vub9NE1TsnrrQLw0UMZjE7idzZn0mw4NfxAw=="
+    "value": "HfOQdPrvuaPCN5UmspRQ16KyUfOke3wtaZPDBbOJlPBGteLI4bqC2/2ZJgvkd4aon4P13wq66DEyr5D+SGFzBg=="
   }
 }
