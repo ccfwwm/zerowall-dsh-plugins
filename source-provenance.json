@@ -225,6 +225,169 @@
       ],
       "removed": [],
       "manifestSha256": "1c26adbb7e239c0e041caa92681ebc7a5035e763119c70bc566bef7141d7b222"
+    },
+    {
+      "id": "@zerowallscience/plugin-environment",
+      "version": "0.1.28",
+      "sourceCommit": "9442a2e46140fbb8ade2ad3678b15ded3cc53744",
+      "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
+      "sourceRepositoryParent": "a8b2a5ce1b8a806390ef610ea0e0544f2de06120",
+      "retainedOtherSources": true,
+      "publicationAsserted": false,
+      "files": [
+        {
+          "path": "config/deepseek-harness/plugin-inventory.json",
+          "size": 24554,
+          "sha256": "7f92c11248b8a42a3e17ffbed7609e9d037aecab1747a9646916069468ffda1c"
+        },
+        {
+          "path": "plugins/environment/dsh.bundle.patch.yml",
+          "size": 91,
+          "sha256": "c10172d7562ee873c99cb66644934221f102be9934486046cc07a817ea580977"
+        },
+        {
+          "path": "plugins/environment/package.json",
+          "size": 7591,
+          "sha256": "28e40fcf2c1ee0646a783e400f8ca8b29876f580f700f013c198da99fa2e1045"
+        },
+        {
+          "path": "plugins/environment/src/client/LiteratureSettings.tsx",
+          "size": 8161,
+          "sha256": "94c7bfe526ddc2d9d6f1397dac856b23700c61bf7068451fa7e86d50f1b05476"
+        },
+        {
+          "path": "plugins/environment/src/client/VariableActionDialog.tsx",
+          "size": 2778,
+          "sha256": "b09aa7aefff5c77e28cf9e622314514675cf9795a2deb0c06477962eea9e3389"
+        },
+        {
+          "path": "plugins/environment/src/client/context-budget.tsx",
+          "size": 3453,
+          "sha256": "4d153af153c0839e286c38180033eeb677948d76cb8e1becf5cb1e0610a8fced"
+        },
+        {
+          "path": "plugins/environment/src/client/css-modules.d.ts",
+          "size": 96,
+          "sha256": "78f2c9d100da3ac6935319540dafc72498fe2bae19a635b0dafcccfdff5b4c2d"
+        },
+        {
+          "path": "plugins/environment/src/client/index.ts",
+          "size": 3868,
+          "sha256": "29529c92f1472cd329949da05f5bd203c23d5f7b380806c5b2bf92d6e02100fa"
+        },
+        {
+          "path": "plugins/environment/src/client/literature.module.css",
+          "size": 5062,
+          "sha256": "d4ca028490662fb879675fbdf367a48bc994c9757204610dab4626a1a9a19991"
+        },
+        {
+          "path": "plugins/environment/src/client/locales.ts",
+          "size": 18872,
+          "sha256": "fffb5110a062ebbe77772d2c335a31ddc7517bb7aaf342e4dbeb39c67f23381b"
+        },
+        {
+          "path": "plugins/environment/src/client/messages.ts",
+          "size": 904,
+          "sha256": "0d9f03be635176e3ad8645f0880573187aa99f883426065fa259351a07356d56"
+        },
+        {
+          "path": "plugins/environment/src/client/section.module.css",
+          "size": 9748,
+          "sha256": "a05b039a40b3b6fc72cfbfb9e177a2602ea39050eaab8f56d7f1373707e6ed40"
+        },
+        {
+          "path": "plugins/environment/src/client/section.tsx",
+          "size": 36503,
+          "sha256": "282d08c7e4c1931ea8d4d50ad54d0e7a9f00e67ddcba21d82f5908481da30f38"
+        },
+        {
+          "path": "plugins/environment/src/host/index.ts",
+          "size": 26526,
+          "sha256": "090f9385d0fd2b3bd30645a0f9d0d1e5976ae9c3b7c40b3274f3f2c8de179174"
+        },
+        {
+          "path": "plugins/environment/src/host/official-config.ts",
+          "size": 4473,
+          "sha256": "42c290bfda2b49125d7f02522dc8042f7bffbcc0d788fb046bd009c9788a11e6"
+        },
+        {
+          "path": "plugins/environment/src/shared/types.ts",
+          "size": 709,
+          "sha256": "704bad37373158cbcb8e73920606b145290dc86f7690dffe395434cb9c268f0e"
+        },
+        {
+          "path": "plugins/environment/test/budget-integration.spec.ts",
+          "size": 3523,
+          "sha256": "80ecfb1fc1205293802709aaa9e72d463471289dd84dc0dca268efa29a8348ce"
+        },
+        {
+          "path": "plugins/environment/test/client.spec.tsx",
+          "size": 25542,
+          "sha256": "422f055da8af5ec550920b958e5196e807f23f6b2792bb192598606730c52672"
+        },
+        {
+          "path": "plugins/environment/test/host.spec.ts",
+          "size": 11570,
+          "sha256": "53d32b5f107ac99ea7a2c92349b606796f4a924f7c52a48a6675d30271c29949"
+        },
+        {
+          "path": "plugins/environment/tsconfig.client.json",
+          "size": 108,
+          "sha256": "fdcc145d975e93424f4f85facc080688d164cbcfe1beca679b65abd16e7e030d"
+        },
+        {
+          "path": "plugins/environment/tsconfig.host.json",
+          "size": 104,
+          "sha256": "ad102a7d79b2fd6ceea3e4e664ecf9410cd30d5d2d343043984786b7aa1f8770"
+        },
+        {
+          "path": "plugins/environment/tsconfig.json",
+          "size": 142,
+          "sha256": "ad1b25d36ea100440140e543e2a2af188178934da74eadce1b27ef14e91b335e"
+        },
+        {
+          "path": "plugins/environment/tsdown.config.ts",
+          "size": 163,
+          "sha256": "635fff0a4f98effe3b639383b55b1b96cc86024b4d7062dc3535c1e7685a2ab4"
+        },
+        {
+          "path": "plugins/environment/zerowall.plugin.json",
+          "size": 770,
+          "sha256": "29a0642ce5cdebe7a2a4403b97460a02f10dbe5eb0d3ea305af71c624fc3772f"
+        },
+        {
+          "path": "pnpm-lock.yaml",
+          "size": 1625081,
+          "sha256": "0ecbadbbda25389ee8422627040cd86aa01ad8216de26cc91484bd286a0242df"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.mjs",
+          "size": 10583,
+          "sha256": "06fe7bb630a91a27da22e0e3a52e89f246788d9f6b8f6d7450fa553cea40fb5e"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.test.mjs",
+          "size": 16206,
+          "sha256": "fcf3716248c86de5f6b2a661f16ad4ad4b74096f0e44d26beb1c2fd0c3d41b1b"
+        },
+        {
+          "path": "tools/plugins/export-source-repository.mjs",
+          "size": 7890,
+          "sha256": "c82341cb5e6fd7447695cb98687a0ada662bbed14b3ff15b0b94b60dcfd64b95"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.mjs",
+          "size": 965,
+          "sha256": "75422dc2a03d394aca7cece43c69a822b240a30974e659e67f6fadec6a57410f"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.test.mjs",
+          "size": 1785,
+          "sha256": "6fb0c6ce7848aff9b863816db1a73a0b3723e432dba72245160e770b31190fba"
+        }
+      ],
+      "removed": [],
+      "manifestSha256": "828dd61e5d5359f94290bdd5010a0968651936c08e8b3274547504125a6aa4cd"
     }
   ]
 }
