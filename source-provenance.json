@@ -6,5 +6,225 @@
   "buildCommit": null,
   "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
   "packages": [],
-  "exportedSourceFiles": 5463
+  "exportedSourceFiles": 5463,
+  "pluginSourceUpdates": [
+    {
+      "id": "@zerowallscience/plugin-images",
+      "version": "0.2.37",
+      "sourceCommit": "9442a2e46140fbb8ade2ad3678b15ded3cc53744",
+      "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
+      "sourceRepositoryParent": "c71eba78630d504da1569923fb81561c79552f54",
+      "retainedOtherSources": true,
+      "publicationAsserted": false,
+      "files": [
+        {
+          "path": "config/catalogs/resource-versions.json",
+          "size": 9278,
+          "sha256": "a93315332e601464c894efff87b7bf7b42d7f85bee23edb03b64abd99b7ee8dd"
+        },
+        {
+          "path": "config/deepseek-harness/plugin-inventory.json",
+          "size": 24554,
+          "sha256": "82e1899a0b910d189a58aa62cd79d6b198f95ab082b0e63a1eaa030e93208ea4"
+        },
+        {
+          "path": "plugins/images/README.md",
+          "size": 2608,
+          "sha256": "fba8fad76fa3b0d387bfeee1f71dc123208ef7eeb2ea886cf16b630ec8824a30"
+        },
+        {
+          "path": "plugins/images/dsh.bundle.patch.yml",
+          "size": 91,
+          "sha256": "6b14eb2866deb39d6ad3cf811d5e58330c2387db20ba5f41d7b31f0920ab679e"
+        },
+        {
+          "path": "plugins/images/package.json",
+          "size": 7626,
+          "sha256": "72d8ab55832809e02180c978c8205f95f64f00171aa7024db9067bc6465aa7f7"
+        },
+        {
+          "path": "plugins/images/src/client/ImageToolView.module.css",
+          "size": 2277,
+          "sha256": "1889cbf8bc60cc4ca6adde5bddca295e2aba67b167cc36e936333202d759c5a1"
+        },
+        {
+          "path": "plugins/images/src/client/ImageToolView.tsx",
+          "size": 8672,
+          "sha256": "1c50fa6428c101fad42b1be63ffb10e340307ba5d85f64f24185bf4cd4446d8d"
+        },
+        {
+          "path": "plugins/images/src/client/css-modules.d.ts",
+          "size": 96,
+          "sha256": "78f2c9d100da3ac6935319540dafc72498fe2bae19a635b0dafcccfdff5b4c2d"
+        },
+        {
+          "path": "plugins/images/src/client/index.ts",
+          "size": 260,
+          "sha256": "403aba41be8ae7675ffbb66aeb409d072ce6b114dba57ea3c8d1923d1c778192"
+        },
+        {
+          "path": "plugins/images/src/host/generator.ts",
+          "size": 45334,
+          "sha256": "87f81feb9df1787e3dd2a5a3343e8bbb563caecdc5020c6b342bde858168b59d"
+        },
+        {
+          "path": "plugins/images/src/host/image-concurrency.ts",
+          "size": 1301,
+          "sha256": "20f12fd935d3ef9b2b882d907fcef34d0fa6cba2e3f11f4f8275e6c3855a20f8"
+        },
+        {
+          "path": "plugins/images/src/host/index.ts",
+          "size": 18058,
+          "sha256": "49256aabd16947b04bdcb044ece846795a5c7097b4129b22ec066aa815607583"
+        },
+        {
+          "path": "plugins/images/src/host/presentation-layout.ts",
+          "size": 8100,
+          "sha256": "1b283d9db4b5735e621e93ee1ffa274b220765940e37754f5c7bb7c22abad888"
+        },
+        {
+          "path": "plugins/images/src/host/presentation-prompts.ts",
+          "size": 7660,
+          "sha256": "6e353b9865f26ddd5946b2dc1b0144732e71725abd85c31c5a5cc89631aa463a"
+        },
+        {
+          "path": "plugins/images/src/host/presentation-style-candidates.ts",
+          "size": 5666,
+          "sha256": "2612738059a9eb22e585bbc821ab4369d4f8ec769bd7d19f61b61bb263b5d9fc"
+        },
+        {
+          "path": "plugins/images/src/host/presentation-template-analysis.ts",
+          "size": 11943,
+          "sha256": "aadb0a4b5d89c329d133ac9ee52be51055812c09557c15175350533ce98a2347"
+        },
+        {
+          "path": "plugins/images/src/host/presentation-workflow.ts",
+          "size": 116712,
+          "sha256": "680f53e381ec24ee98f2006fada62a3ea10c246f11aa1640bf2d2ef084cd9e43"
+        },
+        {
+          "path": "plugins/images/src/host/visual-assets.ts",
+          "size": 24972,
+          "sha256": "4bfeec93af14b93ff2ef8a435c2810f194239aef4bcfba72857fffc6b8ab01b1"
+        },
+        {
+          "path": "plugins/images/src/shared/types.ts",
+          "size": 56,
+          "sha256": "577cb8e965c7ce9a0ea3db3e705c69aeb66d16a808211984073a0629b5ed2966"
+        },
+        {
+          "path": "plugins/images/test/client.spec.tsx",
+          "size": 3870,
+          "sha256": "7ec30d2dc7add4b6be20c0fb6cd473a870d00ba1368033915eefa5deabf66b2d"
+        },
+        {
+          "path": "plugins/images/test/fixtures/presentation-template.ts",
+          "size": 1667,
+          "sha256": "8f46ea6dfec59bee007d6a79e9b1abea7b7f0b6ca3d2b8ddfc30bb12459d4333"
+        },
+        {
+          "path": "plugins/images/test/host.spec.ts",
+          "size": 46371,
+          "sha256": "40b32e5311c1359a866536b31f7e863bb1fdc08453f6c8352a6939cafacafd53"
+        },
+        {
+          "path": "plugins/images/test/presentation-page-jobs.spec.ts",
+          "size": 28894,
+          "sha256": "294a6b30e8ed09c67e984ac9f14e97e40894fe1c27eac99b452b83b0ea3f594c"
+        },
+        {
+          "path": "plugins/images/test/presentation-state.spec.ts",
+          "size": 11201,
+          "sha256": "8401077b65531f28f7a71908834d763f1f96c63c46017e5b9b59aff8c030dd7e"
+        },
+        {
+          "path": "plugins/images/test/presentation-template-analysis.spec.ts",
+          "size": 1991,
+          "sha256": "bc237582472044e084aae48dd915f533a31ce89ded9b69b2bfbc5cbea005eff8"
+        },
+        {
+          "path": "plugins/images/test/presentation-template-review.spec.ts",
+          "size": 26812,
+          "sha256": "9f082d6f2f1ff317bef0e8cbf90b2131176b43eacd6a61ffafe07d7bee311e4b"
+        },
+        {
+          "path": "plugins/images/test/presentation-workflow.spec.ts",
+          "size": 4657,
+          "sha256": "67ec4a6d86d41ef5849d802da6cdcfc91f7eea6f17f6c9cf8828f0fb18f78bdd"
+        },
+        {
+          "path": "plugins/images/tsconfig.client.json",
+          "size": 108,
+          "sha256": "fdcc145d975e93424f4f85facc080688d164cbcfe1beca679b65abd16e7e030d"
+        },
+        {
+          "path": "plugins/images/tsconfig.host.json",
+          "size": 104,
+          "sha256": "ad102a7d79b2fd6ceea3e4e664ecf9410cd30d5d2d343043984786b7aa1f8770"
+        },
+        {
+          "path": "plugins/images/tsconfig.json",
+          "size": 142,
+          "sha256": "ad1b25d36ea100440140e543e2a2af188178934da74eadce1b27ef14e91b335e"
+        },
+        {
+          "path": "plugins/images/tsdown.config.ts",
+          "size": 158,
+          "sha256": "d3447b301494d77e9e293c04e83df26afc3de78a9adfd8abde71d6d52ed0528b"
+        },
+        {
+          "path": "plugins/images/zerowall.plugin.json",
+          "size": 781,
+          "sha256": "954c0bc782eba74e6cb9663c4a79d8ca4858112e9e6f6314a7ca77521093496c"
+        },
+        {
+          "path": "pnpm-lock.yaml",
+          "size": 1625081,
+          "sha256": "0ecbadbbda25389ee8422627040cd86aa01ad8216de26cc91484bd286a0242df"
+        },
+        {
+          "path": "resources/extensions/skills/gpt-image-generator/SKILL.md",
+          "size": 12826,
+          "sha256": "0d821f266eb892afa71381d3d609376ce6d0c4f724ffb1ded3c473fd2ec63c27"
+        },
+        {
+          "path": "resources/extensions/skills/gpt-image-generator/agents/openai.yaml",
+          "size": 351,
+          "sha256": "994523665a2c2ab2ebd28074b7baaf17bd8e056721f67b5b361f15d01b751eb3"
+        },
+        {
+          "path": "resources/extensions/skills/zerowall-presentation/SKILL.md",
+          "size": 8686,
+          "sha256": "6c0c7fd3ffb9b10e20cc5c75e0b50c7b7ad7aefee61eea3f0fdf9653f26bd32e"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.mjs",
+          "size": 10583,
+          "sha256": "06fe7bb630a91a27da22e0e3a52e89f246788d9f6b8f6d7450fa553cea40fb5e"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.test.mjs",
+          "size": 16206,
+          "sha256": "fcf3716248c86de5f6b2a661f16ad4ad4b74096f0e44d26beb1c2fd0c3d41b1b"
+        },
+        {
+          "path": "tools/plugins/export-source-repository.mjs",
+          "size": 7890,
+          "sha256": "c82341cb5e6fd7447695cb98687a0ada662bbed14b3ff15b0b94b60dcfd64b95"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.mjs",
+          "size": 965,
+          "sha256": "75422dc2a03d394aca7cece43c69a822b240a30974e659e67f6fadec6a57410f"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.test.mjs",
+          "size": 1785,
+          "sha256": "6fb0c6ce7848aff9b863816db1a73a0b3723e432dba72245160e770b31190fba"
+        }
+      ],
+      "removed": [],
+      "manifestSha256": "1c26adbb7e239c0e041caa92681ebc7a5035e763119c70bc566bef7141d7b222"
+    }
+  ]
 }

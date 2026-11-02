@@ -7,7 +7,7 @@ import { randomUUID } from 'node:crypto'
 import { join } from 'node:path'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue }
-import { validateImageSize, type GenerateImageResult } from './generator.js'
+import type { GenerateImageResult } from './generator.js'
 import { AiCloudClient } from '@zerowallscience/plugin-account'
 import { AiCloudImageGenerator } from './generator.js'
 import { SecretBrokerClient } from '@zerowallscience/plugin-secrets'
@@ -60,6 +60,8 @@ const IMAGE_OUTPUT_SCHEMA = {
     groupId: { type: 'string' as const, required: true },
     bytes: { type: 'integer' as const, required: true },
     requestedSize: { type: 'string' as const, required: true },
+    requestedAspectRatio: { type: 'string' as const },
+    requestedImageSize: { type: 'string' as const },
     actualWidth: { type: 'integer' as const, required: true },
     actualHeight: { type: 'integer' as const, required: true },
     quality: { type: 'string' as const, enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'] as const, required: true },
@@ -120,9 +122,12 @@ const IMAGE_OUTPUT_SCHEMA = {
 export function renderImageResult(verb: 'Generated' | 'Edited', value: GenerateImageResult) {
   const warning = value.previewWarning === undefined ? '' : ` Preview warning: ${value.previewWarning}`
   const quality = value.actualQuality === 'unreported' ? `requested ${value.requestedQuality} quality; actual quality unreported by provider` : `${value.actualQuality} quality`
+  const settings = value.requestedImageSize
+    ? `requested ${value.requestedImageSize} tier${value.requestedAspectRatio ? `, ${value.requestedAspectRatio} aspect ratio` : ''}`
+    : `${quality}, requested ${value.requestedSize}`
   const destination = value.path.replace(/\\/gu, '/').replace(/[%<>\r\n]/gu, character => encodeURIComponent(character))
   const markdown = `![${verb === 'Generated' ? 'Generated image' : 'Edited image'}](<${destination}>)`
-  const content = [{ type: 'text' as const, text: `${verb} ${value.path} with ${value.model} at ${quality} (${value.actualWidth}x${value.actualHeight}, requested ${value.requestedSize}, ${value.bytes} bytes).${warning}\n\nDisplay this saved image directly in your final reply by copying the following Markdown image embed verbatim, outside code/backticks. Do not return only a path or a download link:\n${markdown}` }]
+  const content = [{ type: 'text' as const, text: `${verb} ${value.path} with ${value.model} (${settings}; actual ${value.actualWidth}x${value.actualHeight}, ${value.bytes} bytes).${warning}\n\nDisplay this saved image directly in your final reply by copying the following Markdown image embed verbatim, outside code/backticks. Do not return only a path or a download link:\n${markdown}` }]
   const attachment = value.attachment ?? value.image
   return attachment === undefined ? content : [
     ...content,
@@ -137,6 +142,8 @@ function presentationMeta(value: GenerateImageResult): JsonValue {
     providerId: value.providerId,
     groupId: value.groupId,
     requestedSize: value.requestedSize,
+    ...(value.requestedAspectRatio ? { requestedAspectRatio: value.requestedAspectRatio } : {}),
+    ...(value.requestedImageSize ? { requestedImageSize: value.requestedImageSize } : {}),
     actualWidth: value.actualWidth,
     actualHeight: value.actualHeight,
     quality: value.quality,
@@ -198,13 +205,11 @@ export function apply(ctx: Context): void {
 
   ctx.tools.register(defineTool({
     name: 'generate_image',
-      description: '生成独立 PNG 与真实生成回执，包括 PPT/PPTX、幻灯片、文档和报告配图。先加载 gpt-image-generator，沿用环境配置的生图模型、分组和参数，不创建媒体项目/任务。修改已有图使用 edit_image。',
+      description: '生成独立 PNG 与真实生成回执，包括 PPT/PPTX、幻灯片、文档和报告配图。每次调用都读取当前环境配置中的生图模型、分组和参数；不要传模型、质量或尺寸覆盖值。需要指定任务画幅时才传 aspect_ratio。不创建媒体项目/任务。修改已有图使用 edit_image。',
     parameters: {
       prompt: { type: 'string', required: true, description: 'Detailed image-generation prompt.' },
       output_path: { type: 'string', required: true, description: 'New PNG path inside the current session working directory.' },
-        model: { type: 'string', description: '可选的生图模型 ID；未填写时使用环境配置或账户目录中的唯一可用模型。' },
-      size: { type: 'string', description: 'auto 或 WIDTHxHEIGHT，例如 2048x2048；不要假设 1024x1024 是最大尺寸。' },
-      quality: { type: 'string', enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'], description: 'Optional explicit override. Omit unless the user requested a quality level; the environment setting is otherwise authoritative (default: medium). Image dimensions do not imply high quality.' },
+      aspect_ratio: { type: 'string', description: '可选的任务画幅比例（例如 16:9）；仅在页面规格或用户要求明确比例时传入，否则使用环境配置。' },
       overwrite: { type: 'boolean', description: 'Replace an existing output file. Defaults to false.' },
       concurrency: { type: 'integer', description: 'Maximum concurrent image jobs in this batch (integer 1–10, default 10). When the user specifies a limit, pass the same value to every generate_image/edit_image call in the batch.' },
     },
@@ -220,9 +225,7 @@ export function apply(ctx: Context): void {
       return await generator.generate({
         prompt: args.prompt,
         outputPath: args.output_path,
-        ...(args.model === undefined ? {} : { model: args.model }),
-        ...(args.size === undefined ? {} : { size: validateImageSize(args.size) }),
-        ...(args.quality === undefined ? {} : { quality: args.quality }),
+        ...(args.aspect_ratio === undefined ? {} : { aspectRatio: args.aspect_ratio }),
         ...(args.overwrite === undefined ? {} : { overwrite: args.overwrite }),
         ...(args.concurrency === undefined ? {} : { concurrency: args.concurrency }),
       }, cwd, exec.signal)
@@ -237,16 +240,14 @@ export function apply(ctx: Context): void {
 
   ctx.tools.register(defineTool({
     name: 'edit_image',
-    description: '编辑 PNG、JPEG 或 WebP 并保留被引用内容，适用于 PPT/PPTX 配图及普通改图。使用 gpt-image-generator 和环境配置的生图模型、分组、参数，返回 PNG 与生成回执，不创建媒体项目/任务。',
+    description: '编辑 PNG、JPEG 或 WebP 并保留被引用内容，适用于 PPT/PPTX 配图及普通改图。每次调用都读取当前环境配置中的生图模型、分组和参数；不要传模型、质量或尺寸覆盖值。需要指定任务画幅时才传 aspect_ratio。返回 PNG 与生成回执，不创建媒体项目/任务。',
     parameters: {
       prompt: { type: 'string', required: true, description: 'Detailed edit instruction, including what must remain unchanged.' },
       input_paths: { type: 'array', items: { type: 'string' }, description: 'Optional source image paths inside the session working directory.' },
       input_attachment_ids: { type: 'array', items: { type: 'string' }, description: 'Optional image attachment IDs from the current conversation.' },
       mask_path: { type: 'string', description: 'Optional independent alpha mask matching the first input image format and dimensions. Omit this field entirely for whole-image edits; never send an empty string or repeat input_paths[0] as the mask.' },
       output_path: { type: 'string', required: true, description: 'PNG output path inside the current session working directory.' },
-        model: { type: 'string', description: '可选的生图模型 ID；未填写时使用环境配置或账户目录中的唯一可用模型。' },
-      size: { type: 'string', description: 'auto 或 WIDTHxHEIGHT，例如 2048x2048；不要假设 1024x1024 是最大尺寸。' },
-      quality: { type: 'string', enum: ['auto', 'low', 'medium', 'high', 'xhigh', 'max'], description: 'Optional explicit override. Omit unless the user requested a quality level; the environment setting is otherwise authoritative (default: medium). Image dimensions do not imply high quality.' },
+      aspect_ratio: { type: 'string', description: '可选的任务画幅比例（例如 16:9）；仅在页面规格或用户要求明确比例时传入，否则使用环境配置。' },
       overwrite: { type: 'boolean', description: 'Replace an existing output file, including a source image. Defaults to false.' },
       concurrency: { type: 'integer', description: 'Maximum concurrent image jobs in this batch (integer 1–10, default 10). Use the same value for every generate_image/edit_image call in the batch.' },
     },
@@ -265,9 +266,7 @@ export function apply(ctx: Context): void {
         inputPaths: [...(args.input_paths ?? []), ...attachmentPaths],
         outputPath: args.output_path,
         ...(args.mask_path?.trim() ? { maskPath: args.mask_path.trim() } : {}),
-        ...(args.model === undefined ? {} : { model: args.model }),
-        ...(args.size === undefined ? {} : { size: validateImageSize(args.size) }),
-        ...(args.quality === undefined ? {} : { quality: args.quality }),
+        ...(args.aspect_ratio === undefined ? {} : { aspectRatio: args.aspect_ratio }),
         ...(args.overwrite === undefined ? {} : { overwrite: args.overwrite }),
         ...(args.concurrency === undefined ? {} : { concurrency: args.concurrency }),
       }, cwd, exec.signal) } finally { await Promise.all(attachmentPaths.map(path => unlink(path).catch(() => undefined))) }
