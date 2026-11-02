@@ -601,6 +601,234 @@
       ],
       "removed": [],
       "manifestSha256": "b69036068b27d29a7a0e4ca3fd9712922bdff68aff9d73f8e98e75aadf7f0dac"
+    },
+    {
+      "id": "@zerowallscience/plugin-ai-cloud",
+      "version": "0.1.37",
+      "sourceCommit": "9442a2e46140fbb8ade2ad3678b15ded3cc53744",
+      "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
+      "sourceRepositoryParent": "5118af3db05ccc52a1cbc1fea3946427d9a5d444",
+      "retainedOtherSources": true,
+      "publicationAsserted": false,
+      "files": [
+        {
+          "path": "config/deepseek-harness/plugin-inventory.json",
+          "size": 24554,
+          "sha256": "8875e92be3f81794147973b168321d2edf0276b4ba8299b43b4b9b38f27ea2b4"
+        },
+        {
+          "path": "plugins/ai-cloud/dsh.bundle.patch.yml",
+          "size": 89,
+          "sha256": "d388d28c58ad71876619a55fe162693bfa5692bfd282059778ac27caf38e48b3"
+        },
+        {
+          "path": "plugins/ai-cloud/package.json",
+          "size": 7246,
+          "sha256": "245c56c294dce3d3b5d511fe4ff5ec09a7049a079b1f14afac983354110c1711"
+        },
+        {
+          "path": "plugins/ai-cloud/src/client/css-modules.d.ts",
+          "size": 96,
+          "sha256": "78f2c9d100da3ac6935319540dafc72498fe2bae19a635b0dafcccfdff5b4c2d"
+        },
+        {
+          "path": "plugins/ai-cloud/src/client/index.ts",
+          "size": 33,
+          "sha256": "88e6c394e8980a82a76acb0a22c26b8b846336ab83fce23d7fdf03eac9ee727b"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/artifact-format.ts",
+          "size": 4087,
+          "sha256": "ebe9ae7848356d722ef310b6238a68bb64f2489b6de523311237cb73ce58c333"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/artifact-network.ts",
+          "size": 2336,
+          "sha256": "6334497c4100d409b64732dfbff4c99e0ed4b2bf64cc3b6c49d7de727e129c26"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/image-download.ts",
+          "size": 7232,
+          "sha256": "1908b60a42d4028444409d78c4643418067f492adf39a14b8c454514f37f3684"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/index.ts",
+          "size": 19233,
+          "sha256": "349172cf35fe22fbb50fda005694d503133378281d292ad76e53531f0fc6505f"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/managed-adapter.ts",
+          "size": 3816,
+          "sha256": "e65a3ba6b09ce54e445ecd85bef6cb5fc2b653813bb36d1e7a2095fa6391253a"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/media-abort.ts",
+          "size": 580,
+          "sha256": "102e62653c4e0cbabd46cdc7748fda9b7995d49fd808c48d88fa06032738c0da"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/media-diagnostics.ts",
+          "size": 2012,
+          "sha256": "74959b99287022a52c4c89a1ff93f07e022ffda9e2b08de31dc16c77215074d9"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/media-download.ts",
+          "size": 4204,
+          "sha256": "7d8bb24c15502f7c6bdedc984c162371a617115d7944ca47cafd65f104261364"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/media-jobs.ts",
+          "size": 33262,
+          "sha256": "4d950cd5622b229e0a2241e295d5109d7b85bd1434a3644e51b6a24a3749a585"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/media-reference.ts",
+          "size": 7587,
+          "sha256": "4eb046641e52aa49690d54e1cd9bfe3b3917ef41305397bf2aac71a93100e28b"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/media-retry.ts",
+          "size": 1229,
+          "sha256": "89a13e39221174ba6105d4d9b28763368f65a30b895c8a30b87535a23463969b"
+        },
+        {
+          "path": "plugins/ai-cloud/src/host/media.ts",
+          "size": 34799,
+          "sha256": "a57dd221967a35098eb3b49def09451853025656ee8e00753b7adbcb72c30a64"
+        },
+        {
+          "path": "plugins/ai-cloud/src/shared/media.ts",
+          "size": 6405,
+          "sha256": "9daabc405276528cf7a3c79412938b03454ba89d89ff6465840391cab8bd78bd"
+        },
+        {
+          "path": "plugins/ai-cloud/src/shared/types.ts",
+          "size": 361,
+          "sha256": "b051e5ed786391e4bddb23f1506631b8646ebe2baae88770c83a846d2363fbc4"
+        },
+        {
+          "path": "plugins/ai-cloud/test/artifact-format.spec.ts",
+          "size": 1284,
+          "sha256": "ba65a09802e8b25526c5fcb6be29258df96e1bf392cbf1b13306bc728bed92ca"
+        },
+        {
+          "path": "plugins/ai-cloud/test/context-recovery.spec.ts",
+          "size": 4674,
+          "sha256": "dbd6a4d827fca66aeeee7c167360a08036b458cee8ffad1aa7bd15109a2ee34d"
+        },
+        {
+          "path": "plugins/ai-cloud/test/fixtures/audio.m4a",
+          "size": 2010,
+          "sha256": "567c838b02cbbef7197f9f8f5e3a6495d35f53c896211c81055f1ac7aa6f1127"
+        },
+        {
+          "path": "plugins/ai-cloud/test/host.spec.ts",
+          "size": 20766,
+          "sha256": "1e4aa1e12346fdcf78c4956e72a7d49f6549238b4434e21b156098322f9c2d73"
+        },
+        {
+          "path": "plugins/ai-cloud/test/image-download.spec.ts",
+          "size": 3855,
+          "sha256": "216cb5d6f451da799b0b7eaa844242f86bfbadb5a4e1286bf2946341d3714eff"
+        },
+        {
+          "path": "plugins/ai-cloud/test/media-diagnostics.spec.ts",
+          "size": 2864,
+          "sha256": "611b7f6deb229bf080efcca012b9f8ea2649f3f914e7e843ddfe9dcfdcdd0b37"
+        },
+        {
+          "path": "plugins/ai-cloud/test/media-download.spec.ts",
+          "size": 3839,
+          "sha256": "fc8e69ee4563c3b5696f3d4e8234f20ffb129e6c971a72e81f47d050f8f7317d"
+        },
+        {
+          "path": "plugins/ai-cloud/test/media-identity.spec.ts",
+          "size": 4696,
+          "sha256": "554c2cd94b660587b837d39ec0ae951b0955106115770e1962c54b95304e7aa9"
+        },
+        {
+          "path": "plugins/ai-cloud/test/media-jobs.spec.ts",
+          "size": 20349,
+          "sha256": "2b76bbaeb3f89298bb64d5612e0456e4caa170b777c25067c03b660e3723b634"
+        },
+        {
+          "path": "plugins/ai-cloud/test/media-journal.spec.ts",
+          "size": 1975,
+          "sha256": "092e4ba41d2dd3ca55a2f2fd92cabcef21499ec6aa30085b84bd6e762b8b7f87"
+        },
+        {
+          "path": "plugins/ai-cloud/test/media-materialization.spec.ts",
+          "size": 21136,
+          "sha256": "93eb5f53b9c7473bab0de2d5c8fcdc63bacc8d06b758fc5d4a5e14762f850415"
+        },
+        {
+          "path": "plugins/ai-cloud/test/media.spec.ts",
+          "size": 27010,
+          "sha256": "ea7fb90e4b459feb962396342d3c67b7099a0c705195def4c99d63a52b5b3c30"
+        },
+        {
+          "path": "plugins/ai-cloud/test/retry.spec.ts",
+          "size": 11279,
+          "sha256": "8ac20ed602cef9617cc91d8ededf440aa661a5ba9ae3cff669a903f7964668f3"
+        },
+        {
+          "path": "plugins/ai-cloud/tsconfig.client.json",
+          "size": 108,
+          "sha256": "fdcc145d975e93424f4f85facc080688d164cbcfe1beca679b65abd16e7e030d"
+        },
+        {
+          "path": "plugins/ai-cloud/tsconfig.host.json",
+          "size": 104,
+          "sha256": "ad102a7d79b2fd6ceea3e4e664ecf9410cd30d5d2d343043984786b7aa1f8770"
+        },
+        {
+          "path": "plugins/ai-cloud/tsconfig.json",
+          "size": 142,
+          "sha256": "ad1b25d36ea100440140e543e2a2af188178934da74eadce1b27ef14e91b335e"
+        },
+        {
+          "path": "plugins/ai-cloud/tsdown.config.ts",
+          "size": 269,
+          "sha256": "8ea6ebc91ea3ee0ddfa6906177d15c22b827f680a3c11797640dc099b3042ecf"
+        },
+        {
+          "path": "plugins/ai-cloud/zerowall.plugin.json",
+          "size": 716,
+          "sha256": "2d2682f5c6e74f4f7d49ea9c7b1bf2f7af269474a9a28b6427c721416db10491"
+        },
+        {
+          "path": "pnpm-lock.yaml",
+          "size": 1625081,
+          "sha256": "0ecbadbbda25389ee8422627040cd86aa01ad8216de26cc91484bd286a0242df"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.mjs",
+          "size": 10583,
+          "sha256": "06fe7bb630a91a27da22e0e3a52e89f246788d9f6b8f6d7450fa553cea40fb5e"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.test.mjs",
+          "size": 16206,
+          "sha256": "fcf3716248c86de5f6b2a661f16ad4ad4b74096f0e44d26beb1c2fd0c3d41b1b"
+        },
+        {
+          "path": "tools/plugins/export-source-repository.mjs",
+          "size": 7890,
+          "sha256": "c82341cb5e6fd7447695cb98687a0ada662bbed14b3ff15b0b94b60dcfd64b95"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.mjs",
+          "size": 965,
+          "sha256": "75422dc2a03d394aca7cece43c69a822b240a30974e659e67f6fadec6a57410f"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.test.mjs",
+          "size": 1785,
+          "sha256": "6fb0c6ce7848aff9b863816db1a73a0b3723e432dba72245160e770b31190fba"
+        }
+      ],
+      "removed": [],
+      "manifestSha256": "5c556e974c1ecd9e0089d2dc6ca2be6dfe583d23bea5ce75c6e80af0d10b0633"
     }
   ]
 }

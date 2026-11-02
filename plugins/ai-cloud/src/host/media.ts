@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { setTimeout as delay } from 'node:timers/promises'
 import type { AccountSecretStore } from '@zerowallscience/plugin-account'
 import type { AiCloudAccountSnapshot, AiCloudMediaModel } from '@zerowallscience/plugin-account/types'
-import { isImageGenerationGroup, uniqueMediaModels } from '@zerowallscience/plugin-account'
+import { uniqueMediaModels } from '@zerowallscience/plugin-account'
 import type { MediaArtifact, MediaCatalog, MediaDiagnostics, MediaRequest, MediaSelection, MediaTask, ZeroWallMedia } from '../shared/media.js'
 import { safeMediaValue, safeMediaResponse } from './media-diagnostics.js'
 import { artifactFormat } from './artifact-format.js'
@@ -23,6 +23,13 @@ const JOURNAL = 'zerowall.ai-cloud.media-journal.v1'
 const MAX_BYTES = 256 * 1024 * 1024
 const TRUSTED = ['hkcode.aicodeme.xyz', 'code.aicodeme.xyz', 'code.aicodeme.cn']
 const hash = (value: string | Uint8Array) => createHash('sha256').update(value).digest('hex')
+/** Gemini tiers are enums; a pixel canvas is not an imageSize. */
+export function normalizeGeminiImageSize(raw: string): string {
+  const value = raw.trim().toUpperCase()
+  const aliases: Record<string, string> = { '512': '512', '1024': '1K', '1K': '1K', '2048': '2K', '2K': '2K', '4096': '4K', '4K': '4K' }
+  if (!aliases[value]) throw new Error('Gemini imageSize must be 512, 1K, 2K or 4K.')
+  return aliases[value]!
+}
 function canonical(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(canonical)
   if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([key, v]) => [key, canonical(v)]))
@@ -57,15 +64,17 @@ export class AiCloudMediaService implements ZeroWallMedia {
     const snapshot = await (refresh ? this.account.discoverModels() : this.account.current())
     if (snapshot.status !== 'signedIn') return { models: [], status: 'signedOut', error: '请登录 AI 云平台。' }
     const status = snapshot.mediaSync?.status ?? 'unavailable'
-    return { models: uniqueMediaModels((snapshot.mediaModels ?? []).filter(m => isImageGenerationGroup(m.groupName))), status, ...(status === 'succeeded' ? {} : { error: '媒体能力目录不可用，请刷新账号目录。' }) }
+    return { models: uniqueMediaModels(snapshot.mediaModels ?? []), status, ...(status === 'succeeded' ? {} : { error: '媒体能力目录不可用，请刷新账号目录。' }) }
   }
 
   private async resolve(input: MediaSelection): Promise<{ model: AiCloudMediaModel; key: string; snapshot: AiCloudAccountSnapshot; base: string }> {
     const snapshot = await this.account.current()
     if (snapshot.status !== 'signedIn') throw new Error('MEDIA_SIGN_IN_REQUIRED')
     const candidates = uniqueMediaModels(snapshot.mediaModels ?? []).filter(m => m.groupId === input.groupId && m.modelId === input.modelId && m.profileId === input.profileId && m.operations.includes(input.operation))
-    const model = candidates.length === 1 ? candidates[0] : undefined
-    if (!model || !isImageGenerationGroup(model.groupName) || model.stale || !snapshot.mediaSync?.groups.some(g => g.groupId === input.groupId && g.status === 'succeeded')) throw new Error('MEDIA_SELECTION_INVALID: 请重新选择当前目标分组中的模型。')
+    let model = candidates.length === 1 ? candidates[0] : undefined
+    const group = snapshot.groups?.find(item => item.groupId === input.groupId)
+    if (!model || model.stale || (group?.protocol && model.imageProtocol && model.imageProtocol !== group.protocol) || !snapshot.mediaSync?.groups.some(g => g.groupId === input.groupId && g.status === 'succeeded')) throw new Error('MEDIA_SELECTION_INVALID: 请刷新分组目录并重新选择当前模型。')
+    if (!model.imageProtocol) model = { ...model, imageProtocol: group?.protocol ?? 'openai', imageProtocolSource: group?.protocolSource ?? 'openai-default' }
     const key = await this.secrets.get(`zerowall.ai-cloud.group.${model.groupId}`)
     if (!key?.trim()) throw new Error('MEDIA_CREDENTIAL_UNAVAILABLE: 请刷新账号。')
     return { model, key: key.trim(), snapshot, base: gateway(model.baseUrl) }
@@ -94,10 +103,35 @@ export class AiCloudMediaService implements ZeroWallMedia {
 
   private wire(input: MediaRequest, model: AiCloudMediaModel): { path: string; payload: Record<string, unknown>; body: string | FormData } {
     const parameters = input.parameters ?? {}
+    const imageOperation = ['image', 'image_edit', 'gemini_image'].includes(input.operation)
+    if (imageOperation && model.imageProtocol === 'gemini') {
+      const parts: Record<string, unknown>[] = [{ text: input.prompt }]
+      for (const ref of input.references ?? []) {
+        if (ref.base64 === undefined) throw new Error('MEDIA_GEMINI_REFERENCE_BASE64_REQUIRED')
+        parts.push({ inlineData: { mimeType: ref.mediaType, data: ref.base64 } })
+      }
+      const imageConfig: Record<string, unknown> = {}
+      const ratio = typeof parameters.aspect_ratio === 'string' ? parameters.aspect_ratio.trim() : undefined
+      // OpenAI size/quality are deliberately absent from the Gemini payload.
+      const rawSize = parameters.image_size ?? parameters.resolution ?? '4K'
+      if (typeof rawSize !== 'string') throw new Error('MEDIA_INVALID_GEMINI_IMAGE_SIZE')
+      const imageSize = normalizeGeminiImageSize(rawSize)
+      const declaredSizes = model.imageSizes?.length ? model.imageSizes : model.resolutions
+      const supportedSizes = declaredSizes.flatMap(value => { try { return [normalizeGeminiImageSize(value)] } catch { return [] } })
+      if (declaredSizes.length && !supportedSizes.includes(imageSize)) throw new Error('MEDIA_UNSUPPORTED_GEMINI_IMAGE_SIZE: ' + imageSize)
+      if (ratio && model.aspectRatios.length && !model.aspectRatios.includes(ratio)) throw new Error('MEDIA_UNSUPPORTED_GEMINI_ASPECT_RATIO: ' + ratio)
+      if (ratio) imageConfig.aspectRatio = ratio
+      imageConfig.imageSize = imageSize
+      const generationConfig: Record<string, unknown> = { candidateCount: 1, responseModalities: ['IMAGE', 'TEXT'], ...(Object.keys(imageConfig).length ? { imageConfig } : {}) }
+      const payload: Record<string, unknown> = { contents: [{ role: 'user', parts }], generationConfig }
+      const body = JSON.stringify(payload)
+      if (Buffer.byteLength(body) > Math.min(MAX_MEDIA_REQUEST_BYTES, model.maxRequestBytes ?? MAX_MEDIA_REQUEST_BYTES)) throw new Error('MEDIA_REQUEST_TOO_LARGE')
+      return { path: '/v1beta/models/' + encodeURIComponent(input.modelId) + ':generateContent', payload, body }
+    }
     const payload: Record<string, unknown> = { ...parameters, model: input.modelId, public_profile_id: input.profileId, prompt: input.prompt, async: input.async ?? true }
     const paths: Record<string, string> = {
       image: '/v1/images/generations', image_edit: '/v1/images/edits',
-      gemini_image: '/v1beta/models/'+encodeURIComponent(input.modelId)+':generateContent',
+      gemini_image: '/v1beta/models/' + encodeURIComponent(input.modelId) + ':generateContent',
       video: '/v1/videos', chat_music: '/v1/chat/completions', audio: '/v1/audio/generations', speech: '/v1/audio/speech'
     }
     const path = paths[input.operation]
@@ -190,7 +224,7 @@ export class AiCloudMediaService implements ZeroWallMedia {
     const { model, key, snapshot, base } = await this.resolve(input)
     this.validate(input, model)
     const { path, payload, body } = this.wire(input, model)
-    if (model.maxRequestBytes && Buffer.byteLength(JSON.stringify(payload)) > model.maxRequestBytes) throw new Error('MEDIA_REQUEST_TOO_LARGE')
+    if (model.maxRequestBytes && Buffer.byteLength(typeof body === 'string' ? body : JSON.stringify(payload)) > model.maxRequestBytes) throw new Error('MEDIA_REQUEST_TOO_LARGE')
     const old = await this.get(input.requestId)
     if (old) {
       await this.assertOwner(old, snapshot, key)

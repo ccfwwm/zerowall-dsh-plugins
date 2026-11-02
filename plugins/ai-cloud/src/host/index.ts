@@ -10,7 +10,6 @@ import {
 import { resolveProfiles } from '@deepseek-ai/dsh-llm-pi-ai/src/config.ts'
 import type { AccountSecretStore } from '@zerowallscience/plugin-account'
 import type { AiCloudAccountSnapshot, AiCloudManagedModel } from '@zerowallscience/plugin-account/types'
-import { isImageGenerationGroup } from '@zerowallscience/plugin-account'
 import { SecretBrokerClient } from '@zerowallscience/plugin-secrets'
 import { MediaJobLedger } from './media-jobs.js'
 import { createHash } from 'node:crypto'
@@ -19,7 +18,7 @@ import { AiCloudMediaService } from './media.js'
 import { mediaAbortable } from './media-abort.js'
 import { ManagedPiAiAdapter, managedRetryPolicy } from './managed-adapter.js'
 import type { ZeroWallMedia } from '../shared/media.js'
-export { AiCloudMediaService } from './media.js'
+export { AiCloudMediaService, normalizeGeminiImageSize } from './media.js'
 export { downloadImageBytes } from './image-download.js'
 export type { ZeroWallMedia, MediaRequest, MediaTask, MediaSelection } from '../shared/media.js'
 
@@ -187,7 +186,7 @@ export class AiCloudLlmController {
   }
 
   async update(snapshot: AiCloudAccountSnapshot): Promise<void> {
-    const chatModels = snapshot.models.filter(model => model.capability !== 'image-generation' && model.capability !== 'media' && !isImageGenerationGroup(model.groupName))
+    const chatModels = snapshot.models.filter(model => model.capability !== 'image-generation' && model.capability !== 'media')
     const next = snapshot.status === 'signedIn' ? managedProfiles(chatModels) : new Map<string, ResolvedPiAiProviderProfile>()
     this.profiles = next
     const routes = [...next.keys()]
