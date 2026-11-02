@@ -388,6 +388,219 @@
       ],
       "removed": [],
       "manifestSha256": "828dd61e5d5359f94290bdd5010a0968651936c08e8b3274547504125a6aa4cd"
+    },
+    {
+      "id": "@zerowallscience/plugin-account",
+      "version": "0.1.27",
+      "sourceCommit": "9442a2e46140fbb8ade2ad3678b15ded3cc53744",
+      "dshCommit": "cb61e6caf4664e82fc4bf30e9a15d0d8bf32293a",
+      "sourceRepositoryParent": "d84cb64df3fe353160147162e28d27dac848f636",
+      "retainedOtherSources": true,
+      "publicationAsserted": false,
+      "files": [
+        {
+          "path": "config/deepseek-harness/plugin-inventory.json",
+          "size": 24554,
+          "sha256": "873ba88a2054bae3875d84063ded9cf62d08c5b74b4da85ee439d805ebaa338d"
+        },
+        {
+          "path": "plugins/account/dsh.bundle.patch.yml",
+          "size": 83,
+          "sha256": "519b37cad0528d8febd196be90849a4946facb3f9e9cb4df17d050e08c40512a"
+        },
+        {
+          "path": "plugins/account/package.json",
+          "size": 8015,
+          "sha256": "b0638750403f9d85faf0010bd4765fe48cea61f2f932274b93d2faa274292dac"
+        },
+        {
+          "path": "plugins/account/src/client/AiCloudAccountButton.module.css",
+          "size": 21128,
+          "sha256": "0ddbd9561d021cffe6d12541fdec0683c480c498a59e67a3898871ac59648ca0"
+        },
+        {
+          "path": "plugins/account/src/client/AiCloudAccountButton.tsx",
+          "size": 46782,
+          "sha256": "aa9ba7db22bcb8d297bf75951781d94fd399ac6816975d64f033971e097cab69"
+        },
+        {
+          "path": "plugins/account/src/client/GroupInfo.tsx",
+          "size": 4416,
+          "sha256": "f9c4f6b7175d728eb58e1ca2adf44be90d9b86091fd728181bd2e35f5cebb88d"
+        },
+        {
+          "path": "plugins/account/src/client/GroupedModelSelect.module.css",
+          "size": 5026,
+          "sha256": "92949173556f526a9cc7b3baac5d3ac0aa2e43ef6266453c6c5562d3c06d9150"
+        },
+        {
+          "path": "plugins/account/src/client/GroupedModelSelect.tsx",
+          "size": 14286,
+          "sha256": "dc67ef9de9546d69823ec33d3ce02a14c2477d828727e94a717d0083e6f0a64b"
+        },
+        {
+          "path": "plugins/account/src/client/ManagedProviderCard.tsx",
+          "size": 2258,
+          "sha256": "7e65df5fce908688c37d018d6c45c902b3bf379d5da8e205de965240b219160e"
+        },
+        {
+          "path": "plugins/account/src/client/account-surface.tsx",
+          "size": 783,
+          "sha256": "6f455bfb73302563a3d3a5fd5ee1a594aa7b03106037285bc9a284b90ef756d8"
+        },
+        {
+          "path": "plugins/account/src/client/css-modules.d.ts",
+          "size": 96,
+          "sha256": "78f2c9d100da3ac6935319540dafc72498fe2bae19a635b0dafcccfdff5b4c2d"
+        },
+        {
+          "path": "plugins/account/src/client/group-catalog.ts",
+          "size": 3231,
+          "sha256": "bad44e6b42aeddfaad7bac5d99899d75a57fac89358cceeb24cea30a8b3b6f0f"
+        },
+        {
+          "path": "plugins/account/src/client/index.ts",
+          "size": 7380,
+          "sha256": "58e0161bb3b238b1db06462c167b6a353dd79eec4d8297d51d70a851cb341399"
+        },
+        {
+          "path": "plugins/account/src/client/model-locales.ts",
+          "size": 2405,
+          "sha256": "becba612c411ba471852a215cf9a5311deb1debec810cb18d04e7cb04dbad8c5"
+        },
+        {
+          "path": "plugins/account/src/client/platform.ts",
+          "size": 985,
+          "sha256": "32f2f5ad493fd1f0deb29146cfb2b4ad3ec68004e2cc0dc0562832d387676049"
+        },
+        {
+          "path": "plugins/account/src/client/qrcode.d.ts",
+          "size": 102,
+          "sha256": "442931c3cc8027193ca3a107a4fe39b929de335de63b11d5ad6aeeedcb887c7b"
+        },
+        {
+          "path": "plugins/account/src/client/use-floating-panel.ts",
+          "size": 1534,
+          "sha256": "20136902ac286f9425129a48a3f72871db676e9072cde43b5b9f9b45cea3f27d"
+        },
+        {
+          "path": "plugins/account/src/host/index.ts",
+          "size": 60693,
+          "sha256": "63d904f87ee8138eb19ebaca85eef6ae006faa06b0545ca2364eb58ba4578589"
+        },
+        {
+          "path": "plugins/account/src/host/models-dev-context.ts",
+          "size": 269972,
+          "sha256": "78b50839191a050b82872d7310fcd7ea657b851fc0a66a79f6a253100c191ea9"
+        },
+        {
+          "path": "plugins/account/src/host/reasoning-default.ts",
+          "size": 893,
+          "sha256": "4bc97d2fc23de0fe1028c82b6a07fb9c68099c7cd5e928b163e73a69235b5bdb"
+        },
+        {
+          "path": "plugins/account/src/shared/types.ts",
+          "size": 6615,
+          "sha256": "293097f0ac99e7cff76e0ef373108ece7e9740ad22b3d9aff0d9ed9728ab1d20"
+        },
+        {
+          "path": "plugins/account/test/client.spec.tsx",
+          "size": 42170,
+          "sha256": "fcab27094abdae96d9174c8478642e4feb6d056debbc73d7f51b7fdae922dbd8"
+        },
+        {
+          "path": "plugins/account/test/grouped-model-select.spec.tsx",
+          "size": 14552,
+          "sha256": "574e3c212a286816f2e28c5baa8918fe851a293488d56fc38d8c20b722ac1afa"
+        },
+        {
+          "path": "plugins/account/test/host.spec.ts",
+          "size": 48569,
+          "sha256": "ede14522a80edeec47428eb619182248e40574fb5dd8783ce8788a09ae85ac0e"
+        },
+        {
+          "path": "plugins/account/test/image-catalog.spec.ts",
+          "size": 3347,
+          "sha256": "768f821d2cc98447830acca063b5eb8c07893c504144aae20767009b70fbd623"
+        },
+        {
+          "path": "plugins/account/test/locale-integration.spec.tsx",
+          "size": 7989,
+          "sha256": "f0a9717a00edb73570c522b971fd71a98e562573425776927e1d2f3d5bec7475"
+        },
+        {
+          "path": "plugins/account/test/media.spec.ts",
+          "size": 6037,
+          "sha256": "4314d88578a25349244960bd7cba611052e7fdf01b71433124202770a2b8a1fd"
+        },
+        {
+          "path": "plugins/account/test/reasoning-default.spec.ts",
+          "size": 1289,
+          "sha256": "a3c3a7c95f0379a3cb795d7f08c6c51b61ca635a9b7f8282a65ad24b9a985858"
+        },
+        {
+          "path": "plugins/account/test/restore-race-repro.spec.ts",
+          "size": 4744,
+          "sha256": "107553e20704984ca9112f7e718a7b69809031ac4d01f43091bdc69177752ed5"
+        },
+        {
+          "path": "plugins/account/tsconfig.client.json",
+          "size": 108,
+          "sha256": "fdcc145d975e93424f4f85facc080688d164cbcfe1beca679b65abd16e7e030d"
+        },
+        {
+          "path": "plugins/account/tsconfig.host.json",
+          "size": 104,
+          "sha256": "ad102a7d79b2fd6ceea3e4e664ecf9410cd30d5d2d343043984786b7aa1f8770"
+        },
+        {
+          "path": "plugins/account/tsconfig.json",
+          "size": 142,
+          "sha256": "ad1b25d36ea100440140e543e2a2af188178934da74eadce1b27ef14e91b335e"
+        },
+        {
+          "path": "plugins/account/tsdown.config.ts",
+          "size": 159,
+          "sha256": "53dc381d199457d8a19e9e2be93abde79f6b4b0bfdccb2521704eb4c5bd257f9"
+        },
+        {
+          "path": "plugins/account/zerowall.plugin.json",
+          "size": 691,
+          "sha256": "f393639dc02b1848fb40e62b9afb18744fa552ff3e301b2e39d58fd8a20b0e39"
+        },
+        {
+          "path": "pnpm-lock.yaml",
+          "size": 1625081,
+          "sha256": "0ecbadbbda25389ee8422627040cd86aa01ad8216de26cc91484bd286a0242df"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.mjs",
+          "size": 10583,
+          "sha256": "06fe7bb630a91a27da22e0e3a52e89f246788d9f6b8f6d7450fa553cea40fb5e"
+        },
+        {
+          "path": "tools/plugins/export-plugin-source.test.mjs",
+          "size": 16206,
+          "sha256": "fcf3716248c86de5f6b2a661f16ad4ad4b74096f0e44d26beb1c2fd0c3d41b1b"
+        },
+        {
+          "path": "tools/plugins/export-source-repository.mjs",
+          "size": 7890,
+          "sha256": "c82341cb5e6fd7447695cb98687a0ada662bbed14b3ff15b0b94b60dcfd64b95"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.mjs",
+          "size": 965,
+          "sha256": "75422dc2a03d394aca7cece43c69a822b240a30974e659e67f6fadec6a57410f"
+        },
+        {
+          "path": "tools/plugins/skill-snapshot.test.mjs",
+          "size": 1785,
+          "sha256": "6fb0c6ce7848aff9b863816db1a73a0b3723e432dba72245160e770b31190fba"
+        }
+      ],
+      "removed": [],
+      "manifestSha256": "b69036068b27d29a7a0e4ca3fd9712922bdff68aff9d73f8e98e75aadf7f0dac"
     }
   ]
 }
