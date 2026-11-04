@@ -140,11 +140,11 @@
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.54",
+      "version": "0.2.55",
       "kind": "plugin",
-      "size": 418722,
-      "sha256": "190db6ba4b6850807fd9b97c70815f33f69b5f25d8aad6bac72dffdafdf7fc16",
-      "sourceFingerprint": "6248b66c8fca4b0bd6f63a9c54f1124d1712b9e78c8f9b853a17f0612c5cef65"
+      "size": 419361,
+      "sha256": "df01c8ef77c41535fb0e86a75b32ee6be677e4d3bd4e48feffef63b51d285a36",
+      "sourceFingerprint": "7aa3170b729942e20a15212b7da4533791f2bfefd3a320e681179e4c65332838"
     },
     {
       "id": "@zerowallscience/plugin-mineru",
@@ -445,10 +445,10 @@
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.54",
+      "version": "0.2.55",
       "path": "plugins/mcp",
       "files": 27,
-      "sha256": "9f01560b4ae1aee2bd5547a9f795e0cf4dc811c4fa5a41eb2b17cd01b5c736e5"
+      "sha256": "8afc02f548ae4a3a206f74b322b7e8ecf63294a63c4cdce44723552cd41bff90"
     },
     {
       "id": "@zerowallscience/plugin-mineru",
