@@ -140,11 +140,11 @@
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.53",
+      "version": "0.2.54",
       "kind": "plugin",
-      "size": 418011,
-      "sha256": "4d8edffdb63c5ff72063f736407dfc166ad86d1596be0c485cd93600f79b56e2",
-      "sourceFingerprint": "1d17accd8d3a0ec8faa4fde8a0b9c4e192215a407ac8b298700171d1cc59a161"
+      "size": 418722,
+      "sha256": "190db6ba4b6850807fd9b97c70815f33f69b5f25d8aad6bac72dffdafdf7fc16",
+      "sourceFingerprint": "6248b66c8fca4b0bd6f63a9c54f1124d1712b9e78c8f9b853a17f0612c5cef65"
     },
     {
       "id": "@zerowallscience/plugin-mineru",
@@ -445,10 +445,10 @@
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.53",
+      "version": "0.2.54",
       "path": "plugins/mcp",
       "files": 27,
-      "sha256": "5011e767c71487a51af5b1a3ef7f8c685046c3a0d0e9e9b23c8e19263848f248"
+      "sha256": "9f01560b4ae1aee2bd5547a9f795e0cf4dc811c4fa5a41eb2b17cd01b5c736e5"
     },
     {
       "id": "@zerowallscience/plugin-mineru",
@@ -2197,10 +2197,10 @@
     },
     {
       "id": "zerowall-faerskit",
-      "version": "0.1.16",
+      "version": "0.1.17",
       "files": 7,
-      "sourceSha256": "6f24d346cc585d28002cfb3da6e7f15e3ffbdc928221c0c0740a5bdfe8013bfb",
-      "sha256": "3904e43f5f361af73202e7976812f72df83418d3455e7ca542f847adeccc626c"
+      "sourceSha256": "9a1cd849580c80f326d43e0719ffb9821e4f586179dbb8c92dfa315045b56302",
+      "sha256": "b103ae661e0d8e071820367eed73254bcde61b8e2f2d3a33c9b8f6414cf70a96"
     },
     {
       "id": "zerowall-fiji",

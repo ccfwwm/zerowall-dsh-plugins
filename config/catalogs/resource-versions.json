@@ -3,9 +3,9 @@
     "science-dependencies": "8.3.0"
   },
   "skill": {
-    "gpt-image-generator": "0.1.14",
+    "gpt-image-generator": "0.1.10",
     "mineru-document-parser": "0.1.1",
-    "zerowall-presentation": "0.2.9",
+    "zerowall-presentation": "0.2.7",
     "academic-paper": "0.1.5",
     "academic-paper-reviewer": "0.1.4",
     "academic-pipeline": "0.1.5",
@@ -271,7 +271,7 @@
     "zerowall-research-evidence": "0.1.5",
     "zerowall-research-orchestrator": "0.1.5",
     "zerowall-rmcp": "0.1.13",
-    "zerowall-rplatform": "0.1.12",
+    "zerowall-rplatform": "0.1.11",
     "zerowall-rplotfigure": "0.1.9",
     "zerowall-sanger": "0.1.2",
     "zerowall-science-agent-router": "0.1.2",
@@ -283,6 +283,6 @@
     "zerowall-spreadsheet": "0.1.1",
     "academic-research-shared": "0.1.0",
     "zerowall-tooluniverse": "0.1.11",
-    "zerowall-faerskit": "0.1.16"
+    "zerowall-faerskit": "0.1.17"
   }
 }
