@@ -10,7 +10,7 @@
   "mergedSourceUpdates": [
     {
       "repository": "https://github.com/ccfwwm/zerowall-dsh-plugins",
-      "commit": "875f306f",
+      "commit": "875f306fe49a6f46ed9e4761b42746cbee64f319",
       "scope": "Preserve separately published FAERS canonical Skill sources and release notes; retain 8.4.24 plugin/resource versions."
     }
   ]
