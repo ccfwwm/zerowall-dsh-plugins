@@ -116,6 +116,31 @@ test('startup readiness catches missing client entrypoints and a changed install
   assert.equal(JSON.parse(await readFile(join(f.active, 'node_modules/plugin-a/package.json'))).version, '2.0.0')
 })
 
+test('healthy startup and full verification do not read a removed installer supply', async t => {
+  const f = await fixture(t), source = await f.supply('1.0.0')
+  await f.manager.repairOffline(source)
+  await rm(source, { recursive: true })
+  assert.equal((await f.manager.inspectStartupProfile(source)).ready, true)
+  assert.equal((await f.manager.inspectStartupProfile(null, { full: true })).ready, true)
+  await unlink(join(f.active, 'node_modules/plugin-a/index.cjs'))
+  const damaged = await f.manager.inspectStartupProfile(source)
+  assert.equal(damaged.ready, false)
+  assert.equal(damaged.repairAvailable, false)
+})
+
+test('a new desktop installer requests local reconciliation even when the active profile is healthy', async t => {
+  const f = await fixture(t), source = await f.supply('1.0.0')
+  await f.manager.repairOffline(source)
+  const nextTarget = { ...target, desktopVersion: '8.4.19' }, next = await f.supply('2.0.0', {}, { runtimeTarget: nextTarget })
+  const manager = f.createManager(nextTarget)
+  const state = await manager.inspectStartupProfile(next)
+  assert.equal(state.ready, true)
+  assert.equal(state.reconcile, true)
+  await manager.repairOffline(next, { startup: true })
+  assert.equal((await manager.inspectStartupProfile(next)).reconcile, false)
+  assert.equal(JSON.parse(await readFile(join(f.active, 'node_modules/plugin-a/package.json'))).version, '2.0.0')
+})
+
 test('a healthy signed plugin update survives restart when the installer embeds an older seed', async t => {
   const f = await fixture(t, ['plugin-a']), offline = await f.supply('1.0.0')
   await f.manager.repairOffline(offline)
@@ -155,6 +180,9 @@ test('a healthy signed plugin update survives restart when the installer embeds 
   assert.equal((await restarted.inspectStartupProfile(offline)).ready, true)
   assert.equal((await restarted.repairOffline(offline)).repaired, false)
   assert.equal(JSON.parse(await readFile(join(f.active, 'node_modules', id, 'package.json'))).version, '2.0.0')
+  await rm(offline, { recursive: true })
+  assert.equal((await restarted.inspectStartupProfile(offline)).ready, true)
+  assert.equal((await restarted.inspectStartupProfile(null, { full: true })).ready, true)
 })
 
 test('a healthy signed plugin update survives restart when the old materialization receipt belongs to another DSH', async t => {
@@ -612,6 +640,38 @@ test('retained exact pin keeps its original dependency bytes when installer upda
   assert(await verifyMaterializedProfile({ profile: f.active, keys: f.keys, target, expected: f.ids, full: true }))
   await writeFile(join(f.active, 'node_modules/plugin-b/node_modules/shared/index.cjs'), 'corrupt preserved dependency')
   assert.equal(await verifyMaterializedProfile({ profile: f.active, keys: f.keys, target, expected: f.ids, full: true }), undefined)
+})
+
+for (const emptyCurrent of [false, true]) test(`desktop upgrade preserves historical dependencies sharing the current digest (${emptyCurrent ? 'empty' : 'updated'} current generation)`, async t => {
+  const f = await fixture(t), first = await f.supply('1.0.0')
+  await f.manager.repairOffline(first)
+  await mkdir(join(f.home, 'resources/plugins'), { recursive: true })
+  await writeFile(join(f.home, 'resources/plugins/selection.json'), JSON.stringify({ pinned: { 'plugin-b': '1.0.0' } }))
+  const manifestFile = join(f.active, 'package.json'), manifest = JSON.parse(await readFile(manifestFile))
+  manifest.zerowall.pluginArchitecture = 6
+  await writeFile(manifestFile, JSON.stringify(manifest))
+  await f.manager.repairOffline(first)
+  const markerFile = join(f.active, materializationFile), previous = JSON.parse(await readFile(markerFile))
+  assert.equal(previous.preserved[0].digest, previous.digest)
+  const retainedRoot = previous.preserved[0].dependencyRoot
+  const retainedDependency = await realpath(join(f.active, 'node_modules/plugin-b/node_modules/shared'))
+  // Independent plugin updates retain the old seed receipt and may leave its
+  // current id list empty. The history namespace remains a separate source.
+  const pluginFile = join(f.active, 'node_modules/plugin-a/package.json'), plugin = JSON.parse(await readFile(pluginFile))
+  await writeFile(pluginFile, JSON.stringify({ ...plugin, version: '1.1.0' }))
+  if (emptyCurrent) {
+    previous.ids = []
+    await writeFile(markerFile, JSON.stringify(previous))
+  }
+  assert(await verifyMaterializedProfile({ profile: f.active, keys: f.keys, target, expected: f.ids }))
+  const next = await f.supply('2.0.0')
+  assert.equal((await f.manager.repairOffline(next, { startup: true })).repaired, true)
+  const current = JSON.parse(await readFile(markerFile))
+  assert.equal(current.preserved[0].dependencyRoot, retainedRoot)
+  assert.equal(await realpath(join(f.active, 'node_modules/plugin-b/node_modules/shared')), retainedDependency)
+  assert.equal(JSON.parse(await readFile(join(f.active, 'node_modules/plugin-a/package.json'))).version, '2.0.0')
+  assert(await verifyMaterializedProfile({ profile: f.active, keys: f.keys, target, expected: f.ids, full: true }))
+  assert.equal((await f.manager.repairOffline(next, { startup: true })).repaired, false)
 })
 
 test('explicit bundled pnpm install keeps physical roots and exact dependencies after candidate activation', async t => {

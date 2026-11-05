@@ -7,13 +7,13 @@
  *  - /edit op 应用与 revision 推进
  *  - undo/redo 游标
  *  - /media/upload 白名单 + 5MB 上限
- *  - /export 两种口径：默认回 pptx 二进制流；`save:true` 落到工程目录 export/ 并回相对路径
+ *  - /export：默认回 pptx 附件；`save:true` 同时落到工程目录 export/ 并回附件与路径头
  *  - openRequest TTL 60s
  *
  * 用 vitest（沿用 tests/ 口径）；core 直接用 src/core 的真实实现，没有替身。
  */
 import { createServer, type Server } from 'node:http'
-import { mkdtemp, rm, mkdir, writeFile, readFile } from 'node:fs/promises'
+import { mkdtemp, rm, mkdir, writeFile, readFile, rename } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -146,6 +146,67 @@ afterEach(async () => {
 })
 
 // ── sameOrigin 栅栏 ─────────────────────────────────────────────────
+
+it('streams same-path and atomic image replacements without a history revision', async () => {
+  const { key, dir } = await seedProject()
+  await writeFile(path.join(cwd, dir, 'media/figure.png'), 'image-one')
+  await editProject(cwd, { dir, baseRevision: 0, ops: [{ op: 'add_page', page: 'pages/01.page', content: { elements: [{ elementId: 'figure', elementType: 'image', bounds: [0, 0, 100, 100], src: 'media/figure.png' }] } }] })
+  await startServer()
+  const controller = new AbortController()
+  const response = await fetch(`http://127.0.0.1:${port}${API_PREFIX}/events?sessionId=${SESSION}`, { signal: controller.signal })
+  const reader = response.body!.getReader()
+  let buffer = ''
+  const next = async () => {
+    for (;;) {
+      const boundary = buffer.indexOf('\n\n')
+      if (boundary >= 0) {
+        const chunk = buffer.slice(0, boundary); buffer = buffer.slice(boundary+2)
+        const line = chunk.split('\n').find(line => line.startsWith('data: '))
+        if (line) return JSON.parse(line.slice(6))
+      } else {
+        const part = await reader.read()
+        if (part.done) throw new Error('Stream ended before the image update')
+        buffer += new TextDecoder().decode(part.value)
+      }
+    }
+  }
+  try {
+    const before = await next(), previousRevision = before.manifest.revision
+    let version = before.manifest.mediaVersions['media/figure.png']
+    const latencies: number[] = []
+    for (let index = 0; index < 5; index++) {
+      const started = Date.now()
+      const file = path.join(cwd, dir, 'media/figure.png')
+      if (index % 2) { await writeFile(file+'.tmp', `new-image-${index}`); await rename(file+'.tmp', file) }
+      else await writeFile(file, `new-image-${index}`)
+      let state
+      do { state = await next() } while (state.manifest.mediaVersions['media/figure.png'] === version)
+      latencies.push(Date.now()-started)
+      version = state.manifest.mediaVersions['media/figure.png']
+      expect(state.manifest.revision).toBe(previousRevision)
+      expect(state.manifest.pageVersions['pages/01.page']).not.toBe(before.manifest.pageVersions['pages/01.page'])
+    }
+    console.log('[ppt-live] update latencies ms:', latencies, 'P95:', Math.max(...latencies))
+    expect(Math.max(...latencies)).toBeLessThan(3000)
+  } finally { controller.abort(); await reader.cancel().catch(() => {}) }
+}, 15000)
+
+it('keeps references on the stable page after reordering and rejects changed targets', async () => {
+  const { key, dir } = await seedProject()
+  await editProject(cwd, { dir, baseRevision: 0, ops: ['01','02'].map(number => ({ op:'add_page', page:`pages/${number}.page`, content:{ elements:[{elementId:'title',elementType:'text',bounds:[0,0,200,40],content:{text:`Page ${number}`}}] } })) })
+  await startServer()
+  const project = (await apiJson(`${API_PREFIX}/project?sessionId=${SESSION}&key=${key}`)).json as any
+  const target = { sessionId: SESSION, key, page:'pages/01.page', ids:['title'], version:project.pageVersions['pages/01.page'] }
+  const first = await apiJson(`${API_PREFIX}/reference`, {method:'POST',body:target})
+  expect(first.status).toBe(200)
+  await editProject(cwd, {dir,baseRevision:1,ops:[{op:'move_page',page:target.page,toIndex:1}]})
+  const moved = await apiJson(`${API_PREFIX}/reference`, {method:'POST',body:target})
+  expect(moved.status).toBe(200)
+  expect((moved.json as any).record).toMatchObject({pageId:target.page,pageNumberAtReference:2,elementIds:['title']})
+  await editProject(cwd, {dir,baseRevision:2,ops:[{op:'update_element',page:target.page,elementId:'title',patch:{content:{text:'Changed'}}}]})
+  const stale = await apiJson(`${API_PREFIX}/reference`, {method:'POST',body:target})
+  expect(stale.status).toBe(409)
+})
 
 describe('sameOrigin', () => {
   it('Host 必须是环路字面量', () => {
@@ -372,7 +433,7 @@ describe('host 路由', () => {
     expect(uu.json!.revision).toBe(0)
   })
 
-  it('/export：默认回 pptx 二进制流，save 模式落到工程目录 export/ 并回相对路径', async () => {
+  it('/export：默认回 pptx 附件，save 模式同时下载并保存到工程目录 export/', async () => {
     await startServer()
     const { key } = await seedProject()
     await apiJson(`${API_PREFIX}/edit`, {
@@ -380,7 +441,7 @@ describe('host 路由', () => {
       body: { sessionId: SESSION, key, baseRevision: 0, ops: [{ op: 'add_page', page: 'pages/01.page', content: { elements: [] } }] },
     })
 
-    // 默认口径：二进制流 + attachment（工作台导出后由 /export/open-menu 打开成品）
+    // 默认工具口径：二进制流 + attachment。
     const bin = await api(`${API_PREFIX}/export`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -394,16 +455,24 @@ describe('host 路由', () => {
     expect(bin.body.subarray(0, 2).toString('latin1')).toBe('PK')
     expect(bin.body.length).toBeGreaterThan(1000)
 
-    // 面板口径：落盘 + 相对路径
-    const saved = await apiJson(`${API_PREFIX}/export`, { method: 'POST', body: { sessionId: SESSION, key, save: true } })
+    // 面板口径：同一份 PPTX 同时落盘和作为附件返回给客户端下载。
+    const saved = await api(`${API_PREFIX}/export`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: { sessionId: SESSION, key, save: true },
+    })
     expect(saved.status).toBe(200)
-    const rel = String(saved.json!.relativePath || '')
+    expect(String(saved.headers['content-disposition'] || '')).toContain('attachment')
+    expect(saved.headers['x-pt-filename']).toContain('.pptx')
+    const rel = decodeURIComponent(String(saved.headers['x-pt-relative-path'] || ''))
     expect(rel).toContain('export/')
     expect(rel.endsWith('.pptx')).toBe(true)
-    expect(Number(saved.json!.revision)).toBe(1)
-    expect(Number(saved.json!.bytes)).toBe(bin.body.length)
+    expect(Number(saved.headers['x-pt-revision'])).toBe(1)
+    expect(Number(saved.headers['x-pt-bytes'])).toBe(bin.body.length)
+    expect(saved.body.length).toBe(bin.body.length)
     const onDisk = await readFile(path.join(cwd, rel))
     expect(onDisk.subarray(0, 2).toString('latin1')).toBe('PK')
+    expect(onDisk).toEqual(saved.body)
 
     // 落账到 manifest.exportReport（kind 区分面板导出与浏览器导出）
     const proj = await apiJson(`${API_PREFIX}/project?sessionId=${SESSION}&key=${key}`)
@@ -418,20 +487,30 @@ describe('host 路由', () => {
     await editProject(cwd, { dir, newVersion: true, ops: [{ op: 'update_element', page: 'pages/01.page', elementId: 'text', patch: { content: { text: 'Background change' } } }] })
     const before = await readFile(path.join(cwd, dir, 'manifest.json'), 'utf8')
     const snapshot = { baseRevision: 1, ops: [{ op: 'update_element', page: 'pages/01.page', elementId: 'text', patch: { content: { text: 'Visible draft' } } }] }
-    const saved = await apiJson(`${API_PREFIX}/export`, { method: 'POST', body: { sessionId: SESSION, key, save: true, snapshot } })
+    const saved = await api(`${API_PREFIX}/export`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: { sessionId: SESSION, key, save: true, snapshot },
+    })
     expect(saved.status).toBe(200)
-    expect(saved.json!.revision).toBe(1)
-    expect(saved.json!.snapshotHash).toMatch(/^[a-f0-9]{64}$/)
-    const output = await readFile(String(saved.json!.absolutePath))
+    expect(saved.headers['x-pt-revision']).toBe('1')
+    expect(saved.headers['x-pt-snapshot']).toMatch(/^[a-f0-9]{64}$/)
+    const absolutePath = decodeURIComponent(saved.headers['x-pt-absolute-path'])
+    const output = await readFile(absolutePath)
+    expect(output).toEqual(saved.body)
     const xml = strFromU8(unzipSync(output)['ppt/slides/slide1.xml'])
     expect(xml).toContain('Visible draft'); expect(xml).not.toContain('Background change')
-    const receipt = JSON.parse(await readFile(String(saved.json!.absolutePath) + '.export.json', 'utf8'))
-    expect(receipt.snapshotHash).toBe(saved.json!.snapshotHash)
+    const receipt = JSON.parse(await readFile(`${absolutePath}.export.json`, 'utf8'))
+    expect(receipt.snapshotHash).toBe(saved.headers['x-pt-snapshot'])
     expect(await readFile(path.join(cwd, dir, 'manifest.json'), 'utf8')).toBe(before)
-    const binary = await apiJson(`${API_PREFIX}/export`, { method: 'POST', body: { sessionId: SESSION, key, snapshot } })
+    const binary = await api(`${API_PREFIX}/export`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: { sessionId: SESSION, key, snapshot },
+    })
     expect(binary.status).toBe(200)
     expect(binary.headers['x-pt-revision']).toBe('1')
-    expect(binary.headers['x-pt-snapshot']).toBe(saved.json!.snapshotHash)
+    expect(binary.headers['x-pt-snapshot']).toBe(saved.headers['x-pt-snapshot'])
   })
 
   describe('/export/open-menu 与 /export/open（打开方式 / 显示文件位置）', () => {
@@ -463,9 +542,13 @@ describe('host 路由', () => {
         method: 'POST',
         body: { sessionId: SESSION, key, baseRevision: 0, ops: [{ op: 'add_page', page: 'pages/01.page', content: { elements: [] } }] },
       })
-      const saved = await apiJson(`${API_PREFIX}/export`, { method: 'POST', body: { sessionId: SESSION, key, save: true } })
+      const saved = await api(`${API_PREFIX}/export`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: { sessionId: SESSION, key, save: true },
+      })
       expect(saved.status).toBe(200)
-      const abs = String(saved.json!.absolutePath || '')
+      const abs = decodeURIComponent(String(saved.headers['x-pt-absolute-path'] || ''))
       expect(abs.length).toBeGreaterThan(0)
       return { key, abs }
     }

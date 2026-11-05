@@ -20,9 +20,10 @@ const mockApi = vi.hoisted(() => ({
   exportPptxToProject: vi.fn(),
   mediaUrl: vi.fn(() => '/ppt-maker/api/media'),
 }))
+const mockPptxDownload = vi.hoisted(() => vi.fn())
 vi.mock('../client/api', async (importOriginal) => {
   const actual = await importOriginal<typeof import('../client/api')>()
-  return { ...actual, api: mockApi }
+  return { ...actual, api: mockApi, triggerPptxDownload: mockPptxDownload }
 })
 
 import { ConflictError } from '../client/api'
@@ -84,6 +85,34 @@ afterEach(() => {
 })
 
 describe('PptStore（S6 骨架纪律）', () => {
+  it('moves reconstructed group members in a single undoable edit and preserves other elements', async () => {
+    const store=seedStore()
+    mockApi.page.mockResolvedValue({ok:true,path:'pages/01.page',revision:1,page:{elements:[
+      {elementId:'card',bounds:[20,20,300,100],reconstructionGroup:'g'},
+      {elementId:'label',bounds:[30,30,100,40],reconstructionGroup:'g'},
+      {elementId:'other',bounds:[600,20,100,40]},
+    ]}})
+    await store.actions.init();await store.actions.ensurePageLoaded()
+    expect(await store.actions.updateElement('card',{bounds:[40,50,300,100]})).toBe(true)
+    const ops=store.getSnapshot().draft!.ops as any[]
+    expect(ops.map(op=>op.elementId)).toEqual(['card','label']);expect(ops[1].patch.bounds).toEqual([50,60,100,40])
+    await vi.advanceTimersByTimeAsync(450)
+    expect(mockApi.edit).toHaveBeenCalledTimes(1)
+  })
+  it('refreshes changed media while preserving unrelated page objects and stable reference IDs', async () => {
+    const store = seedStore()
+    const initial = { ...PROJECT_R1, contentVersion:'one', pageVersions:{'pages/01.page':'same','pages/02.page':'old'}, mediaVersions:{'media/x.png':'old'}, pageData:{'pages/01.page':PAGE_1,'pages/02.page':{elements:[]}} }
+    mockApi.project.mockResolvedValue(initial)
+    await store.actions.init()
+    const unchanged = store.getSnapshot().pagesAst[0].page
+    mockApi.project.mockResolvedValue({...initial,contentVersion:'two',pageVersions:{...initial.pageVersions,'pages/02.page':'new'},mediaVersions:{'media/x.png':'new'}})
+    await store.actions.applyPoll({...STATE_R1,manifest:{...STATE_R1.manifest,contentVersion:'two',pageVersions:{...initial.pageVersions,'pages/02.page':'new'},mediaVersions:{'media/x.png':'new'}}})
+    expect(store.getSnapshot().pagesAst[0].page).toBe(unchanged)
+    expect(store.actions.referenceTarget(0,['el-1'])).toMatchObject({page:'pages/01.page',ids:['el-1'],version:'same'})
+    store.actions.mediaUrl('media/x.png')
+    expect(mockApi.mediaUrl).toHaveBeenLastCalledWith('s1','k1','media/x.png','new')
+    store.dispose()
+  })
   it('loads the surviving page after deletion only after refreshing the page list', async () => {
     const store = seedStore()
     await store.actions.init()
@@ -233,25 +262,29 @@ describe('PptStore（S6 骨架纪律）', () => {
     store.dispose()
   })
 
-  it('exportDeck：toast 挂导出文件路径（打开方式菜单的数据源），并视觉残留 10 秒', async () => {
+  it('exportDeck：触发下载、保留工程文件路径（打开方式菜单的数据源），并视觉残留 10 秒', async () => {
     const store = seedStore()
     await store.actions.init()
+    const blob = new Blob(['pptx'])
     mockApi.exportPptxToProject.mockResolvedValue({
       relativePath: 'a/export/x-r1.pptx',
       absolutePath: 'C:/ws/a/export/x-r1.pptx',
       filename: 'x-r1.pptx',
       revision: 1,
       bytes: 2048,
+      blob,
     })
     const res = await store.actions.exportDeck()
     expect(res).not.toBeNull()
+    expect(mockPptxDownload).toHaveBeenCalledWith(blob, 'x-r1.pptx')
     const snap = store.getSnapshot()
-    expect(snap.toast?.text).toContain('已导出 a/export/x-r1.pptx')
+    expect(snap.toast?.text).toContain('已开始下载 x-r1.pptx')
+    expect(snap.toast?.text).toContain('a/export/x-r1.pptx')
     expect(snap.toast?.file).toBe('C:/ws/a/export/x-r1.pptx')
 
     // 普通 info 2.6s 就消；导出 toast 要留够点开「打开方式」的时间
     await vi.advanceTimersByTimeAsync(5000)
-    expect(store.getSnapshot().toast?.text).toContain('已导出')
+    expect(store.getSnapshot().toast?.text).toContain('已开始下载')
     await vi.advanceTimersByTimeAsync(6000)
     expect(store.getSnapshot().toast).toBeNull()
     store.dispose()

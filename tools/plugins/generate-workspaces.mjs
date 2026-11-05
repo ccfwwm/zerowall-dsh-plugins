@@ -153,7 +153,7 @@ const npmDependencies = {
   // Independent Claude releases must remain installable with the base shipped
   // in 8.4.7, even while an unrelated base update is present in the workspace.
   'claude-code': { '@zerowallscience/plugin-base': '^0.1.24', '@deepseek-ai/dsh-credentials': 'workspace:^', '@deepseek-ai/dsh-session-projection': 'workspace:^', '@deepseek-ai/dsh-subprocess': 'workspace:^', '@deepseek-ai/dsh-tool-subagent': 'workspace:^', '@deepseek-ai/dsh-permission-presets': 'workspace:^', '@deepseek-ai/dsh-sandbox-policy': 'workspace:^', '@deepseek-ai/dsh-user-approval': 'workspace:^', '@modelcontextprotocol/sdk': '^1.29.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
-  python: { '@zerowallscience/integrity-runtime': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', yauzl: '3.4.0', pend: '1.2.0', react: '^18.2.0', 'react-dom': '^18.2.0' },
+  python: { 'dsh-better-sidebar': '^0.28.1-zws.3', '@zerowallscience/integrity-runtime': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', yauzl: '3.4.0', pend: '1.2.0', react: '^18.2.0', 'react-dom': '^18.2.0' },
   biogenie: { '@zerowallscience/research-store': 'workspace:^' },
   pubmed: { compromise: '14.16.0', undici: '^7.16.0', '@zerowallscience/research-store': 'workspace:^', zod: '^4.4.3' },
   projects: { '@deepseek-ai/dsh-session-format-catalog': 'workspace:^', '@deepseek-ai/dsh-session-persistence-jsonl': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
@@ -164,11 +164,13 @@ const npmDependencies = {
   files: { '@open-file-viewer/core': '0.1.49', 'viewer-pdfjs': 'npm:pdfjs-dist@6.3.289', '@deepseek-ai/dsh-api-workspace-files': 'workspace:^', '@deepseek-ai/dsh-office-to-pdf': 'workspace:^', '@deepseek-ai/dsh-client-ui-sidebar-right': 'workspace:^', '@deepseek-ai/dsh-client-file-upload': 'workspace:^', 'dsh-office-tools': officeSource, jszip: '3.10.1', 'pdf-lib': '^1.17.1', 'pdfjs-dist': '^4.10.38', xlsx: '^0.18.5', 'fast-xml-parser': '^5.11.0', zod: '^4.4.3', 'lucide-react': '^0.468.0', react: '^18.2.0' },
   // Image workflows use the published base contract; unrelated prompt/tool
   // routing work in a newer local base must not become a release dependency.
-  images: { '@zerowallscience/plugin-base': '^0.1.35', sharp: runtimeDependencies.sharp, '@xmldom/xmldom': '0.9.12', fflate: '0.8.3', 'lucide-react': '^0.468.0', react: '^18.2.0', yaml: '2.8.1' },
+  images: { 'dsh-better-sidebar': '^0.28.1-zws.3', '@zerowallscience/plugin-base': '^0.1.35', sharp: runtimeDependencies.sharp, '@xmldom/xmldom': '0.9.12', fflate: '0.8.3', 'lucide-react': '^0.468.0', react: '^18.2.0', yaml: '2.8.1' },
   // MCP requires the published dynamic tool-access bridge so tools discovered
   // after agent creation stay executable through the base capability filter.
   mcp: { '@zerowallscience/plugin-base': '^0.1.36', '@zerowallscience/plugin-secrets': 'workspace:^', '@zerowallscience/research-store': 'workspace:^', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
-  skills: { 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
+  // Skill hot-refresh uses the existing sidebar API; do not pull an unrelated
+  // unpublished sidebar revision into an independent resource update.
+  skills: { 'dsh-better-sidebar': '^0.28.1-zws.3', 'lucide-react': '^0.468.0', react: '^18.2.0', 'react-dom': '^18.2.0', zod: '^4.4.3' },
   'extension-center': { 'lucide-react': '^0.468.0', react: '^18.2.0' },
   reviewer: { '@deepseek-ai/dsh-agent-preset-registry': 'workspace:^', '@deepseek-ai/dsh-persona': 'workspace:^', 'lucide-react': '^0.468.0', react: '^18.2.0', zod: '^4.4.3' },
   environment: { 'lucide-react': '^0.468.0', react: '^18.2.0', zod: '^4.4.3' },
@@ -184,7 +186,7 @@ const plugins = [
   { id: 'pubmed', remote: true, capabilities: ['literature', 'evidence-graph'], permissions: ['files', 'network', 'credentials', 'approvals'], dependencies: ['secrets', 'research'], requiredServices: ['settings', 'tools', 'sessions', 'zerowallResearch'] },
   // These services are accessed directly by plugin-base during activation.
   // Keep the generated manifest in sync so Loader injects them before apply.
-  { id: 'base', client: true, clientExternal: [], capabilities: ['ui.locale', 'ui.update'], permissions: [], requiredServices: ['webServer', 'systemPrompt', 'workspaceRegistry'], optionalServices: ['updater'] },
+  { id: 'base', client: true, clientExternal: [], capabilities: ['ui.locale', 'ui.update'], permissions: [], requiredServices: ['webServer', 'systemPrompt', 'workspaceRegistry'], optionalServices: ['updater', 'dshPptMakerTools'] },
   { id: 'desktop-compat', capabilities: ['desktop.profiles', 'desktop.plugins'], permissions: [], requiredServices: [], optionalServices: ['desktopProfiles', 'desktopPnpm'] },
   { id: 'secrets', capabilities: ['credentials.read', 'credentials.write'], permissions: ['credentials'], requiredServices: [], optionalServices: ['credentialBroker'] },
   { id: 'environment', client: true, remote: true, capabilities: ['environment-config'], permissions: ['credentials', 'processes', 'network'], dependencies: ['secrets', 'base'], requiredServices: ['settings', 'llm', 'tokenMeter'] },
@@ -198,6 +200,7 @@ const plugins = [
     permissions: ['files', 'network'],
     dependencies: ['account', 'ai-cloud', 'secrets', 'base', 'environment'],
     requiredServices: ['tools', 'zerowallEnvironment', 'attachments', 'llm', 'zerowallMedia'],
+    optionalServices: ['dshPptMakerTools'],
   },
   { id: 'mcp', client: true, remote: true, capabilities: ['mcp'], permissions: ['files', 'network', 'credentials'], dependencies: ['base', 'secrets'], requiredServices: ['zerowallMcpConfigurationStore', 'tools'] },
   { id: 'skills', client: true, remote: true, capabilities: ['skills'], permissions: ['files'], dependencies: ['base'], requiredServices: ['skills', 'systemPrompt', 'tools', 'workingDirectory'] },
@@ -276,7 +279,7 @@ for (const plugin of plugins) {
       migrationVersion: 1,
       restartRequired: true,
       rollbackSupported: true,
-      ...(plugin.id === 'files' ? { runtimeFiles: ['lib/viewer-runtime.js'] } : plugin.id === 'research' ? { runtimeFiles: ['brainglobe', 'canvas', 'cells', 'flow', 'he', 'imagej', 'molecule', 'sanger', 'sequence'].map(name => `lib/research-assets/${name}.png`) } : {}),
+      ...(plugin.id === 'files' ? { runtimeFiles: ['lib/viewer-runtime.js'] } : plugin.id === 'images' ? { runtimeFiles: ['scripts/ppt-reconstruct.py', 'scripts/ppt_reconstruction_analysis.py', 'scripts/ppt-reconstruction-models.json'] } : plugin.id === 'research' ? { runtimeFiles: ['brainglobe', 'canvas', 'cells', 'flow', 'he', 'imagej', 'molecule', 'sanger', 'sequence'].map(name => `lib/research-assets/${name}.png`) } : {}),
     },
     scripts: {
       prepack: 'node ../../tools/plugins/prepare-pack.mjs',
@@ -290,6 +293,7 @@ for (const plugin of plugins) {
     license: plugin.id === 'claude-code' ? 'MIT' : 'AGPL-3.0-only',
     files: [
       'lib', 'src',
+      ...(plugin.id === 'images' ? ['scripts/ppt-reconstruct.py', 'scripts/ppt_reconstruction_analysis.py', 'scripts/ppt-reconstruction-models.json'] : []),
       ...(plugin.id === 'claude-code' ? ['LICENSE'] : []),
       ...(plugin.id === 'biogenie' ? ['payload'] : []),
       ...(plugin.remote ? [
@@ -309,7 +313,7 @@ for (const plugin of plugins) {
     ...(plugin.id === 'files' ? { '@deepseek-ai/dsh-fs': 'workspace:^', 'dsh-office-tools': officeSource } : {}),
       ...(plugin.client && !['base', 'environment', 'extension-center', 'claude-code'].includes(plugin.id) ? externalClientDependencies : {}),
       ...Object.fromEntries((plugin.dependencies ?? []).map(id => [`@zerowallscience/plugin-${id}`, 'workspace:^'])),
-      ...(plugin.id === 'images' ? { '@zerowallscience/plugin-ai-cloud': '^0.1.20' } : {}),
+      ...(plugin.id === 'images' ? { '@zerowallscience/plugin-ai-cloud': '^0.1.37' } : {}),
       ...(npmDependencies[plugin.id] ?? {}),
         ...(plugin.id === 'mcp' ? { '@modelcontextprotocol/client': mcpClientDependencies['@modelcontextprotocol/client'] } : {}),
     },

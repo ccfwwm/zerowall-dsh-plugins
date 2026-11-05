@@ -4,12 +4,12 @@ import { cp, mkdir, readdir, realpath, rename, rm, stat, writeFile } from 'node:
 import { dirname, isAbsolute, join, relative, resolve } from 'node:path'
 import { homedir } from 'node:os'
 import type { SkillDefinition, SkillSummary } from '@deepseek-ai/dsh-skill'
-import { isModelInvocable, isSkillName } from '@deepseek-ai/dsh-skill'
+import { isModelInvocable, isSkillName, renderSkillContent } from '@deepseek-ai/dsh-skill'
 import type {} from '@deepseek-ai/dsh-agent'
 import { createUserMessage, type MessageSource } from '@deepseek-ai/dsh-llm'
 import type { Session } from '@deepseek-ai/dsh-session'
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import { apply as applySkillFilesystem } from '@deepseek-ai/dsh-skill-filesystem'
+import { apply as applySkillFilesystem, FileSystemSkillProvider } from '@deepseek-ai/dsh-skill-filesystem'
 import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
 import type {} from 'zod'
 import type { CopyBundledSkillInput, CreateSkillInput, ImportSkillInput, SkillSourceSnapshot, ZeroWallSkillDetail, ZeroWallSkillSummary } from '../shared/types.js'
@@ -55,11 +55,14 @@ declare module '@deepseek-ai/cordis' {
 
 export class ZeroWallCapabilitiesService extends TypertRemoteService {
   static inject = ['skills']
+  private readonly invalidateSkillViews = new Set<() => void>()
+  private readonly mountedAgents = new WeakSet<object>()
+  private userSkillProvider?: FileSystemSkillProvider
 
   constructor(private readonly runtimeCtx: Context) {
     super(runtimeCtx, 'zerowallCapabilities')
     const bundledSkillDir = process.env.ZEROWALL_BUNDLED_SKILLS ?? process.env.DSH_BUNDLED_SKILL_DIR
-    const registry = runtimeCtx.get('skills') as { registerProvider?: (create: never) => unknown } | undefined
+    const registry = runtimeCtx.get('skills')
     if (bundledSkillDir !== undefined && typeof registry?.registerProvider === 'function') {
       applySkillFilesystem(runtimeCtx, {
         providerName: 'zerowall-scientific',
@@ -79,29 +82,41 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     }
     if (typeof registry?.registerProvider === 'function') {
       void mkdir(userSkillsDir, { recursive: true })
-      applySkillFilesystem(runtimeCtx, {
-        providerName: 'zerowall-user-skills',
-        includeDefaultRoots: false,
-        customSkillDirs: [userSkillsDir],
-        // DSH assigns custom roots rank 300 and bundled roots rank 600, so an
-        // editable user Skill wins a same-name bundled catalog entry.
-        // User changes must invalidate the filesystem provider cache so the
-        // Settings page reflects create/import/disable operations immediately.
-        watch: true,
+      registry.registerProvider(control => {
+        this.invalidateSkillViews.add(control.invalidate)
+        control.signal.addEventListener('abort', () => this.invalidateSkillViews.delete(control.invalidate), { once: true })
+        return this.userSkillProvider = new FileSystemSkillProvider(runtimeCtx, {
+          signal: control.signal,
+          invalidate: () => this.refreshSkillViews(),
+        }, {
+          providerName: 'zerowall-user-skills', includeDefaultRoots: false,
+          customSkillDirs: [userSkillsDir], watch: true,
+        })
       })
+      runtimeCtx.effect(() => async () => { await this.userSkillProvider?.dispose() })
+      // Preset-local bundled providers outrank global providers regardless of
+      // filesystem rank. Mount the same watched user provider into the agent's
+      // own layer so a successfully installed update is also used by /skill.
+      runtimeCtx.on('agent/created', ({ agent }) => { this.mountAgentSkills(agent) })
+      runtimeCtx.on('agent/pre-step', async ({ agent, signal }, next) => {
+        this.mountAgentSkills(agent)
+        await refreshLoadedSkillInstructions(runtimeCtx, agent, signal)
+        return next()
+      }, { prepend: true })
     }
     if (runtimeCtx.get('tools') === undefined || runtimeCtx.get('workingDirectory') === undefined) return
     runtimeCtx.tools.register(defineTool({
       name: 'skill_search',
-      description: 'Search available Skills by task, method, software, or domain. Returns at most five matching summaries; call skill with an exact returned name to load its full instructions.',
+      description: 'Search available Skills by task, method, software, domain, or owning plugin ID. Results include their provider and whether this Agent can load them with skill.',
       parameters: { query: { type: 'string', description: 'Task or capability; omit to browse categories.' }, category: { type: 'string', description: 'Optional category returned by this tool.' } },
       output: { schema: { type: 'object', additionalProperties: true }, render: (_args, value) => [{ type: 'text', text: JSON.stringify(value) }] },
       async execute(args, exec) {
         const cwd = exec.agent === undefined ? undefined : await runtimeCtx.workingDirectory.ensure(exec.agent, exec.signal)
         const skills = (await runtimeCtx.skills.list({ cwd, signal: exec.signal, scope: exec.agent })).filter(isModelInvocable)
         const candidates = skills.filter(skill => !args.category || skillCategory(skill) === args.category)
-        if (!args.query?.trim() && !args.category) return { categories: SKILL_CATEGORIES.map(([id, label]) => ({ id, label, count: skills.filter(skill => skillCategory(skill) === id).length })).filter(item => item.count > 0), next: 'Search a category or task, then load an exact name with skill.' }
-        return { matches: (args.query?.trim() ? rankSkills(candidates, args.query) : candidates.sort((a, b) => a.name.localeCompare(b.name))).slice(0, 5).map(skill => ({ name: skill.name, category: skillCategory(skill), description: skill.description.slice(0, 320), ...(skill.whenToUse ? { whenToUse: skill.whenToUse.slice(0, 200) } : {}) })) }
+        const loaderAvailable = runtimeCtx.tools.schemas(exec.agent).some(schema => schema.name === 'skill')
+        if (!args.query?.trim() && !args.category) return { loaderAvailable, categories: SKILL_CATEGORIES.map(([id, label]) => ({ id, label, count: skills.filter(skill => skillCategory(skill) === id).length })).filter(item => item.count > 0), next: loaderAvailable ? 'Search a category, task, or plugin ID, then load an exact name with skill.' : 'This Agent preset does not include the skill loader; switch to a Skills-enabled preset to load instructions.' }
+        return { loaderAvailable, matches: (args.query?.trim() ? rankSkills(candidates, args.query) : candidates.sort((a, b) => a.name.localeCompare(b.name))).slice(0, 5).map(skill => ({ name: skill.name, category: skillCategory(skill), provider: skill.provider, source: skill.source, loadable: loaderAvailable, description: skill.description.slice(0, 320), ...(skill.whenToUse ? { whenToUse: skill.whenToUse.slice(0, 200) } : {}) })) }
       },
     }))
     // DSH's standard preset emits every Skill summary into every request. Keep
@@ -126,6 +141,22 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
       const filtered = decision.messages.filter(message => !isSkillCatalogSource(message.source))
       return { ...decision, messages: compact ? [...filtered, compact] : filtered }
     }, { prepend: true })
+  }
+
+  private refreshSkillViews(): void {
+    for (const invalidate of this.invalidateSkillViews) invalidate()
+  }
+
+  private mountAgentSkills(agent: import('@deepseek-ai/dsh-agent').Agent): void {
+    if (!this.userSkillProvider || this.mountedAgents.has(agent)) return
+    const provider = this.userSkillProvider
+    const dispose = agent.ctx.get('skills')!.registerProvider(control => {
+      this.invalidateSkillViews.add(control.invalidate)
+      control.signal.addEventListener('abort', () => this.invalidateSkillViews.delete(control.invalidate), { once: true })
+      return { name: provider.name, list: options => provider.list(options), get: (candidate, options) => provider.get(candidate, options) }
+    })
+    this.runtimeCtx.effect(() => dispose)
+    this.mountedAgents.add(agent)
   }
 
   @Remote('listSkills')
@@ -162,6 +193,7 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     if (await exists(target)) throw new Error(`A user Skill already exists: ${normalized.name}`)
     await mkdir(target, { recursive: false })
     await writeFile(join(target, 'SKILL.md'), skillMarkdown(normalized), 'utf8')
+    this.refreshSkillViews()
     return await this.getSkill(normalized.name)
   }
 
@@ -176,6 +208,7 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     const target = safeSkillPath(userSkillDir(), parsed.name)
     if (await exists(target)) throw new Error(`A user Skill already exists: ${parsed.name}`)
     await copySkillTree(root, target)
+    this.refreshSkillViews()
     return await this.getSkill(parsed.name)
   }
 
@@ -195,8 +228,9 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     await mkdir(dirname(backup), { recursive: true })
     await moveSkillDirectory(target, backup)
     try { await moveSkillDirectory(candidate, target) } catch (error) { await moveSkillDirectory(backup, target); throw error }
-    // The filesystem provider's watcher invalidates the registry. Existing
-    // tasks keep their already resolved SkillDefinition and content snapshot.
+    // Do not wait for asynchronous filesystem watchers: the successful update
+    // response and the very next model request must resolve the new version.
+    this.refreshSkillViews()
     return await this.getSkill(name)
   }
 
@@ -213,6 +247,7 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     const backup = join(history, randomUUID())
     await moveSkillDirectory(target, backup)
     try { await moveSkillDirectory(previous.path, target) } catch (error) { await moveSkillDirectory(backup, target); throw error }
+    this.refreshSkillViews()
     return this.getSkill(name)
   }
 
@@ -227,6 +262,7 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     const target = safeSkillPath(userSkillDir(), parsed.name)
     if (await exists(target)) throw new Error(`A user Skill already exists: ${parsed.name}`)
     await copySkillTree(source, target)
+    this.refreshSkillViews()
     return await this.getSkill(parsed.name)
   }
 
@@ -237,6 +273,7 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     const disabled = safeSkillPath(disabledSkillDir(), normalized)
     if (!(await exists(active)) && !(await exists(disabled))) throw new Error(`Imported Skill was not found: ${normalized}`)
     await Promise.all([rm(active, { recursive: true, force: true }), rm(disabled, { recursive: true, force: true })])
+    this.refreshSkillViews()
   }
 
   @Remote('setSkillEnabled')
@@ -247,6 +284,24 @@ export class ZeroWallCapabilitiesService extends TypertRemoteService {
     if (!(await exists(from))) throw new Error(`Imported Skill was not found: ${normalized}`)
     await mkdir(dirname(to), { recursive: true })
     await moveSkillDirectory(from, to)
+    this.refreshSkillViews()
+  }
+}
+
+/** Refresh the model surface without rewriting the original audit events. */
+export async function refreshLoadedSkillInstructions(ctx: Context, agent: import('@deepseek-ai/dsh-agent').Agent, signal?: AbortSignal): Promise<void> {
+  for (const seq of [...agent.session.surface.nodes]) {
+    const event = agent.session.eventAt(seq)
+    if (event?.type !== 'user/message') continue
+    const source = event.data.source
+    if (source?.kind !== 'skill-invocation' || source.form !== 'instructions') continue
+    const skill = await ctx.skills.get(source.name, { cwd: agent.session.header.cwd, scope: agent, signal })
+    if (!skill) continue
+    const text = renderSkillContent(skill)
+    if (event.data.content.length === 1 && event.data.content[0]?.type === 'text' && event.data.content[0].text === text) continue
+    agent.session.append('user/message', createUserMessage({ content: [{ type: 'text', text }], source }), {
+      surfaceOp: { op: 'replace', startSeq: seq, endSeq: seq }, sourceEventSeqs: [seq],
+    })
   }
 }
 
@@ -299,8 +354,9 @@ export function rankSkills(skills: SkillSummary[], query: string): SkillSummary[
   if (!terms.size) return []
   return unique.map(skill => {
     const name = skill.name.toLocaleLowerCase()
+    const provider = skill.provider.toLocaleLowerCase()
     const description = `${skill.description} ${skill.whenToUse ?? ''}`.toLocaleLowerCase()
-    const score = [...terms].reduce((total, term) => total + (name.includes(term) ? 5 : 0) + (description.includes(term) ? 1 : 0), 0)
+    const score = [...terms].reduce((total, term) => total + (name.includes(term) ? 5 : 0) + (provider.includes(term) ? 5 : 0) + (description.includes(term) ? 1 : 0), 0)
     return { skill, score }
   }).filter(item => item.score > 0)
     .sort((left, right) => right.score - left.score || left.skill.name.localeCompare(right.skill.name))

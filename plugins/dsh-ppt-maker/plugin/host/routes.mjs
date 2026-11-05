@@ -19,8 +19,10 @@
  * 二进制一律 `res.writeHead(200, {content-type}) + res.end(bytes)`。
  */
 import fsp from 'node:fs/promises'
+import { watch } from 'node:fs'
+import { projectContent, reconstructionProgress } from './live-state.mjs'
 import path from 'node:path'
-import { randomUUID } from 'node:crypto'
+import { randomUUID, createHash } from 'node:crypto'
 
 import * as sessionStore from './store.mjs'
 
@@ -209,6 +211,15 @@ function safeFileStem(key) {
   return stem || 'deck'
 }
 
+function encodeHeaderValue(value) {
+  return encodeURIComponent(String(value)).replace(/[!'()*]/g, char => `%${char.charCodeAt(0).toString(16).toUpperCase()}`)
+}
+
+function attachmentDisposition(filename) {
+  const fallback = filename.replace(/[^\x20-\x7E]|["\\]/g, '_')
+  return `attachment; filename="${fallback}"; filename*=UTF-8''${encodeHeaderValue(filename)}`
+}
+
 /** key → { dir, abs }；key 不存在由路由层归一到 404（`error.status` 被接住）。 */
 function projectOf(ss, sessionId, cwd, key) {
   if (!key) {
@@ -261,13 +272,7 @@ export function createApiHandler({ resolveCwd, log = () => {}, core, createConve
   const thumbDir = (abs, revision) => path.join(abs, '.thumb-cache', `r${String(revision).padStart(4, '0')}`)
   const thumbnailBatches = new Map()
 
-  return async function handle(req, res) {
-    if (!sameOrigin(req)) return fail(res, 403, '拒绝跨站请求')
-    const url = new URL(req.url || '/', 'http://localhost')
-    const route = `${req.method} ${url.pathname.slice(API_PREFIX.length)}`
-
-    try {
-      if (route === 'GET /state') {
+  async function stateFor(url) {
         const { sessionId, cwd } = sessionOf({}, url)
         // 「记住上次打开的工程」：/state 是重启后面板的首个触点，先惰性恢复磁盘状态
         // （store.mjs 真模块恒有；测试桩注入了精简版时静默跳过）。
@@ -283,6 +288,8 @@ export function createApiHandler({ resolveCwd, log = () => {}, core, createConve
               manifest = {
                 revision: loaded.manifest.revision,
                 checksum: loaded.manifest.checksum,
+                ...await projectContent(loaded),
+                reconstruction: await reconstructionProgress(loaded),
                 title: loaded.deck.title ?? null,
                 designSystem: loaded.manifest.designSystem ?? null,
                 theme: loaded.manifest.theme ?? null,
@@ -301,14 +308,55 @@ export function createApiHandler({ resolveCwd, log = () => {}, core, createConve
             }
           }
         }
-        return json(res, 200, {
+        return {
           ok: true,
           cwd,
           activeKey,
           projects,
           openRequests: ss.pendingOpenRequests(sessionId),
           manifest,
-        })
+        }
+  }
+
+  return async function handle(req, res) {
+    if (!sameOrigin(req)) return fail(res, 403, '拒绝跨站请求')
+    const url = new URL(req.url || '/', 'http://localhost')
+    const route = `${req.method} ${url.pathname.slice(API_PREFIX.length)}`
+
+    try {
+      if (route === 'GET /events') {
+        sessionOf({}, url)
+        res.writeHead(200, { 'content-type': 'text/event-stream', 'cache-control': 'no-cache, no-transform', connection: 'keep-alive', 'x-accel-buffering': 'no' })
+        res.flushHeaders?.()
+        let closed = false, busy = false, previous = '', watcher = null, watched = ''
+        const update = async () => {
+          if (closed || busy) return
+          busy = true
+          try {
+            const state = await stateFor(url)
+            if (closed) return
+            const signature = JSON.stringify(state)
+            if (signature !== previous) { previous = signature; res.write(`event: state\ndata: ${signature}\n\n`) }
+            const project = state.projects.find(item => item.key === state.activeKey)
+            const target = project ? path.resolve(state.cwd, project.dir) : ''
+            if (target !== watched) {
+              watcher?.close(); watcher = null; watched = target
+              if (target) try { watcher = watch(target, { recursive: true }, () => { dirty = true }); watcher.on('error', () => { watcher?.close(); watcher = null }) } catch {}
+            }
+          } catch { if (!closed) res.write(': reconnect\n\n') }
+          finally { busy = false }
+        }
+        let dirty = true, heartbeat = 0
+        // File events are coalesced, including external editors and atomic rename.
+        const timer = setInterval(() => { if (dirty || ++heartbeat % 8 === 0) { dirty = false; void update() } }, 100)
+        timer.unref?.()
+        res.on('close', () => { closed = true; clearInterval(timer); watcher?.close() })
+        await update()
+        return
+      }
+
+      if (route === 'GET /state') {
+        return json(res, 200, await stateFor(url))
       }
 
       if (route === 'GET /project') {
@@ -322,6 +370,8 @@ export function createApiHandler({ resolveCwd, log = () => {}, core, createConve
           dir,
           revision: loaded.manifest.revision,
           manifest: loaded.manifest,
+          ...await projectContent(loaded),
+          reconstruction: await reconstructionProgress(loaded),
           deck: loaded.deck,
           pages: loaded.deck.pages.map((rel) => ({ path: rel })),
           // loadProject already parsed all pages. Send them once so a 40-page
@@ -516,6 +566,35 @@ export function createApiHandler({ resolveCwd, log = () => {}, core, createConve
         return json(res, 200, { ok: true, revision: result.revision, undoneOps: result.undoneOps, warnings: result.warnings })
       }
 
+      if (route === 'POST /reference') {
+        const { sessionId, cwd } = sessionOf(body, url)
+        const hit = projectOf(ss, sessionId, cwd, body.key)
+        const loaded = await loadProject(cwd, hit.dir)
+        const page = String(body.page || '').replaceAll('\\', '/')
+        if (!loaded.pages.has(page)) return fail(res, 404, '引用页面已删除')
+        const content = await projectContent(loaded)
+        if (body.version && body.version !== content.pageVersions[page]) return fail(res, 409, '页面已变化，请刷新后重新引用')
+        const source = loaded.pages.get(page)
+        const ids = body.ids ?? []
+        if (!Array.isArray(ids) || ids.length > 32 || ids.some(id => typeof id !== 'string' || !source.elements?.some(element => element.elementId === id))) return fail(res, 400, '引用元素已变化')
+        const region = body.region
+        if (region !== undefined && (!Array.isArray(region) || region.length !== 4 || !region.every(Number.isFinite) || region[0] < 0 || region[1] < 0 || region[2] <= 0 || region[3] <= 0 || region[0]+region[2] > loaded.deck.size[0] || region[1]+region[3] > loaded.deck.size[1])) return fail(res, 400, '引用区域无效')
+        const elements = source.elements?.filter(element => ids.includes(element.elementId)).map(element => ({ elementId: element.elementId, elementType: element.elementType, bounds: element.bounds, ...(typeof element.content?.text === 'string' ? { text: element.content.text } : {}) })) ?? []
+        const record = { schemaVersion: 1, kind: 'ppt-reference', project: path.relative(cwd, loaded.dir).replaceAll('\\', '/'), title: loaded.deck.title ?? null,
+          pageId: page, pageNumberAtReference: loaded.deck.pages.indexOf(page) + 1, elementIds: ids, elements, ...(region ? { region } : {}),
+          instruction: ids.length ? 'Edit only these referenced slide elements.' : region ? 'Edit only this referenced slide region.' : 'Edit only this slide.',
+          contentVersion: content.pageVersions[page], revision: loaded.manifest.revision }
+        const bytes = JSON.stringify(record, null, 2)
+        const id = createHash('sha256').update(bytes).digest('hex')
+        const directory = path.join(loaded.dir, '.references')
+        await fsp.mkdir(directory, { recursive: true })
+        const file = path.join(directory, `${id}.json`)
+        await fsp.writeFile(file, bytes, { flag: 'wx' }).catch(error => { if (error.code !== 'EEXIST') throw error })
+        const rel = path.relative(cwd, file).replaceAll('\\', '/')
+        const pageNo = loaded.deck.pages.indexOf(page) + 1
+        return json(res, 200, { ok: true, ref: `@"${rel}"`, label: `PPT 第 ${pageNo} 页${region ? ' · 选区' : ids.length ? ` · ${ids.length} 个元素` : ''}`, record })
+      }
+
       if (route === 'POST /media/upload') {
         const { sessionId, cwd } = sessionOf(body, url)
         const key = String(body.key || '')
@@ -530,9 +609,8 @@ export function createApiHandler({ resolveCwd, log = () => {}, core, createConve
         const pipeline = await buildProjectDeck(cwd, dir, body.snapshot)
         const { bytes, fontEmbed } = await saveProjectPptx(pipeline)
         const buffer = Buffer.from(bytes)
-        // 面板导出（body.save）落到工程目录 export/ 并回相对路径：桌面外壳的下载没有
-        // 可回读的落点，磁盘上的文件 + 可见路径才是「点了就有反应」的确定性口径。
         const saveToProject = body.save === true
+        let savedFile = null
         const receipt = {
           kind: saveToProject ? 'panel-export' : 'browser-export',
           at: new Date().toISOString(),
@@ -549,25 +627,24 @@ export function createApiHandler({ resolveCwd, log = () => {}, core, createConve
           const outDir = path.join(abs, 'export')
           await fsp.mkdir(outDir, { recursive: true })
           const absolutePath = path.join(outDir, filename)
+          const relativePath = path.posix.join(String(dir).replace(/\\/g, '/'), 'export', filename)
           await fsp.writeFile(absolutePath, buffer)
           await fsp.writeFile(`${absolutePath}.export.json`, JSON.stringify(receipt, null, 2))
-          return json(res, 200, {
-            ok: true,
-            filename,
-            relativePath: path.posix.join(String(dir).replace(/\\/g, '/'), 'export', filename),
-            absolutePath,
-            revision: pipeline.revision,
-            bytes: buffer.length,
-            snapshotHash: pipeline.snapshotHash,
-            qualityIssues: receipt.issues,
-          })
+          savedFile = { filename, relativePath, absolutePath }
         }
+        const filename = savedFile?.filename ?? 'deck.pptx'
         res.writeHead(200, {
           'content-type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-          'content-disposition': 'attachment; filename="deck.pptx"',
+          'content-disposition': attachmentDisposition(filename),
           'cache-control': 'no-store',
           'x-pt-revision': String(pipeline.revision),
           'x-pt-snapshot': pipeline.snapshotHash ?? '',
+          'x-pt-filename': encodeURIComponent(filename),
+          'x-pt-bytes': String(buffer.length),
+          ...(savedFile ? {
+            'x-pt-relative-path': encodeURIComponent(savedFile.relativePath),
+            'x-pt-absolute-path': encodeURIComponent(savedFile.absolutePath),
+          } : {}),
         })
         return res.end(buffer)
       }

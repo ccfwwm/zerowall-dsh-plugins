@@ -4,11 +4,11 @@
   "plugins": [
     {
       "id": "@dingyi222666/dsh-session-notification",
-      "version": "0.2.7-zws.1",
+      "version": "0.2.7-zws.2",
       "kind": "plugin",
-      "size": 36141,
-      "sha256": "92238a5587a8a894f187fd5a555ae87698d7217c7e832e8d856747045b85ecae",
-      "sourceFingerprint": "279c4572a949ae9f5c8aa630de31afe89bfccd84bfe931ac7ccac1e5ee6bb7b4"
+      "size": 35949,
+      "sha256": "83b35ae978685e595a6d3b7ba289d9e870b8a45f77949abbd5c1957b4618916c",
+      "sourceFingerprint": "55cfbd222146ebc9f282c4cd0cd593aea8ef3bd98d493652e166df06ba7c4f61"
     },
     {
       "id": "@dsh-external/zotero-harvest",
@@ -20,11 +20,11 @@
     },
     {
       "id": "@michengai/dsh-archive-manager",
-      "version": "1.1.2-zws.1",
+      "version": "1.1.2-zws.3",
       "kind": "plugin",
-      "size": 614852,
-      "sha256": "88cdb99a57a75396483cce468e89bb867db20b45f347975a3a1674087e64ee5b",
-      "sourceFingerprint": "acc21e4571bc77b6f2d321a5b246009f05ea9bf4fc35f670a86e2a508b1088eb"
+      "size": 615569,
+      "sha256": "091f8b58eb0d220a3f238a15bfc6c77a04b1fc8a09f38f99ff91afbbdc081a5f",
+      "sourceFingerprint": "6bd5bdff91f7c7aeb1e532cce449218a99e1199f74a4b09439de34804884743f"
     },
     {
       "id": "@zerowallscience/dsh-bundle-core",
@@ -36,11 +36,11 @@
     },
     {
       "id": "@zerowallscience/dsh-bundle-science",
-      "version": "0.1.26",
+      "version": "0.1.27",
       "kind": "plugin",
-      "size": 1219,
-      "sha256": "13294f6967b2a39db59c2e6aeceed6299e1b58d3085e588767c7a49b427ae1af",
-      "sourceFingerprint": "34ea237506c03e9ef28802743040fefcc05d91db6fc2b707e06530b552b89608"
+      "size": 1213,
+      "sha256": "8090d3636d2e42597378536a9017fb5bd85cff751b93aa8db1a80afced0a97ee",
+      "sourceFingerprint": "157b250ba206e263a3540767cc6fab38103a000cd25f464655a3f1bc8bec81db"
     },
     {
       "id": "@zerowallscience/integrity-runtime",
@@ -52,27 +52,27 @@
     },
     {
       "id": "@zerowallscience/plugin-account",
-      "version": "0.1.25",
+      "version": "0.1.29",
       "kind": "plugin",
-      "size": 364954,
-      "sha256": "7edf487cc7c6a1cf0efb6fd5741596afaedcb6e42f452aada20e2ea063f478ae",
-      "sourceFingerprint": "740cc77e3c5e5e1bfabeac97e6dcc3bd6fc4a683c9f13eeaf0eff635bc7c83ca"
+      "size": 369539,
+      "sha256": "0fe7ad7b0928f066abefdfdd9e24ff506b3b61b177c66c155d30e6faed72fea7",
+      "sourceFingerprint": "4113381014829d7a419b105c9741cd1dbffef57d31140686dff958faa0acddf0"
     },
     {
       "id": "@zerowallscience/plugin-ai-cloud",
-      "version": "0.1.35",
+      "version": "0.1.37",
       "kind": "plugin",
-      "size": 2271426,
-      "sha256": "746d2756028590d795eb95e8f3de84c8b0936a550f17ae466d156fdafee130e2",
-      "sourceFingerprint": "f69fff7ca8c5f97931d0669114652e19614218b2be462d401ab9d4fec9cb6b31"
+      "size": 2272985,
+      "sha256": "a76d3dd5f1ff1cfe55b1effd5ab7d2d46f68c9e55f4e6cfe980082a9416f6a4d",
+      "sourceFingerprint": "8bb578cd5fd0710845327c2e6e9b59e9cb95ae743622dd093b9d1240d48bd578"
     },
     {
       "id": "@zerowallscience/plugin-base",
-      "version": "0.1.36",
+      "version": "0.1.39",
       "kind": "plugin",
-      "size": 183691,
-      "sha256": "dc9ecb0bb46acac4d162868b47f5f7504c600cabd47204b7f9c33e790ab10eff",
-      "sourceFingerprint": "5a1b6d247efc8c7b7db5f145eb84c1db89e84cdb91c26d4d859a1dc28e8b965e"
+      "size": 186984,
+      "sha256": "78c1e21c5620ab5519f4042db8031ddbc30c9cc2ce7a290ba5b8741d3ade2eef",
+      "sourceFingerprint": "73c947c154456b7b37e9a610d1d3b0c6540fa649d424a791d4f5fd924b29294c"
     },
     {
       "id": "@zerowallscience/plugin-biogenie",
@@ -84,11 +84,11 @@
     },
     {
       "id": "@zerowallscience/plugin-claude-code",
-      "version": "0.2.15",
+      "version": "0.2.16",
       "kind": "plugin",
-      "size": 717042,
-      "sha256": "a60141553a86671cea485357e9cdca1298708847773a151b7f034900e4a56bf0",
-      "sourceFingerprint": "c82fcd2cb1cbf4d2f247047626f8483c209eed9b9a1c8da716b8b1a7590dbf1d"
+      "size": 718746,
+      "sha256": "8d2f9199bc0b74ad1a3eba9e39fd5560e3529641f404ba0f328318a887528b03",
+      "sourceFingerprint": "842820158aba98917bd38b548583c40bb0502268b007a7bff12f0bf159c17e50"
     },
     {
       "id": "@zerowallscience/plugin-desktop-compat",
@@ -100,11 +100,11 @@
     },
     {
       "id": "@zerowallscience/plugin-environment",
-      "version": "0.1.24",
+      "version": "0.1.28",
       "kind": "plugin",
-      "size": 261865,
-      "sha256": "692a5cc78ef2ca85c62bcd670250eef7793f2404701763f2f9e232704b78f50f",
-      "sourceFingerprint": "f861291caa438feb836784e949f1743f9bb20c0dc33befb7c1284770fb9716a4"
+      "size": 264144,
+      "sha256": "13dc2997f38c47cf775351415cc6f6a1eddc9a374ccb1e25175b0f899f408cd6",
+      "sourceFingerprint": "49ca89af0f2957da840d41ab6196f2b8d44e06a2360235ffcc192a6485ccc5d5"
     },
     {
       "id": "@zerowallscience/plugin-execution",
@@ -132,19 +132,19 @@
     },
     {
       "id": "@zerowallscience/plugin-images",
-      "version": "0.2.32",
+      "version": "0.2.47",
       "kind": "plugin",
-      "size": 182786,
-      "sha256": "9d7b9f1d08a738c43ff7feabb090ad233db64cac045e33766c1c5715ed447618",
-      "sourceFingerprint": "dd185e80e67c6f1062b1a5c1cbd5ce7130411044370b925b7a7f0c1f5d2d897f"
+      "size": 281816,
+      "sha256": "93c733d3f78463fc66ad7e9307094fe501e825b9bcb52ea10c8c3c81f07f0207",
+      "sourceFingerprint": "bdd753b8e0bdf1e5ffb178554855ef5997549b01ce7dcdd328102f9374319931"
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.53",
+      "version": "0.2.56",
       "kind": "plugin",
-      "size": 418011,
-      "sha256": "4d8edffdb63c5ff72063f736407dfc166ad86d1596be0c485cd93600f79b56e2",
-      "sourceFingerprint": "1d17accd8d3a0ec8faa4fde8a0b9c4e192215a407ac8b298700171d1cc59a161"
+      "size": 419361,
+      "sha256": "133cdbae13db825309d61f327acdc389ee516c1a3149495a3bd2f754bceb5689",
+      "sourceFingerprint": "6ad82b036888d913a4634228f99f23c14a5067dc19603be4e58e79720c7b57fc"
     },
     {
       "id": "@zerowallscience/plugin-mineru",
@@ -172,27 +172,27 @@
     },
     {
       "id": "@zerowallscience/plugin-pubmed",
-      "version": "0.1.11",
+      "version": "0.1.12",
       "kind": "plugin",
-      "size": 186474,
-      "sha256": "67626df86ddc9df64fca9601bb5cdf44bab76fabe7b74abf503ab75c3f2752fb",
-      "sourceFingerprint": "e32c4d2488e7dd36199b03ea0b40038a199dd0e6ec463761ca60426661dae3b0"
+      "size": 186576,
+      "sha256": "23a544fd182960ea55a1125e5482ad46a7eafad2352d4be4e31f9bcd6000e50f",
+      "sourceFingerprint": "ffbd30ddfcf6a59fb5adcf72c0966435c893a5074a72506a3eab785c06b38e36"
     },
     {
       "id": "@zerowallscience/plugin-python",
-      "version": "0.1.35",
+      "version": "0.1.40",
       "kind": "plugin",
-      "size": 273262,
-      "sha256": "a32e9e57e5ae3da0344ee48510c59b9a39087607c3f80d0ab5a9735ae1bcb176",
-      "sourceFingerprint": "eec69a871170d4515924a0c99ad8df6b0c039e24afd86ed1fc33f3a6273684d3"
+      "size": 274515,
+      "sha256": "c1ea441657247d813df71283beb2b03db124ac89897684711de68597eaaab72c",
+      "sourceFingerprint": "727e0813166699bcf4e2ffac99a144d8cd1e6b39e9e62b4b62287cf880baf66e"
     },
     {
       "id": "@zerowallscience/plugin-research",
-      "version": "0.1.33",
+      "version": "0.1.34",
       "kind": "plugin",
-      "size": 9809629,
-      "sha256": "c82538bd9043d17c9764cf958bfb82c3dec537b3b04486733693485c6c71e152",
-      "sourceFingerprint": "3bd04a43915e2a551f3b5dd9eae97242666850c00b8f60884dc70a7f88686839"
+      "size": 9810714,
+      "sha256": "2147fbb2464dee7a24901efdcee5863cb2fba4b0cc790d0672138d1697fcad13",
+      "sourceFingerprint": "c98299d4774bbad187d912bd94371f6bd2e6132c1b17893c01dda30fa81012fb"
     },
     {
       "id": "@zerowallscience/plugin-reviewer",
@@ -228,11 +228,11 @@
     },
     {
       "id": "@zerowallscience/plugin-skills",
-      "version": "0.2.10",
+      "version": "0.2.13",
       "kind": "plugin",
-      "size": 223694,
-      "sha256": "92e30447ba42fff6b74e0bfc79cbea66a34363a587970bf521c6398bd32a0508",
-      "sourceFingerprint": "af64314420cbd8afc392cae57a90d85078d43e92fe9274ce439612b3e071c8c8"
+      "size": 225149,
+      "sha256": "957cd3b4566b5f9e0788aa5f0edefdd6ef0efd5d9b5250632b277896cbdfccd8",
+      "sourceFingerprint": "cf83e0fa3e83dba981f8c803a598f0e0c0ca36b87904ae9413da795f56bf3de7"
     },
     {
       "id": "@zerowallscience/plugin-videos",
@@ -248,15 +248,15 @@
       "kind": "support",
       "size": 56770,
       "sha256": "6857de8a61109b8fc32fe77ae31509345b301310e476d57c3384622ff2af79e0",
-      "sourceFingerprint": "b349f40bf7159f2a0a04ae9b3c155b64927245a40ad2776a4369564fbde8e3c0"
+      "sourceFingerprint": "ed0a9d27330e4b52b54791a7c26b192e7c74a9e2e05e7be6245dac69593f8e79"
     },
     {
       "id": "dsh-better-sidebar",
-      "version": "0.28.1-zws.1",
+      "version": "0.28.1-zws.4",
       "kind": "plugin",
-      "size": 4802575,
-      "sha256": "a0dd5f4effbcd15927b04946db3686680d48b20bade064273331eab35a4498d3",
-      "sourceFingerprint": "f2ae31f588ea8c301d41a43bf8802bc11e8d6b0984161864eb307404843739f9"
+      "size": 4803792,
+      "sha256": "782764ca206e469ea808b5cb50afadb752b62a0b220d6f6c43ddc927bef5e610",
+      "sourceFingerprint": "d8d9470d4fe196f2697fe626d31daf2ed540e24875814debe750de78c477d523"
     },
     {
       "id": "dsh-dream-skin",
@@ -272,7 +272,7 @@
       "kind": "plugin",
       "size": 664782,
       "sha256": "6568011376788b3c84e48831660e4c0b57280a0e94c6fd772cf772e10e015656",
-      "sourceFingerprint": "2ae060f081caa596147c453c7fa66d4eb2bbb8cb0daed4ba859167b6198c9ba8"
+      "sourceFingerprint": "475cea4eec84f89a0687f61d8f3e0f54dc7cabaaac4eb5e185fb6c5cc197d79d"
     },
     {
       "id": "dsh-free-search",
@@ -292,11 +292,11 @@
     },
     {
       "id": "dsh-ppt-maker",
-      "version": "1.0.1-zws.10",
+      "version": "1.0.1-zws.16",
       "kind": "plugin",
-      "size": 503974,
-      "sha256": "89007135150a012e6e41962dcf3a1dc9c177dad65bd81fe750a74e3377b8644a",
-      "sourceFingerprint": "f404e0c332e41025bc74cc4b3ceb258387fdffbed1c138f7984147c6e65aaba4"
+      "size": 563491,
+      "sha256": "70f007ebc9ed927c85bab44793de88dd429981a2d847ce1feea5b371952661ad",
+      "sourceFingerprint": "a4503db5615d206f0bfb2a76b25cd082de69d252e4e0ed22b09d9a9f71719795"
     },
     {
       "id": "dsh-ssh-ops",
@@ -326,10 +326,10 @@
   "pluginSources": [
     {
       "id": "@dingyi222666/dsh-session-notification",
-      "version": "0.2.7-zws.1",
+      "version": "0.2.7-zws.2",
       "path": "plugins/dsh-session-notification",
       "files": 36,
-      "sha256": "5f44f1cf1cf92dcb7adcc1636a7e5e476ab821ad417cd0dcbf9f9bd8014b78ed"
+      "sha256": "56cc406016f1b403b3c7819464ea47b071b398d5f8a12d498cfb2c3bc8625dfc"
     },
     {
       "id": "@dsh-external/zotero-harvest",
@@ -340,10 +340,10 @@
     },
     {
       "id": "@michengai/dsh-archive-manager",
-      "version": "1.1.2-zws.1",
+      "version": "1.1.2-zws.3",
       "path": "plugins/dsh-archive-manager",
       "files": 53,
-      "sha256": "277d4a58c7d3a340047c51c95d2e11623df366e102aeaa72878b8f1abc2349e6"
+      "sha256": "4371e225552a2418f07434e51c4c5315ffbe7cf2a8cec14a4f5cce1006cf6bbf"
     },
     {
       "id": "@zerowallscience/dsh-bundle-core",
@@ -354,10 +354,10 @@
     },
     {
       "id": "@zerowallscience/dsh-bundle-science",
-      "version": "0.1.26",
+      "version": "0.1.27",
       "path": "plugins/dsh-bundle-science",
       "files": 2,
-      "sha256": "4b2b3c3e79c9d0c1ea8e8980dd1777ce04fa1234fa009ab1dc42e8f197472124"
+      "sha256": "e404aa1370419a6a4bed4e4797e0e3ecf427cb99faaa55a6afc76643b31f6c86"
     },
     {
       "id": "@zerowallscience/integrity-runtime",
@@ -368,24 +368,24 @@
     },
     {
       "id": "@zerowallscience/plugin-account",
-      "version": "0.1.25",
+      "version": "0.1.29",
       "path": "plugins/account",
       "files": 25,
-      "sha256": "265e47d1705a2000b0e2e8c38cfd104ee6fa1a6bda9ad089454f3dc19e3be9dd"
+      "sha256": "4f45729a97a2ae0aacecf670e0a86f6c1f010f643082bae243b80ffdb3533556"
     },
     {
       "id": "@zerowallscience/plugin-ai-cloud",
-      "version": "0.1.35",
+      "version": "0.1.37",
       "path": "plugins/ai-cloud",
       "files": 23,
-      "sha256": "e5b03ecd011e13e5320366d464afc4e230656ff32ae9c06344c6871d372022d2"
+      "sha256": "bc3a8a45309d17bd594cf4b3b3ac662a7bd559d0ed4cededae8c257eee913810"
     },
     {
       "id": "@zerowallscience/plugin-base",
-      "version": "0.1.36",
+      "version": "0.1.39",
       "path": "plugins/base",
-      "files": 32,
-      "sha256": "b300b8d1c76db2af2dd57ab1b278a47c6ecf8389f1f5c9fd8b821e4a31ca3bcf"
+      "files": 33,
+      "sha256": "2b91001b533f4c1eff8472a36d8d1be983e1f3bd754e4829297dea95c2dafb01"
     },
     {
       "id": "@zerowallscience/plugin-biogenie",
@@ -396,10 +396,10 @@
     },
     {
       "id": "@zerowallscience/plugin-claude-code",
-      "version": "0.2.15",
+      "version": "0.2.16",
       "path": "plugins/claude-code",
       "files": 46,
-      "sha256": "73dee444a3bb5bf15567a88d86e666271ad556cde0a11fa89225cce6d980c8cd"
+      "sha256": "509dfef9f75ef966e4ffb128df751d70b464e062b85aac12378cdaebe6fedf07"
     },
     {
       "id": "@zerowallscience/plugin-desktop-compat",
@@ -410,10 +410,10 @@
     },
     {
       "id": "@zerowallscience/plugin-environment",
-      "version": "0.1.24",
+      "version": "0.1.28",
       "path": "plugins/environment",
       "files": 20,
-      "sha256": "14d10e423f86cbc41d327eeea641fd1bccbe0fd299e07ee7ca38998c91a26ff8"
+      "sha256": "2cdf3f7eec158e187849024800aa8b51b6006d264ecd486d965531df00bb5a41"
     },
     {
       "id": "@zerowallscience/plugin-execution",
@@ -438,17 +438,17 @@
     },
     {
       "id": "@zerowallscience/plugin-images",
-      "version": "0.2.32",
+      "version": "0.2.47",
       "path": "plugins/images",
-      "files": 19,
-      "sha256": "3d6dd8ce7dbb73bf29c7229acff50b7eb9276f59f5e47412c85478bd817737a3"
+      "files": 36,
+      "sha256": "63d424793d17b4d419640f4f40eb6cf2877c07ea730d3a0c0f80ca0bb521051d"
     },
     {
       "id": "@zerowallscience/plugin-mcp",
-      "version": "0.2.53",
+      "version": "0.2.56",
       "path": "plugins/mcp",
       "files": 27,
-      "sha256": "5011e767c71487a51af5b1a3ef7f8c685046c3a0d0e9e9b23c8e19263848f248"
+      "sha256": "f114d74fb81745aba767ff2a19dbe7a5549e17f527773cedaae83c24025e22fc"
     },
     {
       "id": "@zerowallscience/plugin-mineru",
@@ -473,24 +473,24 @@
     },
     {
       "id": "@zerowallscience/plugin-pubmed",
-      "version": "0.1.11",
+      "version": "0.1.12",
       "path": "plugins/pubmed",
       "files": 21,
-      "sha256": "da1b8a2de6bb0ff8e69c924ae44c3208bc6b77811106a7bf31c4ecd1bc35abe1"
+      "sha256": "6c2e2ef08fd5b06b376766dac62230843d67a7cc94147b14a022efa5e08d7b26"
     },
     {
       "id": "@zerowallscience/plugin-python",
-      "version": "0.1.35",
+      "version": "0.1.40",
       "path": "plugins/python",
       "files": 49,
-      "sha256": "14da1dede416708e444b636c18fa5a83a6320a43bdc84577244a3acc3cdf3cab"
+      "sha256": "5ceb339043b9d74bc75425a599fd0083c02584e1a2a8de8d8a6dae70ac7beafd"
     },
     {
       "id": "@zerowallscience/plugin-research",
-      "version": "0.1.33",
+      "version": "0.1.34",
       "path": "plugins/research",
       "files": 128,
-      "sha256": "586e78bad4d7a95d19b64c87dff42dbf8a0f0791f06ccf3c8e83d27074fc7d94"
+      "sha256": "f96830fbb3d80a2a3da74d62cab363ac99d1dc034945493d10581a79da68144a"
     },
     {
       "id": "@zerowallscience/plugin-reviewer",
@@ -522,10 +522,10 @@
     },
     {
       "id": "@zerowallscience/plugin-skills",
-      "version": "0.2.10",
+      "version": "0.2.13",
       "path": "plugins/skills",
       "files": 14,
-      "sha256": "cf979f33412bfe3ba40205d8c6f588e291f58325bc5f4d6a692b1d4b928d27b7"
+      "sha256": "838672606d32d2ccd941adf8d08da45678bff6114e4f25933c5bbb68748e64ed"
     },
     {
       "id": "@zerowallscience/plugin-videos",
@@ -543,10 +543,10 @@
     },
     {
       "id": "dsh-better-sidebar",
-      "version": "0.28.1-zws.1",
+      "version": "0.28.1-zws.4",
       "path": "plugins/dsh-better-sidebar",
-      "files": 359,
-      "sha256": "c74f5236d8c1a343095a1bdb1fe9a459feb039daf0c0ba2d4082dfe6db231284"
+      "files": 360,
+      "sha256": "c94169a9996399df89616e5a2463dfb33ddc38736a57cfdb6f672b9600c771fa"
     },
     {
       "id": "dsh-file-review",
@@ -557,10 +557,10 @@
     },
     {
       "id": "dsh-ppt-maker",
-      "version": "1.0.1-zws.10",
+      "version": "1.0.1-zws.16",
       "path": "plugins/dsh-ppt-maker",
-      "files": 146,
-      "sha256": "c96b171a9588f91706472e606a896676a55f0900d3b3ae59359f6fb037ebd6b9"
+      "files": 156,
+      "sha256": "7cf4691e064b58f42bf4c235fbd9598931217c32e2a1c284a46557fb3528a729"
     },
     {
       "id": "dsh-ssh-ops",
@@ -1210,10 +1210,10 @@
     },
     {
       "id": "gpt-image-generator",
-      "version": "0.1.10",
+      "version": "0.1.19",
       "files": 2,
-      "sourceSha256": "90dcd336aa619f48d9f20c211811eff91182abda97061d1e2658487ab151b829",
-      "sha256": "0ab0a2bcad19df3c015f13b090be5d8236fba4445b0b97c848b62b9b867cc48a"
+      "sourceSha256": "f48913e182309b5ca19ed3e12fa00acbc490a9a760fc3c07950a453bd809c001",
+      "sha256": "0be951e4cd55684b3de045030481843b444c2ad8b7050c91ad155258a125a0b8"
     },
     {
       "id": "gtars",
@@ -1849,7 +1849,7 @@
       "id": "sc-tenifold-knockout",
       "version": "0.1.8",
       "files": 15,
-      "sourceSha256": "039034fbb9cd236596a4caa4fb314e8be61b189619f9ea7d6708c500dbebd5d0",
+      "sourceSha256": "20fde2b34cc603f3d42be5812319074fc441b22c1f50e60359ebe10eb2652a62",
       "sha256": "8f80c49388a979acea5ba086ed0917b4f29e39c1c3a5fb8a93c881856f98138a"
     },
     {
@@ -2197,10 +2197,10 @@
     },
     {
       "id": "zerowall-faerskit",
-      "version": "0.1.16",
+      "version": "0.1.17",
       "files": 7,
-      "sourceSha256": "6f24d346cc585d28002cfb3da6e7f15e3ffbdc928221c0c0740a5bdfe8013bfb",
-      "sha256": "3904e43f5f361af73202e7976812f72df83418d3455e7ca542f847adeccc626c"
+      "sourceSha256": "9a1cd849580c80f326d43e0719ffb9821e4f586179dbb8c92dfa315045b56302",
+      "sha256": "b103ae661e0d8e071820367eed73254bcde61b8e2f2d3a33c9b8f6414cf70a96"
     },
     {
       "id": "zerowall-fiji",
@@ -2255,7 +2255,7 @@
       "id": "zerowall-geo",
       "version": "0.1.10",
       "files": 6,
-      "sourceSha256": "9968c9556f6bd97804e5e2de6b33d795f04e9f8846fee00186903a2bc97d86cf",
+      "sourceSha256": "2577b6fce1c9fdd1c43d74145f78429690ffb3731ce3e5068a00f3410411da63",
       "sha256": "673a60dbb3718bd319e46848f9dc488ed5721c0dc0163751e3a5205f57c0c3ee"
     },
     {
@@ -2332,7 +2332,7 @@
       "id": "zerowall-mr",
       "version": "0.1.10",
       "files": 5,
-      "sourceSha256": "a8db906dd0ecc9d3f2e9cbd991f04b4388bfbf12d4eaba9b470543f220a3e1d7",
+      "sourceSha256": "0c23d8d6d1b5dec66a2c7c7c4b590731378ec8fd1c4b8958bee37874c2708385",
       "sha256": "dfed323f5f81658391c604d62103b2417b433223a59c40005538218817488034"
     },
     {
@@ -2346,7 +2346,7 @@
       "id": "zerowall-nhanes",
       "version": "0.1.11",
       "files": 6,
-      "sourceSha256": "14c61d109d08a1127d79b3447eb1f0ece0e1c11a0844e0ece92730ebd248716a",
+      "sourceSha256": "42f3eba2e01fd63412c1f2190e60f5189b73b1c5fed49ad893f592a0b044bbcc",
       "sha256": "8d53c57b1fc83b2b937c5b695688f87e280c57cbe9c618ffbd9bacc7efd7943e"
     },
     {
@@ -2360,7 +2360,7 @@
       "id": "zerowall-omicverse",
       "version": "0.1.10",
       "files": 7,
-      "sourceSha256": "aad813208318b79dee00600781d5c6b19ca2bb482e6ae003b056c91ea950cde0",
+      "sourceSha256": "2a5ffa4ecca5d48a764f9e07cb9d2e9ea4c3872ce2c1107a2e2c3b96b8c2be2c",
       "sha256": "37dd955de8b2f8e17d9aa1eabd6c6cfaf6aa439b75f44602ef56696594b1d9f6"
     },
     {
@@ -2414,10 +2414,10 @@
     },
     {
       "id": "zerowall-presentation",
-      "version": "0.2.7",
+      "version": "0.2.13",
       "files": 1,
-      "sourceSha256": "85cbff8ab3637bdd63a816e91de80806f6f144cdad6bd979e037cc686d412a9b",
-      "sha256": "6c655a0e1a59fd5f006b14046a332177880cf89abe75517782d80e3df0d43101"
+      "sourceSha256": "e57ad730a417a1d271203e1f031578c3573c3c11576455cee32e35bed15a7523",
+      "sha256": "cd9e05dfb58d3c8f95c1f90ad4965bf4a0922ae2ac6503fb52ec586b4e5835c2"
     },
     {
       "id": "zerowall-python-packages",
@@ -2437,14 +2437,14 @@
       "id": "zerowall-r-packages",
       "version": "0.1.10",
       "files": 6,
-      "sourceSha256": "904377941190956911772d3161ba102352ec87ad94e66877d96cc837f291e3d7",
+      "sourceSha256": "2debc5ec429ce7b492835cf92b20b16ec8c1446ffc0e291194fd0ce75a3923f2",
       "sha256": "f1ebabbef6b86cea2c0a2cbdd8777922492f66543018eacb8cf3ce5ebd1509ee"
     },
     {
       "id": "zerowall-rbioagent",
       "version": "0.1.10",
       "files": 6,
-      "sourceSha256": "983961959bad70b53ef2d9a52e438ca37b2bf0efff496fe44d4be4dc84462eb0",
+      "sourceSha256": "7f2d82e813b4f60f97bf8f018c2f4e56551c51173dadf940abbf614c626095b9",
       "sha256": "16ed578c1f2e1ca8808107e3eb58051a541a3eb614ad51120c691982490888b3"
     },
     {
@@ -2470,16 +2470,16 @@
     },
     {
       "id": "zerowall-rplatform",
-      "version": "0.1.11",
+      "version": "0.1.12",
       "files": 6,
       "sourceSha256": "cecf7a6f3bc08db8391359a29310528852ac6d3d4bfb75efff0d9061ab2d07b5",
-      "sha256": "8cc25732ecc517d2b9de1a10c5f42342bacff61f5db92552f677f136a5c0c1df"
+      "sha256": "3e98f8b08fbd875fa55eb07da35090ccce55d9ac543818df3f425f30d147e245"
     },
     {
       "id": "zerowall-rplotfigure",
       "version": "0.1.9",
       "files": 6,
-      "sourceSha256": "a943175bf70585946b7f4abe18bfe5759ced1e13eaecae6bda9be7d500234a27",
+      "sourceSha256": "049e98ee9adc936433df62a027aa07eaca93c715593b1e157c667a8127f474c1",
       "sha256": "47e9e3c8efde681a230df93d3eab37136c0afe4e0186c5ee6a652c7188bc9ebd"
     },
     {
@@ -2542,7 +2542,7 @@
       "id": "zerowall-tooluniverse",
       "version": "0.1.11",
       "files": 168,
-      "sourceSha256": "9ac6ad6e77ee052f0612ab8fe90bff362d262c5ea11a6ddc14cd249e53495e18",
+      "sourceSha256": "93b407f4793c46cd1b2484ada3151807f69a84c0d487cbb39893fb53ed39c40f",
       "sha256": "c0f888a95cc0624cc252b0c85ae51dac138e1e0ce48f71c0463ca903fa436e79"
     }
   ]
