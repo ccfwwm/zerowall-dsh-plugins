@@ -1,17 +1,18 @@
 {
-  "applicationVersion": "8.4.24",
+  "applicationVersion": "8.4.25",
   "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
-  "sourceCommit": "42d867bd74881a54683fbec02105d27371f9dd03",
+  "sourceCommit": "e7003c6bfcca739aa7ce3b2457c5c5af5d6ea00a",
   "sourceOnly": true,
   "buildCommit": null,
   "dshCommit": "fdf67a9e4d74c1b4b9db33e33231eb488f27cdb6",
   "packages": [],
-  "exportedSourceFiles": 5533,
+  "exportedSourceFiles": 5536,
   "mergedSourceUpdates": [
     {
       "repository": "https://github.com/ccfwwm/zerowall-dsh-plugins",
       "commit": "875f306fe49a6f46ed9e4761b42746cbee64f319",
       "scope": "Preserve separately published FAERS canonical Skill sources and release notes; retain 8.4.24 plugin/resource versions."
     }
-  ]
+  ],
+  "publicationReceipt": "publication/8.4.25/plugin-artifacts.json"
 }

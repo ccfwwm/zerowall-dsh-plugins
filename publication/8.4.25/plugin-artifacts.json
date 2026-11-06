@@ -1,0 +1,412 @@
+{
+  "schema": 1,
+  "applicationVersion": "8.4.25",
+  "sourceRepository": "https://github.com/ccfwwm/zerowallscience",
+  "sourceCommit": "e7003c6bfcca739aa7ce3b2457c5c5af5d6ea00a",
+  "buildParentCommit": "42d867bd74881a54683fbec02105d27371f9dd03",
+  "dshCommit": "fdf67a9e4d74c1b4b9db33e33231eb488f27cdb6",
+  "buildId": "1793891598578-10ec857a",
+  "pluginSnapshot": "f98239032ce67166aca150ac2ebf2373df5803b2ca4c4f6a4f98003afe8466e9",
+  "packages": [
+    {
+      "id": "@zerowallscience/plugin-account",
+      "version": "0.1.29",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-account-0.1.29.tgz",
+      "size": 369539,
+      "sha256": "0fe7ad7b0928f066abefdfdd9e24ff506b3b61b177c66c155d30e6faed72fea7",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-account/0.1.29/zerowallscience-plugin-account-0.1.29.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-account-0.1.29.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-ai-cloud",
+      "version": "0.1.37",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-ai-cloud-0.1.37.tgz",
+      "size": 2272985,
+      "sha256": "a76d3dd5f1ff1cfe55b1effd5ab7d2d46f68c9e55f4e6cfe980082a9416f6a4d",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-ai-cloud/0.1.37/a76d3dd5f1ff1cfe55b1effd5ab7d2d46f68c9e55f4e6cfe980082a9416f6a4d.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-ai-cloud-0.1.37.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-base",
+      "version": "0.1.40",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-base-0.1.40.tgz",
+      "size": 201788,
+      "sha256": "1af40a01ab0d57fdb82fbb1c5ba82d2ce41f4cc1a3f37b5868098eb2e080d352",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-base/0.1.40/zerowallscience-plugin-base-0.1.40.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-base-0.1.40.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-biogenie",
+      "version": "0.1.7",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-biogenie-0.1.7.tgz",
+      "size": 270119,
+      "sha256": "a1da6798d93776780ed6be887ec7719c66415f2bc0a8065bc6e53a9084c7d21f",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-biogenie/0.1.7/zerowallscience-plugin-biogenie-0.1.7.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-biogenie-0.1.7.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-claude-code",
+      "version": "0.2.16",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-claude-code-0.2.16.tgz",
+      "size": 718746,
+      "sha256": "8d2f9199bc0b74ad1a3eba9e39fd5560e3529641f404ba0f328318a887528b03",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-claude-code/0.2.16/zerowallscience-plugin-claude-code-0.2.16.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-claude-code-0.2.16.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-desktop-compat",
+      "version": "0.1.9",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-desktop-compat-0.1.9.tgz",
+      "size": 7375,
+      "sha256": "acbcf83330d081da80d0c9f72cb47969602812ef6ce741447a10cfe4c0eebb42",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-desktop-compat/0.1.9/zerowallscience-plugin-desktop-compat-0.1.9.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-desktop-compat-0.1.9.tgz"
+    },
+    {
+      "id": "@michengai/dsh-archive-manager",
+      "version": "1.1.2-zws.3",
+      "kind": "plugin",
+      "assetName": "michengai-dsh-archive-manager-1.1.2-zws.3.tgz",
+      "size": 615569,
+      "sha256": "091f8b58eb0d220a3f238a15bfc6c77a04b1fc8a09f38f99ff91afbbdc081a5f",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-archive-manager/1.1.2-zws.3/michengai-dsh-archive-manager-1.1.2-zws.3.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/michengai-dsh-archive-manager-1.1.2-zws.3.tgz"
+    },
+    {
+      "id": "dsh-better-sidebar",
+      "version": "0.28.1-zws.4",
+      "kind": "plugin",
+      "assetName": "dsh-better-sidebar-0.28.1-zws.4.tgz",
+      "size": 4803792,
+      "sha256": "782764ca206e469ea808b5cb50afadb752b62a0b220d6f6c43ddc927bef5e610",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-better-sidebar/0.28.1-zws.4/dsh-better-sidebar-0.28.1-zws.4.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-better-sidebar-0.28.1-zws.4.tgz"
+    },
+    {
+      "id": "@zerowallscience/dsh-bundle-core",
+      "version": "0.1.1",
+      "kind": "plugin",
+      "assetName": "zerowallscience-dsh-bundle-core-0.1.1.tgz",
+      "size": 444,
+      "sha256": "65aba903c49afe124f82285e2bcf2c0772d407c09f5d0af91293ba8b039d327d",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-bundle-core/0.1.1/zerowallscience-dsh-bundle-core-0.1.1.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-dsh-bundle-core-0.1.1.tgz"
+    },
+    {
+      "id": "@zerowallscience/dsh-bundle-science",
+      "version": "0.1.27",
+      "kind": "plugin",
+      "assetName": "zerowallscience-dsh-bundle-science-0.1.27.tgz",
+      "size": 1213,
+      "sha256": "8090d3636d2e42597378536a9017fb5bd85cff751b93aa8db1a80afced0a97ee",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-bundle-science/0.1.27/zerowallscience-dsh-bundle-science-0.1.27.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-dsh-bundle-science-0.1.27.tgz"
+    },
+    {
+      "id": "dsh-file-review",
+      "version": "0.8.11-zws.1",
+      "kind": "plugin",
+      "assetName": "dsh-file-review-0.8.11-zws.1.tgz",
+      "size": 664782,
+      "sha256": "6568011376788b3c84e48831660e4c0b57280a0e94c6fd772cf772e10e015656",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-file-review/0.8.11-zws.1/dsh-file-review-0.8.11-zws.1.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-file-review-0.8.11-zws.1.tgz"
+    },
+    {
+      "id": "dsh-ppt-maker",
+      "version": "1.0.1-zws.16",
+      "kind": "plugin",
+      "assetName": "dsh-ppt-maker-1.0.1-zws.16.tgz",
+      "size": 563491,
+      "sha256": "70f007ebc9ed927c85bab44793de88dd429981a2d847ce1feea5b371952661ad",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-ppt-maker/1.0.1-zws.16/dsh-ppt-maker-1.0.1-zws.16.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-ppt-maker-1.0.1-zws.16.tgz"
+    },
+    {
+      "id": "@dingyi222666/dsh-session-notification",
+      "version": "0.2.7-zws.2",
+      "kind": "plugin",
+      "assetName": "dingyi222666-dsh-session-notification-0.2.7-zws.2.tgz",
+      "size": 35949,
+      "sha256": "83b35ae978685e595a6d3b7ba289d9e870b8a45f77949abbd5c1957b4618916c",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-session-notification/0.2.7-zws.2/dingyi222666-dsh-session-notification-0.2.7-zws.2.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dingyi222666-dsh-session-notification-0.2.7-zws.2.tgz"
+    },
+    {
+      "id": "dsh-ssh-ops",
+      "version": "0.3.23-zws.3",
+      "kind": "plugin",
+      "assetName": "dsh-ssh-ops-0.3.23-zws.3.tgz",
+      "size": 716413,
+      "sha256": "1e7f01dd78585fc75fb89e109c7aece66d04f9774ca8b7bad60563ef3409d1b1",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-ssh-ops/0.3.23-zws.3/dsh-ssh-ops-0.3.23-zws.3.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-ssh-ops-0.3.23-zws.3.tgz"
+    },
+    {
+      "id": "dsh-wechat",
+      "version": "0.11.1-zws.2",
+      "kind": "plugin",
+      "assetName": "dsh-wechat-0.11.1-zws.2.tgz",
+      "size": 1336357,
+      "sha256": "d25e0749d74261af3be7dcba0524a94f0eaf89abad38374b75428748c706fc0e",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-wechat/0.11.1-zws.2/dsh-wechat-0.11.1-zws.2.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-wechat-0.11.1-zws.2.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-environment",
+      "version": "0.1.28",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-environment-0.1.28.tgz",
+      "size": 264144,
+      "sha256": "13dc2997f38c47cf775351415cc6f6a1eddc9a374ccb1e25175b0f899f408cd6",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-environment/0.1.28/zerowallscience-plugin-environment-0.1.28.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-environment-0.1.28.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-execution",
+      "version": "0.1.6",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-execution-0.1.6.tgz",
+      "size": 96056,
+      "sha256": "e26f809433b0227774e387e82aa9cd1b7b3aa4c2e5cb3ef8fa18e5cfee10ed2b",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-execution/0.1.6/e26f809433b0227774e387e82aa9cd1b7b3aa4c2e5cb3ef8fa18e5cfee10ed2b.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-execution-0.1.6.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-extension-center",
+      "version": "0.1.20",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-extension-center-0.1.20.tgz",
+      "size": 140844,
+      "sha256": "03b17780710c4765dd38437c66cbb8238abbcd2d7384fe2e0c9e9ca69a78e0cb",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-extension-center/0.1.20/03b17780710c4765dd38437c66cbb8238abbcd2d7384fe2e0c9e9ca69a78e0cb.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-extension-center-0.1.20.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-files",
+      "version": "0.2.14",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-files-0.2.14.tgz",
+      "size": 6889053,
+      "sha256": "4b0cc2b1ab318aaed8b56beeca47aa6a3bf7d846d6629aead1d11645ef45decc",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-files/0.2.14/zerowallscience-plugin-files-0.2.14.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-files-0.2.14.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-images",
+      "version": "0.2.50",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-images-0.2.50.tgz",
+      "size": 284965,
+      "sha256": "f7aabb29cd84db63ab0c8b8ca299c40157ab3d6b12f7b9993aa3e9684df9eaf5",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-images/0.2.50/zerowallscience-plugin-images-0.2.50.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-images-0.2.50.tgz"
+    },
+    {
+      "id": "@zerowallscience/integrity-runtime",
+      "version": "6.2.2",
+      "kind": "support",
+      "assetName": "zerowallscience-integrity-runtime-6.2.2.tgz",
+      "size": 19589,
+      "sha256": "32f446f09c6eb17da872b917352bd69d5fdfa826ef3fc4b54c2a27f135094d3f",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/integrity-runtime/6.2.2/zerowallscience-integrity-runtime-6.2.2.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-integrity-runtime-6.2.2.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-mcp",
+      "version": "0.2.56",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-mcp-0.2.56.tgz",
+      "size": 419361,
+      "sha256": "133cdbae13db825309d61f327acdc389ee516c1a3149495a3bd2f754bceb5689",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-mcp/0.2.56/zerowallscience-plugin-mcp-0.2.56.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-mcp-0.2.56.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-mineru",
+      "version": "0.1.13",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-mineru-0.1.13.tgz",
+      "size": 119193,
+      "sha256": "1e46c92d40817bcc11aebdbc6cce516d60845e03c1c147f8ff92bd8a8ce4ac1e",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-mineru/0.1.13/1e46c92d40817bcc11aebdbc6cce516d60845e03c1c147f8ff92bd8a8ce4ac1e.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-mineru-0.1.13.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-projects",
+      "version": "0.1.7",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-projects-0.1.7.tgz",
+      "size": 103460,
+      "sha256": "1e6a7cb04e76641107ca7e870fe59ac1aa88e2f51dc68afca8cfd4fd1dbc6d2b",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-projects/0.1.7/1e6a7cb04e76641107ca7e870fe59ac1aa88e2f51dc68afca8cfd4fd1dbc6d2b.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-projects-0.1.7.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-publications",
+      "version": "0.1.6",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-publications-0.1.6.tgz",
+      "size": 96460,
+      "sha256": "311dbc3c4d73626fcaeb95b355124239d9f63ef1c368492520a94487671b7464",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-publications/0.1.6/311dbc3c4d73626fcaeb95b355124239d9f63ef1c368492520a94487671b7464.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-publications-0.1.6.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-pubmed",
+      "version": "0.1.12",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-pubmed-0.1.12.tgz",
+      "size": 186576,
+      "sha256": "23a544fd182960ea55a1125e5482ad46a7eafad2352d4be4e31f9bcd6000e50f",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-pubmed/0.1.12/23a544fd182960ea55a1125e5482ad46a7eafad2352d4be4e31f9bcd6000e50f.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-pubmed-0.1.12.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-python",
+      "version": "0.1.40",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-python-0.1.40.tgz",
+      "size": 274515,
+      "sha256": "c1ea441657247d813df71283beb2b03db124ac89897684711de68597eaaab72c",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-python/0.1.40/zerowallscience-plugin-python-0.1.40.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-python-0.1.40.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-research",
+      "version": "0.1.34",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-research-0.1.34.tgz",
+      "size": 9810714,
+      "sha256": "2147fbb2464dee7a24901efdcee5863cb2fba4b0cc790d0672138d1697fcad13",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-research/0.1.34/2147fbb2464dee7a24901efdcee5863cb2fba4b0cc790d0672138d1697fcad13.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-research-0.1.34.tgz"
+    },
+    {
+      "id": "@zerowallscience/research-store",
+      "version": "4.1.6",
+      "kind": "support",
+      "assetName": "zerowallscience-research-store-4.1.6.tgz",
+      "size": 56770,
+      "sha256": "6857de8a61109b8fc32fe77ae31509345b301310e476d57c3384622ff2af79e0",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/research-store/4.1.6/zerowallscience-research-store-4.1.6.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-research-store-4.1.6.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-reviewer",
+      "version": "0.1.8",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-reviewer-0.1.8.tgz",
+      "size": 42900,
+      "sha256": "48a4bb6409fa0b20a009f36ee3aea2c006c39d5222ea263e0407e7b70062e570",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-reviewer/0.1.8/48a4bb6409fa0b20a009f36ee3aea2c006c39d5222ea263e0407e7b70062e570.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-reviewer-0.1.8.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-runs",
+      "version": "0.1.6",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-runs-0.1.6.tgz",
+      "size": 103078,
+      "sha256": "c89485aee19cceafda467c914cf3142a9c8d47d8ceb37c7ef58854b4080c6f00",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-runs/0.1.6/c89485aee19cceafda467c914cf3142a9c8d47d8ceb37c7ef58854b4080c6f00.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-runs-0.1.6.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-secrets",
+      "version": "0.1.1",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-secrets-0.1.1.tgz",
+      "size": 2713,
+      "sha256": "aff2a27e387668e9ffea327c07a7571f28401fdc10e750822e4d2bc5df1368f8",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-secrets/0.1.1/aff2a27e387668e9ffea327c07a7571f28401fdc10e750822e4d2bc5df1368f8.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-secrets-0.1.1.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-singlecell",
+      "version": "0.1.8",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-singlecell-0.1.8.tgz",
+      "size": 155192,
+      "sha256": "6402b5058070780b117f5114adbe71248672a78a372bb0274a88aba60437736a",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-singlecell/0.1.8/6402b5058070780b117f5114adbe71248672a78a372bb0274a88aba60437736a.package",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-singlecell-0.1.8.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-skills",
+      "version": "0.2.15",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-skills-0.2.15.tgz",
+      "size": 225889,
+      "sha256": "833ddc47c348218dd8a7fa2c7719b815574e5074f90b8f4ac91774eb9129693f",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-skills/0.2.15/zerowallscience-plugin-skills-0.2.15.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-skills-0.2.15.tgz"
+    },
+    {
+      "id": "@zerowallscience/plugin-videos",
+      "version": "0.2.9",
+      "kind": "plugin",
+      "assetName": "zerowallscience-plugin-videos-0.2.9.tgz",
+      "size": 338066,
+      "sha256": "abf4ee0128748e17747461b052e1dc1cb8b644075ef74d46c596158094f1fca7",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/plugin-videos/0.2.9/zerowallscience-plugin-videos-0.2.9.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/zerowallscience-plugin-videos-0.2.9.tgz"
+    },
+    {
+      "id": "@dsh-external/zotero-harvest",
+      "version": "0.2.2-zws.1",
+      "kind": "plugin",
+      "assetName": "dsh-external-zotero-harvest-0.2.2-zws.1.tgz",
+      "size": 28295,
+      "sha256": "1352a40de904456bd878b48d2ee645f5251f6e1d245fcb3e410724603441a573",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/zotero-harvest/0.2.2-zws.1/dsh-external-zotero-harvest-0.2.2-zws.1.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-external-zotero-harvest-0.2.2-zws.1.tgz"
+    },
+    {
+      "id": "dsh-office-tools",
+      "version": "1.0.6",
+      "kind": "support",
+      "assetName": "dsh-office-tools-1.0.6.tgz",
+      "size": 42631,
+      "sha256": "820075635cd0ba7020fb42114efe8c1edc6f9e92d10090618f3d8e60f9534286",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-office-tools/1.0.6/dsh-office-tools-1.0.6.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-office-tools-1.0.6.tgz"
+    },
+    {
+      "id": "dsh-dream-skin",
+      "version": "10.16.1-zws.3",
+      "kind": "plugin",
+      "assetName": "dsh-dream-skin-10.16.1-zws.3.tgz",
+      "size": 148373,
+      "sha256": "4ca5fabcef815cc01cd218ea07bcd099c5d545cf092439bbaffef0d8fc974873",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-dream-skin/10.16.1-zws.3/dsh-dream-skin-10.16.1-zws.3.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-dream-skin-10.16.1-zws.3.tgz"
+    },
+    {
+      "id": "dsh-zotero",
+      "version": "0.12.2-zws.1",
+      "kind": "plugin",
+      "assetName": "dsh-zotero-0.12.2-zws.1.tgz",
+      "size": 325874,
+      "sha256": "b7d57241537ed62deadf63fb635c040fdc6ba3ea6326e42bdb263f1a995aac21",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-zotero/0.12.2-zws.1/dsh-zotero-0.12.2-zws.1.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-zotero-0.12.2-zws.1.tgz"
+    },
+    {
+      "id": "dsh-free-search",
+      "version": "0.9.4",
+      "kind": "plugin",
+      "assetName": "dsh-free-search-0.9.4.tgz",
+      "size": 154443,
+      "sha256": "1e2ed382961fbf36e93db150116b3432f2c70a9944faa29018a3d965a49581f9",
+      "qiniuUrl": "https://zerowall.chengxunkeji.cn/stable/plugins/dsh-free-search/0.9.4/dsh-free-search-0.9.4.tgz",
+      "githubUrl": "https://github.com/ccfwwm/zerowall-dsh-plugins/releases/download/v8.4.25/dsh-free-search-0.9.4.tgz"
+    }
+  ]
+}
